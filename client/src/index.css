@@ -1,0 +1,73 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+::-webkit-scrollbar {
+  width: 0px;
+}
+::-webkit-scrollbar-track {
+  border-radius: 0px;
+  display: none;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.25);
+}
+::-webkit-scrollbar-thumb {
+  border-radius: 0px;
+  height: 0px;
+  background: rgba(0, 0, 0, 0.2);
+}
+/* * { */
+/* border-style: solid;
+  border-color: rgb(77, 78, 78);
+  border-width: 1px; */
+/* } */
+.container {
+  @apply w-full  text-gray-500 h-[80vh] bg-gray-200 flex items-center justify-center flex-col;
+}
+.inputField {
+  @apply w-full rounded-sm border px-2 py-2 border-blue-400 focus:outline-blue-500;
+}
+.label {
+  @apply mt-4 py-1 self-start;
+}
+.small {
+  @apply text-[10.56px] font-semibold;
+}
+.title {
+  @apply text-[15px];
+}
+.medium {
+  @apply text-[12px];
+}
+.center {
+  @apply flex flex-col w-full items-center justify-center h-full;
+}
+.button-nb {
+  @apply px-3 py-[6px] border text-black border-gray-200  rounded-sm;
+}
+.grids {
+  @apply grid grid-cols-1 w-full sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4;
+}
+.input {
+  @apply border border-gray-300 p-2 rounded-sm;
+}
+
+.px-main {
+  @apply px-[7%];
+}
+
+.bg-main {
+  @apply bg-[#1972F5];
+}
+
+.bg-main-black{
+  @apply bg-blue-900
+}
+.text-dark {
+  @apply dark:text-gray-400;
+}
+.bg-dark {
+  @apply dark:bg-gray-800;
+}
+.border-dark {
+  @apply dark:border-gray-600;
+}
