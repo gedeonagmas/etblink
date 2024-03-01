@@ -5,6 +5,7 @@ import Home from "./pages/Home";
 import Header from "./pages/Header";
 import Footer from "./pages/Footer";
 import Category from "./pages/categories/Category";
+import CompanyDetail from "./pages/categories/CompanyDetail";
 
 function App() {
   const jwt = localStorage.getItem("jwt");
@@ -22,6 +23,8 @@ function App() {
             <Route path="/" element={<Home />}></Route>
             <Route path="/local" element={<Category type='local' />}></Route>
             <Route path="/global" element={<Category type='global' />}></Route>
+            <Route path="/news" element={<Category />}></Route>
+            <Route path="/company-detail" element={<CompanyDetail />}></Route>
             <Route path="/" element={<Home />}></Route>
             {jwt && user && (
               <Route
