@@ -39,8 +39,12 @@
   @apply text-[12px];
 }
 .center {
-  @apply flex flex-col w-full items-center justify-center h-full;
+  @apply flex w-full items-center justify-center h-full;
 }
+.centers {
+  @apply flex items-center justify-center;
+}
+
 .button-nb {
   @apply px-3 py-[6px] border text-black border-gray-200  rounded-sm;
 }
@@ -59,8 +63,8 @@
   @apply bg-[#1972F5];
 }
 
-.bg-main-black{
-  @apply bg-blue-900
+.bg-main-black {
+  @apply bg-blue-900;
 }
 .text-dark {
   @apply dark:text-gray-400;

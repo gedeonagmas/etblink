@@ -1,4 +1,3 @@
-
 import { Search } from "@mui/icons-material";
 import { DarkThemeToggle } from "flowbite-react";
 // import SportsHandBall from "@mui/icons-material/SportsHandBall";
@@ -318,8 +317,7 @@ const Header = () => {
               </div>
               <p className="font-normal">52.34 birr</p>
             </div>
-          </div>{ " " }
-          
+          </div>{" "}
           <li className="me-2">
             <div className="flex items-center justify-center gap-6">
               {/* <img src="./gedi.jpg" alt="" className="w-10 h-8 rounded-sm" /> */}
