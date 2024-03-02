@@ -6,6 +6,8 @@ import Header from "./pages/Header";
 import Footer from "./pages/Footer";
 import Category from "./pages/categories/Category";
 import CompanyDetail from "./pages/categories/CompanyDetail";
+import NewsCategory from "./pages/news/NewsCategory";
+import NewsDetail from "./pages/news/NewsDetail";
 
 function App() {
   const jwt = localStorage.getItem("jwt");
@@ -14,17 +16,17 @@ function App() {
   // console.log(jwt, user);
   return (
     <Flowbite>
-      <div
-        className='font-poppins text-black text-dark bg-dark'
-      >
+      <div className="font-poppins text-black text-dark bg-dark">
         <Header />
         <div className="">
           <Routes>
             <Route path="/" element={<Home />}></Route>
-            <Route path="/local" element={<Category type='local' />}></Route>
-            <Route path="/global" element={<Category type='global' />}></Route>
-            <Route path="/news" element={<Category />}></Route>
+            <Route path="/local" element={<Category type="local" />}></Route>
+            <Route path="/global" element={<Category type="global" />}></Route>
             <Route path="/company-detail" element={<CompanyDetail />}></Route>
+            <Route path="/news" element={<NewsCategory />}></Route>
+            <Route path="/news-detail" element={<NewsDetail />}></Route>
+
             <Route path="/" element={<Home />}></Route>
             {jwt && user && (
               <Route
