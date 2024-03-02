@@ -16,12 +16,12 @@ const CompanyDetail = () => {
     <div className="relative overflow-hidden z-20">
       <div
         style={{ backgroundImage: "url('./image-4.jpg')" }}
-        className="h-[82vh] px-main relative w-full"
+        className="h-[82vh] px-main bg-center relative bg-cover w-full"
       >
-        <div className="absolute px-2 shadow-lg bg-gray-500/50 bottom-0 py-4 h-auto flex items-end justify-between w-[60%]">
+        <div className="absolute px-4 shadow-lg bg-gray-500/50 bottom-0 py-4 h-auto flex items-end justify-between w-[80%] md:w-[60%]">
           <div className="w-auto gap-6 flex flex-col lg:flex-row items-end justify-center">
             <img src="./image-3.jpg" alt="" className="h-32 w-40 rounded-md" />
-            <div className="flex flex-col gap-2 text-white">
+            <div className="flex w-full flex-col gap-2 text-white">
               <p className="font-bold text-xl">ETBlink ethiopia</p>
               <p className="mt-2">ethiopian business link</p>
               <p className="flex  ">
@@ -40,7 +40,7 @@ const CompanyDetail = () => {
           </div>
 
           <div className="flex gap-4 items-center justify-center">
-            <p className="py-2  px-3 cursor-pointer rounded-sm border border-gray-200 text-white flex items-endjustify-end gap-2">
+            <p className="py-2 hover:bg-red-500 cursor-pointer hover:text-white shadow  px-3 cursor-pointer rounded-full border border-gray-200 text-white flex items-endjustify-end gap-2">
               <svg
                 class="w-5 h-5 text-white"
                 aria-hidden="true"
@@ -58,7 +58,7 @@ const CompanyDetail = () => {
               </svg>{" "}
               save
             </p>
-            <p className="py-2  px-3 cursor-pointer rounded-sm border border-gray-200  text-white flex items-center justify-center  gap-2">
+            {/* <p className="py-2  px-3 cursor-pointer rounded-sm border border-gray-200  text-white flex items-center justify-center  gap-2">
               <svg
                 class="w-5 h-5 text-white"
                 aria-hidden="true"
@@ -75,25 +75,7 @@ const CompanyDetail = () => {
                 />
               </svg>{" "}
               save
-            </p>
-            <p className="py-2 px-3 cursor-pointer rounded-sm border border-gray-200  text-white flex items-center justify-center  gap-2">
-              <svg
-                class="w-6 h-6 text-white"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M12 6C6.5 1 1 8 5.8 13l6.2 7 6.2-7C23 8 17.5 1 12 6Z"
-                />
-              </svg>{" "}
-              save
-            </p>
+            </p> */}
           </div>
         </div>
       </div>
@@ -277,7 +259,7 @@ const CompanyDetail = () => {
                     for="checked-checkbox"
                     class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                   >
-                    Checked state
+                    Branding and design
                   </label>
                 </div>
                 <div class="flex items-center">
@@ -292,7 +274,7 @@ const CompanyDetail = () => {
                     for="checked-checkbox"
                     class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                   >
-                    Checked state
+                    Full web development
                   </label>
                 </div>
                 <div class="flex items-center">
@@ -307,7 +289,7 @@ const CompanyDetail = () => {
                     for="checked-checkbox"
                     class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                   >
-                    Checked state
+                    Branding and advert
                   </label>
                 </div>
                 <div class="flex items-center">
@@ -322,70 +304,7 @@ const CompanyDetail = () => {
                     for="checked-checkbox"
                     class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                   >
-                    Checked state
-                  </label>
-                </div>
-              </div>
-
-              <div className="flex flex-col gap-4 items-start justify-start">
-                <div class="flex items-center">
-                  <input
-                    checked
-                    id="checked-checkbox"
-                    type="checkbox"
-                    value=""
-                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-0 dark:bg-gray-700 dark:border-gray-600"
-                  />
-                  <label
-                    for="checked-checkbox"
-                    class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                  >
-                    Checked state
-                  </label>
-                </div>
-                <div class="flex items-center">
-                  <input
-                    checked
-                    id="checked-checkbox"
-                    type="checkbox"
-                    value=""
-                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-0 dark:bg-gray-700 dark:border-gray-600"
-                  />
-                  <label
-                    for="checked-checkbox"
-                    class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                  >
-                    Checked state
-                  </label>
-                </div>
-                <div class="flex items-center">
-                  <input
-                    checked
-                    id="checked-checkbox"
-                    type="checkbox"
-                    value=""
-                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-0 dark:bg-gray-700 dark:border-gray-600"
-                  />
-                  <label
-                    for="checked-checkbox"
-                    class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                  >
-                    Checked state
-                  </label>
-                </div>
-                <div class="flex items-center">
-                  <input
-                    checked
-                    id="checked-checkbox"
-                    type="checkbox"
-                    value=""
-                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-0 dark:bg-gray-700 dark:border-gray-600"
-                  />
-                  <label
-                    for="checked-checkbox"
-                    class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                  >
-                    Checked state
+                    Web support
                   </label>
                 </div>
               </div>
@@ -403,7 +322,7 @@ const CompanyDetail = () => {
                     for="checked-checkbox"
                     class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                   >
-                    Checked state
+                    Branding and design
                   </label>
                 </div>
                 <div class="flex items-center">
@@ -418,7 +337,7 @@ const CompanyDetail = () => {
                     for="checked-checkbox"
                     class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                   >
-                    Checked state
+                    Full web development
                   </label>
                 </div>
                 <div class="flex items-center">
@@ -433,7 +352,7 @@ const CompanyDetail = () => {
                     for="checked-checkbox"
                     class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                   >
-                    Checked state
+                    Branding and advert
                   </label>
                 </div>
                 <div class="flex items-center">
@@ -448,7 +367,70 @@ const CompanyDetail = () => {
                     for="checked-checkbox"
                     class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                   >
-                    Checked state
+                    Web support
+                  </label>
+                </div>
+              </div>
+
+              <div className="flex flex-col gap-4 items-start justify-start">
+                <div class="flex items-center">
+                  <input
+                    checked
+                    id="checked-checkbox"
+                    type="checkbox"
+                    value=""
+                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-0 dark:bg-gray-700 dark:border-gray-600"
+                  />
+                  <label
+                    for="checked-checkbox"
+                    class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                  >
+                    Branding and design
+                  </label>
+                </div>
+                <div class="flex items-center">
+                  <input
+                    checked
+                    id="checked-checkbox"
+                    type="checkbox"
+                    value=""
+                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-0 dark:bg-gray-700 dark:border-gray-600"
+                  />
+                  <label
+                    for="checked-checkbox"
+                    class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                  >
+                    Full web development
+                  </label>
+                </div>
+                <div class="flex items-center">
+                  <input
+                    checked
+                    id="checked-checkbox"
+                    type="checkbox"
+                    value=""
+                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-0 dark:bg-gray-700 dark:border-gray-600"
+                  />
+                  <label
+                    for="checked-checkbox"
+                    class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                  >
+                    Branding and advert
+                  </label>
+                </div>
+                <div class="flex items-center">
+                  <input
+                    checked
+                    id="checked-checkbox"
+                    type="checkbox"
+                    value=""
+                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-0 dark:bg-gray-700 dark:border-gray-600"
+                  />
+                  <label
+                    for="checked-checkbox"
+                    class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                  >
+                    Web support
                   </label>
                 </div>
               </div>
@@ -524,7 +506,7 @@ const CompanyDetail = () => {
 
             <div>
               <div className="flex my-4 items-center gap-2 w-full">
-                <label className="w-72 gap-2 flex items-center" for="file">
+                <label className="w-[300px] gap-2 flex items-center" for="file">
                   Your rating{" "}
                   <Rating>
                     <Rating.Star />
@@ -749,127 +731,189 @@ const CompanyDetail = () => {
             <Map markers={[...markers]} height="35vh" />
 
             <div className="mt-7 gap-2 flex flex-col">
-              <p className="flex text-sm gap-2 items-center">
+              <p className="py-2 cursor-pointer rounded-sm flex items-center justify-start  gap-2">
                 <svg
                   class="w-5 h-5 text-gray-800 dark:text-white"
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
-                  fill="currentColor"
+                  fill="none"
                   viewBox="0 0 24 24"
                 >
                   <path
-                    fill-rule="evenodd"
-                    d="M12 2a3 3 0 0 0-2.1.9l-.9.9a1 1 0 0 1-.7.3H7a3 3 0 0 0-3 3v1.2c0 .3 0 .5-.2.7l-1 .9a3 3 0 0 0 0 4.2l1 .9c.2.2.3.4.3.7V17a3 3 0 0 0 3 3h1.2c.3 0 .5 0 .7.2l.9 1a3 3 0 0 0 4.2 0l.9-1c.2-.2.4-.3.7-.3H17a3 3 0 0 0 3-3v-1.2c0-.3 0-.5.2-.7l1-.9a3 3 0 0 0 0-4.2l-1-.9a1 1 0 0 1-.3-.7V7a3 3 0 0 0-3-3h-1.2a1 1 0 0 1-.7-.2l-.9-1A3 3 0 0 0 12 2Zm3.7 7.7a1 1 0 1 0-1.4-1.4L10 12.6l-1.3-1.3a1 1 0 0 0-1.4 1.4l2 2c.4.4 1 .4 1.4 0l5-5Z"
-                    clip-rule="evenodd"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"
+                  />
+                  <path
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M17.8 14h0a7 7 0 1 0-11.5 0h0l.1.3.3.3L12 21l5.1-6.2.6-.7.1-.2Z"
                   />
                 </svg>
-                New york
+                London
               </p>
-              <p className="flex text-sm gap-2 items-center">
+              <p className="py-2 cursor-pointer rounded-sm flex items-center justify-start  gap-2">
                 <svg
                   class="w-5 h-5 text-gray-800 dark:text-white"
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
-                  fill="currentColor"
+                  fill="none"
                   viewBox="0 0 24 24"
                 >
                   <path
-                    fill-rule="evenodd"
-                    d="M12 2a3 3 0 0 0-2.1.9l-.9.9a1 1 0 0 1-.7.3H7a3 3 0 0 0-3 3v1.2c0 .3 0 .5-.2.7l-1 .9a3 3 0 0 0 0 4.2l1 .9c.2.2.3.4.3.7V17a3 3 0 0 0 3 3h1.2c.3 0 .5 0 .7.2l.9 1a3 3 0 0 0 4.2 0l.9-1c.2-.2.4-.3.7-.3H17a3 3 0 0 0 3-3v-1.2c0-.3 0-.5.2-.7l1-.9a3 3 0 0 0 0-4.2l-1-.9a1 1 0 0 1-.3-.7V7a3 3 0 0 0-3-3h-1.2a1 1 0 0 1-.7-.2l-.9-1A3 3 0 0 0 12 2Zm3.7 7.7a1 1 0 1 0-1.4-1.4L10 12.6l-1.3-1.3a1 1 0 0 0-1.4 1.4l2 2c.4.4 1 .4 1.4 0l5-5Z"
-                    clip-rule="evenodd"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 8v4l3 3m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
                   />
                 </svg>
-                New york
+                4 hours ago
               </p>
-              <p className="flex text-sm gap-2 items-center">
+              <p className="py-2 cursor-pointer rounded-sm flex items-center justify-start  gap-2">
                 <svg
                   class="w-5 h-5 text-gray-800 dark:text-white"
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
-                  fill="currentColor"
+                  fill="none"
                   viewBox="0 0 24 24"
                 >
                   <path
-                    fill-rule="evenodd"
-                    d="M12 2a3 3 0 0 0-2.1.9l-.9.9a1 1 0 0 1-.7.3H7a3 3 0 0 0-3 3v1.2c0 .3 0 .5-.2.7l-1 .9a3 3 0 0 0 0 4.2l1 .9c.2.2.3.4.3.7V17a3 3 0 0 0 3 3h1.2c.3 0 .5 0 .7.2l.9 1a3 3 0 0 0 4.2 0l.9-1c.2-.2.4-.3.7-.3H17a3 3 0 0 0 3-3v-1.2c0-.3 0-.5.2-.7l1-.9a3 3 0 0 0 0-4.2l-1-.9a1 1 0 0 1-.3-.7V7a3 3 0 0 0-3-3h-1.2a1 1 0 0 1-.7-.2l-.9-1A3 3 0 0 0 12 2Zm3.7 7.7a1 1 0 1 0-1.4-1.4L10 12.6l-1.3-1.3a1 1 0 0 0-1.4 1.4l2 2c.4.4 1 .4 1.4 0l5-5Z"
-                    clip-rule="evenodd"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    d="M21 12c0 1.2-4 6-9 6s-9-4.8-9-6c0-1.2 4-6 9-6s9 4.8 9 6Z"
+                  />
+                  <path
+                    stroke="currentColor"
+                    stroke-width="2"
+                    d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
                   />
                 </svg>
-                New york
+                2300 views
               </p>
-              <p className="flex text-sm gap-2 items-center">
+
+              <p className="py-2 cursor-pointer rounded-sm flex items-center justify-start  gap-2">
                 <svg
-                  class="w-5 h-5 text-gray-800 dark:text-white"
+                  class="w-5 h-5 "
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="currentColor"
                   viewBox="0 0 24 24"
                 >
-                  <path
-                    fill-rule="evenodd"
-                    d="M12 2a3 3 0 0 0-2.1.9l-.9.9a1 1 0 0 1-.7.3H7a3 3 0 0 0-3 3v1.2c0 .3 0 .5-.2.7l-1 .9a3 3 0 0 0 0 4.2l1 .9c.2.2.3.4.3.7V17a3 3 0 0 0 3 3h1.2c.3 0 .5 0 .7.2l.9 1a3 3 0 0 0 4.2 0l.9-1c.2-.2.4-.3.7-.3H17a3 3 0 0 0 3-3v-1.2c0-.3 0-.5.2-.7l1-.9a3 3 0 0 0 0-4.2l-1-.9a1 1 0 0 1-.3-.7V7a3 3 0 0 0-3-3h-1.2a1 1 0 0 1-.7-.2l-.9-1A3 3 0 0 0 12 2Zm3.7 7.7a1 1 0 1 0-1.4-1.4L10 12.6l-1.3-1.3a1 1 0 0 0-1.4 1.4l2 2c.4.4 1 .4 1.4 0l5-5Z"
-                    clip-rule="evenodd"
-                  />
+                  <path d="m12.7 20.7 6.2-7.1c2.7-3 2.6-6.5.8-8.7A5 5 0 0 0 16 3c-1.3 0-2.7.4-4 1.4A6.3 6.3 0 0 0 8 3a5 5 0 0 0-3.7 1.9c-1.8 2.2-2 5.8.8 8.7l6.2 7a1 1 0 0 0 1.4 0Z" />
                 </svg>
-                New york
+                456 saves
               </p>
             </div>
 
+            <p className="py-2 cursor-pointer rounded-sm flex items-center justify-start  gap-2">
+              <svg
+                class="w-5 h-5 text-gray-800 dark:text-white"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-width="2"
+                  d="M21 12c0 1.2-4 6-9 6s-9-4.8-9-6c0-1.2 4-6 9-6s9 4.8 9 6Z"
+                />
+                <path
+                  stroke="currentColor"
+                  stroke-width="2"
+                  d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                />
+              </svg>
+              views
+            </p>
             <p className="text-lg mt-7 ">Follow us</p>
             <div className="flex mt-4 items-center justify-between w-full">
-              <svg
-                class="w-6 h-6 text-gray-800 dark:text-white"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M13.1 6H15V3h-1.9A4.1 4.1 0 0 0 9 7.1V9H7v3h2v10h3V12h2l.6-3H12V6.6a.6.6 0 0 1 .6-.6h.5Z"
-                  clip-rule="evenodd"
-                />
-              </svg>
+              <a href="#" className="">
+                <svg
+                  className="w-5 h-5"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  viewBox="0 0 8 19"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M6.135 3H8V0H6.135a4.147 4.147 0 0 0-4.142 4.142V6H0v3h2v9.938h3V9h2.021l.592-3H5V3.591A.6.6 0 0 1 5.592 3h.543Z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                <span className="sr-only">Discord community</span>
+              </a>
+              <a href="#" className="">
+                <svg
+                  className="w-6 h-6 "
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M21.7 8c0-.7-.4-1.3-.8-2-.5-.5-1.2-.8-2-.8C16.2 5 12 5 12 5s-4.2 0-7 .2c-.7 0-1.4.3-2 .9-.3.6-.6 1.2-.7 2l-.2 3.1v1.5c0 1.1 0 2.2.2 3.3 0 .7.4 1.3.8 2 .6.5 1.4.8 2.2.8l6.7.2s4.2 0 7-.2c.7 0 1.4-.3 2-.9.3-.5.6-1.2.7-2l.2-3.1v-1.6c0-1 0-2.1-.2-3.2ZM10 14.6V9l5.4 2.8-5.4 2.8Z"
+                    clipRule="evenodd"
+                  />
+                </svg>
 
-              <svg
-                class="w-6 h-6 text-gray-800 dark:text-white"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M22 5.9c-.7.3-1.5.5-2.4.6a4 4 0 0 0 1.8-2.2c-.8.5-1.6.8-2.6 1a4.1 4.1 0 0 0-6.7 1.2 4 4 0 0 0-.2 2.5 11.7 11.7 0 0 1-8.5-4.3 4 4 0 0 0 1.3 5.4c-.7 0-1.3-.2-1.9-.5a4 4 0 0 0 3.3 4 4.2 4.2 0 0 1-1.9.1 4.1 4.1 0 0 0 3.9 2.8c-1.8 1.3-4 2-6.1 1.7a11.7 11.7 0 0 0 10.7 1A11.5 11.5 0 0 0 20 8.5V8a10 10 0 0 0 2-2.1Z"
-                  clip-rule="evenodd"
-                />
-              </svg>
-              <svg
-                class="w-6 h-6 text-gray-800 dark:text-white"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M22 5.9c-.7.3-1.5.5-2.4.6a4 4 0 0 0 1.8-2.2c-.8.5-1.6.8-2.6 1a4.1 4.1 0 0 0-6.7 1.2 4 4 0 0 0-.2 2.5 11.7 11.7 0 0 1-8.5-4.3 4 4 0 0 0 1.3 5.4c-.7 0-1.3-.2-1.9-.5a4 4 0 0 0 3.3 4 4.2 4.2 0 0 1-1.9.1 4.1 4.1 0 0 0 3.9 2.8c-1.8 1.3-4 2-6.1 1.7a11.7 11.7 0 0 0 10.7 1A11.5 11.5 0 0 0 20 8.5V8a10 10 0 0 0 2-2.1Z"
-                  clip-rule="evenodd"
-                />
-              </svg>
-              <svg
-                class="w-6 h-6 text-gray-800 dark:text-white"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M22 5.9c-.7.3-1.5.5-2.4.6a4 4 0 0 0 1.8-2.2c-.8.5-1.6.8-2.6 1a4.1 4.1 0 0 0-6.7 1.2 4 4 0 0 0-.2 2.5 11.7 11.7 0 0 1-8.5-4.3 4 4 0 0 0 1.3 5.4c-.7 0-1.3-.2-1.9-.5a4 4 0 0 0 3.3 4 4.2 4.2 0 0 1-1.9.1 4.1 4.1 0 0 0 3.9 2.8c-1.8 1.3-4 2-6.1 1.7a11.7 11.7 0 0 0 10.7 1A11.5 11.5 0 0 0 20 8.5V8a10 10 0 0 0 2-2.1Z"
-                  clip-rule="evenodd"
-                />
-              </svg>
+                <span className="sr-only">Discord community</span>
+              </a>
+              <a href="#" className="">
+                <svg
+                  className="w-6 h-6 "
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M12.5 8.8v1.7a3.7 3.7 0 0 1 3.3-1.7c3.5 0 4.2 2.2 4.2 5v5.7h-3.2v-5c0-1.3-.2-2.8-2.1-2.8-1.9 0-2.2 1.3-2.2 2.6v5.2H9.3V8.8h3.2ZM7.2 6.1a1.6 1.6 0 0 1-2 1.6 1.6 1.6 0 0 1-1-2.2A1.6 1.6 0 0 1 6.6 5c.3.3.5.7.5 1.1Z"
+                    clipRule="evenodd"
+                  />
+                  <path d="M7.2 8.8H4v10.7h3.2V8.8Z" />
+                </svg>
+              </a>
+              <a href="#" className="">
+                <svg
+                  className="w-5 h-5"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  viewBox="0 0 20 17"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M20 1.892a8.178 8.178 0 0 1-2.355.635 4.074 4.074 0 0 0 1.8-2.235 8.344 8.344 0 0 1-2.605.98A4.13 4.13 0 0 0 13.85 0a4.068 4.068 0 0 0-4.1 4.038 4 4 0 0 0 .105.919A11.705 11.705 0 0 1 1.4.734a4.006 4.006 0 0 0 1.268 5.392 4.165 4.165 0 0 1-1.859-.5v.05A4.057 4.057 0 0 0 4.1 9.635a4.19 4.19 0 0 1-1.856.07 4.108 4.108 0 0 0 3.831 2.807A8.36 8.36 0 0 1 0 14.184 11.732 11.732 0 0 0 6.291 16 11.502 11.502 0 0 0 17.964 4.5c0-.177 0-.35-.012-.523A8.143 8.143 0 0 0 20 1.892Z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                <span className="sr-only">Twitter page</span>
+              </a>
+              <a href="#" className="">
+                <svg
+                  className="w-6 h-6 "
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M12.5 8.8v1.7a3.7 3.7 0 0 1 3.3-1.7c3.5 0 4.2 2.2 4.2 5v5.7h-3.2v-5c0-1.3-.2-2.8-2.1-2.8-1.9 0-2.2 1.3-2.2 2.6v5.2H9.3V8.8h3.2ZM7.2 6.1a1.6 1.6 0 0 1-2 1.6 1.6 1.6 0 0 1-1-2.2A1.6 1.6 0 0 1 6.6 5c.3.3.5.7.5 1.1Z"
+                    clipRule="evenodd"
+                  />
+                  <path d="M7.2 8.8H4v10.7h3.2V8.8Z" />
+                </svg>
+              </a>
             </div>
           </div>
 
@@ -892,7 +936,7 @@ const CompanyDetail = () => {
             </p>
 
             <div className="py-2 px-3 mt-2 flex items-center justify-between border-b">
-              <p className="font-semibold">Monday</p>
+              <p className="font-semibold">Sunday</p>
               <p>2:00 AM - 12:00 AM</p>
             </div>
             <div className="py-2 px-3 mt-2 flex items-center justify-between border-b">
@@ -900,23 +944,23 @@ const CompanyDetail = () => {
               <p>2:00 AM - 12:00 AM</p>
             </div>
             <div className="py-2 px-3 mt-2 flex items-center justify-between border-b">
-              <p className="font-semibold">Monday</p>
+              <p className="font-semibold">Tuesday</p>
               <p>2:00 AM - 12:00 AM</p>
             </div>
             <div className="py-2 px-3 mt-2 flex items-center justify-between border-b">
-              <p className="font-semibold">Monday</p>
+              <p className="font-semibold">Wedensday</p>
               <p>2:00 AM - 12:00 AM</p>
             </div>
             <div className="py-2 px-3 mt-2 flex items-center justify-between border-b">
-              <p className="font-semibold">Monday</p>
+              <p className="font-semibold">Thursday</p>
               <p>2:00 AM - 12:00 AM</p>
             </div>
             <div className="py-2 px-3 mt-2 flex items-center justify-between border-b">
-              <p className="font-semibold">Monday</p>
+              <p className="font-semibold">Friday</p>
               <p>2:00 AM - 12:00 AM</p>
             </div>
             <div className="py-2 px-3 mt-2 flex items-center justify-between border-b">
-              <p className="font-semibold">Monday</p>
+              <p className="font-semibold">Saturday</p>
               <p>2:00 AM - 12:00 AM</p>
             </div>
           </div>
@@ -1002,7 +1046,7 @@ const CompanyDetail = () => {
               placeholder="Write your thoughts here..."
             ></textarea>
 
-            <button className="py-3 w-full bg-red-500 text-white rounded-md text-white mt-4">
+            <button className="py-3 w-full bg-main rounded-md text-white mt-4">
               Submit
             </button>
           </div>
@@ -1026,14 +1070,85 @@ const CompanyDetail = () => {
             </p>
 
             <div className="flex w-full mt-5 flex-col items-center justify-center">
-              <img
-                src="./gedi.jpg"
-                alt=""
-                className="w-24 h-24 rounded-full border border-dark border-gray-200"
-              />
-              <p className="text-xl mt-2 font-bold">Gedeon</p>
-              <p className="text-xl font-bold -mt-1">Agmas</p>
-              <p className="text-sm mt-1">22 companies</p>
+              <div class="flex items-center mb-4">
+                <img
+                  class="w-24 h-24 me-4 rounded-full"
+                  src="./gedi.jpg"
+                  alt=""
+                />
+                <div class="font-medium gap-1 flex flex-col dark:text-white">
+                  <p className="text-xl font-bold">Gedeon agmas</p>
+                  <p className="">gedeona..@gmail.com</p>
+                  <p>+251 954304543</p>
+                </div>
+              </div>
+              <div className="flex mt-4 items-center justify-between w-full">
+                <a href="#" className="">
+                  <svg
+                    className="w-5 h-5"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="currentColor"
+                    viewBox="0 0 8 19"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M6.135 3H8V0H6.135a4.147 4.147 0 0 0-4.142 4.142V6H0v3h2v9.938h3V9h2.021l.592-3H5V3.591A.6.6 0 0 1 5.592 3h.543Z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                  <span className="sr-only">Discord community</span>
+                </a>
+                <a href="#" className="">
+                  <svg
+                    className="w-6 h-6 "
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M21.7 8c0-.7-.4-1.3-.8-2-.5-.5-1.2-.8-2-.8C16.2 5 12 5 12 5s-4.2 0-7 .2c-.7 0-1.4.3-2 .9-.3.6-.6 1.2-.7 2l-.2 3.1v1.5c0 1.1 0 2.2.2 3.3 0 .7.4 1.3.8 2 .6.5 1.4.8 2.2.8l6.7.2s4.2 0 7-.2c.7 0 1.4-.3 2-.9.3-.5.6-1.2.7-2l.2-3.1v-1.6c0-1 0-2.1-.2-3.2ZM10 14.6V9l5.4 2.8-5.4 2.8Z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+
+                  <span className="sr-only">Discord community</span>
+                </a>
+                <a href="#" className="">
+                  <svg
+                    className="w-6 h-6 "
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M12.5 8.8v1.7a3.7 3.7 0 0 1 3.3-1.7c3.5 0 4.2 2.2 4.2 5v5.7h-3.2v-5c0-1.3-.2-2.8-2.1-2.8-1.9 0-2.2 1.3-2.2 2.6v5.2H9.3V8.8h3.2ZM7.2 6.1a1.6 1.6 0 0 1-2 1.6 1.6 1.6 0 0 1-1-2.2A1.6 1.6 0 0 1 6.6 5c.3.3.5.7.5 1.1Z"
+                      clipRule="evenodd"
+                    />
+                    <path d="M7.2 8.8H4v10.7h3.2V8.8Z" />
+                  </svg>
+                </a>
+                <a href="#" className="">
+                  <svg
+                    className="w-5 h-5"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="currentColor"
+                    viewBox="0 0 20 17"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M20 1.892a8.178 8.178 0 0 1-2.355.635 4.074 4.074 0 0 0 1.8-2.235 8.344 8.344 0 0 1-2.605.98A4.13 4.13 0 0 0 13.85 0a4.068 4.068 0 0 0-4.1 4.038 4 4 0 0 0 .105.919A11.705 11.705 0 0 1 1.4.734a4.006 4.006 0 0 0 1.268 5.392 4.165 4.165 0 0 1-1.859-.5v.05A4.057 4.057 0 0 0 4.1 9.635a4.19 4.19 0 0 1-1.856.07 4.108 4.108 0 0 0 3.831 2.807A8.36 8.36 0 0 1 0 14.184 11.732 11.732 0 0 0 6.291 16 11.502 11.502 0 0 0 17.964 4.5c0-.177 0-.35-.012-.523A8.143 8.143 0 0 0 20 1.892Z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                  <span className="sr-only">Twitter page</span>
+                </a>
+              </div>
             </div>
           </div>
         </div>

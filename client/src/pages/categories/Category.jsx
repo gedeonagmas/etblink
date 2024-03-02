@@ -33,7 +33,7 @@ const markers = [
 
 const Category = () => {
   return (
-    <div className="w-full relative bg-gray-200 bg-dark h-auto">
+    <div className="w-full relative bg-gray-50 bg-dark h-auto">
       <div className="absolute text-lg font-bold  z-50 top-[100px] left-[10%]">
         We provide more than <br /> 245 total companies <br /> for your business
       </div>
