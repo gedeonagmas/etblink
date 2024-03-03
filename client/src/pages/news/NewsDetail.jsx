@@ -7,7 +7,7 @@ const NewsDetail = () => {
           backgroundImage: "url('./image-1.jpg')",
           backgroundRepeat: false,
         }}
-        className="h-[70vh] relative z-20 w-full"
+        className="h-[70vh] bg-cover bg-center relative z-20 w-full"
       >
         <div className="absolute bottom-0 text-2xl h-auto px-4 w-full bg-black text-white">
           <Ticker show={true} isNewsTicker={true} slideSpeed={30}>
