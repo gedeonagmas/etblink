@@ -121,7 +121,7 @@ const Header = () => {
           <div className="flex w-full justify-between items-center">
             <div className="flex flex-col">
               <p className="text-[12px] -mt-1 font-light">
-                want to advert your services and products?
+                want to advert your services <br /> and products?
               </p>
               <a
                 href="#"
