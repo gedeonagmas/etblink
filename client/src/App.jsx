@@ -8,6 +8,10 @@ import Category from "./pages/categories/Category";
 import CompanyDetail from "./pages/categories/CompanyDetail";
 import NewsCategory from "./pages/news/NewsCategory";
 import NewsDetail from "./pages/news/NewsDetail";
+import Prices from "./pages/Prices";
+import About from "./pages/About";
+import Ethiopia from "./pages/Ethiopia";
+import Contact from "./pages/Contact";
 
 function App() {
   const jwt = localStorage.getItem("jwt");
@@ -26,7 +30,10 @@ function App() {
             <Route path="/company-detail" element={<CompanyDetail />}></Route>
             <Route path="/news" element={<NewsCategory />}></Route>
             <Route path="/news-detail" element={<NewsDetail />}></Route>
-
+            <Route path="/prices" element={<Prices />}></Route>
+            <Route path="/about" element={<About />}></Route>
+            <Route path="/ethiopia" element={<Ethiopia />}></Route>
+            <Route path="/contact" element={<Contact />}></Route>
             <Route path="/" element={<Home />}></Route>
             {jwt && user && (
               <Route

@@ -40,7 +40,7 @@ const CompanyDetail = () => {
           </div>
 
           <div className="flex gap-4 items-center justify-center">
-            <p className="py-2 hover:bg-red-500 cursor-pointer hover:text-white shadow  px-3 cursor-pointer rounded-full border border-gray-200 text-white flex items-endjustify-end gap-2">
+            <p className="py-2 hover:bg-red-500 hover:text-white shadow  px-3 cursor-pointer rounded-full border border-gray-200 text-white flex items-endjustify-end gap-2">
               <svg
                 class="w-5 h-5 text-white"
                 aria-hidden="true"
