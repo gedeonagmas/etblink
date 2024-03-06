@@ -24,14 +24,88 @@ const Header = () => {
   return (
     // fixed bg-white bg-dark top-0 left-0 w-full z-50 h-auto
     <div className="">
-      <div className="w-full flex flex-col md:flex-row ">
+      <div className="w-full text-xs text-smf text-white py-3 pr-20 bg-gray-900 flex gap-4 justify-end items-end">
+        <p className="border-r t border-gray-300" role="presentation">
+          <button
+            id="dropdownDelayButton"
+            data-dropdown-toggle="dropdownDelay"
+            data-dropdown-delay="500"
+            data-dropdown-trigger="hover"
+            className="focus:ring-0 focus:outline-none font-medium rounded-lg px-5 text-center inline-flex items-center "
+            type="button"
+          >
+            Languages{" "}
+            <svg
+              className="w-2.5 h-2.5 ms-3"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 10 6"
+            >
+              <path
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="m1 1 4 4 4-4"
+              />
+            </svg>
+          </button>
+
+          <div
+            id="dropdownDelay"
+            className="z-30 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-auto dark:bg-gray-700"
+          >
+            <ul
+              className="py-2 text-sm text-start text-gray-700 dark:text-gray-200"
+              aria-labelledby="dropdownDelayButton"
+            >
+              <li>
+                <a
+                  href="#"
+                  className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                >
+                  English
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                >
+                  Amharic
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                >
+                  Affan oromo
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                >
+                  Tigirigna
+                </a>
+              </li>
+            </ul>
+          </div>
+        </p>
+        <p>Login</p>
+        <p>Sign up</p>
+      </div>
+      <div className="w-full hidden md:flex ">
         <div className="relative w-full md:w-[60%]">
           <Slide
-            autoplay={false}
+            autoplay={true}
             infinite={true}
-            duration={3000}
+            duration={4000}
             arrows={false}
-            transitionDuration={5000}
+            transitionDuration={7000}
             indicators={false}
             pauseOnHover={false}
             responsive={true}
@@ -218,11 +292,6 @@ const Header = () => {
         </div>
       </div>
 
-      {/* <div className="w-full text-sm text-white py-2 pr-20 bg-gray-900 flex gap-4 justify-end items-end">
-        <p>Login</p>
-        <p>Sign up</p>
-      </div> */}
-
       {/* tabs */}
       <div className="border-b relative py-2 md:py-1 border-gray-200 dark:border-gray-700">
         <ul
@@ -232,7 +301,7 @@ const Header = () => {
           role="tablist"
         >
           {/* currencies */}
-          <div className="hidden xl:flex absolute bg-gray-200 bg-dark text-dark z-10 -bottom-[214px] right-[7%] w-auto h-auto flex-col items-center justify-center rounded-sm shadow-2xl ">
+          <div className="hidden xl:flex absolute bg-gray-200/70 bg-dark rounded-xl text-dark z-10 -bottom-[214px] right-[7%] w-auto h-auto flex-col items-center justify-center shadow-2xl ">
             <div className="flex text-sm font-semibold w-full px-1 py-2 flex-col border-t-2 border-dark items-center justify-center">
               <div className="flex w-full items-center justify-start">
                 <svg
@@ -514,14 +583,14 @@ const Header = () => {
               </div>
             </div>
           </li>
-          <li className="me-2" role="presentation">
+          {/* <li className="me-2" role="presentation">
             <Link
               to="/donates"
               className="inline-block p-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
             >
               Donates
             </Link>
-          </li>
+          </li> */}
           <li className="me-2" role="presentation">
             <div className="flex items-center border pr-2 rounded-md border-dark justify-center">
               <Search sx={{ width: 20, height: 20 }} className="m-1" />
@@ -532,7 +601,7 @@ const Header = () => {
               />
             </div>
           </li>
-          <li className="me-2" role="presentation">
+          {/* <li className="me-2" role="presentation">
             <button
               id="dropdownDelayButton"
               data-dropdown-toggle="dropdownDelay"
@@ -601,8 +670,8 @@ const Header = () => {
                 </li>
               </ul>
             </div>
-          </li>
-          <li className="me-2" role="presentation">
+          </li> */}
+          {/* <li className="me-2" role="presentation">
             <Link
               to="/login"
               className="inline-block p-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
@@ -617,7 +686,7 @@ const Header = () => {
             >
               Sign up
             </Link>
-          </li>
+          </li> */}
           <li className="me-2" role="presentation">
             <div className="top-2 right-2 z-50">
               <DarkThemeToggle />

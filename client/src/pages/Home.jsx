@@ -34,11 +34,11 @@ const Home = () => {
             className="slide-container relative w-full h-full bg-blue-500"
           >
             <Slide
-              autoplay={false}
+              autoplay={true}
               infinite={true}
-              duration={4000}
+              duration={5000}
               arrows={false}
-              transitionDuration={1000}
+              transitionDuration={2000}
               indicators={false}
               pauseOnHover={false}
               responsive={true}
@@ -51,7 +51,7 @@ const Home = () => {
                       backgroundImage: `url(${slideImage})`,
                       width: "100%",
                     }}
-                    className="object-fill brightness-[0.4] object-center"
+                    className="object-cover brightness-[0.4] object-center"
                   ></div>
                 </div>
               ))}
@@ -99,7 +99,7 @@ const Home = () => {
               </div>
             </div>
 
-            <div className="w-full px-main relative pt-10 bg-cover h-[100%] bg-no-repeat md:py-0 bg-[url('/bg3.jpg')] bg-dark bg-bottom grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+            <div className="w-full px-main relative pt-10 bg-cover bg-center h-[100%] bg-no-repeat md:py-0 bg-[url('/bg5.jpg')] bg-dark grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
               <div className="w-full gap-5 py-5 md:py-0 flex px-4 flex-col items-center justify-center bg-main-black text-white">
                 <div className="w-full flex justify-between items-center">
                   <p className="font-bold text-gray-200">

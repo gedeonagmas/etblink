@@ -4,12 +4,12 @@ const Banner = () => {
   return (
     <div
       style={{ width: "100%", height: "100%" }}
-      className="slide-container mt-4 relative w-full h-full bg-blue-500"
+      className="slide-container rounded-full mt-4 relative w-full h-full bg-blue-500"
     >
       <Slide
-        autoplay={false}
+        autoplay={true}
         infinite={true}
-        duration={1000}
+        duration={2000}
         arrows={false}
         transitionDuration={4000}
         indicators={false}

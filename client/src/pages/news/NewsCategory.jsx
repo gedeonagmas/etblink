@@ -7,7 +7,7 @@ const NewsCategory = () => {
     <div className="w-full relative bg-gray-50 bg-dark h-auto">
       <div
         style={{ backgroundImage: "url('./image-1.jpg')" }}
-        className="h-[70vh] relative z-20 w-full"
+        className="h-[70vh] bg-cover bg-center relative z-20 w-full"
       ></div>
       <div className="w-full px-main h-auto bg-red-500f flex flex-col lg:flex-row gap-4">
         <div className="h-auto flex flex-col bg-yellow-500f w-full lg:w-[80%]">
