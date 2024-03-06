@@ -57,7 +57,7 @@ const NewsCategory = () => {
             })}
           </div>
         </div>
-        <div className="flex flex-col gap-4 w-full lg:w-[20%] bg-green-500f">
+        <div className="flex flex-col gap-4 w-full lg:w-[20%]">
           <div className="flex w-full mt-4 mb-1 justify-between items-center">
             <p className="font-bold">Featured</p>
             <div className="flex gap-2 items-center justify-center">

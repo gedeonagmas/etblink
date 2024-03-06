@@ -116,8 +116,8 @@ const Header = () => {
                 className=""
                 style={{ width: "100%", background: "blue" }}
               >
-                <div className="place-items-center px-main gap-x-10 gap-y-2 bg-main-black  grid grid-cols-1 xl:grid-cols-2  items-center justify-center w-full h-auto">
-                  <div className="w-full bg-main-black text-white dark:text-gray-200 p-2 h-[60px]  flex gap-2 ">
+                <div className="place-items-center py-3 px-main gap-x-10 gap-y-2 bg-main-black  grid grid-cols-1 xl:grid-cols-2  items-center justify-center w-full h-auto">
+                  <div className="w-full bg-main-black text-white dark:text-gray-200 p-2 h-[80px]  flex gap-2 ">
                     <img
                       src="./image1.jpg"
                       alt=""
@@ -129,6 +129,7 @@ const Header = () => {
                           Samteck law firm
                         </h5>
                       </a>
+                      <p className="text-xs">best law firm out of the box</p>
                       <p className="mb-[5px] flex mt-1 text-xs font-normal">
                         Go to our guideline
                         <svg
@@ -150,7 +151,7 @@ const Header = () => {
                     </div>
                   </div>
 
-                  <div className="w-full bg-main-black text-white dark:text-gray-200 p-2 h-[60px]  flex gap-2 ">
+                  <div className="w-full bg-main-black text-white dark:text-gray-200 p-2 h-[80px]  flex gap-2 ">
                     <img
                       src="./image-1.jpg"
                       alt=""
@@ -162,6 +163,7 @@ const Header = () => {
                           Samteck law firm
                         </h5>
                       </a>
+                      <p className="text-xs">best law firm out of the box</p>
                       <p className="mb-[5px] flex mt-1 text-xs font-normal">
                         Go to our guideline
                         <svg
