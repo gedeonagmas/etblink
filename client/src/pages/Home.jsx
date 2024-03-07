@@ -34,11 +34,11 @@ const Home = () => {
             className="slide-container relative w-full h-full bg-blue-500"
           >
             <Slide
-              autoplay={true}
+              autoplay={false}
               infinite={true}
-              duration={5000}
+              duration={4000}
               arrows={false}
-              transitionDuration={2000}
+              transitionDuration={1000}
               indicators={false}
               pauseOnHover={false}
               responsive={true}
@@ -51,57 +51,31 @@ const Home = () => {
                       backgroundImage: `url(${slideImage})`,
                       width: "100%",
                     }}
-                    className="object-fill brightness-[0.4] object-center"
-                  ></div>
+                    className="object-fill relative items-start justify-start  object-center"
+                  >
+                    {/* hero page content */}
+                    <div className="flex z-10 w-full px-main  h-auto gap-2 items-start justify-start">
+                      <div className="absolute -mt-32 p-5 rounded-sm bg-black/35 mx-auto">
+                        <h1 className="mb-2 tracking-wider text-4xl font-extrabold leading-none text-white dark:text-gray-300 ">
+                          Your investment
+                        </h1>
+                        <h1 className="mb-6 tracking-wider text-4xl font-extrabold leading-none text-white dark:text-gray-300 ">
+                          destination
+                        </h1>
+
+                        <p className=" text-sm font-normal text-gray-200 text-dark">
+                          Here at ETBLINK we focus on markets where technology,{" "}
+                          <br />
+                          innovation, and capital can unlock long-term value.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               ))}
             </Slide>
-            {/* hero page content */}
-            <div className="flex top-[12%] md:top-[22%]  z-10 w-full h-auto gap-2 absolute  items-center justify-center">
-              <div className="px-4 -mt-20 mx-auto max-w-screen-xl text-center">
-                <h1 className="mb-4 tracking-wider text-4xl font-extrabold leading-none text-white dark:text-gray-300 md:text-5xl lg:text-5xl">
-                  Your investment
-                </h1>
-                <h1 className="mb-4 tracking-wider text-4xl font-extrabold leading-none text-white dark:text-gray-300 md:text-5xl lg:text-5xl">
-                  destination
-                </h1>
-                <p className="mb-8 text-sm font-normal text-gray-300 text-dark lg:text-sm sm:px-16 lg:px-48">
-                  Here at ETBLINK we focus on markets where technology, <br />
-                  innovation, and capital can unlock long-term value.
-                </p>
-                <div className="flex flex-col space-y-4 sm:flex-row sm:justify-center sm:space-y-0">
-                  <a
-                    href="#"
-                    className="inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-white dark:text-gray-200 rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-0 dark:focus:ring-blue-900"
-                  >
-                    Get started
-                    <svg
-                      className="w-3.5 h-3.5 ms-2 rtl:rotate-180"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 14 10"
-                    >
-                      <path
-                        stroke="currentColor"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M1 5h12m0 0L9 1m4 4L9 9"
-                      />
-                    </svg>
-                  </a>
-                  <a
-                    href="#"
-                    className="inline-flex justify-center hover:text-gray-900 items-center py-3 px-5 sm:ms-4 text-base font-medium text-center text-white rounded-lg border border-white hover:bg-gray-100 hover:dark:bg-gray-300 focus:ring-0"
-                  >
-                    Learn more
-                  </a>
-                </div>
-              </div>
-            </div>
 
-            <div className="w-full px-main relative pt-10 bg-cover bg-center h-[100%] bg-no-repeat md:py-0 bg-[url('/bg5.jpg')] bg-dark grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+            <div className="w-full px-main relative pt-10 bg-cover h-[100%] bg-no-repeat md:py-0 bg-[url('/bg3.jpg')] bg-dark bg-bottom grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
               <div className="w-full gap-5 py-5 md:py-0 flex px-4 flex-col items-center justify-center bg-main-black text-white">
                 <div className="w-full flex justify-between items-center">
                   <p className="font-bold text-gray-200">
