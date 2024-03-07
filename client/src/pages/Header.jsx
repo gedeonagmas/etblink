@@ -24,88 +24,14 @@ const Header = () => {
   return (
     // fixed bg-white bg-dark top-0 left-0 w-full z-50 h-auto
     <div className="">
-      <div className="w-full text-xs text-smf text-white py-3 pr-20 bg-gray-900 flex gap-4 justify-end items-end">
-        <p className="border-r t border-gray-300" role="presentation">
-          <button
-            id="dropdownDelayButton"
-            data-dropdown-toggle="dropdownDelay"
-            data-dropdown-delay="500"
-            data-dropdown-trigger="hover"
-            className="focus:ring-0 focus:outline-none font-medium rounded-lg px-5 text-center inline-flex items-center "
-            type="button"
-          >
-            Languages{" "}
-            <svg
-              className="w-2.5 h-2.5 ms-3"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 10 6"
-            >
-              <path
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="m1 1 4 4 4-4"
-              />
-            </svg>
-          </button>
-
-          <div
-            id="dropdownDelay"
-            className="z-30 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-auto dark:bg-gray-700"
-          >
-            <ul
-              className="py-2 text-sm text-start text-gray-700 dark:text-gray-200"
-              aria-labelledby="dropdownDelayButton"
-            >
-              <li>
-                <a
-                  href="#"
-                  className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                >
-                  English
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                >
-                  Amharic
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                >
-                  Affan oromo
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                >
-                  Tigirigna
-                </a>
-              </li>
-            </ul>
-          </div>
-        </p>
-        <p>Login</p>
-        <p>Sign up</p>
-      </div>
-      <div className="w-full hidden md:flex ">
-        <div className="relative w-full md:w-[60%]">
+      <div className="w-full flex flex-col md:flex-row ">
+        <div className="relative w-[78%]">
           <Slide
-            autoplay={true}
+            autoplay={false}
             infinite={true}
-            duration={4000}
+            duration={3000}
             arrows={false}
-            transitionDuration={7000}
+            transitionDuration={5000}
             indicators={false}
             pauseOnHover={false}
             responsive={true}
@@ -114,75 +40,23 @@ const Header = () => {
               <div
                 key={index}
                 className=""
-                style={{ width: "100%", background: "blue" }}
+                // style={{ width: "100%", background: "blue" }}
               >
-                <div className="place-items-center py-3 px-main gap-x-10 gap-y-2 bg-main-black  grid grid-cols-1 xl:grid-cols-2  items-center justify-center w-full h-auto">
-                  <div className="w-full bg-main-black text-white dark:text-gray-200 p-2 h-[80px]  flex gap-2 ">
+                <div className="place-items-center py-3 pl-main pr-10 gap-x-24 gap-y-2 bg-main-black  grid grid-cols-1 xl:grid-cols-2  items-center justify-center  h-auto">
+                  <div className="w-full bg-main-black text-white dark:text-gray-200 p-2 h-[120px]  flex gap-2 ">
                     <img
-                      src="./image1.jpg"
+                      src="./ad1.jpg"
                       alt=""
-                      className="w-36 h-auto rounded-sm"
+                      className="w-full h-auto rounded-sm"
                     />
-                    <div>
-                      <a href="#">
-                        <h5 className="mb-1 text-sm font-semibold tracking-tight ">
-                          Samteck law firm
-                        </h5>
-                      </a>
-                      <p className="text-xs">best law firm out of the box</p>
-                      <p className="mb-[5px] flex mt-1 text-xs font-normal">
-                        Go to our guideline
-                        <svg
-                          className="w-3 h-3 ms-2.5 rtl:rotate-[270deg]"
-                          aria-hidden="true"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 18 18"
-                        >
-                          <path
-                            stroke="currentColor"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M15 11v4.833A1.166 1.166 0 0 1 13.833 17H2.167A1.167 1.167 0 0 1 1 15.833V4.167A1.166 1.166 0 0 1 2.167 3h4.618m4.447-2H17v5.768M9.111 8.889l7.778-7.778"
-                          />
-                        </svg>
-                      </p>
-                    </div>
                   </div>
-
-                  <div className="w-full bg-main-black text-white dark:text-gray-200 p-2 h-[80px]  flex gap-2 ">
+                  <div className="h-[70%] w-[2px] absolute bg-blue-800"></div>
+                  <div className="w-full bg-main-black text-white dark:text-gray-200 p-2 h-[120px]  flex gap-2 ">
                     <img
-                      src="./image-1.jpg"
+                      src="./ad3.jpeg"
                       alt=""
-                      className="w-36 h-auto rounded-sm"
+                      className="w-full h-auto rounded-sm"
                     />
-                    <div>
-                      <a href="#">
-                        <h5 className="mb-1 text-sm font-semibold tracking-tight ">
-                          Samteck law firm
-                        </h5>
-                      </a>
-                      <p className="text-xs">best law firm out of the box</p>
-                      <p className="mb-[5px] flex mt-1 text-xs font-normal">
-                        Go to our guideline
-                        <svg
-                          className="w-3 h-3 ms-2.5 rtl:rotate-[270deg]"
-                          aria-hidden="true"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 18 18"
-                        >
-                          <path
-                            stroke="currentColor"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M15 11v4.833A1.166 1.166 0 0 1 13.833 17H2.167A1.167 1.167 0 0 1 1 15.833V4.167A1.166 1.166 0 0 1 2.167 3h4.618m4.447-2H17v5.768M9.111 8.889l7.778-7.778"
-                          />
-                        </svg>
-                      </p>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -191,108 +65,117 @@ const Header = () => {
         </div>
 
         {/* advert action button and social media */}
-        <div className="w-full px-main md:px-4  bg-main-black text-white dark:text-gray-200 p-2 h-auto  flex gap-2 ">
-          <div className="flex w-full justify-between items-center">
-            <div className="flex flex-col">
-              <p className="text-[12px] -mt-1 font-light">
-                want to advert your services <br /> and products?
-              </p>
-              <a
-                href="#"
-                className="inline-flex mt-1 text-[12px] font-semibold items-center hover:underline"
+        {/* <div className="w-full px-main md:px-4  bg-main-black text-white dark:text-gray-200 p-2 h-auto  flex gap-2 "> */}
+        <div className="flex w-full pl-4 pr-main bg-main-black justify-center flex-col gap-6 items-center">
+          <p
+            href="#"
+            className="inline-flex  text-white rounded-full gap-2 px-4 py-2 border-2 border-white mt-1 text-[14px] font-bold items-center"
+          >
+            Advert here
+            <svg
+              class="w-4 h-4"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M3 4a1 1 0 0 0-.8 1.6L6.6 12l-4.4 6.4A1 1 0 0 0 3 20h13.2c.3 0 .6-.2.8-.4l4.8-7a1 1 0 0 0 0-1.2l-4.8-7a1 1 0 0 0-.8-.4H3Z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </p>
+
+          <div className="flex items-center justify-center gap-3">
+            <a
+              href="#"
+              className="h-6 w-6 flex items-center justify-center rounded-full bg-white text-black"
+            >
+              <svg
+                className="w-4 h-4"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="currentColor"
+                viewBox="0 0 8 19"
               >
-                Advert here
-                <svg
-                  className="w-3 h-3 ms-2.5 rtl:rotate-[270deg]"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 18 18"
-                >
-                  <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M15 11v4.833A1.166 1.166 0 0 1 13.833 17H2.167A1.167 1.167 0 0 1 1 15.833V4.167A1.166 1.166 0 0 1 2.167 3h4.618m4.447-2H17v5.768M9.111 8.889l7.778-7.778"
-                  />
-                </svg>
-              </a>
-            </div>
+                <path
+                  fillRule="evenodd"
+                  d="M6.135 3H8V0H6.135a4.147 4.147 0 0 0-4.142 4.142V6H0v3h2v9.938h3V9h2.021l.592-3H5V3.591A.6.6 0 0 1 5.592 3h.543Z"
+                  clipRule="evenodd"
+                />
+              </svg>
+              <span className="sr-only">Discord community</span>
+            </a>
+            <a
+              href="#"
+              className="h-6 w-6 flex items-center justify-center rounded-full bg-white text-black"
+            >
+              <svg
+                className="w-4 h-4 "
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M21.7 8c0-.7-.4-1.3-.8-2-.5-.5-1.2-.8-2-.8C16.2 5 12 5 12 5s-4.2 0-7 .2c-.7 0-1.4.3-2 .9-.3.6-.6 1.2-.7 2l-.2 3.1v1.5c0 1.1 0 2.2.2 3.3 0 .7.4 1.3.8 2 .6.5 1.4.8 2.2.8l6.7.2s4.2 0 7-.2c.7 0 1.4-.3 2-.9.3-.5.6-1.2.7-2l.2-3.1v-1.6c0-1 0-2.1-.2-3.2ZM10 14.6V9l5.4 2.8-5.4 2.8Z"
+                  clipRule="evenodd"
+                />
+              </svg>
 
-            {/* social media */}
-            <div className="flex items-center xl:pr-[7%] justify-center gap-6">
-              <a href="#" className="">
-                <svg
-                  className="w-5 h-5"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="currentColor"
-                  viewBox="0 0 8 19"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M6.135 3H8V0H6.135a4.147 4.147 0 0 0-4.142 4.142V6H0v3h2v9.938h3V9h2.021l.592-3H5V3.591A.6.6 0 0 1 5.592 3h.543Z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-                <span className="sr-only">Discord community</span>
-              </a>
-              <a href="#" className="">
-                <svg
-                  className="w-6 h-6 "
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M21.7 8c0-.7-.4-1.3-.8-2-.5-.5-1.2-.8-2-.8C16.2 5 12 5 12 5s-4.2 0-7 .2c-.7 0-1.4.3-2 .9-.3.6-.6 1.2-.7 2l-.2 3.1v1.5c0 1.1 0 2.2.2 3.3 0 .7.4 1.3.8 2 .6.5 1.4.8 2.2.8l6.7.2s4.2 0 7-.2c.7 0 1.4-.3 2-.9.3-.5.6-1.2.7-2l.2-3.1v-1.6c0-1 0-2.1-.2-3.2ZM10 14.6V9l5.4 2.8-5.4 2.8Z"
-                    clipRule="evenodd"
-                  />
-                </svg>
+              <span className="sr-only">Discord community</span>
+            </a>
+            <a
+              href="#"
+              className="h-6 w-6 flex items-center justify-center rounded-full bg-white text-black"
+            >
+              <svg
+                className="w-4 h-4"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="currentColor"
+                viewBox="0 0 20 17"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M20 1.892a8.178 8.178 0 0 1-2.355.635 4.074 4.074 0 0 0 1.8-2.235 8.344 8.344 0 0 1-2.605.98A4.13 4.13 0 0 0 13.85 0a4.068 4.068 0 0 0-4.1 4.038 4 4 0 0 0 .105.919A11.705 11.705 0 0 1 1.4.734a4.006 4.006 0 0 0 1.268 5.392 4.165 4.165 0 0 1-1.859-.5v.05A4.057 4.057 0 0 0 4.1 9.635a4.19 4.19 0 0 1-1.856.07 4.108 4.108 0 0 0 3.831 2.807A8.36 8.36 0 0 1 0 14.184 11.732 11.732 0 0 0 6.291 16 11.502 11.502 0 0 0 17.964 4.5c0-.177 0-.35-.012-.523A8.143 8.143 0 0 0 20 1.892Z"
+                  clipRule="evenodd"
+                />
+              </svg>
+              <span className="sr-only">Twitter page</span>
+            </a>
+            <a
+              href="#"
+              className="h-6 w-6 flex items-center justify-center rounded-full bg-white text-black"
+            >
+              <svg
+                className="w-4 h-4 "
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M12.5 8.8v1.7a3.7 3.7 0 0 1 3.3-1.7c3.5 0 4.2 2.2 4.2 5v5.7h-3.2v-5c0-1.3-.2-2.8-2.1-2.8-1.9 0-2.2 1.3-2.2 2.6v5.2H9.3V8.8h3.2ZM7.2 6.1a1.6 1.6 0 0 1-2 1.6 1.6 1.6 0 0 1-1-2.2A1.6 1.6 0 0 1 6.6 5c.3.3.5.7.5 1.1Z"
+                  clipRule="evenodd"
+                />
+                <path d="M7.2 8.8H4v10.7h3.2V8.8Z" />
+              </svg>
 
-                <span className="sr-only">Discord community</span>
-              </a>
-              <a href="#" className="">
-                <svg
-                  className="w-5 h-5"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="currentColor"
-                  viewBox="0 0 20 17"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M20 1.892a8.178 8.178 0 0 1-2.355.635 4.074 4.074 0 0 0 1.8-2.235 8.344 8.344 0 0 1-2.605.98A4.13 4.13 0 0 0 13.85 0a4.068 4.068 0 0 0-4.1 4.038 4 4 0 0 0 .105.919A11.705 11.705 0 0 1 1.4.734a4.006 4.006 0 0 0 1.268 5.392 4.165 4.165 0 0 1-1.859-.5v.05A4.057 4.057 0 0 0 4.1 9.635a4.19 4.19 0 0 1-1.856.07 4.108 4.108 0 0 0 3.831 2.807A8.36 8.36 0 0 1 0 14.184 11.732 11.732 0 0 0 6.291 16 11.502 11.502 0 0 0 17.964 4.5c0-.177 0-.35-.012-.523A8.143 8.143 0 0 0 20 1.892Z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-                <span className="sr-only">Twitter page</span>
-              </a>
-              <a href="#" className="">
-                <svg
-                  className="w-6 h-6 "
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M12.5 8.8v1.7a3.7 3.7 0 0 1 3.3-1.7c3.5 0 4.2 2.2 4.2 5v5.7h-3.2v-5c0-1.3-.2-2.8-2.1-2.8-1.9 0-2.2 1.3-2.2 2.6v5.2H9.3V8.8h3.2ZM7.2 6.1a1.6 1.6 0 0 1-2 1.6 1.6 1.6 0 0 1-1-2.2A1.6 1.6 0 0 1 6.6 5c.3.3.5.7.5 1.1Z"
-                    clipRule="evenodd"
-                  />
-                  <path d="M7.2 8.8H4v10.7h3.2V8.8Z" />
-                </svg>
-
-                <span className="sr-only">GitHub account</span>
-              </a>
-            </div>
+              <span className="sr-only">GitHub account</span>
+            </a>
           </div>
         </div>
+        {/* </div> */}
       </div>
+
+      {/* <div className="w-full text-sm text-white py-2 pr-20 bg-gray-900 flex gap-4 justify-end items-end">
+        <p>Login</p>
+        <p>Sign up</p>
+      </div> */}
 
       {/* tabs */}
       <div className="border-b relative py-2 md:py-1 border-gray-200 dark:border-gray-700">
@@ -303,7 +186,7 @@ const Header = () => {
           role="tablist"
         >
           {/* currencies */}
-          <div className="hidden xl:flex absolute bg-gray-200/70 bg-dark rounded-xl text-dark z-10 -bottom-[214px] right-[7%] w-auto h-auto flex-col items-center justify-center shadow-2xl ">
+          <div className="hidden xl:flex absolute bg-gray-200 bg-dark text-dark z-10 -bottom-[214px] right-[7%] w-auto h-auto flex-col items-center justify-center rounded-sm shadow-2xl ">
             <div className="flex text-sm font-semibold w-full px-1 py-2 flex-col border-t-2 border-dark items-center justify-center">
               <div className="flex w-full items-center justify-start">
                 <svg
@@ -585,14 +468,14 @@ const Header = () => {
               </div>
             </div>
           </li>
-          {/* <li className="me-2" role="presentation">
+          <li className="me-2" role="presentation">
             <Link
               to="/donates"
               className="inline-block p-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
             >
               Donates
             </Link>
-          </li> */}
+          </li>
           <li className="me-2" role="presentation">
             <div className="flex items-center border pr-2 rounded-md border-dark justify-center">
               <Search sx={{ width: 20, height: 20 }} className="m-1" />
@@ -603,7 +486,7 @@ const Header = () => {
               />
             </div>
           </li>
-          {/* <li className="me-2" role="presentation">
+          <li className="me-2" role="presentation">
             <button
               id="dropdownDelayButton"
               data-dropdown-toggle="dropdownDelay"
@@ -672,8 +555,8 @@ const Header = () => {
                 </li>
               </ul>
             </div>
-          </li> */}
-          {/* <li className="me-2" role="presentation">
+          </li>
+          <li className="me-2" role="presentation">
             <Link
               to="/login"
               className="inline-block p-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
@@ -688,7 +571,7 @@ const Header = () => {
             >
               Sign up
             </Link>
-          </li> */}
+          </li>
           <li className="me-2" role="presentation">
             <div className="top-2 right-2 z-50">
               <DarkThemeToggle />

@@ -59,13 +59,15 @@ const Home = () => {
             {/* hero page content */}
             <div className="flex top-[12%] md:top-[22%]  z-10 w-full h-auto gap-2 absolute  items-center justify-center">
               <div className="px-4 -mt-20 mx-auto max-w-screen-xl text-center">
-                <h1 className="mb-4 tracking-wider text-4xl font-extrabold leading-none text-white dark:text-gray-300 md:text-5xl lg:text-6xl">
-                  Your investment destination
+                <h1 className="mb-4 tracking-wider text-4xl font-extrabold leading-none text-white dark:text-gray-300 md:text-5xl lg:text-5xl">
+                  Your investment
                 </h1>
-                <p className="mb-8 text-lg font-normal text-gray-300 text-dark lg:text-xl sm:px-16 lg:px-48">
-                  Here at ETBLINK we focus on markets where technology,
-                  innovation, and capital can unlock long-term value and drive
-                  economic growth.
+                <h1 className="mb-4 tracking-wider text-4xl font-extrabold leading-none text-white dark:text-gray-300 md:text-5xl lg:text-5xl">
+                  destination
+                </h1>
+                <p className="mb-8 text-sm font-normal text-gray-300 text-dark lg:text-sm sm:px-16 lg:px-48">
+                  Here at ETBLINK we focus on markets where technology, <br />
+                  innovation, and capital can unlock long-term value.
                 </p>
                 <div className="flex flex-col space-y-4 sm:flex-row sm:justify-center sm:space-y-0">
                   <a
@@ -250,7 +252,7 @@ const Home = () => {
               </div>
 
               <div className="w-full h-full place-items-center relative">
-                <div className="hidden md:block h-[222px] w-full  absolute -top-[222px] right-0">
+                <div className="hidden md:block h-[222px] w-full  absolute -top-[190px] right-0">
                   <div className="relative w-full h-full ">
                     <div className="absolute right-0 top-0 z-30 bg-white bg-dark w-full">
                       <p className="px-4 pt-2 pb-1">Recently added business</p>

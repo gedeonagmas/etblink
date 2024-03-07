@@ -56,7 +56,7 @@
 }
 
 .px-main {
-  @apply px-[7%];
+  @apply px-[10%];
 }
 
 .bg-main {
@@ -75,5 +75,18 @@
 .border-dark {
   @apply dark:border-gray-600;
 }
-
-
+.pr-main {
+  @apply pr-[10%];
+}
+.pl-main {
+  @apply pl-[10%];
+}
+.py-main {
+  @apply py-[10%];
+}
+.mr-main {
+  @apply mr-[10%];
+}
+.ml-main {
+  @apply ml-[10%];
+}
