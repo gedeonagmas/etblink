@@ -25,7 +25,7 @@ const Header = () => {
     // fixed bg-white bg-dark top-0 left-0 w-full z-50 h-auto
     <div className="">
       <div className="w-full flex flex-col md:flex-row ">
-        <div className="relative w-[78%]">
+        <div className="relative pl-main bg-main-black w-[78%]">
           <Slide
             autoplay={false}
             infinite={true}
@@ -42,8 +42,8 @@ const Header = () => {
                 className=""
                 // style={{ width: "100%", background: "blue" }}
               >
-                <div className="place-items-center py-3 pl-main pr-10 gap-x-24 gap-y-2 bg-main-black  grid grid-cols-1 xl:grid-cols-2  items-center justify-center  h-auto">
-                  <div className="w-full bg-main-black text-white dark:text-gray-200 p-2 h-[120px]  flex gap-2 ">
+                <div className="place-items-center py-3 pr-10 gap-x-24 gap-y-2  grid grid-cols-1 xl:grid-cols-2  items-center justify-center  h-auto">
+                  <div className="w-full bg-main-black text-white dark:text-gray-200 py-2 h-[100px]  flex gap-2 ">
                     <img
                       src="./ad1.jpg"
                       alt=""
@@ -51,7 +51,7 @@ const Header = () => {
                     />
                   </div>
                   <div className="h-[70%] w-[2px] absolute bg-blue-800"></div>
-                  <div className="w-full bg-main-black text-white dark:text-gray-200 p-2 h-[120px]  flex gap-2 ">
+                  <div className="w-full bg-main-black text-white dark:text-gray-200 p-2 h-[100px]  flex gap-2 ">
                     <img
                       src="./ad3.jpeg"
                       alt=""
@@ -172,10 +172,86 @@ const Header = () => {
         {/* </div> */}
       </div>
 
-      {/* <div className="w-full text-sm text-white py-2 pr-20 bg-gray-900 flex gap-4 justify-end items-end">
-        <p>Login</p>
-        <p>Sign up</p>
-      </div> */}
+      <div className="w-full text-sm text-white py-1 px-main bg-gray-900 flex gap-4 justify-between items-center">
+        <p className="py-2 text-xs rounded-sm px-2 bg-yellow-400 font-semibold">
+          jan, 23 2024 3:24 PM
+        </p>
+        <div className="flex items-center gap-2 justify-center">
+          <div className="me-2" role="presentation">
+            <button
+              id="dropdownDelayButton"
+              data-dropdown-toggle="dropdownDelay"
+              data-dropdown-delay="500"
+              data-dropdown-trigger="hover"
+              className="focus:ring-0 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center "
+              type="button"
+            >
+              Languages{" "}
+              <svg
+                className="w-2.5 h-2.5 ms-3"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 10 6"
+              >
+                <path
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="m1 1 4 4 4-4"
+                />
+              </svg>
+            </button>
+
+            <div
+              id="dropdownDelay"
+              className="z-30 -mt-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-auto dark:bg-gray-700"
+            >
+              <ul
+                className="py-2 text-sm text-start text-gray-700 dark:text-gray-200"
+                aria-labelledby="dropdownDelayButton"
+              >
+                <li>
+                  <a
+                    href="#"
+                    className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                  >
+                    English
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                  >
+                    Amharic
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                  >
+                    Affan oromo
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                  >
+                    Tigirigna
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <p>Login</p>
+          <p className="text-gray-600">|</p>
+          <p>Register</p>
+        </div>
+      </div>
 
       {/* tabs */}
       <div className="border-b relative py-2 md:py-1 border-gray-200 dark:border-gray-700">
@@ -186,90 +262,92 @@ const Header = () => {
           role="tablist"
         >
           {/* currencies */}
-          <div className="hidden xl:flex absolute bg-gray-200 bg-dark text-dark z-10 -bottom-[214px] right-[7%] w-auto h-auto flex-col items-center justify-center rounded-sm shadow-2xl ">
-            <div className="flex text-sm font-semibold w-full px-1 py-2 flex-col border-t-2 border-dark items-center justify-center">
-              <div className="flex w-full items-center justify-start">
-                <svg
-                  className="w-4 h-4"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M8 17.3a5 5 0 0 0 2.6 1.7c2.2.6 4.5-.5 5-2.3.4-2-1.3-4-3.6-4.5-2.3-.6-4-2.7-3.5-4.5.5-1.9 2.7-3 5-2.3 1 .2 1.8.8 2.5 1.6m-3.9 12v2m0-18v2.2"
-                  />
-                </svg>
-                <p className="">USD</p>
-              </div>
-              <p className="font-normal">52.34 birr</p>
+          <div className="hidden xl:flex absolute  bg-dark right-main text-dark z-10 -bottom-[260px] w-[90px] h-auto flex-col items-center justify-center rounded-sm ">
+            <div className="top-20 shadow-2xl absolute left-0 py-2 rounded-tr-[40px] px-2 text-white font-semibold w-full bg-yellow-400">
+              Exchange
             </div>
-            <div className="flex text-sm font-semibold w-full p-1 flex-col border-t-2 border-dark items-center justify-center">
-              <div className="flex w-full items-center justify-start">
-                <svg
-                  className="w-4 h-4"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M8 17.3a5 5 0 0 0 2.6 1.7c2.2.6 4.5-.5 5-2.3.4-2-1.3-4-3.6-4.5-2.3-.6-4-2.7-3.5-4.5.5-1.9 2.7-3 5-2.3 1 .2 1.8.8 2.5 1.6m-3.9 12v2m0-18v2.2"
-                  />
-                </svg>
-                <p className="">EURO</p>
+            <div className="absolute shadow-2xl bottom-0 w-full h-2 rounded-sm bg-yellow-400 "></div>
+            <div className="bg-gray-200 shadow-2xl w-[90%] pt-1 pb-3 mt-[115px]">
+              <div className="flex relative text-sm border-b border-gray-400 font-semibold w-full px-1 flex-col border-dark items-center justify-center">
+                <div className="flex  w-full gap-1 items-center justify-center">
+                  <svg
+                    className="w-6 h-6"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M8 17.3a5 5 0 0 0 2.6 1.7c2.2.6 4.5-.5 5-2.3.4-2-1.3-4-3.6-4.5-2.3-.6-4-2.7-3.5-4.5.5-1.9 2.7-3 5-2.3 1 .2 1.8.8 2.5 1.6m-3.9 12v2m0-18v2.2"
+                    />
+                  </svg>
+                </div>
+                <p className="font-normal">52 birr</p>
               </div>
-              <p className="font-normal">52.34 birr</p>
-            </div>
-            <div className="flex text-sm font-semibold w-full p-1 flex-col border-t-2 border-dark items-center justify-center">
-              <div className="flex w-full items-center justify-start">
-                <svg
-                  className="w-4 h-4"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M8 17.3a5 5 0 0 0 2.6 1.7c2.2.6 4.5-.5 5-2.3.4-2-1.3-4-3.6-4.5-2.3-.6-4-2.7-3.5-4.5.5-1.9 2.7-3 5-2.3 1 .2 1.8.8 2.5 1.6m-3.9 12v2m0-18v2.2"
-                  />
-                </svg>
-                <p className="">POUND</p>
+              <div className="flex text-sm font-semibold w-full p-1 flex-col border-b border-gray-400 border-dark items-center justify-center">
+                <div className="flex w-full items-center justify-center">
+                  <svg
+                    class="w-6 h-6 text-gray-800 dark:text-white"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M6 10h9.2M6 14h9.2M18 5a6 6 0 0 0-3.4-1C11 4 7.8 7.6 7.8 12s3 8 6.8 8a6 6 0 0 0 3.4-1"
+                    />
+                  </svg>
+                </div>
+                <p className="font-normal">52 birr</p>
               </div>
-              <p className="font-normal">52.34 birr</p>
-            </div>
-            <div className="flex text-sm font-semibold w-full p-1 flex-col border-t-2 border-dark items-center justify-center">
-              <div className="flex w-full items-center justify-start">
-                <svg
-                  className="w-4 h-4"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M8 17.3a5 5 0 0 0 2.6 1.7c2.2.6 4.5-.5 5-2.3.4-2-1.3-4-3.6-4.5-2.3-.6-4-2.7-3.5-4.5.5-1.9 2.7-3 5-2.3 1 .2 1.8.8 2.5 1.6m-3.9 12v2m0-18v2.2"
-                  />
-                </svg>
-                <p className="">RYAD</p>
+              <div className="flex text-sm font-semibold w-full p-1 flex-col border-b border-gray-400 border-dark items-center justify-center">
+                <div className="flex w-full items-center justify-center">
+                  <svg
+                    class="w-6 h-6 text-gray-800 dark:text-white"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M6 10h9.2M6 14h9.2M18 5a6 6 0 0 0-3.4-1C11 4 7.8 7.6 7.8 12s3 8 6.8 8a6 6 0 0 0 3.4-1"
+                    />
+                  </svg>
+                </div>
+                <p className="font-normal">52 birr</p>
               </div>
-              <p className="font-normal">52.34 birr</p>
+              <div className="flex text-sm font-semibold w-full p-1 flex-col items-center justify-center">
+                <div className="flex w-full items-center justify-center">
+                  <svg
+                    class="w-6 h-6 text-gray-800 dark:text-white"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M6 10h9.2M6 14h9.2M18 5a6 6 0 0 0-3.4-1C11 4 7.8 7.6 7.8 12s3 8 6.8 8a6 6 0 0 0 3.4-1"
+                    />
+                  </svg>
+                </div>
+                <p className="font-normal">52 birr</p>
+              </div>
             </div>
           </div>{" "}
           <li className="me-2">
@@ -468,14 +546,14 @@ const Header = () => {
               </div>
             </div>
           </li>
-          <li className="me-2" role="presentation">
+          {/* <li className="me-2" role="presentation">
             <Link
               to="/donates"
               className="inline-block p-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
             >
               Donates
             </Link>
-          </li>
+          </li> */}
           <li className="me-2" role="presentation">
             <div className="flex items-center border pr-2 rounded-md border-dark justify-center">
               <Search sx={{ width: 20, height: 20 }} className="m-1" />
@@ -485,92 +563,6 @@ const Header = () => {
                 placeholder="search"
               />
             </div>
-          </li>
-          <li className="me-2" role="presentation">
-            <button
-              id="dropdownDelayButton"
-              data-dropdown-toggle="dropdownDelay"
-              data-dropdown-delay="500"
-              data-dropdown-trigger="hover"
-              className="focus:ring-0 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center "
-              type="button"
-            >
-              Languages{" "}
-              <svg
-                className="w-2.5 h-2.5 ms-3"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 10 6"
-              >
-                <path
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="m1 1 4 4 4-4"
-                />
-              </svg>
-            </button>
-
-            <div
-              id="dropdownDelay"
-              className="z-30 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-auto dark:bg-gray-700"
-            >
-              <ul
-                className="py-2 text-sm text-start text-gray-700 dark:text-gray-200"
-                aria-labelledby="dropdownDelayButton"
-              >
-                <li>
-                  <a
-                    href="#"
-                    className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                  >
-                    English
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                  >
-                    Amharic
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                  >
-                    Affan oromo
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                  >
-                    Tigirigna
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </li>
-          <li className="me-2" role="presentation">
-            <Link
-              to="/login"
-              className="inline-block p-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
-            >
-              Login
-            </Link>
-          </li>
-          <li className="me-2" role="presentation">
-            <Link
-              to="/signup"
-              className="inline-block p-1 rounded-md  rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
-            >
-              Sign up
-            </Link>
           </li>
           <li className="me-2" role="presentation">
             <div className="top-2 right-2 z-50">

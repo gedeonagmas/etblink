@@ -90,3 +90,6 @@
 .ml-main {
   @apply ml-[10%];
 }
+.right-main {
+  @apply right-[10%];
+}
