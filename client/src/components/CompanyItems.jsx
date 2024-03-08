@@ -2,10 +2,20 @@ const CompanyItems = ({ value }) => {
   return (
     <div
       key={value}
-      className="w-full relative  py-8 px-6 h-auto bg-white dark:bg-gray-700 rounded-md shadow-md shadow-gray-400 flex flex-col items-start text-sm justify-start"
+      className="w-full relative  py-8 px-10 h-auto bg-white dark:bg-gray-700 rounded-md shadow-md shadow-gray-400 flex flex-col items-start text-sm justify-start"
     >
       <p className="font-bold">Ethiopian business link portal your alliance</p>
 
+      <div class="flex rotate-[270deg] absolute z-20 -left-[112px] -top-[37px] gap-x-3">
+        <svg width="100" height="100" viewBox="-150 -150 400 400">
+          <polygon
+            points=" 200 200,0 0, 200 0,"
+            onclick="rotate()"
+            mydatadeg="0"
+          />
+          <circle cx="100" cy="100" r="6" fill="red"></circle>
+        </svg>
+      </div>
       <div
         className={`absolute ${
           value === 0
@@ -13,11 +23,13 @@ const CompanyItems = ({ value }) => {
             : value === 1
             ? "bg-red-500"
             : value === 2
-            ? "bg-emerald-500"
+            ? "bg-emerald-400"
             : "bg-white"
-        } top-0 left-0 h-[6px] rounded-sm rounded-b-none w-full `}
+        } top-0 left-0 h-[8px] rounded-md rounded-b-none w-full `}
       ></div>
-      <p className="text-dark mt-2">Ethiopian business link</p>
+      <p className="text-dark text-gray-500 text-dark mt-2">
+        Ethiopian business link
+      </p>
       <div className="w-full relative my-3 shadow-lgd py-6  flex items-center justify-center gap-4">
         <div className="relative w-full">
           <img
@@ -57,7 +69,7 @@ const CompanyItems = ({ value }) => {
             1200
           </p>
         </div>
-        <div className="absolute bg-white bg-dark w-24 top-[90px] z-10 h-24 border border-dark rounded-full shadow-sm   flex items-center justify-center">
+        <div className="absolute bg-white bg-dark w-20 top-[90px] z-10 h-20 border border-dark rounded-full shadow-sm   flex items-center justify-center">
           <img
             src="./image-1.jpg"
             alt=""
@@ -66,8 +78,8 @@ const CompanyItems = ({ value }) => {
           <div className="w-5 absolute top-2 right-0 h-5 bg-emerald-400 rounded-full border-2 border-white"></div>
         </div>
       </div>
-      {/* <p className="mt-10">local company from ethiopia</p> */}
-      <div className="flex w-full mt-10 items-center justify-between">
+
+      {/* <div className="flex w-full mt-10 items-center justify-between">
         <div className="flex items-center justify-center">
           <svg
             className="w-6 h-6 text-gray-800 dark:text-white"
@@ -147,6 +159,104 @@ const CompanyItems = ({ value }) => {
           </svg>
           Detail
         </div>
+      </div> */}
+      <div className="flex mt-10 w-full items-center justify-between">
+        <div className="flex items-center gap-1 justify-center">
+          <svg
+            className="w-4 h-4 text-gray-600 dark:text-white"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              fillRule="evenodd"
+              d="M12 2a8 8 0 0 1 6.6 12.6l-.1.1-.6.7-5.1 6.2a1 1 0 0 1-1.6 0L6 15.3l-.3-.4-.2-.2v-.2A8 8 0 0 1 11.8 2Zm3 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+              clipRule="evenodd"
+            />
+          </svg>
+          Addiss ababa
+        </div>
+        <div className="flex gap-1 items-center justify-center">
+          <svg
+            className="w-4 h-4 text-gray-600 dark:text-white"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              fillRule="evenodd"
+              d="M3 6c0-1.1.9-2 2-2h14a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-6.6l-2.9 2.6c-1 .9-2.5.2-2.5-1.1V17H5a2 2 0 0 1-2-2V6Zm4 2a1 1 0 0 0 0 2h5a1 1 0 1 0 0-2H7Zm8 0a1 1 0 1 0 0 2h2a1 1 0 1 0 0-2h-2Zm-8 3a1 1 0 1 0 0 2h2a1 1 0 1 0 0-2H7Zm5 0a1 1 0 1 0 0 2h5a1 1 0 1 0 0-2h-5Z"
+              clipRule="evenodd"
+            />
+          </svg>
+          Chat
+        </div>
+      </div>
+      <div className="flex mt-5 w-full items-center justify-between">
+        <div class="flex items-center">
+          <svg
+            class="w-4 h-4 text-yellow-300 me-1"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="currentColor"
+            viewBox="0 0 22 20"
+          >
+            <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+          </svg>
+          <svg
+            class="w-4 h-4 text-yellow-300 me-1"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="currentColor"
+            viewBox="0 0 22 20"
+          >
+            <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+          </svg>
+          <svg
+            class="w-4 h-4 text-yellow-300 me-1"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="currentColor"
+            viewBox="0 0 22 20"
+          >
+            <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+          </svg>
+          {/* <svg
+            class="w-4 h-4 text-yellow-300 me-1"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="currentColor"
+            viewBox="0 0 22 20"
+          >
+            <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+          </svg> */}
+          <svg
+            class="w-4 h-4 text-gray-300 me-1 dark:text-gray-500"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="currentColor"
+            viewBox="0 0 22 20"
+          >
+            <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+          </svg>
+          <p class="ms-1 text-sm font-medium text-gray-500 dark:text-gray-400">
+            4.5
+          </p>
+        </div>
+
+        <button
+          className={`py-[2px] px-4 ${
+            value === 1
+              ? "bg-[#00aeff]"
+              : value === 2
+              ? "bg-emerald-500"
+              : "bg-orange-500"
+          }  text-white rounded-sm`}
+        >
+          Read more{" "}
+        </button>
       </div>
     </div>
   );
