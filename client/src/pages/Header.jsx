@@ -172,8 +172,8 @@ const Header = () => {
         {/* </div> */}
       </div>
 
-      <div className="w-full text-sm text-white py-1 px-main bg-gray-900 flex gap-4 justify-between items-center">
-        <p className="py-2 text-xs rounded-sm px-2 bg-yellow-400 font-semibold">
+      <div className="w-full text-sm text-white py-1 px-[21%] bg-gray-900 flex gap-4 justify-between items-center">
+        <p className="py-2 first-line:text-xs rounded-sm px-2 bg-yellow-400 font-semibold">
           jan, 23 2024 3:24 PM
         </p>
         <div className="flex items-center gap-2 justify-center">
@@ -262,13 +262,23 @@ const Header = () => {
           role="tablist"
         >
           {/* currencies */}
-          <div className="hidden xl:flex absolute  bg-dark right-main text-dark z-10 -bottom-[260px] w-[90px] h-auto flex-col items-center justify-center rounded-sm ">
-            <div className="top-20 shadow-2xl absolute left-0 py-2 rounded-tr-[40px] px-2 text-white font-semibold w-full bg-yellow-400">
+          {/* <div className="hidden bg-green-300 p-10 xl:flex absolute  bg-dark right-6 text-dark z-10 top-3 w-[90px] h-auto flex-col items-center justify-center rounded-sm "> */}
+          {/* <div className="top-20 shadow-2xl absolute left-0 rounded-tr-[40px] text-white font-semibold w-full bg-yellow-400"> */}
+          <div className="h-auto absolute shadow-2xl shadow-gray-500 z-20 right-5 -top-[52px] w-[84px] ">
+            <p className="absolute z-20  top-5 left-2 text-white">
               Exchange
-            </div>
-            <div className="absolute shadow-2xl bottom-0 w-full h-2 rounded-sm bg-yellow-400 "></div>
-            <div className="bg-gray-200 shadow-2xl w-[90%] pt-1 pb-3 mt-[115px]">
-              <div className="flex relative text-sm border-b border-gray-400 font-semibold w-full px-1 flex-col border-dark items-center justify-center">
+            </p>
+            <svg
+              id="trapezoid"
+              viewbox="0 0 100 100"
+              preserveAspectRatio="none"
+              width="100%"
+              className="absoluted -mt-2"
+            >
+              <path d="M0,5 L110,30 L83,65 L0,65z" fill="orange"></path>
+            </svg>
+            <div className="bg-gray-200 shadow-2xl -mt-[84px] w-full pb-2">
+              <div className="flex py-2 relative text-sm border-b border-gray-400 font-semibold w-full px-1 flex-col border-dark items-center justify-center">
                 <div className="flex  w-full gap-1 items-center justify-center">
                   <svg
                     className="w-6 h-6"
@@ -288,7 +298,7 @@ const Header = () => {
                 </div>
                 <p className="font-normal">52 birr</p>
               </div>
-              <div className="flex text-sm font-semibold w-full p-1 flex-col border-b border-gray-400 border-dark items-center justify-center">
+              <div className="flex text-sm font-semibold w-full p-2 flex-col border-b border-gray-400 border-dark items-center justify-center">
                 <div className="flex w-full items-center justify-center">
                   <svg
                     class="w-6 h-6 text-gray-800 dark:text-white"
@@ -308,7 +318,7 @@ const Header = () => {
                 </div>
                 <p className="font-normal">52 birr</p>
               </div>
-              <div className="flex text-sm font-semibold w-full p-1 flex-col border-b border-gray-400 border-dark items-center justify-center">
+              <div className="flex text-sm font-semibold w-full p-2 flex-col border-b border-gray-400 border-dark items-center justify-center">
                 <div className="flex w-full items-center justify-center">
                   <svg
                     class="w-6 h-6 text-gray-800 dark:text-white"
@@ -328,7 +338,7 @@ const Header = () => {
                 </div>
                 <p className="font-normal">52 birr</p>
               </div>
-              <div className="flex text-sm font-semibold w-full p-1 flex-col items-center justify-center">
+              <div className="flex text-sm font-semibold w-full p-2 flex-col border-b border-gray-400 border-dark items-center justify-center">
                 <div className="flex w-full items-center justify-center">
                   <svg
                     class="w-6 h-6 text-gray-800 dark:text-white"
@@ -348,8 +358,33 @@ const Header = () => {
                 </div>
                 <p className="font-normal">52 birr</p>
               </div>
+              <div className="flex text-sm font-semibold w-full p-2 flex-col items-center justify-center">
+                <div className="flex w-full items-center justify-center">
+                  <svg
+                    class="w-6 h-6 text-gray-800 dark:text-white"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M6 10h9.2M6 14h9.2M18 5a6 6 0 0 0-3.4-1C11 4 7.8 7.6 7.8 12s3 8 6.8 8a6 6 0 0 0 3.4-1"
+                    />
+                  </svg>
+                </div>
+                <p className="font-normal">52 birr</p>
+              </div>
+              <div className="absolute shadow-2xl bottom-0 w-full h-2 rounded-sm bg-yellow-400 "></div>
             </div>
-          </div>{" "}
+          </div>
+
+          {/* </div> */}
+
+          {/* </div>{" "} */}
           <li className="me-2">
             <div className="flex items-center justify-center gap-6">
               {/* <img src="./gedi.jpg" alt="" className="w-10 h-8 rounded-sm" /> */}

@@ -14,7 +14,7 @@ const Home = () => {
     backgroundSize: "cover",
     height: "440px",
   };
-  const slideImages = ["image-1.jpg", "image-a.jpg", "image-b.jpg"];
+  const slideImages = ["build4.jpg", "build1.jpg", "build3.jpg"];
 
   // const hoverHandler = (id) => {
   //   const ids = document.getElementById(id);
@@ -51,10 +51,15 @@ const Home = () => {
                       backgroundImage: `url(${slideImage})`,
                       width: "100%",
                     }}
-                    className="object-fill relative items-start justify-start  object-center"
-                  >
-                    {/* hero page content */}
-                    <div className="flex z-10 w-full px-main  h-auto gap-2 items-start justify-start">
+                    className="object-cover object-bottom relative items-start justify-start"
+                  > 
+                    
+                  </div>
+                </div>
+              ))}
+            </Slide>
+{/* hero page content */}
+                    <div className="flex absolute top-52 ml-main z-10 w-[400px]  h-auto gap-2 items-start justify-start">
                       <div className="absolute -mt-32 p-5 rounded-sm bg-black/35 mx-auto">
                         <h1 className="mb-2 tracking-wider text-4xl font-extrabold leading-none text-white dark:text-gray-300 ">
                           Your investment
@@ -70,11 +75,6 @@ const Home = () => {
                         </p>
                       </div>
                     </div>
-                  </div>
-                </div>
-              ))}
-            </Slide>
-
             <div className="w-full px-main relative pt-10 bg-cover h-[100%] bg-no-repeat md:py-0 bg-[url('/bg3.jpg')] bg-dark bg-bottom grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
               <div className="w-full gap-5 py-5 md:py-0 flex px-4 flex-col items-center justify-center bg-main-black text-white">
                 <div className="w-full flex justify-between items-center">
