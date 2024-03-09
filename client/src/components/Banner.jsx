@@ -4,7 +4,7 @@ const Banner = () => {
   return (
     <div
       style={{ width: "100%", height: "100%" }}
-      className="slide-container px-main rounded-full mt-4 relative w-full h-full "
+      className="slide-container px-main rounded-full relative w-full h-full "
     >
       <Slide
         autoplay={false}
@@ -40,7 +40,7 @@ const Banner = () => {
               </div>
             </div> */}
 
-            <div className="w-full  text-white dark:text-gray-200 h-[150px]  flex gap-2 ">
+            <div className="w-full  text-white dark:text-gray-200 h-[110px]  flex gap-2 ">
               <img
                 src="./ad1.jpg"
                 alt=""

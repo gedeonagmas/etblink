@@ -24,8 +24,8 @@ const Header = () => {
   return (
     // fixed bg-white bg-dark top-0 left-0 w-full z-50 h-auto
     <div className="">
-      <div className="w-full flex flex-col md:flex-row ">
-        <div className="relative pl-main bg-main-black w-[78%]">
+      <div className="w-full flex flex-col lg:flex-row ">
+        <div className="relative pl-main bg-main-black w-full lg:w-[78%]">
           <Slide
             autoplay={false}
             infinite={true}
@@ -42,16 +42,16 @@ const Header = () => {
                 className=""
                 // style={{ width: "100%", background: "blue" }}
               >
-                <div className="place-items-center py-3 pr-10 gap-x-24 gap-y-2  grid grid-cols-1 xl:grid-cols-2  items-center justify-center  h-auto">
-                  <div className="w-full bg-main-black text-white dark:text-gray-200 py-2 h-[100px]  flex gap-2 ">
+                <div className="place-items-center py-[6px] pr-10 gap-x-24 gap-y-2  grid grid-cols-1 xl:grid-cols-2  items-center justify-center  h-auto">
+                  <div className="w-full bg-main-black text-white dark:text-gray-200 py-2 h-[86px]  flex gap-2 ">
                     <img
                       src="./ad1.jpg"
                       alt=""
                       className="w-full h-auto rounded-sm"
                     />
                   </div>
-                  <div className="h-[70%] w-[2px] absolute bg-blue-800"></div>
-                  <div className="w-full bg-main-black text-white dark:text-gray-200 p-2 h-[100px]  flex gap-2 ">
+                  <div className="h-[70%] hidden lg:block w-[2px] absolute bg-blue-800"></div>
+                  <div className="w-full bg-main-black text-white dark:text-gray-200 p-2 h-[86px]  flex gap-2 ">
                     <img
                       src="./ad3.jpeg"
                       alt=""
@@ -66,10 +66,10 @@ const Header = () => {
 
         {/* advert action button and social media */}
         {/* <div className="w-full px-main md:px-4  bg-main-black text-white dark:text-gray-200 p-2 h-auto  flex gap-2 "> */}
-        <div className="flex w-full pl-4 pr-main bg-main-black justify-center flex-col gap-6 items-center">
+        <div className="flex w-full py-3 lg:py-0 pl-4 pr-main bg-main-black justify-center flex-col gap-3 items-center">
           <p
             href="#"
-            className="inline-flex  text-white rounded-full gap-2 px-4 py-2 border-2 border-white mt-1 text-[14px] font-bold items-center"
+            className="inline-flex hover:bg-yellow-400 cursor-pointer  text-white rounded-full gap-2 px-4 py-[5px] border-2 border-white mt-1 text-[14px] font-bold items-center"
           >
             Advert here
             <svg
@@ -172,7 +172,7 @@ const Header = () => {
         {/* </div> */}
       </div>
 
-      <div className="w-full text-sm text-white py-1 px-[21%] bg-gray-900 flex gap-4 justify-between items-center">
+      <div className="w-full text-sm text-white py-[2px] px-[21%] bg-gray-900 flex gap-4 justify-between items-center">
         <p className="py-2 first-line:text-xs rounded-sm px-2 bg-yellow-400 font-semibold">
           jan, 23 2024 3:24 PM
         </p>
@@ -254,7 +254,7 @@ const Header = () => {
       </div>
 
       {/* tabs */}
-      <div className="border-b relative py-2 md:py-1 border-gray-200 dark:border-gray-700">
+      <div className="border-b relative shadow-2xl shadow-black py-2 md:py-1 border-gray-200 dark:border-gray-700">
         <ul
           className="flex relative gap-1 flex-wrap items-center justify-center -mb-px text-sm font-medium text-center"
           id="default-tab"
@@ -264,10 +264,8 @@ const Header = () => {
           {/* currencies */}
           {/* <div className="hidden bg-green-300 p-10 xl:flex absolute  bg-dark right-6 text-dark z-10 top-3 w-[90px] h-auto flex-col items-center justify-center rounded-sm "> */}
           {/* <div className="top-20 shadow-2xl absolute left-0 rounded-tr-[40px] text-white font-semibold w-full bg-yellow-400"> */}
-          <div className="h-auto absolute shadow-2xl shadow-gray-500 z-20 right-5 -top-[52px] w-[84px] ">
-            <p className="absolute z-20  top-5 left-2 text-white">
-              Exchange
-            </p>
+          <div className="h-auto absolute shadow-2xl shadow-gray-500 z-20 right-main -top-[45px] w-[65px] ">
+            <p className="absolute z-20  top-4 left-2 text-white">Today</p>
             <svg
               id="trapezoid"
               viewbox="0 0 100 100"
@@ -275,13 +273,13 @@ const Header = () => {
               width="100%"
               className="absoluted -mt-2"
             >
-              <path d="M0,5 L110,30 L83,65 L0,65z" fill="orange"></path>
+              <path d="M0,5 L110,30 L660,65 L0,56z" fill="orange"></path>
             </svg>
-            <div className="bg-gray-200 shadow-2xl -mt-[84px] w-full pb-2">
-              <div className="flex py-2 relative text-sm border-b border-gray-400 font-semibold w-full px-1 flex-col border-dark items-center justify-center">
+            <div className="bg-gray-200 bg-dark text-[13px] shadow-2xl -mt-[94px] w-full pb-2">
+              <div className="flex py-1 relative border-b border-gray-400 font-semibold w-full px-1 flex-col border-dark items-center justify-center">
                 <div className="flex  w-full gap-1 items-center justify-center">
                   <svg
-                    className="w-6 h-6"
+                    className="w-4 h-4"
                     aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -296,12 +294,12 @@ const Header = () => {
                     />
                   </svg>
                 </div>
-                <p className="font-normal">52 birr</p>
+                <p className="font-normal text-[13px]">52 birr</p>
               </div>
-              <div className="flex text-sm font-semibold w-full p-2 flex-col border-b border-gray-400 border-dark items-center justify-center">
+              <div className="flex py-1 font-semibold w-full flex-col border-b border-gray-400 border-dark items-center justify-center">
                 <div className="flex w-full items-center justify-center">
                   <svg
-                    class="w-6 h-6 text-gray-800 dark:text-white"
+                    class="w-4 h-4 "
                     aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -318,10 +316,10 @@ const Header = () => {
                 </div>
                 <p className="font-normal">52 birr</p>
               </div>
-              <div className="flex text-sm font-semibold w-full p-2 flex-col border-b border-gray-400 border-dark items-center justify-center">
+              <div className="flex text-sm font-semibold w-full py-1 flex-col border-b border-gray-400 border-dark items-center justify-center">
                 <div className="flex w-full items-center justify-center">
                   <svg
-                    class="w-6 h-6 text-gray-800 dark:text-white"
+                    class="w-4 h-4 "
                     aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -338,10 +336,10 @@ const Header = () => {
                 </div>
                 <p className="font-normal">52 birr</p>
               </div>
-              <div className="flex text-sm font-semibold w-full p-2 flex-col border-b border-gray-400 border-dark items-center justify-center">
+              <div className="flex text-sm font-semibold w-full py-1 flex-col border-b border-gray-400 border-dark items-center justify-center">
                 <div className="flex w-full items-center justify-center">
                   <svg
-                    class="w-6 h-6 text-gray-800 dark:text-white"
+                    class="w-4 h-4 "
                     aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -358,10 +356,10 @@ const Header = () => {
                 </div>
                 <p className="font-normal">52 birr</p>
               </div>
-              <div className="flex text-sm font-semibold w-full p-2 flex-col items-center justify-center">
+              <div className="flex text-sm font-semibold w-full py-1 flex-col items-center justify-center">
                 <div className="flex w-full items-center justify-center">
                   <svg
-                    class="w-6 h-6 text-gray-800 dark:text-white"
+                    class="w-4 h-4 "
                     aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -378,7 +376,7 @@ const Header = () => {
                 </div>
                 <p className="font-normal">52 birr</p>
               </div>
-              <div className="absolute shadow-2xl bottom-0 w-full h-2 rounded-sm bg-yellow-400 "></div>
+              <div className="absolute shadow-2xl bottom-0 w-full h-1 rounded-sm bg-yellow-400 "></div>
             </div>
           </div>
 
@@ -435,9 +433,11 @@ const Header = () => {
           </li>
           <li className="me-2 relative" role="presentation">
             <button
-              onMouseOver={() => {
+              onClick={() => {
                 const ids = document.getElementById("resource-dropdown");
-                ids?.classList?.remove("hidden");
+                ids?.classList?.value.includes("hidden")
+                  ? ids?.classList.remove("hidden")
+                  : ids?.classList?.add("hidden");
               }}
               className="focus:ring-0 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center "
               type="button"
