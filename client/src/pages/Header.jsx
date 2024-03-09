@@ -264,7 +264,7 @@ const Header = () => {
           {/* currencies */}
           {/* <div className="hidden bg-green-300 p-10 xl:flex absolute  bg-dark right-6 text-dark z-10 top-3 w-[90px] h-auto flex-col items-center justify-center rounded-sm "> */}
           {/* <div className="top-20 shadow-2xl absolute left-0 rounded-tr-[40px] text-white font-semibold w-full bg-yellow-400"> */}
-          <div className="h-auto absolute shadow-2xl shadow-gray-500 z-20 right-main -top-[45px] w-[65px] ">
+          <div className="h-auto absolute shadow-2xl shadow-gray-500 z-20 right-main -top-[20px] w-[65px] ">
             <p className="absolute z-20  top-4 left-2 text-white">Today</p>
             <svg
               id="trapezoid"

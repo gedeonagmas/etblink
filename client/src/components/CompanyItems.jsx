@@ -20,6 +20,7 @@ const CompanyItems = ({ value }) => {
           />
           {/* <circle cx="100" cy="100" r="6" fill="red"></circle> */}
         </svg>
+        <p className="absolute rotate-45 top-11 left-16 text-white">0{ value}</p>
       </div>
       {/* <div
         className={`absolute ${
