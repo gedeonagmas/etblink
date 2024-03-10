@@ -86,10 +86,15 @@ const Footer = () => {
 
       <div
         style={{
-          backgroundImage: "url('./bg-blueblack.jpeg')",
-          backgroundPosition: "bottom",
+          // backgroundImage: "url('./etblink.jpg')",
+          // backgroundPosition: "bottom",
+          backgroundImage:
+            "linear-gradient(to right, rgba(109, 179, 242, .9), rgba(109, 179, 242, .6)), url('./etblink.jpg')",
+          backgroundSize: "cover, contain",
+          backgroundPosition: "center, right bottom",
+          backgroundRepeat: "no-repeat, no-repeat",
         }}
-        className="flex px-main bg-re bg-no-repeat bg-cover flex-col gap-2 w-full mt-10 object-bottom bg-blue-500/20 py-10 text-white"
+        className="flex px-main bg-re bg-no-repeat bg-opacity-20 bg-cover flex-col gap-2 w-full mt-10 object-bottom bg-blue-500/20 py-10 text-white"
       >
         <p className="text-lg">
           ETBLINK <span className="text-sm">ethiopian business link</span>

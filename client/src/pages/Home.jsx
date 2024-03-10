@@ -5,6 +5,8 @@ import Sponsors from "../components/Sponsors";
 import YoutubeItems from "../components/YoutubeItems";
 import CompanyItems from "../components/CompanyItems";
 import Banner from "../components/Banner";
+import BorderColorOutlinedIcon from "@mui/icons-material/BorderColorOutlined";
+import { CreateOutlined } from "@mui/icons-material";
 
 const Home = () => {
   const divStyle = {
@@ -14,7 +16,7 @@ const Home = () => {
     backgroundSize: "cover",
     height: "440px",
   };
-  const slideImages = ["build4.jpg", "build1.jpg", "build3.jpg"];
+  const slideImages = ["etblink.jpg", "etblink2.jpg", "etblink3.jpg"];
 
   // const hoverHandler = (id) => {
   //   const ids = document.getElementById(id);
@@ -74,7 +76,85 @@ const Home = () => {
               </div>
             </div>
             <div className="w-full px-main relative pt-10 bg-cover h-[100%] bg-no-repeat md:py-0 bg-[url('/bg3.jpg')] bg-dark bg-bottom grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-              <div className="w-full gap-5 py-5 md:py-0 flex px-4 flex-col items-center justify-center bg-main-black text-white">
+              <div className="absolute shadow-xl grid grid-cols-4 text-gray-500 mx-main w-[55.5%] -top-10 left-0 h-[70px] rounded-lg border border-gray-300 bg-white z-20">
+                <div className="flex p-2 items-center justify-start border-r">
+                  <svg
+                    class="w-6 h-6 "
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="m10.8 17.8-6.4 2.1 2.1-6.4m4.3 4.3L19 9a3 3 0 0 0-4-4l-8.4 8.6m4.3 4.3-4.3-4.3m2.1 2.1L15 9.1m-2.1-2 4.2 4.2"
+                    />
+                  </svg>
+                  <input
+                    type="text"
+                    className="h-full border-0 focus:outline-none focus:ring-0 outline-none w-32"
+                    placeholder="Keywords"
+                  />
+                </div>
+                <div className="flex p-2 items-center justify-start border-r">
+                  <svg
+                    class="w-6 h-6 "
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M5 11.2v.8l7 4 7-4v-.8m-14 5v.8l7 4 7-4v-1M12 3 5 7l7 4 7-4-7-4Z"
+                    />
+                  </svg>
+                  <input
+                    type="text"
+                    className="h-full border-0 focus:outline-none focus:ring-0 outline-none w-32"
+                    placeholder="Filter by category"
+                  />
+                </div>
+                <div className="flex p-2 items-center justify-start border-r">
+                  <svg
+                    class="w-6 h-6 "
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"
+                    />
+                    <path
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M17.8 14h0a7 7 0 1 0-11.5 0h0l.1.3.3.3L12 21l5.1-6.2.6-.7.1-.2Z"
+                    />
+                  </svg>
+                  <input
+                    type="text"
+                    className="h-full border-0 focus:outline-none focus:ring-0 outline-none w-32"
+                    placeholder="Location"
+                  />
+                </div>
+                <div className="flex p-2 cursor-pointer items-center justify-center rounded-r-lg text-white bg-[rgb(252,45,45)]">
+                  <p className="text-lg  text-center uppercase">Search</p>
+                </div>
+              </div>
+              <div className="w-full mt-10 gap-5 py-5 md:py-0 flex px-4 flex-col items-center justify-center bg-main-black text-white">
                 <div className="w-full flex justify-between items-center">
                   <p className="font-bold text-gray-200">
                     Top listed magazines
@@ -173,7 +253,7 @@ const Home = () => {
                 </div>
               </div>
 
-              <div className="w-full p-4 bg-white dark:bg-gray-700">
+              <div className="w-full mt-10 p-4 bg-white dark:bg-gray-700">
                 <div className="w-full flex justify-between items-center">
                   <p className="font-bold text-dark">Our galleries</p>
                   {/* <p className="text-xs cursor-pointer flex items-center justify-center">
@@ -453,11 +533,20 @@ const Home = () => {
         </div>
 
         <Banner />
-        <div className="w-full px-main py-8 flex bg-gray-100 bg-dark text-dark flex-col items-center justify-center">
-          <p className="self-start  font-bold">Paid Lists</p>
-          <div className="grid mt-5 grid-cols-1 md:grid-cols-3 lg:grid-cols-4  w-full place-items-centers gap-7">
-            {[0, 1, 2, 3, 4, 5, 6, 7].map((e, i) => {
-              return <CompanyItems value={i} />;
+        <div className="w-full  py-8 flex  bg-dark text-dark flex-col items-center justify-center">
+          <p className="text-4xl font-semibold text-gray-700">
+            Top & Popular Listings
+          </p>
+          <p className="text-[17px] px-main mt-3 py-1 font-light text-gray-500">
+            <center>
+              At Vero Eos Et Accusamus Et Iusto Odio Dignissimos Ducimus Qui
+              Blanditiis Praesentium Voluptatum Deleniti Atque Corrupti Quos
+              Dolores Et Quas Molestias Excepturi
+            </center>
+          </p>
+          <div className="grid px-main mt-5 grid-cols-1 md:grid-cols-2 lg:grid-cols-3  w-full place-items-centers gap-7">
+            {[0, 1, 2, 3, 4, 5].map((e, i) => {
+              return <CompanyItems value={i} phoneNo="+251 9541**" />;
             })}
           </div>
 
@@ -470,7 +559,6 @@ const Home = () => {
 };
 
 export default Home;
-
 
 // import SportsHandBall from "@mui/icons-material/SportsHandBall";
 // import { Slide } from "react-slideshow-image";
