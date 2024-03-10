@@ -3,7 +3,7 @@ import { Visibility } from "@mui/icons-material";
 const YoutubeItems = () => {
   return (
     <div className="w-full bg-gray-200 bg-dark mt-10 py-10 px-main h-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid cols-5 place-items-center gap-3">
-      <div className="flex pr-7 w-full justify-start gap-2 flex-col items-enter">
+      <div className="flex pr-7  w-full justify-start gap-4 flex-col items-enter">
         <p className="text-lg font-bold">Our you tubes</p>
         <p className="text-sm">our latest videos</p>
 
@@ -118,7 +118,13 @@ const YoutubeItems = () => {
             className="flex w-full rounded-sm relative justify-start py-4 gap-1 flex-col items-enter"
           >
             {/* <img src="./image-3.jpg" alt="" className="w-full" /> */}
-            <video src=""></video>
+            <video
+              src="https://www.youtube.com/watch?v=gtj75Kmzp9E"
+              controls
+              autoplay
+              muted
+              className="w-full h-40"
+            ></video>
             <p className="font-bold flex items-center justify-start gap-2 text-sm mt-4">
               {" "}
               <svg

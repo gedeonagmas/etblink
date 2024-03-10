@@ -1,4 +1,5 @@
 import { useState } from "react";
+import VerifiedOutlinedIcon from "@mui/icons-material/VerifiedOutlined";
 
 const CompanyItems = ({ value, phoneNo }) => {
   const [phone, setPhone] = useState(phoneNo);
@@ -49,7 +50,7 @@ const CompanyItems = ({ value, phoneNo }) => {
           <div className="absolute top-4 left-2 rounded-full shadow-lg px-5 py-2 bg-white text-black">
             Open
           </div>
-          <p className="absolute px-2 py-1 rounded-md bg-main ml-5 gap-1 shadow-lg bottom-1 text-white flex items-center justify-center left-2">
+          <p className="absolute px-2 py-1 rounded-md bg-main ml-1 gap-1 shadow-lg bottom-1 text-white flex items-center justify-center left-2">
             {" "}
             <svg
               className="w-5 h-5 "
@@ -64,10 +65,10 @@ const CompanyItems = ({ value, phoneNo }) => {
                 clipRule="evenodd"
               />
             </svg>
-            2500
+            2.5k
           </p>
 
-          <p className="absolute mr-5 gap-1 shadow-lg bottom-1 text-white flex items-center justify-center right-2">
+          <p className="absolute mr-1 gap-1 shadow-lg bottom-1 text-white flex items-center justify-center right-2">
             {" "}
             <svg
               className="w-5 h-5 "
@@ -78,7 +79,7 @@ const CompanyItems = ({ value, phoneNo }) => {
             >
               <path d="m12.7 20.7 6.2-7.1c2.7-3 2.6-6.5.8-8.7A5 5 0 0 0 16 3c-1.3 0-2.7.4-4 1.4A6.3 6.3 0 0 0 8 3a5 5 0 0 0-3.7 1.9c-1.8 2.2-2 5.8.8 8.7l6.2 7a1 1 0 0 0 1.4 0Z" />
             </svg>
-            1200
+            1.2k
           </p>
         </div>
         <div className="absolute bg-white bg-dark w-[130px] h-[130px] top-[125px] rounded-l-mds border-[6px] border-spacing-7 z-10  border-gray-200 rounded-full   flex items-center justify-center">
@@ -139,10 +140,10 @@ const CompanyItems = ({ value, phoneNo }) => {
             <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
           </svg>
         </div>
-        <p className="text-[22px] mt-3 font-semibold text-gray-700">
-          Healthy Food
+        <p className="text-[20px] flex items-center justify-center mt-3 font-semibold text-gray-700">
+          Healthy Food <VerifiedOutlinedIcon className="text-emerald-400" />
         </p>
-        <p className="text-[17px] font-light mt-2">Outdoor, luxury for you</p>
+        <p className="text-[15px] font-light mt-2">Outdoor, luxury for you</p>
 
         <div className="w-full px-4 py-2 border-b border-gray-200 mt-2 text-gray-500 dark:text-white flex items-center justify-between">
           <div className="flex -ml-2 items-center text-[16px] font-light  gap-1 justify-center">
