@@ -448,9 +448,9 @@ const Home = () => {
                 </p>
               </div>
               <img
-                src="./ad1.jpg"
+                src="./skylight.jpg"
                 alt=""
-                className="rounded-xl h-[70px] w-full"
+                className="rounded-sm h-[70px] w-full"
               />
               <img
                 src="./hi.gif"
