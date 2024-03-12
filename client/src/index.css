@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-::-webkit-scrollbar {
+/* ::-webkit-scrollbar {
   width: 0px;
 }
 ::-webkit-scrollbar-track {
@@ -14,7 +14,7 @@
   border-radius: 0px;
   height: 0px;
   background: rgba(0, 0, 0, 0.2);
-}
+} */
 /* * { */
 /* border-style: solid;
   border-color: rgb(77, 78, 78);
@@ -56,15 +56,15 @@
 }
 
 .px-main {
-  @apply px-[10%];
+  @apply px-[8%];
 }
 
 .bg-main {
-  @apply bg-[#1972F5];
+  @apply bg-[#fe755a];
 }
 
 .bg-main-black {
-  @apply bg-blue-900;
+  @apply bg-[#4caedfba];
 }
 .text-dark {
   @apply dark:text-gray-400;
@@ -76,20 +76,23 @@
   @apply dark:border-gray-600;
 }
 .pr-main {
-  @apply pr-[10%];
+  @apply pr-[8%];
 }
 .pl-main {
-  @apply pl-[10%];
+  @apply pl-[8%];
 }
 .py-main {
-  @apply py-[10%];
+  @apply py-[8%];
 }
 .mr-main {
-  @apply mr-[10%];
+  @apply mr-[8%];
 }
 .ml-main {
-  @apply ml-[10%];
+  @apply ml-[8%];
 }
 .right-main {
-  @apply right-[10%];
+  @apply right-[8%];
+}
+.mx-main {
+  @apply mx-[8%];
 }

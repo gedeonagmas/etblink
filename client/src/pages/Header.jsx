@@ -24,8 +24,8 @@ const Header = () => {
   return (
     // fixed bg-white bg-dark top-0 left-0 w-full z-50 h-auto
     <div className="">
-      <div className="w-full flex flex-col md:flex-row ">
-        <div className="relative pl-main bg-main-black w-[78%]">
+      <div className="w-full flex flex-col lg:flex-row ">
+        {/* <div className="relative pl-main bg-main-black w-full lg:w-[78%]">
           <Slide
             autoplay={false}
             infinite={true}
@@ -42,16 +42,16 @@ const Header = () => {
                 className=""
                 // style={{ width: "100%", background: "blue" }}
               >
-                <div className="place-items-center py-3 pr-10 gap-x-24 gap-y-2  grid grid-cols-1 xl:grid-cols-2  items-center justify-center  h-auto">
-                  <div className="w-full bg-main-black text-white dark:text-gray-200 py-2 h-[100px]  flex gap-2 ">
+                <div className="place-items-center py-[6px] pr-10 gap-x-24 gap-y-2  grid grid-cols-1 xl:grid-cols-2  items-center justify-center  h-auto">
+                  <div className="w-full bg-main-black text-white dark:text-gray-200 py-2 h-[86px]  flex gap-2 ">
                     <img
                       src="./ad1.jpg"
                       alt=""
                       className="w-full h-auto rounded-sm"
                     />
                   </div>
-                  <div className="h-[70%] w-[2px] absolute bg-blue-800"></div>
-                  <div className="w-full bg-main-black text-white dark:text-gray-200 p-2 h-[100px]  flex gap-2 ">
+                  <div className="h-[70%] hidden lg:block w-[2px] absolute bg-blue-800"></div>
+                  <div className="w-full bg-main-black text-white dark:text-gray-200 p-2 h-[86px]  flex gap-2 ">
                     <img
                       src="./ad3.jpeg"
                       alt=""
@@ -62,14 +62,14 @@ const Header = () => {
               </div>
             ))}
           </Slide>{" "}
-        </div>
+        </div> */}
 
         {/* advert action button and social media */}
         {/* <div className="w-full px-main md:px-4  bg-main-black text-white dark:text-gray-200 p-2 h-auto  flex gap-2 "> */}
-        <div className="flex w-full pl-4 pr-main bg-main-black justify-center flex-col gap-6 items-center">
+        {/* <div className="flex w-full py-3 lg:py-0 pl-4 pr-main bg-main-black justify-center flex-col gap-3 items-center">
           <p
             href="#"
-            className="inline-flex  text-white rounded-full gap-2 px-4 py-2 border-2 border-white mt-1 text-[14px] font-bold items-center"
+            className="inline-flex hover:bg-yellow-400 cursor-pointer  text-white rounded-full gap-2 px-4 py-[5px] border-2 border-white mt-1 text-[14px] font-bold items-center"
           >
             Advert here
             <svg
@@ -168,15 +168,13 @@ const Header = () => {
               <span className="sr-only">GitHub account</span>
             </a>
           </div>
-        </div>
+        </div> */}
         {/* </div> */}
       </div>
 
-      <div className="w-full text-sm text-white py-1 px-[21%] bg-gray-900 flex gap-4 justify-between items-center">
-        <p className="py-2 first-line:text-xs rounded-sm px-2 bg-yellow-400 font-semibold">
-          jan, 23 2024 3:24 PM
-        </p>
-        <div className="flex items-center gap-2 justify-center">
+      <div className="w-full text-sm text-white py-[5px] px-[18%] bg-[rgb(5,4,4)] flex gap-4 justify-between items-center">
+        {/* <img src="etblogo.jpg" alt="" className="rounded-sm h-[30px]" /> */}
+        <div className="flex w-full items-center gap-2 justify-end">
           <div className="me-2" role="presentation">
             <button
               id="dropdownDelayButton"
@@ -250,11 +248,14 @@ const Header = () => {
           <p>Login</p>
           <p className="text-gray-600">|</p>
           <p>Register</p>
+          <div className="top-2 right-2 z-50">
+            <DarkThemeToggle />
+          </div>
         </div>
       </div>
 
       {/* tabs */}
-      <div className="border-b relative py-2 md:py-1 border-gray-200 dark:border-gray-700">
+      <div className="border-b relative shadow-2xl shadow-black py-2 md:py-1 border-gray-200 dark:border-gray-700">
         <ul
           className="flex relative gap-1 flex-wrap items-center justify-center -mb-px text-sm font-medium text-center"
           id="default-tab"
@@ -264,10 +265,8 @@ const Header = () => {
           {/* currencies */}
           {/* <div className="hidden bg-green-300 p-10 xl:flex absolute  bg-dark right-6 text-dark z-10 top-3 w-[90px] h-auto flex-col items-center justify-center rounded-sm "> */}
           {/* <div className="top-20 shadow-2xl absolute left-0 rounded-tr-[40px] text-white font-semibold w-full bg-yellow-400"> */}
-          <div className="h-auto absolute shadow-2xl shadow-gray-500 z-20 right-5 -top-[52px] w-[84px] ">
-            <p className="absolute z-20  top-5 left-2 text-white">
-              Exchange
-            </p>
+          <div className="h-auto absolute shadow-2xl shadow-gray-500 z-20 right-main -top-[20px] w-[65px] ">
+            <p className="absolute z-20  top-4 left-2 text-white">Today</p>
             <svg
               id="trapezoid"
               viewbox="0 0 100 100"
@@ -275,13 +274,16 @@ const Header = () => {
               width="100%"
               className="absoluted -mt-2"
             >
-              <path d="M0,5 L110,30 L83,65 L0,65z" fill="orange"></path>
+              <path
+                d="M0,5 L110,30 L660,65 L0,56z"
+                fill="rgb(252,45,45)"
+              ></path>
             </svg>
-            <div className="bg-gray-200 shadow-2xl -mt-[84px] w-full pb-2">
-              <div className="flex py-2 relative text-sm border-b border-gray-400 font-semibold w-full px-1 flex-col border-dark items-center justify-center">
+            <div className="bg-gray-200 bg-dark text-[13px] shadow-2xl -mt-[94px] w-full pb-2">
+              <div className="flex py-1 relative border-b border-gray-400 font-semibold w-full px-1 flex-col border-dark items-center justify-center">
                 <div className="flex  w-full gap-1 items-center justify-center">
                   <svg
-                    className="w-6 h-6"
+                    className="w-4 h-4"
                     aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -296,12 +298,12 @@ const Header = () => {
                     />
                   </svg>
                 </div>
-                <p className="font-normal">52 birr</p>
+                <p className="font-normal text-[13px]">52.64</p>
               </div>
-              <div className="flex text-sm font-semibold w-full p-2 flex-col border-b border-gray-400 border-dark items-center justify-center">
+              <div className="flex py-1 font-semibold w-full flex-col border-b border-gray-400 border-dark items-center justify-center">
                 <div className="flex w-full items-center justify-center">
                   <svg
-                    class="w-6 h-6 text-gray-800 dark:text-white"
+                    class="w-4 h-4 "
                     aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -316,12 +318,12 @@ const Header = () => {
                     />
                   </svg>
                 </div>
-                <p className="font-normal">52 birr</p>
+                <p className="font-normal">56.75</p>
               </div>
-              <div className="flex text-sm font-semibold w-full p-2 flex-col border-b border-gray-400 border-dark items-center justify-center">
+              <div className="flex text-sm font-semibold w-full py-1 flex-col border-b border-gray-400 border-dark items-center justify-center">
                 <div className="flex w-full items-center justify-center">
                   <svg
-                    class="w-6 h-6 text-gray-800 dark:text-white"
+                    class="w-4 h-4 "
                     aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -336,12 +338,12 @@ const Header = () => {
                     />
                   </svg>
                 </div>
-                <p className="font-normal">52 birr</p>
+                <p className="font-normal">62.50</p>
               </div>
-              <div className="flex text-sm font-semibold w-full p-2 flex-col border-b border-gray-400 border-dark items-center justify-center">
+              <div className="flex text-sm font-semibold w-full py-1 flex-col border-b border-gray-400 border-dark items-center justify-center">
                 <div className="flex w-full items-center justify-center">
                   <svg
-                    class="w-6 h-6 text-gray-800 dark:text-white"
+                    class="w-4 h-4 "
                     aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -356,12 +358,12 @@ const Header = () => {
                     />
                   </svg>
                 </div>
-                <p className="font-normal">52 birr</p>
+                <p className="font-normal">72.50</p>
               </div>
-              <div className="flex text-sm font-semibold w-full p-2 flex-col items-center justify-center">
+              <div className="flex text-sm font-semibold w-full py-1 flex-col items-center justify-center">
                 <div className="flex w-full items-center justify-center">
                   <svg
-                    class="w-6 h-6 text-gray-800 dark:text-white"
+                    class="w-4 h-4 "
                     aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -376,9 +378,9 @@ const Header = () => {
                     />
                   </svg>
                 </div>
-                <p className="font-normal">52 birr</p>
+                <p className="font-normal">52.32</p>
               </div>
-              <div className="absolute shadow-2xl bottom-0 w-full h-2 rounded-sm bg-yellow-400 "></div>
+              <div className="absolute shadow-2xl bottom-0 w-full h-1 rounded-sm bg-[rgb(252,45,45)] "></div>
             </div>
           </div>
 
@@ -386,29 +388,19 @@ const Header = () => {
 
           {/* </div>{" "} */}
           <li className="me-2">
-            <div className="flex items-center justify-center gap-6">
-              {/* <img src="./gedi.jpg" alt="" className="w-10 h-8 rounded-sm" /> */}
-              <div className="flex gap-3 items-center justify-center">
-                <svg
-                  className="w-5 h-5  dark:text-white"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeWidth="2"
-                    d="M20 6H10m0 0a2 2 0 1 0-4 0m4 0a2 2 0 1 1-4 0m0 0H4m16 6h-2m0 0a2 2 0 1 0-4 0m4 0a2 2 0 1 1-4 0m0 0H4m16 6H10m0 0a2 2 0 1 0-4 0m4 0a2 2 0 1 1-4 0m0 0H4"
-                  />
-                </svg>
-                <p className="title ">ETBLINK</p>
+            <div className="flex relative items-center justify-center gap-6">
+              {/*  */}
+              <div className="flex absolute z-20 shadow-sm -top-[75px] -left-20 h-auto w-[120px] gap-3 items-center justify-center">
+                <img
+                  src="./etblogo.jpg"
+                  alt=""
+                  className="w-[200px] h-28 rounded-sm"
+                />
                 {/* <p className="small ">ethiopian business link</p> */}
               </div>
             </div>
           </li>
-          <li className="me-2 ml-2" role="presentation">
+          <li className="me-2 ml-14" role="presentation">
             <Link to="/" className="inline-block p-2 rounded-t-lg">
               Home
             </Link>
@@ -435,9 +427,11 @@ const Header = () => {
           </li>
           <li className="me-2 relative" role="presentation">
             <button
-              onMouseOver={() => {
+              onClick={() => {
                 const ids = document.getElementById("resource-dropdown");
-                ids?.classList?.remove("hidden");
+                ids?.classList?.value.includes("hidden")
+                  ? ids?.classList.remove("hidden")
+                  : ids?.classList?.add("hidden");
               }}
               className="focus:ring-0 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center "
               type="button"
@@ -599,9 +593,113 @@ const Header = () => {
               />
             </div>
           </li>
-          <li className="me-2" role="presentation">
+          {/* <li className="me-2" role="presentation">
             <div className="top-2 right-2 z-50">
               <DarkThemeToggle />
+            </div>
+          </li> */}
+          <li className="me-2">
+            <div className="flex w-full py-3 relative lg:py-0 pl-4 pr-main bg-main-blackd justify-center flex-col gap-3 items-center">
+              {/* <p
+            href="#"
+            className="inline-flex hover:bg-yellow-400 cursor-pointer  text-white rounded-full gap-2 px-4 py-[5px] border-2 border-white mt-1 text-[14px] font-bold items-center"
+          >
+            Advert here
+            <svg
+              class="w-4 h-4"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M3 4a1 1 0 0 0-.8 1.6L6.6 12l-4.4 6.4A1 1 0 0 0 3 20h13.2c.3 0 .6-.2.8-.4l4.8-7a1 1 0 0 0 0-1.2l-4.8-7a1 1 0 0 0-.8-.4H3Z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </p> */}
+
+              <div className="flex absolute -right-32 z-20 items-center justify-center gap-2">
+                <a
+                  href="#"
+                  className="h-6 w-6  flex items-center justify-center  rounded-full bg-white text-[rgb(252,45,45)]"
+                >
+                  <svg
+                    className="w-5 h-5"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="currentColor"
+                    viewBox="0 0 8 19"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M6.135 3H8V0H6.135a4.147 4.147 0 0 0-4.142 4.142V6H0v3h2v9.938h3V9h2.021l.592-3H5V3.591A.6.6 0 0 1 5.592 3h.543Z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                  <span className="sr-only">Discord community</span>
+                </a>
+                <a
+                  href="#"
+                  className="h-6 w-6 flex items-center justify-center rounded-full bg-white text-[rgb(252,45,45)]"
+                >
+                  <svg
+                    className="w-5 h-5 "
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M21.7 8c0-.7-.4-1.3-.8-2-.5-.5-1.2-.8-2-.8C16.2 5 12 5 12 5s-4.2 0-7 .2c-.7 0-1.4.3-2 .9-.3.6-.6 1.2-.7 2l-.2 3.1v1.5c0 1.1 0 2.2.2 3.3 0 .7.4 1.3.8 2 .6.5 1.4.8 2.2.8l6.7.2s4.2 0 7-.2c.7 0 1.4-.3 2-.9.3-.5.6-1.2.7-2l.2-3.1v-1.6c0-1 0-2.1-.2-3.2ZM10 14.6V9l5.4 2.8-5.4 2.8Z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+
+                  <span className="sr-only">Discord community</span>
+                </a>
+                <a
+                  href="#"
+                  className="h-6 w-6 flex items-center justify-center rounded-full bg-white text-[rgb(252,45,45)]"
+                >
+                  <svg
+                    class="w-4 h-4 "
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      fill="currentColor"
+                      d="M13.8 10.5 20.7 2h-3l-5.3 6.5L7.7 2H1l7.8 11-7.3 9h3l5.7-7 5.1 7H22l-8.2-11.5Zm-2.4 3-1.4-2-5.6-7.9h2.3l4.5 6.3 1.4 2 6 8.5h-2.3l-4.9-7Z"
+                    />
+                  </svg>
+                  <span className="sr-only">Twitter page</span>
+                </a>
+                <a
+                  href="#"
+                  className="h-6 w-6 flex items-center justify-center rounded-full bg-white text-[rgb(252,45,45)]"
+                >
+                  <svg
+                    className="w-5 h-5 "
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M12.5 8.8v1.7a3.7 3.7 0 0 1 3.3-1.7c3.5 0 4.2 2.2 4.2 5v5.7h-3.2v-5c0-1.3-.2-2.8-2.1-2.8-1.9 0-2.2 1.3-2.2 2.6v5.2H9.3V8.8h3.2ZM7.2 6.1a1.6 1.6 0 0 1-2 1.6 1.6 1.6 0 0 1-1-2.2A1.6 1.6 0 0 1 6.6 5c.3.3.5.7.5 1.1Z"
+                      clipRule="evenodd"
+                    />
+                    <path d="M7.2 8.8H4v10.7h3.2V8.8Z" />
+                  </svg>
+
+                  <span className="sr-only">GitHub account</span>
+                </a>
+              </div>
             </div>
           </li>
         </ul>
