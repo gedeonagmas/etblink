@@ -60,7 +60,10 @@
 }
 
 .bg-main {
-  @apply bg-[#fe755a];
+  @apply bg-[rgb(252,45,45)];
+}
+.text-main {
+  @apply text-[rgb(252,45,45)];
 }
 
 .bg-main-black {
@@ -95,4 +98,7 @@
 }
 .mx-main {
   @apply mx-[8%];
+}
+.border-main {
+  @apply border-[rgb(252,45,45)];
 }

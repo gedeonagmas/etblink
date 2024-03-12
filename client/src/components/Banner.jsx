@@ -42,7 +42,7 @@ const Banner = () => {
 
             <div className="w-full  text-white dark:text-gray-200 h-[110px]  flex gap-2 ">
               <img
-                src="./ad1.jpg"
+                src="./skylight.jpg"
                 alt=""
                 className="w-full h-full rounded-xl object-fill object-center"
               />

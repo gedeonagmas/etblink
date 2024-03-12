@@ -20,7 +20,7 @@ function App() {
   // console.log(jwt, user);
   return (
     <Flowbite>
-      <div className="font-poppins text-black text-dark bg-dark">
+      <div className="font-poppins text-black overflow-hidden text-dark bg-dark">
         <Header />
         <div className="">
           <Routes>

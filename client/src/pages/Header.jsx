@@ -392,9 +392,9 @@ const Header = () => {
               {/*  */}
               <div className="flex absolute z-20 shadow-sm -top-[75px] -left-20 h-auto w-[120px] gap-3 items-center justify-center">
                 <img
-                  src="./etblogo.jpg"
+                  src="./logo.png"
                   alt=""
-                  className="w-[200px] h-28 rounded-sm"
+                  className="w-[200px] h-[112px] bg-white rounded-sm"
                 />
                 {/* <p className="small ">ethiopian business link</p> */}
               </div>
