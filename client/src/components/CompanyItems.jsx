@@ -1,5 +1,6 @@
 import { useState } from "react";
 import VerifiedOutlinedIcon from "@mui/icons-material/VerifiedOutlined";
+import VerifiedOutlined from "@mui/icons-material/VerifiedOutlined";
 
 const CompanyItems = ({ value, phoneNo }) => {
   const [phone, setPhone] = useState(phoneNo);
@@ -47,7 +48,7 @@ const CompanyItems = ({ value, phoneNo }) => {
             alt=""
             className="w-full brightness-[0.5] h-[190px] rounded-b-none rounded-xl"
           />
-          <div className="absolute top-4 left-2 rounded-full shadow-lg px-5 py-2 bg-white text-black">
+          <div className="absolute top-4 border-4 border-gray-300 border-dashed left-2 rounded-full shadow-lg px-4 py-1 bg-white text-black">
             Open
           </div>
           <p className="absolute px-2 py-1 rounded-md bg-main ml-1 gap-1 shadow-lg bottom-1 text-white flex items-center justify-center left-2">
@@ -88,7 +89,7 @@ const CompanyItems = ({ value, phoneNo }) => {
             alt=""
             className="w-full h-full rounded-full"
           />
-          <div className="w-4 absolute top-1 -right-1 h-4 bg-emerald-400 p-1 border-2 border-white rounded-full"></div>
+          <div className="w-5 absolute top-1 right-2 h-5 bg-emerald-400 p-1 border-2 border-white rounded-full"></div>
         </div>
       </div>
 
@@ -140,8 +141,8 @@ const CompanyItems = ({ value, phoneNo }) => {
             <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
           </svg>
         </div>
-        <p className="text-[20px] flex items-center justify-center mt-3 font-semibold text-gray-700">
-          Healthy Food <VerifiedOutlinedIcon className="text-emerald-400" />
+        <p className="text-[20px] flex items-center justify-center gap-3 mt-3 font-semibold text-gray-700">
+          Healthy Food <VerifiedOutlined className="text-emerald-400" />
         </p>
         <p className="text-[15px] font-light mt-2">Outdoor, luxury for you</p>
 
@@ -202,9 +203,9 @@ const CompanyItems = ({ value, phoneNo }) => {
           </div>
         </div>
       </div>
-      <div className="flex my-3 w-full items-center justify-between px-5 ">
-        <div className="flex items-center px-3  text-[14px]  gap-2 justify-center">
-          <div className="p-2 bg-[rgb(252,45,45)] rounded-full text-white">
+      <div className="flex my-3 w-full items-center justify-between px-3 ">
+        <div className="flex items-center  text-[14px]  gap-2 justify-center">
+          <div className="p-2  bg-[rgb(252,45,45)] rounded-full text-white">
             <svg
               class="w-6 h-6"
               aria-hidden="true"
