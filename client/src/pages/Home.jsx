@@ -618,8 +618,8 @@ const Home = () => {
           </div>
           <Sponsors />
 
-          <div className="flex w-full mt-16 gap-10 px-main">
-            <div className="flex flex-col items-center justify-start border-t-4 border-main">
+          <div className="flex w-full mt-16 gap-20 px-main">
+            <div className="flex flex-col flex-[70%] items-center justify-start border-t-4 border-main">
               <p className="text-xl self-start font-bold text-main py-3">
                 Ethiopian business link news
               </p>
@@ -635,7 +635,7 @@ const Home = () => {
                         controls
                         autoplay
                         muted
-                        className="w-full h-20"
+                        className="w-full h-32"
                       />
                       <p className="font-light text-lg flex items-center justify-start gap-2 mt-2">
                         Etb buinsess link
@@ -645,12 +645,50 @@ const Home = () => {
                 })}
               </div>
             </div>
-            <div className="flex flex-col gap-4">
-              <div className="flex flex-col items-center border-t-4 border-main w-full justify-start">
-                <p className="text-lg font-bold text-main py-4">
+            <div className="flex flex-col gap-4 flex-[30%]">
+              <div className="flex flex-col items-start border-t-4 border-main w-full justify-start">
+                <p className="text-xl self-start font-bold text-main py-4">
                   Etb business link
                 </p>
-                <p className="text-main">etb business link</p>
+                <ol className="flex items-center px-4 list-disc justify-between w-full">
+                  <li className="">etb business</li>
+                  <li className="">etb business</li>
+                </ol>
+                <ol className="flex items-center px-4 list-disc justify-between w-full">
+                  <li className="">etb business</li>
+                  <li className="">etb business</li>
+                </ol>
+              </div>
+              <div className="flex flex-col items-start mt-5 border-t-4 border-main w-full justify-start">
+                <p className="text-xl self-start font-bold text-main py-4">
+                  Etblink
+                </p>
+                <div className="flex items-center justify-between w-full">
+                  <p className=" ">
+                    Ethiopian business <br /> link portal
+                  </p>
+                  <button className="py-1 px-6 rounded-md text-white bg-main">
+                    More
+                  </button>
+                </div>
+                <div className="flex items-center mt-14 justify-between w-full">
+                  <div className="flex gap-2 items-center justify-center">
+                    <img
+                      src="./build1.jpg"
+                      alt=""
+                      className="h-24 w-20 rounded-sm"
+                    />
+                    <p>etblink</p>
+                  </div>
+                  <div className="flex gap-2 items-center justify-center">
+                    <img
+                      src="./build1.jpg"
+                      alt=""
+                      className="h-24 w-20 rounded-sm"
+                    />
+                    <p>etblink</p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
