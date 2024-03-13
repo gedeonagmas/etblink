@@ -1,6 +1,7 @@
 import { useState } from "react";
 import VerifiedOutlinedIcon from "@mui/icons-material/VerifiedOutlined";
 import VerifiedOutlined from "@mui/icons-material/VerifiedOutlined";
+// import "./bubble.scss";
 
 const CompanyItems = ({ value, phoneNo }) => {
   const [phone, setPhone] = useState(phoneNo);
@@ -223,6 +224,7 @@ const CompanyItems = ({ value, phoneNo }) => {
             </svg>{" "}
           </div>
           Chat
+          <span class="status online"></span>
         </div>
 
         <button

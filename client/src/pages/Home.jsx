@@ -516,14 +516,21 @@ const Home = () => {
                       key={i}
                       className="flex px-4 text-[16px] rounded-lg flex-col items-center justify-center"
                     >
-                      <div className="p-6 rounded-full bg-white bg-dark shadow-sm">
-                        <TransferWithinAStationTwoTone
-                          fontSize="large"
-                          className="text-main"
+                      <div className="p-2h rounded-full bg-white bg-dark shadow-sm">
+                        <img
+                          src={`${
+                            i === 1
+                              ? "./etbagreeculture.png"
+                              : "./etbconstruction.png"
+                          }`}
+                          alt=""
+                          className="w-[65px] h-[65px]"
                         />
                       </div>
 
-                      <p className="mt-2">Importer</p>
+                      <p className="mt-2">
+                        {i === 1 ? <b>Construction</b> : <b>Agriculture</b>}
+                      </p>
                       <p className="-mt-1 font-light">22 total</p>
                     </div>
                   );
@@ -618,7 +625,7 @@ const Home = () => {
           <Sponsors />
 
           <div className="flex w-full mt-16 gap-20 px-main">
-            <div className="flex flex-col flex-[70%] items-center justify-start border-t-4 border-main">
+            <div className="flex flex-col flex-[70%] shadow-lg bg-white bg-dark p-4 items-center justify-start border-t-4 border-main">
               <p className="text-xl self-start font-bold text-main py-3">
                 Ethiopian business link news
               </p>
@@ -644,8 +651,8 @@ const Home = () => {
                 })}
               </div>
             </div>
-            <div className="flex flex-col gap-4 flex-[30%]">
-              <div className="flex flex-col items-start border-t-4 border-main w-full justify-start">
+            <div className="flex flex-col shadow-lg bg-white items-start border-t-4 border-main bg-dark p-4 gap-4 flex-[30%]">
+              <div className="flex flex-col  w-full justify-start">
                 <p className="text-xl self-start font-bold text-main py-4">
                   Etb business link
                 </p>
@@ -670,15 +677,14 @@ const Home = () => {
                     More
                   </button>
                 </div>
-                <div className="flex items-center mt-14 justify-between w-full">
+                <div className="flex items-center mt-20 justify-between w-full">
                   <div className="flex gap-2 items-center justify-center">
                     <img
                       src="./build1.jpg"
                       alt=""
                       className="h-24 w-20 rounded-sm"
                     />
-                    <div className="p-2 shadow-sm rounded-sm">
-                      <p>etblink</p>
+                    <div className="text-sm shadow-sm rounded-sm">
                       <p>etblink</p>
                     </div>
                   </div>
@@ -688,8 +694,7 @@ const Home = () => {
                       alt=""
                       className="h-24 w-20 rounded-sm"
                     />
-                    <div className="p-2 shadow-sm rounded-sm">
-                      <p>etblink</p>
+                    <div className="text-sm shadow-sm rounded-sm">
                       <p>etblink</p>
                     </div>
                   </div>
