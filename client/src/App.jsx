@@ -12,6 +12,7 @@ import Prices from "./pages/Prices";
 import About from "./pages/About";
 import Ethiopia from "./pages/Ethiopia";
 import Contact from "./pages/Contact";
+import Dashboard from "./pages/Dashboard";
 
 function App() {
   const jwt = localStorage.getItem("jwt");
@@ -21,7 +22,7 @@ function App() {
   return (
     <Flowbite>
       <div className="font-poppins text-black overflow-hidden text-dark bg-dark">
-        <Header />
+        {/* <Header /> */}
         <div className="">
           <Routes>
             <Route path="/" element={<Home />}></Route>
@@ -34,6 +35,7 @@ function App() {
             <Route path="/about" element={<About />}></Route>
             <Route path="/ethiopia" element={<Ethiopia />}></Route>
             <Route path="/contact" element={<Contact />}></Route>
+            <Route path="/dashboard" element={<Dashboard />}></Route>
             <Route path="/" element={<Home />}></Route>
             {jwt && user && (
               <Route
@@ -44,7 +46,7 @@ function App() {
             <Route path="*" element={<PageNotFound />} />
           </Routes>
         </div>
-        <Footer />
+        {/* <Footer /> */}
       </div>
     </Flowbite>
   );

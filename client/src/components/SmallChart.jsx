@@ -17,7 +17,7 @@ const SmallChart = (props) => {
         },
       },
       dataLabels: { enabled: false },
-      stroke: { curve: "smooth", width: 2 },
+      stroke: { width: 3 },
       yaxis: {
         tickAmount: 3,
         show: false,
@@ -66,7 +66,7 @@ const SmallChart = (props) => {
           },
         },
       },
-
+      markers: props.markers,
       // tooltip: { enabled: true },
       labels: { show: false },
       tooltip: {

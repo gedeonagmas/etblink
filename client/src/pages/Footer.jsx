@@ -588,7 +588,6 @@ const Footer = () => {
               <li>Blog</li>
               <li>News</li>
               <li>Services</li>
-
             </ul>
           </div>{" "}
           <div className="">
