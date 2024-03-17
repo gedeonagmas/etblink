@@ -1,5 +1,5 @@
 import { Slide } from "react-slideshow-image";
-const slideImages = ["image-1.jpg", "image-a.jpg", "image-b.jpg"];
+const slideImages = ["skylightadd.jpg", "image-a.jpg", "image-b.jpg"];
 const Banner = () => {
   return (
     <div
@@ -42,9 +42,9 @@ const Banner = () => {
 
             <div className="w-full  text-white dark:text-gray-200 h-[110px]  flex gap-2 ">
               <img
-                src="./skylight.jpg"
+                src="./skylightadd.jpg"
                 alt=""
-                className="w-full h-full rounded-xl object-fill object-center"
+                className="w-full h-full rounded-sm object-fill object-center"
               />
             </div>
           </div>

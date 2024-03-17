@@ -4,6 +4,7 @@ import { DarkThemeToggle } from "flowbite-react";
 import { Slide } from "react-slideshow-image";
 import "react-slideshow-image/dist/styles.css";
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 const Header = () => {
   // const divStyle = {
@@ -21,9 +22,24 @@ const Header = () => {
   //     ? ids?.classList?.remove("hidden")
   //     : ids?.classList?.add("hidden");
   // };
+  const [currencies, setCurrencies] = useState(true);
+  useEffect(() => {
+    const onPageScroll = () => {
+      if (window.scrollY > 100) {
+        setCurrencies(false);
+      } else {
+        setCurrencies(true);
+      }
+    };
+    window.addEventListener("scroll", onPageScroll);
+
+    return () => {
+      window.removeEventListener("scroll", onPageScroll);
+    };
+  }, []);
   return (
     // fixed bg-white bg-dark top-0 left-0 w-full z-50 h-auto
-    <div className="">
+    <div className="fixed w-full z-40 bg-white bg-dark">
       <div className="w-full flex flex-col lg:flex-row ">
         {/* <div className="relative pl-main bg-main-black w-full lg:w-[78%]">
           <Slide
@@ -255,7 +271,7 @@ const Header = () => {
       </div>
 
       {/* tabs */}
-      <div className="border-b relative shadow-2xl shadow-black py-2 md:py-1 border-gray-200 dark:border-gray-700">
+      <div className="border-b relative shadow-2xl  py-2 md:py-1 border-gray-200 dark:border-gray-700">
         <ul
           className="flex relative gap-1 flex-wrap items-center justify-center -mb-px text-sm font-medium text-center"
           id="default-tab"
@@ -265,7 +281,11 @@ const Header = () => {
           {/* currencies */}
           {/* <div className="hidden bg-green-300 p-10 xl:flex absolute  bg-dark right-6 text-dark z-10 top-3 w-[90px] h-auto flex-col items-center justify-center rounded-sm "> */}
           {/* <div className="top-20 shadow-2xl absolute left-0 rounded-tr-[40px] text-white font-semibold w-full bg-yellow-400"> */}
-          <div className="h-auto absolute shadow-2xl shadow-gray-500 z-20 right-main -top-[20px] w-[65px] ">
+          <div
+            className={`${
+              currencies ? "block" : "hidden"
+            } h-auto absolute shadow-2xl shadow-gray-500 z-20 right-main -top-[20px] w-[65px]`}
+          >
             <p className="absolute z-20  top-4 left-2 text-white">Today</p>
             <svg
               id="trapezoid"

@@ -1,5 +1,7 @@
 import { useState } from "react";
 import VerifiedOutlinedIcon from "@mui/icons-material/VerifiedOutlined";
+import VerifiedOutlined from "@mui/icons-material/VerifiedOutlined";
+import "./bubble.css";
 
 const CompanyItems = ({ value, phoneNo }) => {
   const [phone, setPhone] = useState(phoneNo);
@@ -47,7 +49,7 @@ const CompanyItems = ({ value, phoneNo }) => {
             alt=""
             className="w-full brightness-[0.5] h-[190px] rounded-b-none rounded-xl"
           />
-          <div className="absolute top-4 left-2 rounded-full shadow-lg px-5 py-2 bg-white text-black">
+          <div className="absolute top-4 border-4 border-gray-300 border-dashed left-2 rounded-full shadow-lg px-4 py-1 bg-white text-black">
             Open
           </div>
           <p className="absolute px-2 py-1 rounded-md bg-main ml-1 gap-1 shadow-lg bottom-1 text-white flex items-center justify-center left-2">
@@ -88,7 +90,7 @@ const CompanyItems = ({ value, phoneNo }) => {
             alt=""
             className="w-full h-full rounded-full"
           />
-          <div className="w-4 absolute top-1 -right-1 h-4 bg-emerald-400 p-1 border-2 border-white rounded-full"></div>
+          <div className="w-5 absolute top-1 right-2 h-5 bg-emerald-400 p-1 border-2 border-white rounded-full"></div>
         </div>
       </div>
 
@@ -140,8 +142,23 @@ const CompanyItems = ({ value, phoneNo }) => {
             <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
           </svg>
         </div>
-        <p className="text-[20px] flex items-center justify-center mt-3 font-semibold text-gray-700">
-          Healthy Food <VerifiedOutlinedIcon className="text-emerald-400" />
+        <p className="text-[20px] flex items-center justify-center gap-3 mt-3 font-semibold text-gray-700">
+          Healthy Food{" "}
+          <svg
+            class="w-6 h-6 text-emerald-500"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M12 2c-.791 0-1.55.314-2.11.874l-.893.893a.985.985 0 0 1-.696.288H7.04A2.984 2.984 0 0 0 4.055 7.04v1.262a.986.986 0 0 1-.288.696l-.893.893a2.984 2.984 0 0 0 0 4.22l.893.893a.985.985 0 0 1 .288.696v1.262a2.984 2.984 0 0 0 2.984 2.984h1.262c.261 0 .512.104.696.288l.893.893a2.984 2.984 0 0 0 4.22 0l.893-.893a.985.985 0 0 1 .696-.288h1.262a2.984 2.984 0 0 0 2.984-2.984V15.7c0-.261.104-.512.288-.696l.893-.893a2.984 2.984 0 0 0 0-4.22l-.893-.893a.985.985 0 0 1-.288-.696V7.04a2.984 2.984 0 0 0-2.984-2.984h-1.262a.985.985 0 0 1-.696-.288l-.893-.893A2.984 2.984 0 0 0 12 2Zm3.683 7.73a1 1 0 1 0-1.414-1.413l-4.253 4.253-1.277-1.277a1 1 0 0 0-1.415 1.414l1.985 1.984a1 1 0 0 0 1.414 0l4.96-4.96Z"
+              clip-rule="evenodd"
+            />
+          </svg>
         </p>
         <p className="text-[15px] font-light mt-2">Outdoor, luxury for you</p>
 
@@ -202,9 +219,9 @@ const CompanyItems = ({ value, phoneNo }) => {
           </div>
         </div>
       </div>
-      <div className="flex my-3 w-full items-center justify-between px-5 ">
-        <div className="flex items-center px-3  text-[14px]  gap-2 justify-center">
-          <div className="p-2 bg-[rgb(252,45,45)] rounded-full text-white">
+      <div className="flex my-3 w-full items-center justify-between px-3 ">
+        <div className="flex items-center px-2 rounded-full hover:bg-orange-500 hover:text-white border border-gray-300 cursor-pointer text-[14px]  justify-center">
+          {/* <div className="p-2  bg-[rgb(252,45,45)] rounded-full text-white">
             <svg
               class="w-6 h-6"
               aria-hidden="true"
@@ -220,8 +237,9 @@ const CompanyItems = ({ value, phoneNo }) => {
                 d="M9 17h6l3 3v-3h2V9h-2M4 4h11v8H9l-3 3v-3H4V4Z"
               />
             </svg>{" "}
-          </div>
-          Chat
+          </div> */}
+          <span class="status online"></span>
+          <p className="mr-3">chat</p>
         </div>
 
         <button
