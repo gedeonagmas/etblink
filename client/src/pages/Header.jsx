@@ -416,27 +416,27 @@ const Header = () => {
             </div>
           </li>
           <li className="me-2 ml-14" role="presentation">
-            <Link to="/" className="inline-block p-2 rounded-t-lg">
+            <Link to="/" className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg">
               Home
             </Link>
           </li>
           <li className="me-2 ml-2" role="presentation">
-            <Link to="/local" className="inline-block p-2 rounded-t-lg">
+            <Link to="/local" className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg">
               Local
             </Link>
           </li>
           <li className="me-2 ml-2" role="presentation">
-            <Link to="/global" className="inline-block p-2 rounded-t-lg">
+            <Link to="/global" className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg">
               Global
             </Link>
           </li>
           <li className="me-2 ml-2" role="presentation">
-            <Link to="/news" className="inline-block p-2 rounded-t-lg">
+            <Link to="/news" className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg">
               News
             </Link>
           </li>
           <li className="me-2 ml-2" role="presentation">
-            <Link to="/job" className="inline-block p-2 rounded-t-lg">
+            <Link to="/job" className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg">
               Job
             </Link>
           </li>
@@ -448,7 +448,7 @@ const Header = () => {
                   ? ids?.classList.remove("hidden")
                   : ids?.classList?.add("hidden");
               }}
-              className="focus:ring-0 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center "
+              className="focus:ring-0 focus:outline-none font-medium hover:text-[rgb(252,45,45)] rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center "
               type="button"
             >
               Resources{" "}
