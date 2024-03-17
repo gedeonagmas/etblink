@@ -17,8 +17,8 @@ import Dashboard from "./pages/Dashboard";
 function App() {
   const jwt = localStorage.getItem("jwt");
   const user = JSON.parse(localStorage.getItem("user"));
+console.log(jwt, user,'info');
 
-  // console.log(jwt, user,'info');
   return (
     <Flowbite>
       <div className="font-poppins text-black overflow-hidden text-dark bg-dark">
