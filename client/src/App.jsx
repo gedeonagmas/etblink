@@ -18,7 +18,7 @@ function App() {
   const jwt = localStorage.getItem("jwt");
   const user = JSON.parse(localStorage.getItem("user"));
 
-  // console.log(jwt, user);
+  // console.log(jwt, user,'user data');
   return (
     <Flowbite>
       <div className="font-poppins text-black overflow-hidden text-dark bg-dark">
