@@ -1,10 +1,10 @@
 const Sponsors = () => {
   return (
-    <div className="w-full relative">
-      <div className="w-56 rounded-sm absolute left-0 text-2xl font-bold -bottom-5 h-[80px] bg-main text-white flex items-center justify-center">
+    <div className="w-full h-auto relative">
+      <div className="w-56 rounded-sm lg:absolute left-0 text-2xl font-bold -bottom-5 h-[80px] bg-main text-white flex items-center justify-center">
         Partners
       </div>
-      <div className="w-full flex flex-wrap ml-40 justify-around gap-8 mt-10 px-main">
+      <div className="w-full grid grid-cols-1 gap-y-10 h-auto sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 flex-wrap lg:ml-40 justify-around gap-x-8 mt-10 px-main">
         <a
           className="flex items-center justify-center text-gray-400 hover:text-gray-200"
           href="https://codecourse.com"

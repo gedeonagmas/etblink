@@ -188,7 +188,7 @@ const Header = () => {
         {/* </div> */}
       </div>
 
-      <div className="w-full text-sm text-white py-[5px] px-[18%] bg-[rgb(5,4,4)] flex gap-4 justify-between items-center">
+      <div className="w-full text-sm text-white py-[5px] lg:px-[18%] bg-[rgb(5,4,4)] flex gap-4 justify-between items-center">
         {/* <img src="etblogo.jpg" alt="" className="rounded-sm h-[30px]" /> */}
         <div className="flex w-full items-center gap-2 justify-end">
           <div className="me-2" role="presentation">
@@ -273,150 +273,145 @@ const Header = () => {
       {/* tabs */}
       <div className="border-b relative shadow-2xl  py-2 md:py-1 border-gray-200 dark:border-gray-700">
         <ul
-          className="flex relative gap-1 flex-wrap items-center justify-center -mb-px text-sm font-medium text-center"
+          className="flex mx-20  relative gap-1 flex-wrap items-center justify-center -mb-px text-sm font-medium text-center"
           id="default-tab"
           data-tabs-toggle="#default-tab-content"
           role="tablist"
         >
-          {/* currencies */}
-          {/* <div className="hidden bg-green-300 p-10 xl:flex absolute  bg-dark right-6 text-dark z-10 top-3 w-[90px] h-auto flex-col items-center justify-center rounded-sm "> */}
-          {/* <div className="top-20 shadow-2xl absolute left-0 rounded-tr-[40px] text-white font-semibold w-full bg-yellow-400"> */}
-          <div
-            className={`${
-              currencies ? "block" : "hidden"
-            } h-auto absolute shadow-2xl shadow-gray-500 z-20 right-main -top-[20px] w-[65px]`}
-          >
-            <p className="absolute z-20  top-4 left-2 text-white">Today</p>
-            <svg
-              id="trapezoid"
-              viewbox="0 0 100 100"
-              preserveAspectRatio="none"
-              width="100%"
-              className="absoluted -mt-2"
+          <div className="hidden xl:block">
+            <div
+              className={`${
+                currencies ? "block" : "hidden"
+              } h-auto absolute shadow-2xl shadow-gray-500 z-20 right-2 -top-[20px] w-[65px]`}
             >
-              <path
-                d="M0,5 L110,30 L660,65 L0,56z"
-                fill="rgb(252,45,45)"
-              ></path>
-            </svg>
-            <div className="bg-gray-200 bg-dark text-[13px] shadow-2xl -mt-[94px] w-full pb-2">
-              <div className="flex py-1 relative border-b border-gray-400 font-semibold w-full px-1 flex-col border-dark items-center justify-center">
-                <div className="flex  w-full gap-1 items-center justify-center">
-                  <svg
-                    className="w-4 h-4"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M8 17.3a5 5 0 0 0 2.6 1.7c2.2.6 4.5-.5 5-2.3.4-2-1.3-4-3.6-4.5-2.3-.6-4-2.7-3.5-4.5.5-1.9 2.7-3 5-2.3 1 .2 1.8.8 2.5 1.6m-3.9 12v2m0-18v2.2"
-                    />
-                  </svg>
+              <p className="absolute z-20  top-4 left-2 text-white">Today</p>
+              <svg
+                id="trapezoid"
+                viewbox="0 0 100 100"
+                preserveAspectRatio="none"
+                width="100%"
+                className="absoluted -mt-2"
+              >
+                <path
+                  d="M0,5 L110,30 L660,65 L0,56z"
+                  fill="rgb(252,45,45)"
+                ></path>
+              </svg>
+              <div className="bg-gray-200 bg-dark text-[13px] shadow-2xl -mt-[94px] w-full pb-2">
+                <div className="flex py-1 relative border-b border-gray-400 font-semibold w-full px-1 flex-col border-dark items-center justify-center">
+                  <div className="flex  w-full gap-1 items-center justify-center">
+                    <svg
+                      className="w-4 h-4"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke="currentColor"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M8 17.3a5 5 0 0 0 2.6 1.7c2.2.6 4.5-.5 5-2.3.4-2-1.3-4-3.6-4.5-2.3-.6-4-2.7-3.5-4.5.5-1.9 2.7-3 5-2.3 1 .2 1.8.8 2.5 1.6m-3.9 12v2m0-18v2.2"
+                      />
+                    </svg>
+                  </div>
+                  <p className="font-normal text-[13px]">52.64</p>
                 </div>
-                <p className="font-normal text-[13px]">52.64</p>
-              </div>
-              <div className="flex py-1 font-semibold w-full flex-col border-b border-gray-400 border-dark items-center justify-center">
-                <div className="flex w-full items-center justify-center">
-                  <svg
-                    class="w-4 h-4 "
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke="currentColor"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M6 10h9.2M6 14h9.2M18 5a6 6 0 0 0-3.4-1C11 4 7.8 7.6 7.8 12s3 8 6.8 8a6 6 0 0 0 3.4-1"
-                    />
-                  </svg>
+                <div className="flex py-1 font-semibold w-full flex-col border-b border-gray-400 border-dark items-center justify-center">
+                  <div className="flex w-full items-center justify-center">
+                    <svg
+                      class="w-4 h-4 "
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M6 10h9.2M6 14h9.2M18 5a6 6 0 0 0-3.4-1C11 4 7.8 7.6 7.8 12s3 8 6.8 8a6 6 0 0 0 3.4-1"
+                      />
+                    </svg>
+                  </div>
+                  <p className="font-normal">56.75</p>
                 </div>
-                <p className="font-normal">56.75</p>
-              </div>
-              <div className="flex text-sm font-semibold w-full py-1 flex-col border-b border-gray-400 border-dark items-center justify-center">
-                <div className="flex w-full items-center justify-center">
-                  <svg
-                    class="w-4 h-4 "
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke="currentColor"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M6 10h9.2M6 14h9.2M18 5a6 6 0 0 0-3.4-1C11 4 7.8 7.6 7.8 12s3 8 6.8 8a6 6 0 0 0 3.4-1"
-                    />
-                  </svg>
+                <div className="flex text-sm font-semibold w-full py-1 flex-col border-b border-gray-400 border-dark items-center justify-center">
+                  <div className="flex w-full items-center justify-center">
+                    <svg
+                      class="w-4 h-4 "
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M6 10h9.2M6 14h9.2M18 5a6 6 0 0 0-3.4-1C11 4 7.8 7.6 7.8 12s3 8 6.8 8a6 6 0 0 0 3.4-1"
+                      />
+                    </svg>
+                  </div>
+                  <p className="font-normal">62.50</p>
                 </div>
-                <p className="font-normal">62.50</p>
-              </div>
-              <div className="flex text-sm font-semibold w-full py-1 flex-col border-b border-gray-400 border-dark items-center justify-center">
-                <div className="flex w-full items-center justify-center">
-                  <svg
-                    class="w-4 h-4 "
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke="currentColor"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M6 10h9.2M6 14h9.2M18 5a6 6 0 0 0-3.4-1C11 4 7.8 7.6 7.8 12s3 8 6.8 8a6 6 0 0 0 3.4-1"
-                    />
-                  </svg>
+                <div className="flex text-sm font-semibold w-full py-1 flex-col border-b border-gray-400 border-dark items-center justify-center">
+                  <div className="flex w-full items-center justify-center">
+                    <svg
+                      class="w-4 h-4 "
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M6 10h9.2M6 14h9.2M18 5a6 6 0 0 0-3.4-1C11 4 7.8 7.6 7.8 12s3 8 6.8 8a6 6 0 0 0 3.4-1"
+                      />
+                    </svg>
+                  </div>
+                  <p className="font-normal">72.50</p>
                 </div>
-                <p className="font-normal">72.50</p>
-              </div>
-              <div className="flex text-sm font-semibold w-full py-1 flex-col items-center justify-center">
-                <div className="flex w-full items-center justify-center">
-                  <svg
-                    class="w-4 h-4 "
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke="currentColor"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M6 10h9.2M6 14h9.2M18 5a6 6 0 0 0-3.4-1C11 4 7.8 7.6 7.8 12s3 8 6.8 8a6 6 0 0 0 3.4-1"
-                    />
-                  </svg>
+                <div className="flex text-sm font-semibold w-full py-1 flex-col items-center justify-center">
+                  <div className="flex w-full items-center justify-center">
+                    <svg
+                      class="w-4 h-4 "
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M6 10h9.2M6 14h9.2M18 5a6 6 0 0 0-3.4-1C11 4 7.8 7.6 7.8 12s3 8 6.8 8a6 6 0 0 0 3.4-1"
+                      />
+                    </svg>
+                  </div>
+                  <p className="font-normal">52.32</p>
                 </div>
-                <p className="font-normal">52.32</p>
+                <div className="absolute shadow-2xl bottom-0 w-full h-1 rounded-sm bg-[rgb(252,45,45)] "></div>
               </div>
-              <div className="absolute shadow-2xl bottom-0 w-full h-1 rounded-sm bg-[rgb(252,45,45)] "></div>
             </div>
           </div>
-
-          {/* </div> */}
-
-          {/* </div>{" "} */}
+          
           <li className="me-2">
             <div className="flex relative items-center justify-center gap-6">
               {/*  */}
-              <div className="flex absolute z-20 shadow-sm -top-[75px] -left-20 h-auto w-[120px] gap-3 items-center justify-center">
+              <div className="flex absolute z-20 shadow-sm -top-[75px] -left-24 lg:-left-20 h-auto w-[120px] gap-3 items-center justify-center">
                 <img
                   src="./logo.png"
                   alt=""
-                  className="w-[200px] h-[112px] bg-white rounded-sm"
+                  className="w-[200px] h-[112px] border-2 lg:border-0 bg-white dark:bg-gray-500 rounded-sm"
                 />
-                {/* <p className="small ">ethiopian business link</p> */}
               </div>
             </div>
           </li>
@@ -473,7 +468,6 @@ const Header = () => {
                 />
               </svg>
             </button>
-            {/* <div className="absolute top-20 left-20 z-50 w-52 h-44 bg-red-400"></div> */}
 
             <div
               id="resource-dropdown"
@@ -595,55 +589,12 @@ const Header = () => {
               </div>
             </div>
           </li>
-          {/* <li className="me-2" role="presentation">
-            <Link
-              to="/donates"
-              className="inline-block p-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
-            >
-              Donates
-            </Link>
-          </li> */}
-          <li className="me-2" role="presentation">
-            <div className="flex items-center border pr-2 rounded-md border-dark justify-center">
-              <Search sx={{ width: 20, height: 20 }} className="m-1" />
-              <input
-                type="text"
-                className="px-2 py-1 bg-dark h-[18px] border-transparent focus:border-transparent focus:ring-0 pr-2 border-none border-gray-300 border-dark bg-none w-[75px] focus:w-40 outline-none"
-                placeholder="search"
-              />
-            </div>
-          </li>
-          {/* <li className="me-2" role="presentation">
-            <div className="top-2 right-2 z-50">
-              <DarkThemeToggle />
-            </div>
-          </li> */}
           <li className="me-2">
-            <div className="flex w-full py-3 relative lg:py-0 pl-4 pr-main bg-main-blackd justify-center flex-col gap-3 items-center">
-              {/* <p
-            href="#"
-            className="inline-flex hover:bg-yellow-400 cursor-pointer  text-white rounded-full gap-2 px-4 py-[5px] border-2 border-white mt-1 text-[14px] font-bold items-center"
-          >
-            Advert here
-            <svg
-              class="w-4 h-4"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                fill-rule="evenodd"
-                d="M3 4a1 1 0 0 0-.8 1.6L6.6 12l-4.4 6.4A1 1 0 0 0 3 20h13.2c.3 0 .6-.2.8-.4l4.8-7a1 1 0 0 0 0-1.2l-4.8-7a1 1 0 0 0-.8-.4H3Z"
-                clip-rule="evenodd"
-              />
-            </svg>
-          </p> */}
-
-              <div className="flex absolute -right-32 z-20 items-center justify-center gap-2">
+            <div className="flex w-full py-3 relative lg:py-0 pl-4 pr-main justify-center flex-col gap-3 items-center">
+              <div className="flex flex-col lg:flex-row w-auto h-auto absolute -right-20 lg:-right-32 z-20 items-center justify-center gap-2">
                 <a
                   href="#"
-                  className="h-6 w-6  flex items-center justify-center  rounded-full bg-white text-[rgb(252,45,45)]"
+                  className="h-6 w-6  flex items-center justify-center  rounded-full bg-white bg-dark text-[rgb(252,45,45)]"
                 >
                   <svg
                     className="w-5 h-5"
@@ -662,7 +613,7 @@ const Header = () => {
                 </a>
                 <a
                   href="#"
-                  className="h-6 w-6 flex items-center justify-center rounded-full bg-white text-[rgb(252,45,45)]"
+                  className="h-6 w-6 flex items-center justify-center rounded-full bg-white bg-dark text-[rgb(252,45,45)]"
                 >
                   <svg
                     className="w-5 h-5 "
@@ -682,7 +633,7 @@ const Header = () => {
                 </a>
                 <a
                   href="#"
-                  className="h-6 w-6 flex items-center justify-center rounded-full bg-white text-[rgb(252,45,45)]"
+                  className="h-6 w-6 flex items-center justify-center rounded-full bg-white bg-dark text-[rgb(252,45,45)]"
                 >
                   <svg
                     class="w-4 h-4 "
@@ -700,7 +651,7 @@ const Header = () => {
                 </a>
                 <a
                   href="#"
-                  className="h-6 w-6 flex items-center justify-center rounded-full bg-white text-[rgb(252,45,45)]"
+                  className="h-6 w-6 flex items-center justify-center rounded-full bg-white bg-dark text-[rgb(252,45,45)]"
                 >
                   <svg
                     className="w-5 h-5 "

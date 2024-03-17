@@ -95,7 +95,7 @@ const Footer = () => {
             return (
               <div
                 key={i}
-                className="flex w-full flex-col items-start rounded-lg hover:bg-red-100 bg-white border shadow-xl p-4 justify-start"
+                className="flex w-full flex-col items-start rounded-lg hover:bg-red-100 dark:hover:bg-gray-600 bg-white bg-dark border-dark border shadow-xl p-4 justify-start"
               >
                 <div className="flex w-full items-center justify-between">
                   <img
@@ -525,7 +525,7 @@ const Footer = () => {
             </div>
           </div> */}
           <div className="">
-            <img src="./logo.png" alt="" className="bg-white rounded-sm" />
+            <img src="./logo.png" alt="" className="bg-white bg-dark rounded-sm" />
             {/* <p className="text-2xl text-main font-bold mt-5">About us</p>
             <p className="mt-5">
               Lorem ipsum, dolor sit amet consectetur adipisicing.

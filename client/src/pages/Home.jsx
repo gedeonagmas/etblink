@@ -8,9 +8,12 @@ import Banner from "../components/Banner";
 import BorderColorOutlinedIcon from "@mui/icons-material/BorderColorOutlined";
 import {
   CreateOutlined,
+  Outlet,
   TransferWithinAStationOutlined,
   TransferWithinAStationTwoTone,
 } from "@mui/icons-material";
+import Header from "./Header";
+import Footer from "./Footer";
 
 const Home = () => {
   const divStyle = {
@@ -31,8 +34,8 @@ const Home = () => {
 
   return (
     <>
-      {/* <Header /> */}
-      <div className="relative mt-24 rounded-lg bg-gray-50 bg-dark">
+      <Header />
+      <div className="relative pt-24 rounded-lg bg-gray-50 bg-dark">
         {/* slides */}
         <div className="w-full pb-11 h-full">
           <div
@@ -64,7 +67,7 @@ const Home = () => {
             </Slide>
 
             {/* hero page content */}
-            <div className="flex absolute top-60 ml-main z-30 w-[440px]  h-auto gap-2 items-start justify-start">
+            <div className="flex absolute top-60 ml-0 lg:ml-[8%] z-30 w-[440px]  h-auto gap-2 items-start justify-start">
               <div className="absolute -mt-32 p-5 rounded-sm bg-black/35 mx-auto">
                 <h1 className="mb-2 tracking-wider text-4xl font-extrabold leading-none text-white dark:text-gray-300 ">
                   Your investment
@@ -73,14 +76,14 @@ const Home = () => {
                   destination
                 </h1>
 
-                <p className=" text-sm font-normal text-gray-200 text-dark">
+                <p className=" text-sm mx-1 lg:mx-0 font-normal text-gray-200 text-dark">
                   Here at ETBLINK we focus on markets where technology, <br />
                   innovation, and capital can unlock long-term value.
                 </p>
               </div>
             </div>
             <div className="w-full px-main relative pt-10 bg-cover h-[100%] bg-no-repeat md:py-0 bg-[url('/bg3.jpg')] bg-dark bg-bottom grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-              <div className="absolute shadow-xl grid grid-cols-4 text-gray-500 mx-main w-[55.5%] -top-10 left-0 h-[70px] rounded-lg border border-gray-300 bg-white bg-dark z-20">
+              <div className="absolute shadow-xl grid  w-full grid-cols-4 text-gray-500 mx-1 lg:mx-[7.5%] lg:w-[55.5%] -top-10 left-0 h-[70px] rounded-lg border border-gray-300 bg-white bg-dark z-20">
                 <div className="flex p-2 items-center justify-start border-r">
                   <svg
                     class="w-6 h-6 "
@@ -99,7 +102,7 @@ const Home = () => {
                   </svg>
                   <input
                     type="text"
-                    className="h-full border-0 focus:outline-none focus:ring-0 outline-none w-32"
+                    className="h-full border-0 bg-dark focus:outline-none focus:ring-0 outline-none w-32"
                     placeholder="Keywords"
                   />
                 </div>
@@ -121,7 +124,7 @@ const Home = () => {
                   </svg>
                   <input
                     type="text"
-                    className="h-full border-0 focus:outline-none focus:ring-0 outline-none w-32"
+                    className="h-full border-0 bg-dark focus:outline-none focus:ring-0 outline-none w-32"
                     placeholder="Filter by category"
                   />
                 </div>
@@ -150,7 +153,7 @@ const Home = () => {
                   </svg>
                   <input
                     type="text"
-                    className="h-full border-0 focus:outline-none focus:ring-0 outline-none w-32"
+                    className="h-full border-0 bg-dark focus:outline-none focus:ring-0 outline-none w-32"
                     placeholder="Location"
                   />
                 </div>
@@ -256,7 +259,7 @@ const Home = () => {
                 </div>
               </div> */}
 
-              <div className="absolute right-0 text-[13px] py-2 -top-[150px] z-30 pr-main w-[490px] h-auto flex justify-end items-center">
+              <div className="absolute hidden lg:flex right-0 text-[13px] py-2 lg:-top-[150px] z-30 mr-main w-[380px] h-auto justify-end items-center">
                 <div className="absolute right-0 top-0 z-30 bg-dark w-full">
                   <p className="px-4 mt-1 pt-2">Recently added business</p>
                   <ul
@@ -443,7 +446,7 @@ const Home = () => {
               </div>
             </div>
             {/* small advert */}
-            <div className="w-full h-52 mt-4 px-main place-items-center grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3 ">
+            <div className="w-full h-52  mt-4 px-main place-items-center grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3 ">
               <div className="flex rounded-md h-[70px] border border-gray-200 shadow-2xl px-2 gap-2 w-full items-center justify-start">
                 <p className="text-3xl font-bold uppercase text-main">
                   ETB <span className="text-gray-600">LINK</span>
@@ -467,8 +470,8 @@ const Home = () => {
             </div>
 
             {/* services */}
-            <div className="flex px-main gap-3 -mt-5 items-center justify-beteween">
-              <div className="flex gap-5 w-[300px]  items-center justify-center">
+            <div className="flex flex-col lg:flex-row px-main gap-3 mt-10 lg:-mt-5 items-center justify-between">
+              <div className="flex flex-col lg:flex-row gap-5 w-[300px]  items-center justify-center">
                 <div className="flex  shadow-2xl w-[200px] rounded-l-none px-7 py-4  bg-main text-white rounded-lg flex-col items-center justify-center gap-1">
                   <svg
                     class="w-10 h-10"
@@ -508,9 +511,9 @@ const Home = () => {
                   <p className="text-sm -mt-2">3k+ listed</p>
                 </div>
               </div>
-              <div className="w-1 bg-gray-200 bg-dark h-20 my-2 mx-2 rounded-full"></div>
+              <div className="w-1 bg-gray-200 bg-dark hidden lg:block h-20 my-2 mx-2 rounded-full"></div>
               {/* service types  */}
-              <div className="grid grid-cols-2 text-[15px] md:grid-cols-4 place-items-center gap-10 ml-6 lg:grid-cols-6">
+              <div className="grid grid-cols-2 text-[15px] mt-3 lg:mt-0 md:grid-cols-4 place-items-center gap-10 ml-6 lg:grid-cols-6">
                 <div className="flex  rounded-lg flex-col items-center justify-center">
                   <div className=" rounded-full bg-white bg-dark shadow-sm">
                     <img
@@ -590,7 +593,7 @@ const Home = () => {
 
         <Banner />
         <div className="w-full  py-8 flex  bg-dark text-dark flex-col items-center justify-center">
-          <p className="text-4xl font-semibold text-gray-700">
+          <p className="text-4xl text-center font-semibold text-gray-700">
             Top & Popular <span className="text-main">Listings</span>
           </p>
           <p className="text-[17px] px-main mt-3 py-1 font-light text-gray-500">
@@ -672,7 +675,7 @@ const Home = () => {
           </div>
           <Sponsors />
 
-          <div className="flex w-full mt-16 gap-6 px-main">
+          <div className="flex flex-col lg:flex-row w-full mt-16 gap-6 px-main">
             <div className="flex flex-col flex-[70%] shadow-lg bg-white bg-dark p-4 items-center justify-start border-t-4 border-main">
               <p className="text-xl self-start font-bold text-main py-3">
                 Ethiopian business link news
@@ -917,6 +920,8 @@ const Home = () => {
           </div>
         </div>
       </div>
+      <Outlet />
+      <Footer />
     </>
   );
 };
