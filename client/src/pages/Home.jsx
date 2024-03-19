@@ -922,8 +922,8 @@ const Home = () => {
           </div>
         </div>
       </div>
-      <Outlet />
-      <Footer />
+      {/* <Outlet />
+      <Footer /> */}
     </>
   );
 };
