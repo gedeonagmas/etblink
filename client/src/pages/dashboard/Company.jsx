@@ -495,66 +495,128 @@ const Company = (props) => {
               />
             </div>
           </div>
-          <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-              <tr>
-                <th scope="col" class="px-6 py-3">
-                  Name
-                </th>
-                <th scope="col" class="px-6 py-3">
-                  Position
-                </th>
-                <th scope="col" class="px-6 py-3">
-                  Status
-                </th>
-                <th scope="col" class="px-6 py-3">
-                  Action
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {[1, 2, 3, 4, 5, 6].map((e, i) => {
-                return (
-                  <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                    <th
-                      scope="row"
-                      class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white"
-                    >
-                      <img
-                        class="w-10 h-10 rounded-full"
-                        src={gedi}
-                        alt="Jese image"
-                      />
-                      <div class="ps-3">
-                        <div class="text-base font-semibold">Neil Sims</div>
-                        <div class="font-normal text-gray-500">
-                          skylight@.com
-                        </div>
-                      </div>
-                    </th>
-                    <td class="px-6 py-4">React Developer</td>
-                    <td class="px-6 py-4">
-                      <div class="flex items-center">
-                        <div class="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div>
-                        Online
-                      </div>
-                    </td>
-                    <td class="px-6 py-4">
-                      <a
-                        href="#"
-                        type="button"
-                        data-modal-target="editUserModal"
-                        data-modal-show="editUserModal"
-                        class="font-medium px-2 py-1 rounded-full bg-main text-white hover:underline"
+          <div className="flex flex-col w-full gap-4 lg:flex-row mt-2">
+            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+              <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                <tr>
+                  <th scope="col" class="px-6 py-3">
+                    Name 
+                  </th>
+                  {/* <th scope="col" class="px-6 py-3">
+                    Position
+                  </th> */}
+                  <th scope="col" class="px-6 py-3">
+                    Status
+                  </th>
+                  <th scope="col" class="px-6 py-3">
+                    Action
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {[1, 2, 3, 4, 5, 6].map((e, i) => {
+                  return (
+                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                      <th
+                        scope="row"
+                        class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white"
                       >
-                        Edit user
-                      </a>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+                        <img
+                          class="w-10 h-10 rounded-full"
+                          src={gedi}
+                          alt="Jese image"
+                        />
+                        <div class="ps-3">
+                          <div class="text-base font-semibold">Neil Sims</div>
+                          <div class="font-normal text-gray-500">
+                            skylight@.com
+                          </div>
+                        </div>
+                      </th>
+                      {/* <td class="px-6 py-4">React Developer</td> */}
+                      <td class="px-6 py-4">
+                        <div class="flex items-center">
+                          <div class="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div>
+                          Online
+                        </div>
+                      </td>
+                      <td class="px-6 py-4">
+                        <a
+                          href="#"
+                          type="button"
+                          data-modal-target="editUserModal"
+                          data-modal-show="editUserModal"
+                          class="font-medium px-2 py-1 rounded-full bg-main text-white hover:underline"
+                        >
+                          Edit user
+                        </a>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+              <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                <tr>
+                  <th scope="col" class="px-6 py-3">
+                    Name
+                  </th>
+                  {/* <th scope="col" class="px-6 py-3">
+                    Position
+                  </th> */}
+                  <th scope="col" class="px-6 py-3">
+                    Status
+                  </th>
+                  <th scope="col" class="px-6 py-3">
+                    Action
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {[1, 2, 3, 4, 5, 6].map((e, i) => {
+                  return (
+                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                      <th
+                        scope="row"
+                        class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white"
+                      >
+                        <img
+                          class="w-10 h-10 rounded-full"
+                          src={gedi}
+                          alt="Jese image"
+                        />
+                        <div class="ps-3">
+                          <div class="text-base font-semibold">Neil Sims</div>
+                          <div class="font-normal text-gray-500">
+                            skylight@.com
+                          </div>
+                        </div>
+                      </th>
+                      {/* <td class="px-6 py-4">React Developer</td> */}
+                      <td class="px-6 py-4">
+                        <div class="flex items-center">
+                          <div class="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div>
+                          Online
+                        </div>
+                      </td>
+                      <td class="px-6 py-4">
+                        <a
+                          href="#"
+                          type="button"
+                          data-modal-target="editUserModal"
+                          data-modal-show="editUserModal"
+                          class="font-medium px-2 py-1 rounded-full bg-main text-white hover:underline"
+                        >
+                          Edit user
+                        </a>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
 

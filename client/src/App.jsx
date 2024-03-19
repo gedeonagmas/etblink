@@ -14,18 +14,19 @@ import Dashboard from "./pages/Dashboard";
 import Company from "./pages/dashboard/Company";
 import Sellers from "./pages/dashboard/Sellers";
 import Visitors from "./pages/dashboard/Visitors";
+import HomeTemplate from "./pages/HomeTemplate";
 
 function App() {
   const jwt = localStorage.getItem("jwt");
   const user = JSON.parse(localStorage.getItem("user"));
-console.log(jwt, user,'info');
+  console.log(jwt, user, "info");
 
   return (
     <Flowbite>
       <div className="font-poppins text-black overflow-hidden text-dark bg-dark">
         <Routes>
-          <Route path="/" element={<Home />}>
-            {/* <Route path="/" element={<Home />}></Route> */}
+          <Route path="/" element={<HomeTemplate />}>
+            <Route path="/" element={<Home />}></Route>
             <Route path="/local" element={<Category type="local" />}></Route>
             <Route path="/global" element={<Category type="global" />}></Route>
             <Route path="/company-detail" element={<CompanyDetail />}></Route>
@@ -48,14 +49,6 @@ console.log(jwt, user,'info');
             <Route path="*" element={<PageNotFound />}></Route>
           </Route>
           <Route path="*" element={<PageNotFound />}></Route>
-          {/* <Route path="/" element={<Home />}></Route> */}
-          {jwt && user && (
-            <Route
-              path="/dashboard/*"
-              element={<Home role={user?.role} />}
-            ></Route>
-          )}
-          <Route path="*" element={<PageNotFound />} />
         </Routes>
       </div>
     </Flowbite>

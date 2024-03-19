@@ -273,7 +273,7 @@ const Header = () => {
       {/* tabs */}
       <div className="border-b relative shadow-2xl  py-2 md:py-1 border-gray-200 dark:border-gray-700">
         <ul
-          className="flex mx-20  relative gap-1 flex-wrap items-center justify-center -mb-px text-sm font-medium text-center"
+          className="flex mx-20d  relative gap-1 flex-wrap items-center justify-center -mb-px text-sm font-medium text-center"
           id="default-tab"
           data-tabs-toggle="#default-tab-content"
           role="tablist"
@@ -282,7 +282,7 @@ const Header = () => {
             <div
               className={`${
                 currencies ? "block" : "hidden"
-              } h-auto absolute shadow-2xl shadow-gray-500 z-20 right-2 -top-[20px] w-[65px]`}
+              } h-auto absolute shadow-2xl shadow-gray-500 z-20 right-[8%] -top-[20px] w-[65px]`}
             >
               <p className="absolute z-20  top-4 left-2 text-white">Today</p>
               <svg
@@ -402,41 +402,56 @@ const Header = () => {
               </div>
             </div>
           </div>
-          
+
           <li className="me-2">
             <div className="flex relative items-center justify-center gap-6">
               {/*  */}
-              <div className="flex absolute z-20 shadow-sm -top-[75px] -left-24 lg:-left-20 h-auto w-[120px] gap-3 items-center justify-center">
+              <div className="flex absolute z-20 shadow-sm -top-[75px] -left-7 lg:-left-20 h-auto w-[120px] gap-3 items-center justify-center">
                 <img
                   src="./logo.png"
                   alt=""
-                  className="w-[200px] h-[112px] border-2 lg:border-0 bg-white dark:bg-gray-500 rounded-sm"
+                  className="w-[80px] h-[65px] lg:w-[200px] lg:h-[112px] border-2 lg:border-0 bg-white dark:bg-gray-500 rounded-sm"
                 />
               </div>
             </div>
           </li>
           <li className="me-2 ml-14" role="presentation">
-            <Link to="/" className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg">
+            <Link
+              to="/"
+              className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
+            >
               Home
             </Link>
           </li>
           <li className="me-2 ml-2" role="presentation">
-            <Link to="/local" className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg">
+            <Link
+              to="/local"
+              className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
+            >
               Local
             </Link>
           </li>
           <li className="me-2 ml-2" role="presentation">
-            <Link to="/global" className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg">
+            <Link
+              to="/global"
+              className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
+            >
               Global
             </Link>
           </li>
           <li className="me-2 ml-2" role="presentation">
-            <Link to="/news" className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg">
+            <Link
+              to="/news"
+              className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
+            >
               News
             </Link>
           </li>
           <li className="me-2 ml-2" role="presentation">
-            <Link to="/job" className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg">
+            <Link
+              to="/job"
+              className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
+            >
               Job
             </Link>
           </li>
@@ -556,7 +571,7 @@ const Header = () => {
                   const ids = document.getElementById("license-dropdown");
                   ids?.classList?.add("hidden");
                 }}
-                className="z-50 hidden px-4 border-none -mt-[150px] ml-[200px]"
+                className="z-50 hidden px-4 border-none -mt-[150px] -ml-[180px] lg:ml-[200px]"
               >
                 <div className=" bg-white  rounded-lg shadow w-40 dark:bg-gray-700">
                   <ul className="py-2 text-start w-full h-auto text-sm text-gray-700 dark:text-gray-200">
@@ -589,7 +604,7 @@ const Header = () => {
               </div>
             </div>
           </li>
-          <li className="me-2">
+          <li className="me-2 hidden lg:block">
             <div className="flex w-full py-3 relative lg:py-0 pl-4 pr-main justify-center flex-col gap-3 items-center">
               <div className="flex flex-col lg:flex-row w-auto h-auto absolute -right-20 lg:-right-32 z-20 items-center justify-center gap-2">
                 <a

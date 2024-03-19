@@ -1,4 +1,13 @@
 {
   "cSpell.words": ["Flowbite"],
-  "eslint.rules.customizations": [{ "rule": "*", "severity": "warn" }]
+  "eslint.rules.customizations": [
+    {
+      "rule": "*",
+      "severity": "warn"
+    }
+  ],
+  "editor.formatOnType": true,
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode"
 }

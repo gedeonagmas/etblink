@@ -590,8 +590,10 @@ const Home = () => {
             </div>
           </div>
         </div>
+        <div className="px-main">
+          <Banner />
+        </div>
 
-        <Banner />
         <div className="w-full  py-8 flex  bg-dark text-dark flex-col items-center justify-center">
           <p className="text-4xl text-center font-semibold text-gray-700">
             Top & Popular <span className="text-main">Listings</span>
