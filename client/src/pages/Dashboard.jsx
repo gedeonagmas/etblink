@@ -876,7 +876,7 @@ const Dashboard = () => {
                 </div>
               </div>
 
-              <div className="flex bg-gray-100 p-2  rounded-sm flex-col relative -mt-20s p-3 h-auto  justify-between items-start">
+              <div className="flex bg-gray-100 p-2 w-full rounded-sm flex-col relative -mt-20s p-3 h-auto  justify-between items-start">
                 {/* <SmallChart
                   type="area"
                   color="#0000FF"
@@ -888,7 +888,7 @@ const Dashboard = () => {
                     },
                   ]}
                 /> */}
-                <div id="chart" className="bg-white">
+                <div id="chart" className="bg-white w-full">
                   <ReactApexChart
                     options={state.options}
                     series={state.series}
