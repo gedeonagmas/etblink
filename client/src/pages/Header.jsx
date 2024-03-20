@@ -7,6 +7,8 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 const Header = () => {
+  const [loginForm, setLoginForm] = useState(false);
+  const [registerForm, setRegisterForm] = useState(false);
   // const divStyle = {
   //   display: "flex",
   //   alignItems: "center",
@@ -220,7 +222,7 @@ const Header = () => {
 
             <div
               id="dropdownDelay"
-              className="z-30 -mt-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-auto dark:bg-gray-700"
+              className="z-50 -mt-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-auto dark:bg-gray-700"
             >
               <ul
                 className="py-2 text-sm text-start text-gray-700 dark:text-gray-200"
@@ -261,9 +263,66 @@ const Header = () => {
               </ul>
             </div>
           </div>
-          <p>Login</p>
+          <div className="relative">
+            <p
+              onMouseOver={() => setLoginForm(true)}
+              className="cursor-pointer"
+            >
+              Login
+            </p>
+            {loginForm && (
+              <div
+                onMouseLeave={() => setLoginForm(false)}
+                className="w-auto text-sm flex flex-col bg-white bg-dark text-dark absolute top-7 -left-40 z-30 text-black"
+              >
+                <input
+                  type="email"
+                  className="w-52  px-2 py-1 focus:outline-none focus:ring-0"
+                  placeholder="Email"
+                />
+                <input
+                  type="password"
+                  className="w-52 px-2 py-1  focus:outline-none focus:ring-0"
+                  placeholder="password"
+                />
+                <button className="w-full py-[6px] font-bold hover:bg-red-500 bg-main text-white">
+                  Login
+                </button>
+              </div>
+            )}
+          </div>
           <p className="text-gray-600">|</p>
-          <p>Register</p>
+          <div className="relative">
+            <p
+              onMouseOver={() => setRegisterForm(true)}
+              className="cursor-pointer"
+            >
+              Register
+            </p>
+            {registerForm && (
+              <div
+                onMouseLeave={() => setRegisterForm(false)}
+                className="w-auto text-center text-sm flex flex-col bg-white bg-dark text-dark absolute top-7 -left-10 z-30 text-black"
+              >
+                <p className="text-sm font-bold border-b cursor-pointer p-1 w-32">
+                  Register as
+                </p>
+                <p className="text-sm border-b cursor-pointer p-1 hover:bg-red-500 hover:text-white w-32">
+                  Visitor
+                </p>
+                <p className="text-sm border-b cursor-pointer p-1 hover:bg-red-500 hover:text-white w-32">
+                  Company
+                </p>
+                <p className="text-sm border-b cursor-pointer p-1 hover:bg-red-500 hover:text-white w-32">
+                  Salles
+                </p>
+
+                {/* <button className="w-full py-[6px] font-bold hover:bg-red-500 bg-main text-white">
+                Register
+              </button> */}
+              </div>
+            )}{" "}
+          </div>
           <div className="top-2 right-2 z-50">
             <DarkThemeToggle />
           </div>
