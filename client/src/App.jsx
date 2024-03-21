@@ -15,6 +15,7 @@ import Company from "./pages/dashboard/Company";
 import Sellers from "./pages/dashboard/Sellers";
 import Visitors from "./pages/dashboard/Visitors";
 import HomeTemplate from "./pages/HomeTemplate";
+import Signup from "./pages/Signup";
 
 function App() {
   const jwt = localStorage.getItem("jwt");
@@ -27,6 +28,7 @@ function App() {
         <Routes>
           <Route path="/" element={<HomeTemplate />}>
             <Route path="/" element={<Home />}></Route>
+            <Route path="/signup" element={<Signup />}></Route>
             <Route path="/local" element={<Category type="local" />}></Route>
             <Route path="/global" element={<Category type="global" />}></Route>
             <Route path="/company-detail" element={<CompanyDetail />}></Route>

@@ -10,7 +10,10 @@ export const authorization = async (req, res, next) => {
   const method = req.method; //req.method
   const table = selectModel(req.params.table, next)?.collection?.collectionName; //model.collection.collectionName
   const role = req.user.role; //req.user.role
-  const data = await Permission.findById(req.user.permission); //permission data
+  const data =
+    role === "private-customer" || "business-customer" || role === "lawyer"
+      ? undefined
+      : await Permission.findById(req.user.permission); //permission data
   let key = table === "users" ? req.query.uu_tt : table;
   let methods = [];
 
@@ -46,10 +49,31 @@ export const authorization = async (req, res, next) => {
     } else {
       //we just switch the table type to select which table can be used
       switch (table) {
-        case "cases" || "categories":
+        case "categories":
           //current user role
           switch (role) {
-            case "customer" || "lawyer":
+            case "private-customer":
+              return unauthorized(next);
+            case "business-customer":
+              return unauthorized(next);
+            case "lawyer":
+              return unauthorized(next);
+            default:
+              if (step1 && step2) {
+                return next();
+              } else {
+                return unauthorized(next);
+              }
+          }
+
+        case "cases":
+          //current user role
+          switch (role) {
+            case "private-customer":
+              return unauthorized(next);
+            case "business-customer":
+              return unauthorized(next);
+            case "lawyer":
               return unauthorized(next);
             default:
               if (step1 && step2) {
@@ -61,7 +85,11 @@ export const authorization = async (req, res, next) => {
 
         case "permissions":
           switch (role) {
-            case "customer" || "lawyer":
+            case "private-customer":
+              return unauthorized(next);
+            case "business-customer":
+              return unauthorized(next);
+            case "lawyer":
               return unauthorized(next);
             case "representative":
               if (method === "GET") {
@@ -117,6 +145,10 @@ export const authorization = async (req, res, next) => {
           return next();
         case "payments":
           return next();
+        case "chats":
+          return next();
+        default:
+          return unauthorized();
       }
     }
   }

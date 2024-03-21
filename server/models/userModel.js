@@ -9,57 +9,57 @@ const userSchema = new mongoose.Schema(
     firstName: {
       type: String,
       validate: function () {
-        return this.userType === "company" ? null : valid.name("First name");
+        return this.userType === "business" ? null : valid.name("First name");
       },
-      required: function () {
-        return this.userType === "company"
-          ? false
-          : [true, "First name is required"];
-      },
+      // required: function () {
+      //   return this.userType === "business"
+      //     ? false
+      //     : [true, "First name is required"];
+      // },
     },
 
     middleName: {
       type: String,
       validate: function () {
-        return this.userType === "company" ? null : valid.name("Middler name");
+        return this.userType === "business" ? null : valid.name("Middle name");
       },
-      required: function () {
-        return this.userType === "company"
-          ? false
-          : [true, "Middler name is required"];
-      },
+      // required: function () {
+      //   return this.userType === "business"
+      //     ? false
+      //     : [true, "Middler name is required"];
+      // },
     },
 
     lastName: {
       type: String,
       validate: function () {
-        return this.userType === "company" ? null : valid.name("Last name");
+        return this.userType === "business" ? null : valid.name("Last name");
       },
-      required: function () {
-        return this.userType === "company"
-          ? false
-          : [true, "Last name is required"];
-      },
+      // required: function () {
+      //   return this.userType === "business"
+      //     ? false
+      //     : [true, "Last name is required"];
+      // },
     },
 
     gender: {
       type: String,
       validate: function () {
-        return this.userType === "company" ? null : valid.gender("Gender");
+        return this.userType === "business" ? null : valid.gender("Gender");
       },
-      required: function () {
-        return this.userType === "company"
-          ? false
-          : [true, "Gender is required"];
-      },
+      // required: function () {
+      //   return this.userType === "business"
+      //     ? false
+      //     : [true, "Gender is required"];
+      // },
     },
 
-    userName: {
-      type: String,
-      unique: [true, "This user name address is taken"],
-      validate: valid.userName("User name"),
-      required: [true, "User name is required"],
-    },
+    // userName: {
+    //   type: String,
+    //   // unique: [true, "This user name address is taken"],
+    //   validate: valid.userName("User name"),
+    //   // required: [true, "User name is required"],
+    // },
 
     email: {
       type: String,
@@ -71,56 +71,68 @@ const userSchema = new mongoose.Schema(
     phone: {
       type: String,
       validate: valid.phone("Phone"),
-      required: [true, "Phone is required"],
+      // required: [true, "Phone is required"],
     },
 
     address: {
       type: String,
       validate: valid.paragraph("Address", 4, 200),
-      required: [true, "Address is required"],
+      // required: [true, "Address is required"],
     },
 
-    role: { type: String, default: "visitor" },
+    role: { type: String, default: "private" },
 
     nationality: {
       type: String,
       validate: valid.paragraph("Nationality", 4, 100),
     },
-
+    // userType: { type: String, required: [true, "User type is required"] },
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: function () {
-        return this.role === "company" ? "company" : null;
+        return this.role === "visitor"
+          ? "visitor"
+          : this.role === "company"
+          ? "company"
+          : this.role === "seller"
+          ? "seller"
+          : "admin";
       },
+      // ref: "lawyer",
     },
-
     password: {
       type: String,
       select: false,
       validate: valid.password("Password"),
     },
-
     confirmPassword: {
       type: String,
       validate: valid.confirmPassword("Confirm password"),
     },
+    isPro: {
+      type: Boolean,
+      default: false,
+    },
     modifiedDate: Number,
-    createdAt: { type: Number, default: Date.now() },
     passwordChangedAt: Number,
     resetToken: String,
     resetTokenExpires: Number,
     profilePicture: {
       type: String,
-      default:
-        "https://res.cloudinary.com/dkvjvnil8/image/upload/v1689691516/defaultProfile.jpg",
+      default: "",
+      // "https://res.cloudinary.com/dkvjvnil8/image/upload/v1689691516/defaultProfile.jpg",
     },
   },
   {
-    toJSON: { virtuals: true },
-    toObject: { virtuals: true },
     timestamps: true,
+    toJSON: {
+      virtuals: true,
+    },
+    toObject: {
+      virtuals: true,
+    },
   }
-);
+); 
 
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();

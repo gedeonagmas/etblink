@@ -28,4 +28,4 @@ const diskStorage = multer.diskStorage({
   },
 });
 
-export const upload = multer({ storage: diskStorage, fileFilter: filter });
+export const upload = multer({ storage: diskStorage });

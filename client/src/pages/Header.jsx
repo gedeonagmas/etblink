@@ -5,10 +5,18 @@ import { Slide } from "react-slideshow-image";
 import "react-slideshow-image/dist/styles.css";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
+import Response from "../components/Response";
+import LoadingButton from "../components/loading/LoadingButton";
+import { useUserLoginMutation } from "../features/api/apiSlice";
 
 const Header = () => {
+  const [loginData, loginResponse] = useUserLoginMutation();
+  const [pending, setPending] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loginForm, setLoginForm] = useState(false);
   const [registerForm, setRegisterForm] = useState(false);
+
   // const divStyle = {
   //   display: "flex",
   //   alignItems: "center",
@@ -39,9 +47,22 @@ const Header = () => {
       window.removeEventListener("scroll", onPageScroll);
     };
   }, []);
+
+  const loginHandler = () => {
+    loginData({ email, password });
+  };
+
   return (
     // fixed bg-white bg-dark top-0 left-0 w-full z-50 h-auto
     <div className="fixed w-full z-40 bg-white bg-dark">
+      <Response
+        response={loginResponse}
+        setPending={setPending}
+        // redirectTo=""
+        // redirectTo="/dashboard/customer/private"
+        type="login"
+        // type="loginddd"
+      />
       <div className="w-full flex flex-col lg:flex-row ">
         {/* <div className="relative pl-main bg-main-black w-full lg:w-[78%]">
           <Slide
@@ -277,17 +298,23 @@ const Header = () => {
               >
                 <input
                   type="email"
-                  className="w-52  px-2 py-1 focus:outline-none focus:ring-0"
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-52  px-2 py-3 focus:outline-none focus:ring-0"
                   placeholder="Email"
                 />
                 <input
+                  onChange={(e) => setPassword(e.target.value)}
                   type="password"
-                  className="w-52 px-2 py-1  focus:outline-none focus:ring-0"
+                  className="w-52 px-2 py-3  focus:outline-none focus:ring-0"
                   placeholder="password"
                 />
-                <button className="w-full py-[6px] font-bold hover:bg-red-500 bg-main text-white">
-                  Login
-                </button>
+                <LoadingButton
+                  pending={pending}
+                  onClick={loginHandler}
+                  title="Login"
+                  color="bg-main"
+                  width="w-full py-1"
+                />
               </div>
             )}
           </div>
@@ -307,15 +334,78 @@ const Header = () => {
                 <p className="text-sm font-bold border-b cursor-pointer p-1 w-32">
                   Register as
                 </p>
-                <p className="text-sm border-b cursor-pointer p-1 hover:bg-red-500 hover:text-white w-32">
-                  Visitor
-                </p>
-                <p className="text-sm border-b cursor-pointer p-1 hover:bg-red-500 hover:text-white w-32">
-                  Company
-                </p>
-                <p className="text-sm border-b cursor-pointer p-1 hover:bg-red-500 hover:text-white w-32">
-                  Salles
-                </p>
+                <Link
+                  to="/signup"
+                  state={{ type: "visitor" }}
+                  className="text-sm flex items-center justify-between gap-1 border-b cursor-pointer p-1 hover:bg-red-500 hover:text-white w-32"
+                >
+                  Visitor{" "}
+                  <svg
+                    class="w-6 h-6 text-gray-800 dark:text-white"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M19 12H5m14 0-4 4m4-4-4-4"
+                    />
+                  </svg>
+                </Link>
+                <Link
+                  to="/signup"
+                  state={{ type: "company" }}
+                  className="text-sm flex items-center justify-between gap-1 border-b cursor-pointer p-1 hover:bg-red-500 hover:text-white w-32"
+                >
+                  Company{" "}
+                  <svg
+                    class="w-6 h-6 text-gray-800 dark:text-white"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M19 12H5m14 0-4 4m4-4-4-4"
+                    />
+                  </svg>
+                </Link>
+                <Link
+                  to="/signup"
+                  state={{ type: "salles" }}
+                  className="text-sm flex items-center justify-between gap-1 border-b cursor-pointer p-1 hover:bg-red-500 hover:text-white w-32"
+                >
+                  Salles{" "}
+                  <svg
+                    class="w-6 h-6 text-gray-800 dark:text-white"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M19 12H5m14 0-4 4m4-4-4-4"
+                    />
+                  </svg>
+                </Link>
 
                 {/* <button className="w-full py-[6px] font-bold hover:bg-red-500 bg-main text-white">
                 Register

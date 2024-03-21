@@ -11,7 +11,7 @@ const schema = new mongoose.Schema({
 
   type: {
     enum: ["Local", "Global"],
-    required: [true, "type must be either Local or Global"],
+    // required: [true, "type must be either Local or Global"],
   },
 
   title: {
@@ -28,7 +28,7 @@ const schema = new mongoose.Schema({
   highlightServices: {
     type: [String],
     unique: true,
-    validate: valid.paragraph("Highlight services", 4, 200),
+    // validate: valid.paragraph("Highlight services", 4, 200),
   },
 
   secondPhone: {
@@ -53,7 +53,7 @@ const schema = new mongoose.Schema({
   amenities: {
     //main features
     type: [String],
-    validate: valid.paragraph("Amenities", 100, 1000),
+    // validate: valid.paragraph("Amenities", 100, 1000),
   },
 
   photoGallery: {

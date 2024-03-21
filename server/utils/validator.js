@@ -113,6 +113,6 @@ export const phone = (field) => {
         v
       );
     },
-    message: `${field} please insert a correct phone number`,
+    message: `${field} must must be either male or female`,
   };
 };

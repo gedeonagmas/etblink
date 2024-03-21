@@ -12,58 +12,152 @@ const Response = ({ response, setPending, redirectTo, type }) => {
   useEffect(() => {
     response.status === "pending" ? setPending(true) : setPending(false);
 
-    response.status === "fulfilled"
+    let dashboard = "";
+    if (response.status === "fulfilled") {
+      switch (response?.data?.data?.role) {
+        case "company":
+          dashboard = "/dashboard/company";
+          break;
+        case "salles":
+          dashboard = "/dashboard/salles";
+          break;
+        case "visitor":
+          dashboard = "/dashboard/visitor";
+          break;
+        default:
+          dashboard = "/";
+      }
+    }
+
+    response.status === "fulfilled" && dashboard?.length > 0
       ? (setError(false),
         setSuccess(true),
         setSuccessMessage(response?.data?.message),
         type === "login"
-          ? (localStorage.setItem("jwt", response?.data?.token),
-            localStorage.setItem("user", JSON.stringify(response?.data?.data)),
-            redirectTo.length > 0
-              ? navigate(redirectTo, { replace: true })
-              : null)
+          ? navigate(dashboard, { replace: true })
           : redirectTo && redirectTo?.length > 0
-          ? navigate(redirectTo)
+          ? (navigate(redirectTo, { replace: true }),
+            window.history.pushState(-1))
           : setTimeout(() => {
               setSuccess(false);
-            }, 4000))
+            }, 6000))
       : null;
 
     response.status === "rejected"
-      ? (setError(true), setErrorMessage([response?.error?.data?.message]))
+      ? (setError(true),
+        setErrorMessage(
+          typeof response?.error?.data?.message === "string"
+            ? [response?.error?.data?.message]
+            : response?.error?.data?.message
+        ))
       : setError(false);
   }, [response]);
 
   return (
     <div>
       {error && errorMessage && (
-        <div className="flex items-start justify-center z-50 fixed w-auto top-44 right-4 flex-col shadow-sm shadow-black gap-2  h-auto py-8 px-2 rounded-md bg-red-200 border border-red-500">
-          <p className="underline text-[14px] font-bold text-red-600">
-            Error Messages {"("}
-            {errorMessage?.length}
-            {")"}
-          </p>
-
-          {errorMessage?.map((err, i) => {
-            return (
-              <p key={i} className="text-[14px] text-red-500">
-                {i + 1}. {err} <br />
+        <div
+          class="flex p-4 mb-4 max-w-xl z-50 shadow-xl fixed top-10 right-20 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+          role="alert"
+        >
+          <div>
+            <div className="flex items-center justify-between py-2">
+              <svg
+                class="flex-shrink-0 inline w-4 h-4 me-3 mt-[2px]"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+              </svg>
+              <span class="sr-only">Danger</span>{" "}
+              <p class="font-medium">
+                Error Messages {"("}
+                {errorMessage?.length}
+                {")"}
               </p>
-            );
-          })}
+              <button
+                type="button"
+                onClick={() => setError(false)}
+                class="ms-auto -mx-1.5 -my-1.5 bg-red-50 text-red-800 rounded-lg focus:ring-0 p-1.5 hover:bg-red-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:text-red-400 dark:hover:bg-gray-700"
+                data-dismiss-target="#alert-2"
+                aria-label="Close"
+              >
+                <span class="sr-only">Close</span>
+                <svg
+                  class="w-3 h-3"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 14 14"
+                >
+                  <path
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+                  />
+                </svg>
+              </button>
+            </div>
 
-          <Close
-            fontSize="small"
-            onClick={() => setError(false)}
-            className="absolute top-2 right-2 cursor-pointer"
-          />
+            <ul class="mt-1 list-disc list-inside">
+              {errorMessage?.map((err, i) => {
+                return <li key={i}>{err}</li>;
+              })}
+            </ul>
+          </div>
         </div>
       )}
+
       {success && successMessage && (
-        <div className="flex items-start justify-center fixed w-auto top-44 z-50 max-w-[400px] right-4 flex-col shadow-sm shadow-black gap-2  h-auto py-8 px-2 rounded-md bg-emerald-200 border border-emerald-500">
-          <p className="text-[14px] font-bold text-emerald-500">
-            {successMessage}
-          </p>
+        <div
+          id="alert-3"
+          class="flex items-center p-4 mb-4 fixed top-20 z-50 right-20 max-w-[400px] text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
+          role="alert"
+        >
+          <svg
+            class="w-6 h-6 text-green-600"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M2 12a10 10 0 1 1 20 0 10 10 0 0 1-20 0Zm13.7-1.3a1 1 0 0 0-1.4-1.4L11 12.6l-1.8-1.8a1 1 0 0 0-1.4 1.4l2.5 2.5c.4.4 1 .4 1.4 0l4-4Z"
+              clip-rule="evenodd"
+            />
+          </svg>
+
+          <span class="sr-only">Info</span>
+          <div class="ms-3 text-sm font-medium">{successMessage}</div>
+          <button
+            onClick={() => setSuccess(false)}
+            type="button"
+            class="ms-auto -mx-1.5 -my-1.5 bg-green-50 text-green-500 rounded-lg focus:ring-0 p-1.5 hover:bg-green-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:text-green-400 dark:hover:bg-gray-700"
+            data-dismiss-target="#alert-3"
+            aria-label="Close"
+          >
+            <span class="sr-only">Close</span>
+            <svg
+              class="w-3 h-3"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 14 14"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+              />
+            </svg>
+          </button>
         </div>
       )}
     </div>
