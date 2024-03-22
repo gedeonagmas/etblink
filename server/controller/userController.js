@@ -12,7 +12,7 @@ import { Private } from "../models/privateModel.js";
 import { Company } from "../models/companyModel.js";
 
 export const signupHandler = asyncCatch(async (req, res, next) => {
-  const value={...req.body}
+  const value = { ...req.body };
   const createAccount = async (model) => {
     const user = await User.create(req.body);
     if (user) {
@@ -142,10 +142,8 @@ export const resetPassword = asyncCatch(async (req, res, next) => {
 });
 
 export const readProfileInfo = asyncCatch(async (req, res, next) => {
-  const user =
-    req.user.userType === "private"
-      ? await User.findById(req.user._id)
-      : await User.findById(req.user._id).populate("user");
+  // console.log(req.cookies,'cookies')
+  const user = await User.findById(req.user._id).populate("user");
 
   res.status(200).json({
     status: "READ",

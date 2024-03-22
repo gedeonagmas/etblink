@@ -4,12 +4,15 @@ import { DarkThemeToggle } from "flowbite-react";
 import { Slide } from "react-slideshow-image";
 import "react-slideshow-image/dist/styles.css";
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Response from "../components/Response";
 import LoadingButton from "../components/loading/LoadingButton";
-import { useUserLoginMutation } from "../features/api/apiSlice";
+import { useReadQuery, useUserLoginMutation } from "../features/api/apiSlice";
+import { userContext } from "../App";
 
 const Header = () => {
+  const context = useContext(userContext);
+  console.log(context.user, "user from header");
   const [loginData, loginResponse] = useUserLoginMutation();
   const [pending, setPending] = useState(false);
   const [email, setEmail] = useState("");
@@ -55,14 +58,7 @@ const Header = () => {
   return (
     // fixed bg-white bg-dark top-0 left-0 w-full z-50 h-auto
     <div className="fixed w-full z-40 bg-white bg-dark">
-      <Response
-        response={loginResponse}
-        setPending={setPending}
-        // redirectTo=""
-        // redirectTo="/dashboard/customer/private"
-        type="login"
-        // type="loginddd"
-      />
+      <Response response={loginResponse} setPending={setPending} type="login" />
       <div className="w-full flex flex-col lg:flex-row ">
         {/* <div className="relative pl-main bg-main-black w-full lg:w-[78%]">
           <Slide
@@ -284,135 +280,145 @@ const Header = () => {
               </ul>
             </div>
           </div>
-          <div className="relative">
-            <p
-              onMouseOver={() => setLoginForm(true)}
-              className="cursor-pointer"
-            >
-              Login
-            </p>
-            {loginForm && (
-              <div
-                onMouseLeave={() => setLoginForm(false)}
-                className="w-auto text-sm flex flex-col bg-white bg-dark text-dark absolute top-7 -left-40 z-30 text-black"
-              >
-                <input
-                  type="email"
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-52  px-2 py-3 focus:outline-none focus:ring-0"
-                  placeholder="Email"
-                />
-                <input
-                  onChange={(e) => setPassword(e.target.value)}
-                  type="password"
-                  className="w-52 px-2 py-3  focus:outline-none focus:ring-0"
-                  placeholder="password"
-                />
-                <LoadingButton
-                  pending={pending}
-                  onClick={loginHandler}
-                  title="Login"
-                  color="bg-main"
-                  width="w-full py-1"
-                />
-              </div>
-            )}
-          </div>
-          <p className="text-gray-600">|</p>
-          <div className="relative">
-            <p
-              onMouseOver={() => setRegisterForm(true)}
-              className="cursor-pointer"
-            >
-              Register
-            </p>
-            {registerForm && (
-              <div
-                onMouseLeave={() => setRegisterForm(false)}
-                className="w-auto text-center text-sm flex flex-col bg-white bg-dark text-dark absolute top-7 -left-10 z-30 text-black"
-              >
-                <p className="text-sm font-bold border-b cursor-pointer p-1 w-32">
-                  Register as
+          {context.user ? (
+            <div className="flex gap-2">
+              <p className="px-2 py-1 rounded-xl bg-main">
+                {context.user.email.split("@")[0]}
+              </p>
+            </div>
+          ) : (
+            <div className="flex gap-2">
+              <div className="relative">
+                <p
+                  onMouseOver={() => setLoginForm(true)}
+                  className="cursor-pointer"
+                >
+                  Login
                 </p>
-                <Link
-                  to="/signup"
-                  state={{ type: "visitor" }}
-                  className="text-sm flex items-center justify-between gap-1 border-b cursor-pointer p-1 hover:bg-red-500 hover:text-white w-32"
-                >
-                  Visitor{" "}
-                  <svg
-                    class="w-6 h-6 text-gray-800 dark:text-white"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    fill="none"
-                    viewBox="0 0 24 24"
+                {loginForm && (
+                  <div
+                    onMouseLeave={() => setLoginForm(false)}
+                    className="w-auto text-sm flex flex-col bg-white bg-dark text-dark absolute top-7 -left-40 z-30 text-black"
                   >
-                    <path
-                      stroke="currentColor"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M19 12H5m14 0-4 4m4-4-4-4"
+                    <input
+                      type="email"
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="w-52  px-2 py-3 focus:outline-none focus:ring-0"
+                      placeholder="Email"
                     />
-                  </svg>
-                </Link>
-                <Link
-                  to="/signup"
-                  state={{ type: "company" }}
-                  className="text-sm flex items-center justify-between gap-1 border-b cursor-pointer p-1 hover:bg-red-500 hover:text-white w-32"
+                    <input
+                      onChange={(e) => setPassword(e.target.value)}
+                      type="password"
+                      className="w-52 px-2 py-3  focus:outline-none focus:ring-0"
+                      placeholder="password"
+                    />
+                    <LoadingButton
+                      pending={pending}
+                      onClick={loginHandler}
+                      title="Login"
+                      color="bg-red-500"
+                      width="w-full py-1"
+                    />
+                  </div>
+                )}
+              </div>
+              <p className="text-gray-600">|</p>
+              <div className="relative">
+                <p
+                  onMouseOver={() => setRegisterForm(true)}
+                  className="cursor-pointer"
                 >
-                  Company{" "}
-                  <svg
-                    class="w-6 h-6 text-gray-800 dark:text-white"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    fill="none"
-                    viewBox="0 0 24 24"
+                  Register
+                </p>
+                {registerForm && (
+                  <div
+                    onMouseLeave={() => setRegisterForm(false)}
+                    className="w-auto text-center text-sm flex flex-col bg-white bg-dark text-dark absolute top-7 -left-10 z-30 text-black"
                   >
-                    <path
-                      stroke="currentColor"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M19 12H5m14 0-4 4m4-4-4-4"
-                    />
-                  </svg>
-                </Link>
-                <Link
-                  to="/signup"
-                  state={{ type: "salles" }}
-                  className="text-sm flex items-center justify-between gap-1 border-b cursor-pointer p-1 hover:bg-red-500 hover:text-white w-32"
-                >
-                  Salles{" "}
-                  <svg
-                    class="w-6 h-6 text-gray-800 dark:text-white"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke="currentColor"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M19 12H5m14 0-4 4m4-4-4-4"
-                    />
-                  </svg>
-                </Link>
+                    <p className="text-sm font-bold border-b cursor-pointer p-1 w-32">
+                      Register as
+                    </p>
+                    <Link
+                      to="/signup"
+                      state={{ type: "visitor" }}
+                      className="text-sm flex items-center justify-between gap-1 border-b cursor-pointer p-1 hover:bg-red-500 hover:text-white w-32"
+                    >
+                      Visitor{" "}
+                      <svg
+                        class="w-6 h-6 text-gray-800 dark:text-white"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M19 12H5m14 0-4 4m4-4-4-4"
+                        />
+                      </svg>
+                    </Link>
+                    <Link
+                      to="/signup"
+                      state={{ type: "company" }}
+                      className="text-sm flex items-center justify-between gap-1 border-b cursor-pointer p-1 hover:bg-red-500 hover:text-white w-32"
+                    >
+                      Company{" "}
+                      <svg
+                        class="w-6 h-6 text-gray-800 dark:text-white"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M19 12H5m14 0-4 4m4-4-4-4"
+                        />
+                      </svg>
+                    </Link>
+                    <Link
+                      to="/signup"
+                      state={{ type: "salles" }}
+                      className="text-sm flex items-center justify-between gap-1 border-b cursor-pointer p-1 hover:bg-red-500 hover:text-white w-32"
+                    >
+                      Salles{" "}
+                      <svg
+                        class="w-6 h-6 text-gray-800 dark:text-white"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M19 12H5m14 0-4 4m4-4-4-4"
+                        />
+                      </svg>
+                    </Link>
 
-                {/* <button className="w-full py-[6px] font-bold hover:bg-red-500 bg-main text-white">
+                    {/* <button className="w-full py-[6px] font-bold hover:bg-red-500 bg-main text-white">
                 Register
               </button> */}
+                  </div>
+                )}{" "}
               </div>
-            )}{" "}
-          </div>
+            </div>
+          )}
           <div className="top-2 right-2 z-50">
             <DarkThemeToggle />
           </div>

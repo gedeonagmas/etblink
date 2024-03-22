@@ -16,43 +16,57 @@ import Sellers from "./pages/dashboard/Sellers";
 import Visitors from "./pages/dashboard/Visitors";
 import HomeTemplate from "./pages/HomeTemplate";
 import Signup from "./pages/Signup";
+import { createContext, useEffect, useState } from "react";
+// import Cookies from "js-cookie";
+import { useReadQuery } from "./features/api/apiSlice";
+
+export const userContext = createContext();
 
 function App() {
-  const jwt = localStorage.getItem("jwt");
-  const user = JSON.parse(localStorage.getItem("user"));
-  console.log(jwt, user, "info");
+  // const { data: user } = useReadQuery({
+  //   url: "/user/readProfileInfo",
+  //   tag: [""],
+  // });
 
+  useEffect(() => {});
+  const user = { data: { email: "gedi@gmail.com" } };
+  console.log(user?.data, "from app js");
   return (
     <Flowbite>
-      <div className="font-poppins text-black overflow-hidden text-dark bg-dark">
-        <Routes>
-          <Route path="/" element={<HomeTemplate />}>
-            <Route path="/" element={<Home />}></Route>
-            <Route path="/signup" element={<Signup />}></Route>
-            <Route path="/local" element={<Category type="local" />}></Route>
-            <Route path="/global" element={<Category type="global" />}></Route>
-            <Route path="/company-detail" element={<CompanyDetail />}></Route>
-            <Route path="/news" element={<NewsCategory />}></Route>
-            <Route path="/news-detail" element={<NewsDetail />}></Route>
-            <Route path="/prices" element={<Prices />}></Route>
-            <Route path="/about" element={<About />}></Route>
-            <Route path="/ethiopia" element={<Ethiopia />}></Route>
-            <Route path="/contact" element={<Contact />}></Route>
-            <Route path="*" element={<PageNotFound />}></Route>
-          </Route>
+      <userContext.Provider value={{ user: user?.data }}>
+        <div className="font-poppins text-black overflow-hidden text-dark bg-dark">
+          <Routes>
+            <Route path="/" element={<HomeTemplate />}>
+              <Route path="/" element={<Home />}></Route>
+              <Route path="/signup" element={<Signup />}></Route>
+              <Route path="/local" element={<Category type="local" />}></Route>
+              <Route
+                path="/global"
+                element={<Category type="global" />}
+              ></Route>
+              <Route path="/company-detail" element={<CompanyDetail />}></Route>
+              <Route path="/news" element={<NewsCategory />}></Route>
+              <Route path="/news-detail" element={<NewsDetail />}></Route>
+              <Route path="/prices" element={<Prices />}></Route>
+              <Route path="/about" element={<About />}></Route>
+              <Route path="/ethiopia" element={<Ethiopia />}></Route>
+              <Route path="/contact" element={<Contact />}></Route>
+              <Route path="*" element={<PageNotFound />}></Route>
+            </Route>
 
-          <Route path="/dashboard" element={<Dashboard />}>
-            <Route path="/dashboard/company" element={<Company />}></Route>
-            <Route path="/dashboard/sellers" element={<Sellers />}></Route>
-            <Route
-              path="/dashboard/visitor"
-              element={<Visitors />}
-            ></Route>{" "}
+            <Route path="/dashboard" element={<Dashboard />}>
+              <Route path="/dashboard/company" element={<Company />}></Route>
+              <Route path="/dashboard/sellers" element={<Sellers />}></Route>
+              <Route
+                path="/dashboard/visitor"
+                element={<Visitors />}
+              ></Route>{" "}
+              <Route path="*" element={<PageNotFound />}></Route>
+            </Route>
             <Route path="*" element={<PageNotFound />}></Route>
-          </Route>
-          <Route path="*" element={<PageNotFound />}></Route>
-        </Routes>
-      </div>
+          </Routes>
+        </div>
+      </userContext.Provider>
     </Flowbite>
   );
 }

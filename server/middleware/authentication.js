@@ -7,7 +7,7 @@ export const authentication = async (req, res, next) => {
   // console.log(req.cookies, "cookies");
   // console.log(req.headers,'headers');
   let token, user;
-  const header = req.headers.authorization;
+  const header = "Bearer " + req.cookies._e_l_s;
   if (header && header.startsWith("Bearer") && header !== "null")
     token = header;
 
