@@ -1,6 +1,6 @@
 import express from "express";
 import { upload } from "../utils/upload.js";
-import { authorization } from "../middleware/authorization.js";
+// import { authorization } from "../middleware/authorization.js";
 import { authentication } from "../middleware/authentication.js";
 import {
   _create,
@@ -61,7 +61,7 @@ router
 router.route("/updatePassword").put(authentication, updatePassword);
 
 //factory route
-router.route("/:table/:id").get(authentication, authorization, _read_single);
+router.route("/:table/:id").get(authentication, _read_single);
 
 const decrypt = async (req, res, next) => {
   const ENC = "bf3c199c2470cb477d907b1e0917c17f";
@@ -89,11 +89,11 @@ const decrypt = async (req, res, next) => {
 
 router
   .route("/:table")
-  .post(authentication, authorization, files, _create)
-  .get(authentication, authorization, _read)
-  .put(authentication, authorization, files, _update)
-  .delete(authentication, authorization, _delete)
-  .patch(authentication, authorization, aggregate);
+  .post(authentication, files, _create)
+  .get(authentication, _read)
+  .put(authentication, files, _update)
+  .delete(authentication, _delete)
+  .patch(authentication, aggregate);
 
 //chat route
 chatRouter.route("/:id").get(chatRead);
