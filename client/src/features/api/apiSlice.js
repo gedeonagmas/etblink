@@ -63,6 +63,15 @@ export const apiSlice = createApi({
       invalidatesTags: ["get-all-users"],
     }),
 
+    //user logout
+    userLogout: builder.mutation({
+      query: () => ({
+        url: "/user/logout",
+        method: "POST",
+        credentials: "include",
+      }),
+    }),
+
     //create
     create: builder.mutation({
       query: (data) => {
@@ -147,6 +156,7 @@ export const apiSlice = createApi({
 export const {
   useUserRegisterMutation,
   useUserLoginMutation,
+  useUserLogoutMutation,
 
   useCreateMutation,
   useReadQuery,

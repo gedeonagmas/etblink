@@ -12,11 +12,10 @@ import { Private } from "../models/privateModel.js";
 import { Company } from "../models/companyModel.js";
 
 export const signupHandler = asyncCatch(async (req, res, next) => {
-  const value = { ...req.body };
-  const createAccount = async (model) => {
-    const user = await User.create(req.body);
-    if (user) {
-      const account = await model.create({});
+  const user = await User.create(req.body);
+  if (user) {
+    if (req.body.role === "company") {
+      const account = await Company.create({});
       if (account._id) {
         const data = await User.findByIdAndUpdate(
           { _id: user._id },
@@ -24,29 +23,20 @@ export const signupHandler = asyncCatch(async (req, res, next) => {
             $set: { user: account._id },
           }
         );
-
-        const token = tokenGenerator(res, data._id);
-
-        return res
-          .status(200)
-          .json({ message: "Account Created Successfully", token, data });
       }
-    } else {
-      return next(new AppError("problem with creating account try again", 500));
     }
-  };
+    const token = tokenGenerator(res, user._id);
 
-  switch (req.body.role) {
-    case "visitor":
-      return createAccount(Visitor);
-    case "company":
-      // const remove = ["firstName", "middleName", "lastName", "gender"];
-      // remove.forEach((el) => delete value[el]);
-      return createAccount(Company);
-    case "seller":
-      return createAccount(Seller);
-    default:
-      return next(new AppError("problem with creating account try again", 500));
+    return res
+      .status(200)
+      .json({ message: "Account Created Successfully", token, data: user });
+  } else {
+    return next(
+      new AppError(
+        "something went wrong unable to create your account try again",
+        500
+      )
+    );
   }
 });
 
@@ -55,33 +45,26 @@ export const loginHandler = asyncCatch(async (req, res, next) => {
   if (!email || !password)
     return next(new AppError("provide email and password", 404));
   const user = await User.findOne({ email }).select("+password");
-  if (!user)
-    return next(
-      new AppError(
-        "there is no user found by this user name please register first",
-        404
-      )
-    );
+  if (!user) return next(new AppError("Invalid email or password", 404));
 
   const isPasswordCorrect = await user.passwordCheck(user.password, password);
   if (!isPasswordCorrect)
     return next(new AppError("Invalid user name or password", 404));
-  const token = tokenGenerator(res, user._id);
 
-  // const MAX_AGE = 60 * 60 * 24;
-  // res.cookie("token", token, {
-  //   // maxAge: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
-  //   expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
-  //   httpOnly: true,
-  //   secure: false,
-  //   sameSite: "None",
-  // });
+  const token = tokenGenerator(res, user._id);
 
   res.status(200).json({
     status: "success",
     message: "you are logged in successfully",
     data: user,
     token,
+  });
+});
+
+export const logoutHandler = asyncCatch(async (req, res, next) => {
+  res.cookie("_e_l_s", "", { maxAge: 1 });
+  res.status(200).json({
+    message: "Log out successful",
   });
 });
 

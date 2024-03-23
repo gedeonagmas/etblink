@@ -36,8 +36,7 @@ const Response = ({ response, setPending, redirectTo, type }) => {
         type === "login"
           ? navigate(dashboard, { replace: true })
           : redirectTo && redirectTo?.length > 0
-          ? (navigate(redirectTo, { replace: true }),
-            window.history.pushState(-1))
+          ? (navigate(redirectTo, { replace: true }), window.location.reload())
           : setTimeout(() => {
               setSuccess(false);
             }, 6000))

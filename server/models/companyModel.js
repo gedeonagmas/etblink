@@ -5,8 +5,13 @@ import * as valid from "../utils/validator.js";
 const schema = new mongoose.Schema({
   name: {
     type: String,
-    unique: true,
     validate: valid.paragraph("Name", 4, 200),
+    // index: {
+    //   unique: true,
+    //   partialFilterExpression: { name: { $type: "string" } },
+
+    // },
+    // default: null,
   },
 
   type: {
@@ -16,7 +21,6 @@ const schema = new mongoose.Schema({
 
   title: {
     type: String,
-    unique: true,
     validate: valid.paragraph("Title", 4, 200),
   },
 
@@ -27,7 +31,6 @@ const schema = new mongoose.Schema({
 
   highlightServices: {
     type: [String],
-    unique: true,
     // validate: valid.paragraph("Highlight services", 4, 200),
   },
 
@@ -92,10 +95,45 @@ const schema = new mongoose.Schema({
   priceRange: {
     type: [Object],
   },
+
+  profileFillStatus: {
+    type: Number,
+  },
 });
 
 schema.pre("findOneAndUpdate", function (next) {
   this.options.runValidators = true;
+  next();
+});
+
+schema.pre("save", function (next) {
+  let percent = 15;
+  const fields = [
+    "name",
+    "type",
+    "title",
+    "banner",
+    "highlightServices",
+    "secondPhone",
+    "description",
+    "latitude",
+    "longitude",
+    "amenities",
+    "photoGallery",
+    "video",
+    "website",
+    "socialMedia",
+    "workingDays",
+    "sales",
+    "priceRange",
+  ];
+  fields.map((field) => {
+    if (this[field]?.length > 0) {
+      percent += 5;
+    }
+  });
+
+  this.profileFillStatus = percent;
   next();
 });
 

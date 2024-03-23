@@ -7,13 +7,18 @@ import { Link } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import Response from "../components/Response";
 import LoadingButton from "../components/loading/LoadingButton";
-import { useReadQuery, useUserLoginMutation } from "../features/api/apiSlice";
+import {
+  useReadQuery,
+  useUserLoginMutation,
+  useUserLogoutMutation,
+} from "../features/api/apiSlice";
 import { userContext } from "../App";
 
 const Header = () => {
   const context = useContext(userContext);
-  console.log(context.user, "user from header");
+  // console.log(context.user, "user from header");
   const [loginData, loginResponse] = useUserLoginMutation();
+  const [logout, logoutResponse] = useUserLogoutMutation();
   const [pending, setPending] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -55,10 +60,19 @@ const Header = () => {
     loginData({ email, password });
   };
 
+  const logoutHandler = () => {
+    logout({});
+  };
+
   return (
     // fixed bg-white bg-dark top-0 left-0 w-full z-50 h-auto
     <div className="fixed w-full z-40 bg-white bg-dark">
       <Response response={loginResponse} setPending={setPending} type="login" />
+      <Response
+        response={logoutResponse}
+        setPending={setPending}
+        redirectTo="/"
+      />
       <div className="w-full flex flex-col lg:flex-row ">
         {/* <div className="relative pl-main bg-main-black w-full lg:w-[78%]">
           <Slide
@@ -281,9 +295,18 @@ const Header = () => {
             </div>
           </div>
           {context.user ? (
-            <div className="flex gap-2">
+            <div className="flex items-center gap-3">
               <p className="px-2 py-1 rounded-xl bg-main">
                 {context.user.email.split("@")[0]}
+              </p>
+              <Link
+                to={`/dashboard/${context.user.role}`}
+                className="cursor-pointer"
+              >
+                Dashboard
+              </Link>
+              <p onClick={logoutHandler} className="cursor-pointer">
+                Logout
               </p>
             </div>
           ) : (
@@ -292,14 +315,12 @@ const Header = () => {
                 <p
                   onMouseOver={() => setLoginForm(true)}
                   className="cursor-pointer"
+                  onClick={() => setLoginForm(false)}
                 >
                   Login
                 </p>
                 {loginForm && (
-                  <div
-                    onMouseLeave={() => setLoginForm(false)}
-                    className="w-auto text-sm flex flex-col bg-white bg-dark text-dark absolute top-7 -left-40 z-30 text-black"
-                  >
+                  <div className="w-auto text-sm flex flex-col bg-white bg-dark text-dark absolute top-7 -left-40 z-30 text-black">
                     <input
                       type="email"
                       onChange={(e) => setEmail(e.target.value)}
@@ -388,10 +409,10 @@ const Header = () => {
                     </Link>
                     <Link
                       to="/signup"
-                      state={{ type: "salles" }}
+                      state={{ type: "sales" }}
                       className="text-sm flex items-center justify-between gap-1 border-b cursor-pointer p-1 hover:bg-red-500 hover:text-white w-32"
                     >
-                      Salles{" "}
+                      Sales{" "}
                       <svg
                         class="w-6 h-6 text-gray-800 dark:text-white"
                         aria-hidden="true"

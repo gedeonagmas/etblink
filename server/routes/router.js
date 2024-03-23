@@ -19,6 +19,7 @@ import {
   updateProfilePicture,
   readProfileInfo,
   updatePassword,
+  logoutHandler,
 } from "../controller/userController.js";
 import { aggregate } from "../controller/aggregationController.js";
 import {
@@ -43,6 +44,7 @@ const files = upload.fields([
 router.route("/signup").post(files, signupHandler);
 
 router.route("/login").post(loginHandler);
+router.route("/logout").post(logoutHandler);
 
 router.route("/forgetPassword").post(forgetPassword);
 
