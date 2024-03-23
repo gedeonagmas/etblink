@@ -1,7 +1,12 @@
-import { Branch } from "../models/branchModel.js";
-import { Company } from "../models/companyModel.js";
-import { Donator } from "../models/donatorModel.js";
-import { Receiver } from "../models/receiverModel.js";
+import { Application } from "../models/applicationModel.js";
+import { CaseManager } from "../models/caseManagerModel.js";
+import { Case } from "../models/caseModel.js";
+import { Category } from "../models/categoryModel.js";
+import { Group } from "../models/groupModel.js";
+import { Lawyer } from "../models/lawyerModel.js";
+import { Institution } from "../models/organizationModel.js";
+import { Payment } from "../models/paymentModel.js";
+import { Permission } from "../models/permissionModel.js";
 import { User } from "../models/userModel.js";
 import AppError from "./AppError.js";
 
@@ -11,22 +16,35 @@ export const selectModel = (name, next) => {
     case "users":
       model = User;
       break;
-    case "company":
-      model = Company;
+    case "institutions":
+      model = Institution;
       break;
-    case "branches":
-      model = Branch;
+    case "permissions":
+      model = Permission;
       break;
-    case "donator":
-      model = Donator;
+    case "cases":
+      model = Case;
       break;
-    case "receiver":
-      model = Receiver;
+    case "categories":
+      model = Category;
+      break;
+    case "applications":
+      model = Application;
+      break;
+    case "payments":
+      model = Payment;
+      break;
+    case "case-managers":
+      model = CaseManager;
+      break;
+    case "lawyers":
+      model = Lawyer;
+      break;
+    case "groups":
+      model = Group;
       break;
     default:
-      return next(
-        new AppError("something went wrong unable to fetch the data.", 500)
-      );
+      return next(new AppError("something went wrong please try again!.", 500));
   }
   return model;
 };

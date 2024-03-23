@@ -4,19 +4,17 @@ import jwt from "jsonwebtoken";
 import AppError from "../utils/AppError.js";
 
 export const authentication = async (req, res, next) => {
-  // console.log(req.headers);
+  // console.log(req.cookies, "cookies");
+  // console.log(req.headers,'headers');
   let token, user;
-  const header = req.headers.authorization;
-  if (header && header.startsWith("Bearer") && header !== "null")
+  const header = req.cookies._e_l_s;
+  if (header && header !== "null" && header !== "") {
     token = header;
+  }
+  if (token === "null" || !token || token === "")
+    return next(new AppError("Please login to proceed!"));
 
-  if (token === "null" || !token)
-    return next(new AppError("Tokens not found please login again"));
-
-  const decode = await promisify(jwt.verify)(
-    token.split(" ")[1],
-    process.env.JWT_SECRET_KEY
-  );
+  const decode = await promisify(jwt.verify)(token, process.env.JWT_SECRET_KEY);
 
   user = await User.findById(decode.id);
   if (!user) return next(new AppError("users not found", 404));

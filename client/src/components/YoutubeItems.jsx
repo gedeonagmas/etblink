@@ -119,7 +119,7 @@ const YoutubeItems = () => {
           >
             {/* <img src="./image-3.jpg" alt="" className="w-full" /> */}
             <video
-              src="https://www.youtube.com/watch?v=gtj75Kmzp9E"
+              src="video.mp4"
               controls
               autoplay
               muted

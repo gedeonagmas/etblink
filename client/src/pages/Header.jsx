@@ -4,9 +4,27 @@ import { DarkThemeToggle } from "flowbite-react";
 import { Slide } from "react-slideshow-image";
 import "react-slideshow-image/dist/styles.css";
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import Response from "../components/Response";
+import LoadingButton from "../components/loading/LoadingButton";
+import {
+  useReadQuery,
+  useUserLoginMutation,
+  useUserLogoutMutation,
+} from "../features/api/apiSlice";
+import { userContext } from "../App";
 
 const Header = () => {
+  const context = useContext(userContext);
+  // console.log(context.user, "user from header");
+  const [loginData, loginResponse] = useUserLoginMutation();
+  const [logout, logoutResponse] = useUserLogoutMutation();
+  const [pending, setPending] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loginForm, setLoginForm] = useState(false);
+  const [registerForm, setRegisterForm] = useState(false);
+
   // const divStyle = {
   //   display: "flex",
   //   alignItems: "center",
@@ -37,9 +55,24 @@ const Header = () => {
       window.removeEventListener("scroll", onPageScroll);
     };
   }, []);
+
+  const loginHandler = () => {
+    loginData({ email, password });
+  };
+
+  const logoutHandler = () => {
+    logout({});
+  };
+
   return (
     // fixed bg-white bg-dark top-0 left-0 w-full z-50 h-auto
     <div className="fixed w-full z-40 bg-white bg-dark">
+      <Response response={loginResponse} setPending={setPending} type="login" />
+      <Response
+        response={logoutResponse}
+        setPending={setPending}
+        redirectTo="/"
+      />
       <div className="w-full flex flex-col lg:flex-row ">
         {/* <div className="relative pl-main bg-main-black w-full lg:w-[78%]">
           <Slide
@@ -220,7 +253,7 @@ const Header = () => {
 
             <div
               id="dropdownDelay"
-              className="z-30 -mt-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-auto dark:bg-gray-700"
+              className="z-50 -mt-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-auto dark:bg-gray-700"
             >
               <ul
                 className="py-2 text-sm text-start text-gray-700 dark:text-gray-200"
@@ -261,9 +294,152 @@ const Header = () => {
               </ul>
             </div>
           </div>
-          <p>Login</p>
-          <p className="text-gray-600">|</p>
-          <p>Register</p>
+          {context.user ? (
+            <div className="flex items-center gap-3">
+              <p className="px-2 py-1 rounded-xl bg-main">
+                {context.user.email.split("@")[0]}
+              </p>
+              <Link
+                to={`/dashboard/${context.user.role}`}
+                className="cursor-pointer"
+              >
+                Dashboard
+              </Link>
+              <p onClick={logoutHandler} className="cursor-pointer">
+                Logout
+              </p>
+            </div>
+          ) : (
+            <div className="flex gap-2">
+              <div className="relative">
+                <p
+                  onMouseOver={() => setLoginForm(true)}
+                  className="cursor-pointer"
+                  onClick={() => setLoginForm(false)}
+                >
+                  Login
+                </p>
+                {loginForm && (
+                  <div className="w-auto text-sm flex flex-col bg-white bg-dark text-dark absolute top-7 -left-40 z-30 text-black">
+                    <input
+                      type="email"
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="w-52  px-2 py-3 focus:outline-none focus:ring-0"
+                      placeholder="Email"
+                    />
+                    <input
+                      onChange={(e) => setPassword(e.target.value)}
+                      type="password"
+                      className="w-52 px-2 py-3  focus:outline-none focus:ring-0"
+                      placeholder="password"
+                    />
+                    <LoadingButton
+                      pending={pending}
+                      onClick={loginHandler}
+                      title="Login"
+                      color="bg-red-500"
+                      width="w-full py-1"
+                    />
+                  </div>
+                )}
+              </div>
+              <p className="text-gray-600">|</p>
+              <div className="relative">
+                <p
+                  onMouseOver={() => setRegisterForm(true)}
+                  className="cursor-pointer"
+                >
+                  Register
+                </p>
+                {registerForm && (
+                  <div
+                    onMouseLeave={() => setRegisterForm(false)}
+                    className="w-auto text-center text-sm flex flex-col bg-white bg-dark text-dark absolute top-7 -left-10 z-30 text-black"
+                  >
+                    <p className="text-sm font-bold border-b cursor-pointer p-1 w-32">
+                      Register as
+                    </p>
+                    <Link
+                      to="/signup"
+                      state={{ type: "visitor" }}
+                      className="text-sm flex items-center justify-between gap-1 border-b cursor-pointer p-1 hover:bg-red-500 hover:text-white w-32"
+                    >
+                      Visitor{" "}
+                      <svg
+                        class="w-6 h-6 text-gray-800 dark:text-white"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M19 12H5m14 0-4 4m4-4-4-4"
+                        />
+                      </svg>
+                    </Link>
+                    <Link
+                      to="/signup"
+                      state={{ type: "company" }}
+                      className="text-sm flex items-center justify-between gap-1 border-b cursor-pointer p-1 hover:bg-red-500 hover:text-white w-32"
+                    >
+                      Company{" "}
+                      <svg
+                        class="w-6 h-6 text-gray-800 dark:text-white"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M19 12H5m14 0-4 4m4-4-4-4"
+                        />
+                      </svg>
+                    </Link>
+                    <Link
+                      to="/signup"
+                      state={{ type: "sales" }}
+                      className="text-sm flex items-center justify-between gap-1 border-b cursor-pointer p-1 hover:bg-red-500 hover:text-white w-32"
+                    >
+                      Sales{" "}
+                      <svg
+                        class="w-6 h-6 text-gray-800 dark:text-white"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M19 12H5m14 0-4 4m4-4-4-4"
+                        />
+                      </svg>
+                    </Link>
+
+                    {/* <button className="w-full py-[6px] font-bold hover:bg-red-500 bg-main text-white">
+                Register
+              </button> */}
+                  </div>
+                )}{" "}
+              </div>
+            </div>
+          )}
           <div className="top-2 right-2 z-50">
             <DarkThemeToggle />
           </div>
@@ -273,7 +449,7 @@ const Header = () => {
       {/* tabs */}
       <div className="border-b relative shadow-2xl  py-2 md:py-1 border-gray-200 dark:border-gray-700">
         <ul
-          className="flex mx-20  relative gap-1 flex-wrap items-center justify-center -mb-px text-sm font-medium text-center"
+          className="flex mx-20d  relative gap-1 flex-wrap items-center justify-center -mb-px text-sm font-medium text-center"
           id="default-tab"
           data-tabs-toggle="#default-tab-content"
           role="tablist"
@@ -282,7 +458,7 @@ const Header = () => {
             <div
               className={`${
                 currencies ? "block" : "hidden"
-              } h-auto absolute shadow-2xl shadow-gray-500 z-20 right-2 -top-[20px] w-[65px]`}
+              } h-auto absolute shadow-2xl shadow-gray-500 z-20 right-[8%] -top-[20px] w-[65px]`}
             >
               <p className="absolute z-20  top-4 left-2 text-white">Today</p>
               <svg
@@ -402,41 +578,56 @@ const Header = () => {
               </div>
             </div>
           </div>
-          
+
           <li className="me-2">
             <div className="flex relative items-center justify-center gap-6">
               {/*  */}
-              <div className="flex absolute z-20 shadow-sm -top-[75px] -left-24 lg:-left-20 h-auto w-[120px] gap-3 items-center justify-center">
+              <div className="flex absolute z-20 shadow-sm -top-[75px] -left-7 lg:-left-20 h-auto w-[120px] gap-3 items-center justify-center">
                 <img
                   src="./logo.png"
                   alt=""
-                  className="w-[200px] h-[112px] border-2 lg:border-0 bg-white dark:bg-gray-500 rounded-sm"
+                  className="w-[80px] h-[65px] lg:w-[200px] lg:h-[112px] border-2 lg:border-0 bg-white dark:bg-gray-500 rounded-sm"
                 />
               </div>
             </div>
           </li>
           <li className="me-2 ml-14" role="presentation">
-            <Link to="/" className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg">
+            <Link
+              to="/"
+              className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
+            >
               Home
             </Link>
           </li>
           <li className="me-2 ml-2" role="presentation">
-            <Link to="/local" className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg">
+            <Link
+              to="/local"
+              className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
+            >
               Local
             </Link>
           </li>
           <li className="me-2 ml-2" role="presentation">
-            <Link to="/global" className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg">
+            <Link
+              to="/global"
+              className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
+            >
               Global
             </Link>
           </li>
           <li className="me-2 ml-2" role="presentation">
-            <Link to="/news" className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg">
+            <Link
+              to="/news"
+              className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
+            >
               News
             </Link>
           </li>
           <li className="me-2 ml-2" role="presentation">
-            <Link to="/job" className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg">
+            <Link
+              to="/job"
+              className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
+            >
               Job
             </Link>
           </li>
@@ -556,7 +747,7 @@ const Header = () => {
                   const ids = document.getElementById("license-dropdown");
                   ids?.classList?.add("hidden");
                 }}
-                className="z-50 hidden px-4 border-none -mt-[150px] ml-[200px]"
+                className="z-50 hidden px-4 border-none -mt-[150px] -ml-[180px] lg:ml-[200px]"
               >
                 <div className=" bg-white  rounded-lg shadow w-40 dark:bg-gray-700">
                   <ul className="py-2 text-start w-full h-auto text-sm text-gray-700 dark:text-gray-200">
@@ -589,7 +780,7 @@ const Header = () => {
               </div>
             </div>
           </li>
-          <li className="me-2">
+          <li className="me-2 hidden lg:block">
             <div className="flex w-full py-3 relative lg:py-0 pl-4 pr-main justify-center flex-col gap-3 items-center">
               <div className="flex flex-col lg:flex-row w-auto h-auto absolute -right-20 lg:-right-32 z-20 items-center justify-center gap-2">
                 <a

@@ -4,7 +4,7 @@ const Banner = () => {
   return (
     <div
       style={{ width: "100%", height: "100%" }}
-      className="slide-container px-main rounded-full relative w-full h-full "
+      className="slide-container rounded-full relative w-full h-full "
     >
       <Slide
         autoplay={false}

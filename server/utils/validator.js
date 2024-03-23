@@ -73,11 +73,12 @@ export const date = (field) => {
 export const paragraph = (field, min, max) => {
   return {
     validator: function (v) {
+      console.log(v,'value')
       return v.toString().length < max && v.toString().length > min;
     },
     message: `${field} must between ${min} and ${max} characters`,
   };
-};
+}; 
 
 export const numberLower = (field, min) => {
   return {
@@ -113,6 +114,6 @@ export const phone = (field) => {
         v
       );
     },
-    message: `${field} please insert a correct phone number`,
+    message: `${field} must must be either male or female`,
   };
 };

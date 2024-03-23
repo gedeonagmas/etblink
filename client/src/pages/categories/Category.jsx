@@ -33,11 +33,20 @@ const markers = [
 
 const Category = () => {
   return (
-    <div className="w-full relative bg-gray-50 bg-dark h-auto">
-      <div className="absolute text-lg font-bold  z-50 top-[100px] left-[10%]">
+    <div className="w-full relative pt-24 bg-gray-50 bg-dark h-auto">
+      <div className="absolute text-lg font-bold  z-30 top-[100px] left-[10%]">
         We provide more than <br /> 245 total companies <br /> for your business
       </div>
-      <Map markers={[...markers]} height='82vh'/>
+      {/* <Map markers={[...markers]} height="82vh" /> */}
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d65325188.17043557!2d-19.40065217965568!3d2.1022195001665533!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x10a06c0a948cf5d5%3A0x108270c99e90f0b3!2sAfrica!5e0!3m2!1sen!2set!4v1710817332813!5m2!1sen!2set"
+        width="1600"
+        height="550"
+        // style="border:0;"
+        allowfullscreen=""
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+      ></iframe>
       <div className="w-full relative px-main mt-10 flex flex-col items-center justify-center h-auto">
         <div className="absolute px-main z-30 w-full px-4 py-2 rounded-md hidden sm:block -mt-80 md:-mt-64 lg:-mt-52 h-32">
           <div className="w-64 text-center rounded-md h-20 bg-dark bg-gray-200">
@@ -211,7 +220,8 @@ const Category = () => {
           </div>
           <div className="grid mt-5 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full place-items-centers gap-6">
             {[0, 1, 2, 3, 4, 5, 6, 7, 8].map((e, i) => {
-              return <CompanyItemsCompany value={i} type="category" />;
+              // return <CompanyItemsCompany value={i} type="category" />;
+              return <CompanyItems />;
             })}
           </div>
         </div>
@@ -251,8 +261,6 @@ const Category = () => {
               </svg>
             </div>
           </div>
-          <CompanyItemsCompany />
-          <CompanyItemsCompany />
           <CompanyItemsCompany />
         </div>
       </div>

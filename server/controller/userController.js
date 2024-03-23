@@ -7,79 +7,50 @@ import { sendEmailMessage } from "./emailController.js";
 import { Lawyer } from "../models/lawyerModel.js";
 import { CaseManager } from "../models/caseManagerModel.js";
 import { Institution } from "../models/organizationModel.js";
+import v2 from "./../config/cloudinary.js";
+import { Private } from "../models/privateModel.js";
+import { Company } from "../models/companyModel.js";
 
 export const signupHandler = asyncCatch(async (req, res, next) => {
-  const profilePicture = req.files.profilePicture;
-  const value = { ...req.body };
-
-  const createAccount = async (id) => {
-    const data = await User.create({
-      ...value,
-      user: id,
-      profilePicture: profilePicture
-        ? "http://192.168.100.12:5000/uploads/" + profilePicture[0].filename
-        : undefined,
-    });
-
-    const token = tokenGenerator(res, data._id);
+  const user = await User.create(req.body);
+  if (user) {
+    if (req.body.role === "company") {
+      const account = await Company.create({});
+      if (account._id) {
+        const data = await User.findByIdAndUpdate(
+          { _id: user._id },
+          {
+            $set: { user: account._id },
+          }
+        );
+      }
+    }
+    const token = tokenGenerator(res, user._id);
 
     return res
       .status(200)
-      .json({ message: "Account Created Successfully", token, data });
-  };
-
-  const user = await User.find({
-    $or: [{ email: req.body.email }, { userName: req.body.userName }],
-  });
-
-  if (user.length > 0) {
-    return next(new AppError(`either user name or email is taken`, 400));
-  }
-
-  switch (value.userType) {
-    case "private":
-      createAccount("");
-      break;
-    case "lawyer":
-      const lawyer = await Lawyer.create(value);
-      lawyer._id && createAccount(lawyer._id);
-      break;
-    case "business":
-      const remove = ["firstName", "middleName", "lastName", "gender"];
-      remove.forEach((el) => delete value[el]);
-      const business = await Institution.create(value);
-      business._id && createAccount(business._id);
-      break;
-    case "case-manager-main" ||
-      "case-manager-regular" ||
-      "case-manager-external":
-      const manager = await CaseManager.create(value);
-      manager._id && createAccount(manager._id);
-      break;
-    case "super-admin":
-      createAccount("");
-      break;
-    default:
-      return next(new AppError("problem with creating account try again", 500));
+      .json({ message: "Account Created Successfully", token, data: user });
+  } else {
+    return next(
+      new AppError(
+        "something went wrong unable to create your account try again",
+        500
+      )
+    );
   }
 });
 
 export const loginHandler = asyncCatch(async (req, res, next) => {
-  const { userName, password } = req.body;
-  if (!userName || !password)
+  const { email, password } = req.body;
+  if (!email || !password)
     return next(new AppError("provide email and password", 404));
-  const user = await User.findOne({ userName }).select("+password");
-  if (!user)
-    return next(
-      new AppError(
-        "there is no user found by this user name please register first",
-        404
-      )
-    );
+  const user = await User.findOne({ email }).select("+password");
+  if (!user) return next(new AppError("Invalid email or password", 404));
 
   const isPasswordCorrect = await user.passwordCheck(user.password, password);
   if (!isPasswordCorrect)
     return next(new AppError("Invalid user name or password", 404));
+
   const token = tokenGenerator(res, user._id);
 
   res.status(200).json({
@@ -87,6 +58,13 @@ export const loginHandler = asyncCatch(async (req, res, next) => {
     message: "you are logged in successfully",
     data: user,
     token,
+  });
+});
+
+export const logoutHandler = asyncCatch(async (req, res, next) => {
+  res.cookie("_e_l_s", "", { maxAge: 1 });
+  res.status(200).json({
+    message: "Log out successful",
   });
 });
 
@@ -147,10 +125,8 @@ export const resetPassword = asyncCatch(async (req, res, next) => {
 });
 
 export const readProfileInfo = asyncCatch(async (req, res, next) => {
-  const user =
-    req.user.userType === "private"
-      ? await User.findById(req.user._id)
-      : await User.findById(req.user._id).populate("user");
+  // console.log(req.cookies,'cookies')
+  const user = await User.findById(req.user._id).populate("user");
 
   res.status(200).json({
     status: "READ",
