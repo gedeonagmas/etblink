@@ -329,7 +329,7 @@ const Dashboard = () => {
 
   const sidebarHandler = (type) => {
     const id = document.getElementById("logo-sidebar");
-    console.log(id, "ids");
+    // console.log(id, "ids");
     id?.classList?.value.includes("hidden") && type === "auto"
       ? id?.classList?.remove("hidden")
       : id?.classList?.add("hidden");

@@ -17,6 +17,7 @@
     "@react-google-maps/api": "^2.19.3",
     "@reduxjs/toolkit": "^1.9.3",
     "apexcharts": "^3.45.1",
+    "axios": "^1.6.8",
     "flowbite": "^2.3.0",
     "flowbite-react": "^0.7.2",
     "graphql": "^16.8.1",
