@@ -24,17 +24,14 @@ const schema = new mongoose.Schema({
     validate: valid.paragraph("Title", 4, 200),
   },
 
-  banner: {
-    type: [String],
-    required: [true, "Banner is required"],
+  phone: {
+    type: String,
+  },
+  video: {
+    type: String,
   },
 
-  highlightServices: {
-    type: [String],
-    // validate: valid.paragraph("Highlight services", 4, 200),
-  },
-
-  secondPhone: {
+  website: {
     type: String,
   },
 
@@ -53,23 +50,30 @@ const schema = new mongoose.Schema({
     validate: valid.paragraph("latitude", 100, 1000),
   },
 
-  amenities: {
+  highlightServices: {
+    type: [String],
+    // validate: valid.paragraph("Highlight services", 4, 200),
+  },
+
+  mainFeatures: {
     //main features
     type: [String],
     // validate: valid.paragraph("Amenities", 100, 1000),
   },
 
+  logo: {
+    type: String,
+    required: [true, "Logo is required"],
+  },
+
+  banner: {
+    type: String,
+    required: [true, "Banner is required"],
+  },
+
   photoGallery: {
     type: [String],
     required: [true, "Photo galleries are required"],
-  },
-
-  video: {
-    type: String,
-  },
-
-  website: {
-    type: String,
   },
 
   socialMedia: {
@@ -82,6 +86,10 @@ const schema = new mongoose.Schema({
     required: [true, "Working days is required"],
   },
 
+  priceRange: {
+    type: [Object],
+  },
+
   registeredBy: {
     type: String,
     default: "Self",
@@ -90,10 +98,6 @@ const schema = new mongoose.Schema({
   sales: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "user",
-  },
-
-  priceRange: {
-    type: [Object],
   },
 
   profileFillStatus: {
