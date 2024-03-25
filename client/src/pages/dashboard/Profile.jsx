@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import LoadingButton from "../../components/loading/LoadingButton";
+import Response from "../../components/Response";
+import { useUpdateMutation } from "../../features/api/apiSlice";
 
 const List = (props) => {
   // import axios from "axios";
@@ -23,7 +26,7 @@ const List = (props) => {
         {props.lists.length > 0 ? (
           props.lists.map((e) => {
             return (
-              <div className=" border w-full py-1 px-2 rounded-lg border-gray-300 bg-gray-50 flex items-center justify-between gap-2">
+              <div className=" border w-full py-1 px-2 rounded-lg border-gray-300 bg-gray-50 bg-dark flex items-center justify-between gap-2">
                 <p className="">{e}</p>
                 <svg
                   onClick={() =>
@@ -52,13 +55,13 @@ const List = (props) => {
           <></>
         )}
 
-        <div className=" border w-full py-1 px-2 rounded-lg border-gray-300 bg-gray-50 flex items-center justify-between gap-2">
+        <div className=" border w-full py-1 px-2 rounded-lg border-gray-300 bg-gray-50 bg-dark flex items-center justify-between gap-2">
           <input
             onChange={(e) => props.setList(e.target.value)}
             type="text"
             id="name"
-            class="bg-gray-50 w-full mr-3 border-0 focus:outline-0 focus:ring-0 h-7 "
-            placeholder="New features"
+            class="bg-gray-50 w-full bg-dark mr-3 border-0 focus:outline-0 focus:ring-0 h-7 "
+            placeholder={"Add new " + props.title.split(" ")[1]}
             value={props.list}
             required
           />
@@ -87,10 +90,46 @@ const List = (props) => {
 };
 
 const Profile = () => {
+  const [updateData, updateResponse] = useUpdateMutation();
+  const [pending, setPending] = useState(false);
+
+  const [name, setName] = useState("");
+  const [type, setType] = useState("");
+  const [title, setTitle] = useState("");
+  const [phone, setPhone] = useState("");
+  const [video, setVideo] = useState("");
+  const [website, setWebsite] = useState("");
+  const [description, setDescription] = useState("");
   const [service, setService] = useState("");
   const [services, setServices] = useState([]);
   const [feature, setFeature] = useState("");
   const [features, setFeatures] = useState([]);
+  const [logo, setLogo] = useState("");
+  const [banner, setBanner] = useState("");
+  const [galleries, setGalleries] = useState("");
+
+  const [socialMedias, setSocialMedias] = useState({
+    facebook: "",
+    instagram: "",
+    twitter: "",
+    linkedin: "",
+  });
+
+  const [workingDays, setWorkingDays] = useState({
+    monday: { from: "", to: "" },
+    tuesday: { from: "", to: "" },
+    wednesday: { from: "", to: "" },
+    thursday: { from: "", to: "" },
+    saturday: { from: "", to: "" },
+    friday: { from: "", to: "" },
+    sunday: { from: "", to: "" },
+  });
+
+  const [pricingRange, setPricingRange] = useState({
+    from: "",
+    to: "",
+    currencies: "Birr",
+  });
 
   const addServices = () => {
     if (service.length > 0 && !services.includes(service)) {
@@ -106,8 +145,29 @@ const Profile = () => {
     }
   };
 
+  const updateHandler = () => {
+    console.log(
+      // name,
+      // type,
+      // title,
+      // phone,
+      // video,
+      // website,
+      // description,
+      // services,
+      // features,
+      // logo,
+      // banner,
+      // galleries,pricingRange
+      // socialMedias,
+      workingDays
+    );
+    const form = new FormData();
+  };
+
   return (
-    <div className="w-full p-5 flex flex-col rounded-lg border gap-2 items-start justify-center">
+    <div className="w-full p-5 flex pb-10 flex-col rounded-lg border gap-2 items-start justify-center">
+      <Response response={updateResponse} setPending={setPending} />
       <p className="text-lg font-semibold">Your company information</p>
       <p className="text-sm max-w-[700px]">
         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Labore
@@ -125,6 +185,7 @@ const Profile = () => {
             Company name
           </label>
           <input
+            onChange={(e) => setName(e.target.value)}
             type="text"
             id="name"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -141,13 +202,16 @@ const Profile = () => {
           </label>
 
           <select
+            onChange={(e) => setType(e.target.value)}
             type="text"
             id="name"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="Skylight Technologies"
             required
           >
-            <option value="local">Local</option>
+            <option selected value="local">
+              Local
+            </option>
             <option value="global">Global</option>
           </select>
         </div>
@@ -159,6 +223,7 @@ const Profile = () => {
             Title
           </label>
           <input
+            onChange={(e) => setTitle(e.target.value)}
             type="text"
             id="name"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -174,6 +239,7 @@ const Profile = () => {
             Phone number
           </label>
           <input
+            onChange={(e) => setPhone(e.target.value)}
             type="text"
             id="name"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -189,6 +255,7 @@ const Profile = () => {
             Video
           </label>
           <input
+            onChange={(e) => setVideo(e.target.files[0])}
             class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
             id="file_input"
             type="file"
@@ -202,14 +269,30 @@ const Profile = () => {
             Website
           </label>
           <input
+            onChange={(e) => setWebsite(e.target.value)}
             type="text"
             id="name"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="skylighttechnologies.com"
             required
           />
-        </div>{" "}
+        </div>
       </div>
+      <label
+        for="name"
+        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+      >
+        Description
+      </label>
+      <textarea
+        onChange={(e) => setDescription(e.target.value)}
+        name=""
+        id=""
+        cols="30"
+        rows="10"
+        placeholder="Little description about your company"
+        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+      ></textarea>
       <p className="text-lg font-semibold mt-6">Lists</p>
       <List
         list={service}
@@ -225,7 +308,7 @@ const Profile = () => {
         lists={features}
         setLists={setFeatures}
         addLists={addFeatures}
-        title="Highlight Features"
+        title="Main Features"
       />
       <p className="text-lg font-semibold mt-6">Attachments</p>
       <div className="grid w-full grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-2">
@@ -250,10 +333,11 @@ const Profile = () => {
               <div class="flex text-sm text-gray-600">
                 <label
                   for="file-upload"
-                  class="relative cursor-pointer bg-white rounded-md font-medium text-main hover:text-red-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
+                  class="relative cursor-pointer bg-white bg-dark rounded-md font-medium text-main hover:text-red-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
                 >
                   <span class="">Upload a file</span>
                   <input
+                    onChange={(e) => setLogo(e.target.files[0])}
                     id="file-upload"
                     name="file-upload"
                     type="file"
@@ -287,10 +371,11 @@ const Profile = () => {
               <div class="flex text-sm text-gray-600">
                 <label
                   for="file-upload"
-                  class="relative cursor-pointer bg-white rounded-md font-medium text-main hover:text-red-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
+                  class="relative cursor-pointer bg-white bg-dark rounded-md font-medium text-main hover:text-red-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
                 >
                   <span class="">Upload a file</span>
                   <input
+                    onChange={(e) => setBanner(e.target.files[0])}
                     id="file-upload"
                     name="file-upload"
                     type="file"
@@ -326,10 +411,11 @@ const Profile = () => {
               <div class="flex text-sm text-gray-600">
                 <label
                   for="file-upload"
-                  class="relative cursor-pointer bg-white rounded-md font-medium text-main hover:text-red-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
+                  class="relative cursor-pointer bg-white bg-dark rounded-md font-medium text-main hover:text-red-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
                 >
                   <span class="">Upload a file</span>
                   <input
+                    onChange={(e) => setGalleries(e.target.files)}
                     id="file-upload"
                     name="file-upload"
                     type="file"
@@ -337,7 +423,7 @@ const Profile = () => {
                     multiple
                   />
                 </label>
-                <p class="pl-1">res 800 x 600 pixels</p>
+                <p class="pl-1">res 800 x 600 pixels each</p>
               </div>
               <p class="text-xs">PNG, JPG, GIF up to 10MB</p>
             </div>
@@ -371,8 +457,9 @@ const Profile = () => {
             </svg>
 
             <input
+              onChange={(e) => setSocialMedias({ facebook: e.target.value })}
               type="text"
-              className="w-full h-7 focus:outline-none border-0 focus:ring-0"
+              className="w-full h-7 focus:outline-none bg-dark border-0 focus:ring-0"
               placeholder="skylight.facebook.com"
             />
           </div>
@@ -397,8 +484,9 @@ const Profile = () => {
               <path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.9 3.9 0 0 0-1.417.923A3.9 3.9 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.9 3.9 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.9 3.9 0 0 0-.923-1.417A3.9 3.9 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599s.453.546.598.92c.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.5 2.5 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.5 2.5 0 0 1-.92-.598 2.5 2.5 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233s.008-2.388.046-3.231c.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92s.546-.453.92-.598c.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92m-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217m0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334" />
             </svg>
             <input
+              onChange={(e) => setSocialMedias({ instagram: e.target.value })}
               type="text"
-              className="w-full h-7 focus:outline-none border-0 focus:ring-0"
+              className="w-full h-7 focus:outline-none bg-dark border-0 focus:ring-0"
               placeholder="skylight.facebook.com"
             />
           </div>
@@ -425,8 +513,9 @@ const Profile = () => {
             </svg>
 
             <input
+              onChange={(e) => setSocialMedias({ twitter: e.target.value })}
               type="text"
-              className="w-full h-7 focus:outline-none border-0 focus:ring-0"
+              className="w-full h-7 focus:outline-none bg-dark border-0 focus:ring-0"
               placeholder="skylight.facebook.com"
             />
           </div>
@@ -458,8 +547,9 @@ const Profile = () => {
             </svg>
 
             <input
+              onChange={(e) => setSocialMedias({ linkedin: e.target.value })}
               type="text"
-              className="w-full h-7 focus:outline-none border-0 focus:ring-0"
+              className="w-full h-7 focus:outline-none bg-dark border-0 focus:ring-0"
               placeholder="skylight.facebook.com"
             />
           </div>
@@ -467,162 +557,296 @@ const Profile = () => {
       </div>
       <p className="text-lg font-semibold mt-6">Working Days</p>
       <div className="flex flex-col w-full gap-4 mt-2">
-        <div className="flex w-full border rounded-lg p-2.5 items-center gap-6">
-          <p className="font-bold">Monday</p>
-          From
-          <input
-            type="time"
-            name=""
-            id=""
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          />
-          To
-          <input
-            type="time"
-            name=""
-            id=""
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          />
+        <div className="flex  flex-col md:flex-row w-full justify-between border rounded-lg p-2.5 items-start md:items-center gap-6">
+          <p className="font-bold w-full">Monday</p>
+          <div className="flex w-full gap-2 items-center">
+            <p className="w-12">From</p>
+            <input
+              onChange={(e) =>
+                setWorkingDays({
+                  ...workingDays,
+                  monday: { from: e.target.value },
+                })
+              }
+              type="time"
+              name=""
+              id=""
+              className="bg-gray-50 border w-full border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-fulls p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            />
+          </div>
+          <div className="flex w-full gap-2 items-center">
+            <p className="w-12">To</p>
+
+            <input
+              onChange={(e) =>
+                setWorkingDays({
+                  ...workingDays,
+                  monday: { to: e.target.value },
+                })
+              }
+              type="time"
+              name=""
+              id=""
+              className="bg-gray-50 border w-full border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-fulls p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            />
+          </div>
         </div>
-        <div className="flex w-full border rounded-lg p-2.5 items-center gap-6">
-          <p className="font-bold">Tuesday</p>
-          From
-          <input
-            type="time"
-            name=""
-            id=""
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          />
-          To
-          <input
-            type="time"
-            name=""
-            id=""
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          />
+        <div className="flex  flex-col md:flex-row w-full justify-between border rounded-lg p-2.5 items-start md:items-center gap-6">
+          <p className="font-bold w-full">Tuesday</p>
+          <div className="flex w-full gap-2 items-center">
+            <p className="w-12">From</p>
+            <input
+              onChange={(e) =>
+                setWorkingDays({
+                  ...workingDays,
+                  tuesday: { from: e.target.value },
+                })
+              }
+              type="time"
+              name=""
+              id=""
+              className="bg-gray-50 border w-full border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-fulls p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            />
+          </div>
+          <div className="flex w-full gap-2 items-center">
+            <p className="w-12">To</p>
+
+            <input
+              onChange={(e) =>
+                setWorkingDays({
+                  ...workingDays,
+                  tuesday: { to: e.target.value },
+                })
+              }
+              type="time"
+              name=""
+              id=""
+              className="bg-gray-50 border w-full border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-fulls p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            />
+          </div>
         </div>
-        <div className="flex w-full border rounded-lg p-2.5 items-center gap-6">
-          <p className="font-bold">Wednesday</p>
-          From
-          <input
-            type="time"
-            name=""
-            id=""
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          />
-          To
-          <input
-            type="time"
-            name=""
-            id=""
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          />
+        <div className="flex  flex-col md:flex-row w-full justify-between border rounded-lg p-2.5 items-start md:items-center gap-6">
+          <p className="font-bold w-full">Wednesday</p>
+          <div className="flex w-full gap-2 items-center">
+            <p className="w-12">From</p>
+            <input
+              onChange={(e) =>
+                setWorkingDays({
+                  ...workingDays,
+                  wednesday: { from: e.target.value },
+                })
+              }
+              type="time"
+              name=""
+              id=""
+              className="bg-gray-50 border w-full border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-fulls p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            />
+          </div>
+          <div className="flex w-full gap-2 items-center">
+            <p className="w-12">To</p>
+
+            <input
+              onChange={(e) =>
+                setWorkingDays({
+                  ...workingDays,
+                  wednesday: { to: e.target.value },
+                })
+              }
+              type="time"
+              name=""
+              id=""
+              className="bg-gray-50 border w-full border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-fulls p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            />
+          </div>
         </div>
-        <div className="flex w-full border rounded-lg p-2.5 items-center gap-6">
-          <p className="font-bold">Thursday</p>
-          From
-          <input
-            type="time"
-            name=""
-            id=""
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          />
-          To
-          <input
-            type="time"
-            name=""
-            id=""
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          />
+        <div className="flex  flex-col md:flex-row w-full justify-between border rounded-lg p-2.5 items-start md:items-center gap-6">
+          <p className="font-bold w-full">Thursday</p>
+          <div className="flex w-full gap-2 items-center">
+            <p className="w-12">From</p>
+            <input
+              onChange={(e) =>
+                setWorkingDays({
+                  ...workingDays,
+                  thursday: { from: e.target.value },
+                })
+              }
+              type="time"
+              name=""
+              id=""
+              className="bg-gray-50 border w-full border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-fulls p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            />
+          </div>
+          <div className="flex w-full gap-2 items-center">
+            <p className="w-12">To</p>
+
+            <input
+              onChange={(e) =>
+                setWorkingDays({
+                  ...workingDays,
+                  thursday: { to: e.target.value },
+                })
+              }
+              type="time"
+              name=""
+              id=""
+              className="bg-gray-50 border w-full border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-fulls p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            />
+          </div>
         </div>
-        <div className="flex w-full border rounded-lg p-2.5 items-center gap-6">
-          <p className="font-bold">Friday</p>
-          From
-          <input
-            type="time"
-            name=""
-            id=""
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          />
-          To
-          <input
-            type="time"
-            name=""
-            id=""
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          />
+        <div className="flex  flex-col md:flex-row w-full justify-between border rounded-lg p-2.5 items-start md:items-center gap-6">
+          <p className="font-bold w-full">Friday</p>
+          <div className="flex w-full gap-2 items-center">
+            <p className="w-12">From</p>
+            <input
+              onChange={(e) =>
+                setWorkingDays({
+                  ...workingDays,
+                  friday: { from: e.target.value },
+                })
+              }
+              type="time"
+              name=""
+              id=""
+              className="bg-gray-50 border w-full border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-fulls p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            />
+          </div>
+          <div className="flex w-full gap-2 items-center">
+            <p className="w-12">To</p>
+
+            <input
+              onChange={(e) =>
+                setWorkingDays({
+                  ...workingDays,
+                  friday: { to: e.target.value },
+                })
+              }
+              type="time"
+              name=""
+              id=""
+              className="bg-gray-50 border w-full border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-fulls p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            />
+          </div>
         </div>
-        <div className="flex w-full border rounded-lg p-2.5 items-center gap-6">
-          <p className="font-bold">Saturday</p>
-          From
-          <input
-            type="time"
-            name=""
-            id=""
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          />
-          To
-          <input
-            type="time"
-            name=""
-            id=""
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          />
+        <div className="flex  flex-col md:flex-row w-full justify-between border rounded-lg p-2.5 items-start md:items-center gap-6">
+          <p className="font-bold w-full">Saturday</p>
+          <div className="flex w-full gap-2 items-center">
+            <p className="w-12">From</p>
+            <input
+              onChange={(e) =>
+                setWorkingDays({
+                  ...workingDays,
+                  saturday: { ...workingDays, from: e.target.value },
+                })
+              }
+              type="time"
+              name=""
+              id=""
+              className="bg-gray-50 border w-full border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-fulls p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            />
+          </div>
+          <div className="flex w-full gap-2 items-center">
+            <p className="w-12">To</p>
+
+            <input
+              onChange={(e) =>
+                setWorkingDays({
+                  ...workingDays,
+                  saturday: { ...workingDays, to: e.target.value },
+                })
+              }
+              type="time"
+              name=""
+              id=""
+              className="bg-gray-50 border w-full border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-fulls p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            />
+          </div>
         </div>
-        <div className="flex w-full border rounded-lg p-2.5 items-center gap-6">
-          <p className="font-bold">Monday</p>
-          From
-          <input
-            type="time"
-            name=""
-            id=""
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          />
-          To
-          <input
-            type="time"
-            name=""
-            id=""
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          />
+        <div className="flex  flex-col md:flex-row w-full justify-between border rounded-lg p-2.5 items-start md:items-center gap-6">
+          <p className="font-bold w-full">Sunday</p>
+          <div className="flex w-full gap-2 items-center">
+            <p className="w-12">From</p>
+            <input
+              onChange={(e) =>
+                setWorkingDays({
+                  ...workingDays,
+                  sunday: { from: e.target.value, to: workingDays.sunday.to },
+                })
+              }
+              type="time"
+              name=""
+              id=""
+              className="bg-gray-50 border w-full border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-fulls p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            />
+          </div>
+          <div className="flex w-full gap-2 items-center">
+            <p className="w-12">To</p>
+
+            <input
+              onChange={(e) =>
+                setWorkingDays({
+                  ...workingDays,
+                  sunday: { from: workingDays.sunday.from, to: e.target.value },
+                })
+              }
+              type="time"
+              name=""
+              id=""
+              className="bg-gray-50 border w-full border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-fulls p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            />
+          </div>
         </div>
       </div>
-      {/* <div className="mb-5">
-        <label
-          for="name"
-          class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-        >
-          Highlight services
-        </label>
-        <div className=" flex gap-1 items-center justify-between">
+      <p className="text-lg font-semibold mt-6">Pricing Range</p>
+      <div className="flex  flex-col md:flex-row w-full justify-between border rounded-lg p-2.5 items-start md:items-center gap-6">
+        <div className="flex flex-col w-full gap-2">
+          <p className="w-12">From</p>
           <input
-            type="text"
-            id="name"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="Skylight Technologies"
-            required
+            onChange={(e) =>
+              setPricingRange({ ...pricingRange, from: e.target.value })
+            }
+            type="number"
+            name=""
+            id=""
+            placeholder="1000"
+            className="bg-gray-50 border w-full border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-fulls p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           />
-          <button className="p-2 add rounded-lg text-white bg-main">Add</button>
+        </div>
+        <div className="flex flex-col w-full gap-2">
+          <p className="w-12">To</p>
+          <input
+            onChange={(e) =>
+              setPricingRange({ ...pricingRange, to: e.target.value })
+            }
+            type="number"
+            name=""
+            id=""
+            placeholder="10000"
+            className="bg-gray-50 border w-full border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-fulls p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          />
+        </div>
+        <div className="flex flex-col w-full gap-2">
+          <p className="w-12">Currencies</p>
+          <select
+            name=""
+            id=""
+            className="bg-gray-50 border w-full border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-fulls p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          >
+            <option value="USD">USD</option>
+            <option selected value="Birr">
+              Birr
+            </option>
+          </select>
         </div>
       </div>
-      <div className="mb-5">
-        <label
-          for="name"
-          class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-        >
-          Main features
-        </label>
-        <div className=" flex gap-1 items-center justify-between">
-          <input
-            type="text"
-            id="name"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="Software development"
-            required
-          />
-          <button className="p-2 add rounded-lg text-white bg-main">Add</button>
-        </div>
-      </div> */}
+      <div className="mt-6">
+        <LoadingButton
+          pending={pending}
+          onClick={updateHandler}
+          title="Update Profile"
+          color="bg-main"
+          width="w-52"
+        />
+      </div>
     </div>
   );
 };

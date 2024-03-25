@@ -27,6 +27,7 @@ const schema = new mongoose.Schema({
   phone: {
     type: String,
   },
+
   video: {
     type: String,
   },
@@ -77,17 +78,17 @@ const schema = new mongoose.Schema({
   },
 
   socialMedia: {
-    type: [Object],
+    type: Object,
     required: [true, "Social media link is required"],
   },
 
   workingDays: {
-    type: [Object],
+    type: Object,
     required: [true, "Working days is required"],
   },
 
   priceRange: {
-    type: [Object],
+    type: Object,
   },
 
   registeredBy: {
