@@ -107,6 +107,7 @@ export const apiSlice = createApi({
     //update
     update: builder.mutation({
       query: (data) => {
+        console.log(data,'api slice')
         data?.tag.map((d) => tag.push(d));
         return {
           url: data.url,

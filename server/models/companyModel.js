@@ -3,7 +3,7 @@ import uniqueValidator from "mongoose-unique-validator";
 import * as valid from "../utils/validator.js";
 
 const schema = new mongoose.Schema({
-  name: {
+  names: {
     type: String,
     validate: valid.paragraph("Name", 4, 200),
     // index: {
@@ -15,8 +15,10 @@ const schema = new mongoose.Schema({
   },
 
   type: {
+    type: String,
     enum: ["Local", "Global"],
-    // required: [true, "type must be either Local or Global"],
+    default: "Local",
+    validate: valid.required("Type"),
   },
 
   title: {
@@ -26,6 +28,7 @@ const schema = new mongoose.Schema({
 
   phone: {
     type: String,
+    validate: valid.phone("Phone"),
   },
 
   video: {
@@ -43,51 +46,47 @@ const schema = new mongoose.Schema({
 
   latitude: {
     type: String,
-    validate: valid.paragraph("latitude", 100, 1000),
   },
 
   longitude: {
     type: String,
-    validate: valid.paragraph("latitude", 100, 1000),
   },
 
-  highlightServices: {
-    type: [String],
-    // validate: valid.paragraph("Highlight services", 4, 200),
+  services: {
+    type: [{ type: String, validate: valid.required("Services") }],
+    // validate: valid.required(""),
   },
 
-  mainFeatures: {
-    //main features
-    type: [String],
-    // validate: valid.paragraph("Amenities", 100, 1000),
+  features: {
+    type: [{ type: String, validate: valid.required("Features") }],
   },
 
   logo: {
     type: String,
-    required: [true, "Logo is required"],
+    validate: valid.required("Logo"),
   },
 
   banner: {
     type: String,
-    required: [true, "Banner is required"],
+    validate: valid.required("Banner"),
   },
 
-  photoGallery: {
-    type: [String],
-    required: [true, "Photo galleries are required"],
+  galleries: {
+    type: [{ type: String, validate: valid.required("Galleries") }],
+    // validate: valid.required(""),
   },
 
-  socialMedia: {
+  socialMedias: {
     type: Object,
-    required: [true, "Social media link is required"],
+    validate: valid.required("Social medias"),
   },
 
   workingDays: {
     type: Object,
-    required: [true, "Working days is required"],
+    validate: valid.required("Working days"),
   },
 
-  priceRange: {
+  pricingRange: {
     type: Object,
   },
 
@@ -117,20 +116,20 @@ schema.pre("save", function (next) {
     "name",
     "type",
     "title",
-    "banner",
-    "highlightServices",
-    "secondPhone",
+    "phone",
+    "video",
+    "website",
     "description",
     "latitude",
     "longitude",
-    "amenities",
-    "photoGallery",
-    "video",
-    "website",
-    "socialMedia",
+    "services",
+    "features",
+    "logo",
+    "banner",
+    "galleries",
+    "socialMedias",
     "workingDays",
-    "sales",
-    "priceRange",
+    "pricingRange",
   ];
   fields.map((field) => {
     if (this[field]?.length > 0) {
