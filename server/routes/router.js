@@ -36,7 +36,6 @@ const router = express.Router();
 const chatRouter = express.Router();
 
 const files = upload.fields([
-  { name: "attachments", maxCount: 10 },
   { name: "profilePicture", maxCount: 1 },
   { name: "logo", maxCount: 1 },
   { name: "banner", maxCount: 1 },

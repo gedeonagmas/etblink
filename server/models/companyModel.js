@@ -1,11 +1,11 @@
 import mongoose from "mongoose";
-import uniqueValidator from "mongoose-unique-validator";
+// import uniqueValidator from "mongoose-unique-validator";
 import * as valid from "../utils/validator.js";
 
 const schema = new mongoose.Schema({
-  names: {
+  name: {
     type: String,
-    validate: valid.paragraph("Name", 4, 200),
+    validate: valid.paragraph("Name", 4, 100),
     // index: {
     //   unique: true,
     //   partialFilterExpression: { name: { $type: "string" } },
@@ -18,7 +18,7 @@ const schema = new mongoose.Schema({
     type: String,
     enum: ["Local", "Global"],
     default: "Local",
-    validate: valid.required("Type"),
+    // validate: valid.required("Type"),
   },
 
   title: {
@@ -77,8 +77,12 @@ const schema = new mongoose.Schema({
   },
 
   socialMedias: {
-    type: Object,
-    validate: valid.required("Social medias"),
+    type: {
+      type: {
+        type: Object,
+        validate: valid.required("Social medias"),
+      },
+    },
   },
 
   workingDays: {
@@ -141,6 +145,6 @@ schema.pre("save", function (next) {
   next();
 });
 
-uniqueValidator.defaults.message = "{PATH} '{VALUE}' is taken";
-schema.plugin(uniqueValidator);
+// uniqueValidator.defaults.message = "{PATH} '{VALUE}' is taken";
+// schema.plugin(uniqueValidator);
 export const Company = mongoose.model("company", schema);

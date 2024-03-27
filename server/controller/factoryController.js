@@ -162,7 +162,7 @@ export const _update = asyncCatch(async (req, res, next) => {
       { ...req.body }, 
       { runValidators: true }
     );
- 
+  
     if (!data)
       return next(
         new AppError("something went wrong unable to update the data")

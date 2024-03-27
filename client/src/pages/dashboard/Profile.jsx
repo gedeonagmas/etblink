@@ -94,7 +94,7 @@ const Profile = () => {
   const [pending, setPending] = useState(false);
 
   const [name, setName] = useState("");
-  const [type, setType] = useState("");
+  const [type, setType] = useState("Local");
   const [title, setTitle] = useState("");
   const [phone, setPhone] = useState("");
   const [video, setVideo] = useState("");
@@ -163,18 +163,19 @@ const Profile = () => {
     formData.append("pricingRange", pricingRange);
     formData.append("socialMedias", socialMedias);
     formData.append("workingDays", workingDays);
-    // formData.append("url", "/user/companies");
-    // formData.append("tag", ["users"]);
+    formData.append("url", "/user/companies");
+    formData.append("tag", ["users", "companies"]);
 
     [...galleries].forEach((image) => {
       formData.append("galleries", image);
     });
 
-    for (var key of formData.entries()) {
-      console.log(key[0] + ", " + key[1]);
-    }
+    // for (var key of formData.entries()) {
+    //   console.log(key[0] + ", " + key[1]);
+    // }
 
-    updateData(formData,{url:'/user/companies',tag:['users']});
+    // updateData({ url: "/user/companies", tag: ["users", "companies"] });
+    updateData(formData);
   };
 
   return (
