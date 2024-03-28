@@ -94,35 +94,45 @@ const Header = () => {
             </div>
           ) : (
             <div className="flex gap-2">
-              <div className="relative">
+              <div className="relative h-auto">
                 <p
                   onMouseOver={() => setLoginForm(true)}
-                  className="cursor-pointer"
+                  className={`cursor-pointer ${
+                    loginForm ? "bg-main px-2" : ""
+                  }`}
                   onClick={() => setLoginForm(false)}
                 >
                   Login
                 </p>
                 {loginForm && (
-                  <div className="w-auto text-sm flex flex-col bg-white bg-dark text-dark absolute top-7 -left-40 z-30 text-black">
+                  <div
+                    onMouseLeave={() => setLoginForm(false)}
+                    className="w-auto rounded-sm rounded-tr-none text-sm p-2 flex gap-1  flex-col bg-main bg-dark text-dark absolute top-5 -left-[72px] z-30 text-black"
+                  >
                     <input
                       type="email"
                       onChange={(e) => setEmail(e.target.value)}
-                      className="w-52  px-2 py-3 focus:outline-none focus:ring-0"
+                      className="w-52  px-2 py-1 bg-white bg-dark focus:outline-none border-0 border-dark focus:ring-0"
                       placeholder="Email"
                     />
                     <input
                       onChange={(e) => setPassword(e.target.value)}
                       type="password"
-                      className="w-52 px-2 py-3  focus:outline-none focus:ring-0"
+                      className="w-52 px-2 py-1 focus:outline-none focus:ring-0"
                       placeholder="password"
                     />
-                    <LoadingButton
-                      pending={pending}
-                      onClick={loginHandler}
-                      title="Login"
-                      color="bg-red-500"
-                      width="w-full py-1"
-                    />
+                    <div className="flex items-center justify-between w-full">
+                      <p className="text-xs cursor-pointer hover:text-gray-100 text-white">
+                        Forget password?
+                      </p>
+                      <LoadingButton
+                        pending={pending}
+                        onClick={loginHandler}
+                        title="Login"
+                        color="bg-main"
+                        width="w-full lg:rounded-sm lg:px-2 lg:py-[2px]"
+                      />
+                    </div>
                   </div>
                 )}
               </div>
@@ -574,7 +584,7 @@ const Header = () => {
                   <p
                     onMouseOver={() => setLoginForm(true)}
                     className={`cursor-pointer ${
-                      loginForm ? "bg-gray-800 px-2" : ""
+                      loginForm ? "bg-main px-2" : ""
                     }`}
                     onClick={() => setLoginForm(false)}
                   >
@@ -583,7 +593,7 @@ const Header = () => {
                   {loginForm && (
                     <div
                       onMouseLeave={() => setLoginForm(false)}
-                      className="w-auto rounded-sm rounded-tr-none text-sm p-2 flex gap-1 flex-col bg-gray-800 bg-dark text-dark absolute top-5 -left-[171px] z-30 text-black"
+                      className="w-auto rounded-sm rounded-tr-none text-sm p-2 flex gap-1 flex-col bg-main bg-dark text-dark absolute top-5 -left-[172px] z-30 text-black"
                     >
                       <input
                         type="email"
