@@ -26,7 +26,7 @@ let tag = [];
 export const apiSlice = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:5000/etblink/app/v1",
+    baseUrl: "http://localhost:3001/etblink/app/v1",
   }),
   tagTypes: [
     "users",
