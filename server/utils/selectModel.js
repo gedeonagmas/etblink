@@ -1,4 +1,5 @@
 import { Application } from "../models/applicationModel.js";
+import { Company } from "../models/companyModel.js";
 // import { CaseManager } from "../models/caseManagerModel.js";
 // import { Case } from "../models/caseModel.js";
 // import { Category } from "../models/categoryModel.js";
@@ -19,8 +20,8 @@ export const selectModel = (name, next) => {
     case "institutions":
       model = Institution;
       break;
-    case "permissions":
-      model = Permission;
+    case "companies":
+      model = Company;
       break;
     case "cases":
       model = Case;

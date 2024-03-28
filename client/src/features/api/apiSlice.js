@@ -107,9 +107,21 @@ export const apiSlice = createApi({
     //update
     update: builder.mutation({
       query: (data) => {
-        data?.tag.map((d) => tag.push(d));
+        let newUrl = "";
+        let newTag;
+        if (!data.url) {
+          for (var key of data.entries()) {
+            if (key[0] === "url") newUrl = key[1];
+            if (key[0] === "tag") newTag = key[1].split(",");
+          }
+        } else {
+          newTag = data.tag;
+        }
+
+        newTag.map((d) => tag.push(d));
+
         return {
-          url: data.url,
+          url: data.url ? data.url : newUrl,
           method: "PUT",
           body: data,
           credentials: "include",
@@ -120,6 +132,19 @@ export const apiSlice = createApi({
       },
     }),
 
+    // update: builder.mutation({
+    //   query: (data) => {
+    //     console.log(data, "api slice");
+    //     // data?.tag.map((d) => tag.push(d));
+    //     return {
+    //       url: "/user/companies",
+    //       method: "PUT",
+    //       body: data,
+    //       credentials: "include",
+    //     };
+    //   },
+    //   invalidatesTags: ["company"],
+    // }),
     //delete
     delete: builder.mutation({
       query: (data) => {
