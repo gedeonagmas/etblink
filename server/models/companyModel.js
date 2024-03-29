@@ -16,9 +16,9 @@ const schema = new mongoose.Schema({
 
   type: {
     type: String,
-    enum: ["Local", "Global"],
+    enum: ["local", "global"],
     default: "Local",
-    // validate: valid.required("Type"),
+    validate: valid.required("Type"),
   },
 
   title: {
@@ -53,12 +53,22 @@ const schema = new mongoose.Schema({
   },
 
   services: {
-    type: [{ type: String, validate: valid.required("Services") }],
+    type: [
+      {
+        type: String,
+        validate: valid.required("Services"),
+      },
+    ],
     // validate: valid.required(""),
   },
 
   features: {
-    type: [{ type: String, validate: valid.required("Features") }],
+    type: [
+      {
+        type: String,
+        validate: valid.required("Features"),
+      },
+    ],
   },
 
   logo: {
@@ -72,26 +82,24 @@ const schema = new mongoose.Schema({
   },
 
   galleries: {
-    type: [{ type: String, validate: valid.required("Galleries") }],
-    // validate: valid.required(""),
+    type: [
+      {
+        type: String,
+        validate: valid.required("Gallery"),
+      },
+    ],
   },
 
   socialMedias: {
-    type: {
       type: {
-        type: Object,
+        type: String,
         validate: valid.required("Social medias"),
       },
-    },
   },
 
   workingDays: {
     type: Object,
     validate: valid.required("Working days"),
-  },
-
-  pricingRange: {
-    type: Object,
   },
 
   registeredBy: {
@@ -115,7 +123,7 @@ schema.pre("findOneAndUpdate", function (next) {
 });
 
 schema.pre("save", function (next) {
-  let percent = 15;
+  let percent = 20;
   const fields = [
     "name",
     "type",
@@ -133,14 +141,15 @@ schema.pre("save", function (next) {
     "galleries",
     "socialMedias",
     "workingDays",
-    "pricingRange",
   ];
   fields.map((field) => {
     if (this[field]?.length > 0) {
       percent += 5;
     }
+    return percent;
   });
 
+  console.log(percent,'percent');
   this.profileFillStatus = percent;
   next();
 });

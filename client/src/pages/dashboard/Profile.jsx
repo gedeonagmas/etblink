@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import LoadingButton from "../../components/loading/LoadingButton";
 import Response from "../../components/Response";
 import { useUpdateMutation } from "../../features/api/apiSlice";
+import { userContext } from "../../App";
 
 const List = (props) => {
   // import axios from "axios";
@@ -90,6 +91,7 @@ const List = (props) => {
 };
 
 const Profile = () => {
+  const context = useContext(userContext);
   const [updateData, updateResponse] = useUpdateMutation();
   const [pending, setPending] = useState(false);
 
@@ -145,9 +147,28 @@ const Profile = () => {
     }
   };
 
+  useEffect(() => {
+    if (context?.user?.user) {
+      const data = context?.user?.user;
+      setTitle(data.title);
+      setType(data.type);
+      setName(data.name);
+      setPhone(data.phone);
+      setVideo(data.video);
+      setWebsite(data.website);
+      setDescription(data.description);
+      setServices(data.services);
+      setFeatures(data.features);
+      // setLogo(data.logo);
+      // setBanner(data.banner);
+      setSocialMedias(data.socialMedias);
+      setWorkingDays(data.workingDays);
+    }
+  }, [context])
+  
+console.log(socialMedias,'social');
   const updateHandler = () => {
     const formData = new FormData();
-
     formData.append("name", name);
     formData.append("type", type);
     formData.append("title", title);
@@ -159,25 +180,26 @@ const Profile = () => {
     formData.append("features", features);
     formData.append("logo", logo);
     formData.append("banner", banner);
-    // formData.append("galleries", galleries);
-    formData.append("pricingRange", pricingRange);
+    // formData.append("pricingRange", pricingRange);
     formData.append("socialMedias", socialMedias);
     formData.append("workingDays", workingDays);
-    formData.append("url", "/user/companies");
+    formData.append("url", `/user/companies?id=${context?.user?.user?._id}`);
     formData.append("tag", ["users", "companies"]);
-
-    [...galleries].forEach((image) => {
-      formData.append("galleries", image);
-    });
+    galleries?.length > 0
+      ? [...galleries].forEach((image) => {
+          formData.append("galleries", image);
+        })
+      : formData.append("galleries", galleries);
 
     // for (var key of formData.entries()) {
     //   console.log(key[0] + ", " + key[1]);
     // }
 
-    // updateData({ url: "/user/companies", tag: ["users", "companies"] });
+    // updateData({ url: `/user/companies?id=${context?.user?.user?._id}`, tag: ["users", "companies"] });
     updateData(formData);
   };
 
+  console.log(context, "context");
   return (
     <div className="w-full p-5 flex pb-10 flex-col rounded-lg border gap-2 items-start justify-center">
       <Response response={updateResponse} setPending={setPending} />
@@ -199,6 +221,7 @@ const Profile = () => {
           </label>
           <input
             onChange={(e) => setName(e.target.value)}
+            value={name}
             type="text"
             id="name"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -216,6 +239,7 @@ const Profile = () => {
 
           <select
             onChange={(e) => setType(e.target.value)}
+            value={type}
             type="text"
             id="name"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -237,6 +261,7 @@ const Profile = () => {
           </label>
           <input
             onChange={(e) => setTitle(e.target.value)}
+            value={title}
             type="text"
             id="name"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -253,6 +278,7 @@ const Profile = () => {
           </label>
           <input
             onChange={(e) => setPhone(e.target.value)}
+            value={phone}
             type="text"
             id="name"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -269,6 +295,7 @@ const Profile = () => {
           </label>
           <input
             onChange={(e) => setVideo(e.target.files[0])}
+            value={video}
             class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
             id="file_input"
             type="file"
@@ -283,6 +310,7 @@ const Profile = () => {
           </label>
           <input
             onChange={(e) => setWebsite(e.target.value)}
+            value={website}
             type="text"
             id="name"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -299,6 +327,7 @@ const Profile = () => {
       </label>
       <textarea
         onChange={(e) => setDescription(e.target.value)}
+        value={description}
         name=""
         id=""
         cols="30"
@@ -351,6 +380,7 @@ const Profile = () => {
                   <span class="">Upload a file</span>
                   <input
                     onChange={(e) => setLogo(e.target.files[0])}
+                    // value={logo}
                     id="file-upload1"
                     name="file-upload1"
                     type="file"
@@ -389,6 +419,7 @@ const Profile = () => {
                   <span class="">Upload a file</span>
                   <input
                     onChange={(e) => setBanner(e.target.files[0])}
+                    // value={banner}
                     id="file-upload2"
                     name="file-upload2"
                     type="file"
@@ -430,6 +461,7 @@ const Profile = () => {
                   <span class="">Upload a file</span>
                   <input
                     onChange={(e) => setGalleries(e.target.files)}
+                    // value={galleries}
                     id="file-upload3"
                     name="file-upload3"
                     type="file"
@@ -474,6 +506,7 @@ const Profile = () => {
               onChange={(e) =>
                 setSocialMedias({ ...socialMedias, facebook: e.target.value })
               }
+              value={socialMedias.facebook}
               type="text"
               className="w-full h-7 focus:outline-none bg-dark border-0 focus:ring-0"
               placeholder="skylight.facebook.com"
@@ -503,6 +536,7 @@ const Profile = () => {
               onChange={(e) =>
                 setSocialMedias({ ...socialMedias, instagram: e.target.value })
               }
+              value={socialMedias.instagram}
               type="text"
               className="w-full h-7 focus:outline-none bg-dark border-0 focus:ring-0"
               placeholder="skylight.facebook.com"
@@ -534,6 +568,7 @@ const Profile = () => {
               onChange={(e) =>
                 setSocialMedias({ ...socialMedias, twitter: e.target.value })
               }
+              value={socialMedias.twitter}
               type="text"
               className="w-full h-7 focus:outline-none bg-dark border-0 focus:ring-0"
               placeholder="skylight.facebook.com"
@@ -570,6 +605,7 @@ const Profile = () => {
               onChange={(e) =>
                 setSocialMedias({ ...socialMedias, linkedin: e.target.value })
               }
+              value={socialMedias.linkedin}
               type="text"
               className="w-full h-7 focus:outline-none bg-dark border-0 focus:ring-0"
               placeholder="skylight.facebook.com"
@@ -590,6 +626,7 @@ const Profile = () => {
                   monday: { from: e.target.value, to: workingDays.monday.to },
                 })
               }
+              // value={workingDays.monday.from}
               type="time"
               name=""
               id=""
@@ -606,6 +643,7 @@ const Profile = () => {
                   monday: { from: workingDays.monday.from, to: e.target.value },
                 })
               }
+              // value={workingDays.monday.to}
               type="time"
               name=""
               id=""
@@ -839,7 +877,7 @@ const Profile = () => {
           </div>
         </div>
       </div>
-      <p className="text-lg font-semibold mt-6">Pricing Range</p>
+      {/* <p className="text-lg font-semibold mt-6">Pricing Range</p>
       <div className="flex  flex-col md:flex-row w-full justify-between border rounded-lg p-2.5 items-start md:items-center gap-6">
         <div className="flex flex-col w-full gap-2">
           <p className="w-12">From</p>
@@ -898,7 +936,7 @@ const Profile = () => {
             </option>
           </select>
         </div>
-      </div>
+      </div> */}
       <div className="mt-6">
         <LoadingButton
           pending={pending}
