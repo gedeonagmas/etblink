@@ -98,7 +98,7 @@ const Header = () => {
                 <p
                   onMouseOver={() => setLoginForm(true)}
                   className={`cursor-pointer ${
-                    loginForm ? "bg-main px-2" : ""
+                    loginForm ? "bg-gray-400 px-2" : ""
                   }`}
                   onClick={() => setLoginForm(false)}
                 >
@@ -107,7 +107,7 @@ const Header = () => {
                 {loginForm && (
                   <div
                     onMouseLeave={() => setLoginForm(false)}
-                    className="w-auto rounded-sm rounded-tr-none text-sm p-2 flex gap-1  flex-col bg-main bg-dark text-dark absolute top-5 -left-[72px] z-30 text-black"
+                    className="w-auto rounded-sm rounded-tr-none text-sm p-2 flex gap-1  flex-col bg-gray-400 bg-dark text-dark absolute top-5 -left-[71.5px] z-30 text-black"
                   >
                     <input
                       type="email"
@@ -584,7 +584,7 @@ const Header = () => {
                   <p
                     onMouseOver={() => setLoginForm(true)}
                     className={`cursor-pointer ${
-                      loginForm ? "bg-main px-2" : ""
+                      loginForm ? "bg-gray-400 px-2" : ""
                     }`}
                     onClick={() => setLoginForm(false)}
                   >
@@ -593,7 +593,7 @@ const Header = () => {
                   {loginForm && (
                     <div
                       onMouseLeave={() => setLoginForm(false)}
-                      className="w-auto rounded-sm rounded-tr-none text-sm p-2 flex gap-1 flex-col bg-main bg-dark text-dark absolute top-5 -left-[172px] z-30 text-black"
+                      className="w-auto rounded-sm rounded-tr-none text-sm p-2 flex gap-1 flex-col bg-gray-400 bg-dark text-dark absolute top-5 -left-[171.5px] z-30 text-black"
                     >
                       <input
                         type="email"
