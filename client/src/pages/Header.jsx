@@ -73,7 +73,7 @@ const Header = () => {
         setPending={setPending}
         redirectTo="/"
       />
-      <div className="flex lg:hidden fixed top-0 left-0 z-50 flex-col items-center w-full h-auto py-10 overflow-y-scroll ">
+      <div className="flex lg:hidden fixed top-0 left-0 z-50 flex-col items-center w-full h-auto py-10 ">
         <div className="flex bg-white bg-dark -mt-12 justify-between items-center px-2 h-full w-full">
           <img
             src="./logo.png"
@@ -82,7 +82,7 @@ const Header = () => {
           />
           {context.user ? (
             <div className="flex items-center gap-3">
-              <p className="px-2 py-1 rounded-xl bg-main">
+              <p className="px-2 py-1 text-white rounded-xl bg-main">
                 {context.user.email.split("@")[0]}
               </p>
               <Link
@@ -93,21 +93,36 @@ const Header = () => {
               </Link>
             </div>
           ) : (
-            <div className="flex gap-2">
-              <div className="relative h-auto">
+            <div className="flex relative gap-4">
+              <div className="">
                 <p
                   onMouseOver={() => setLoginForm(true)}
                   className={`cursor-pointer ${
-                    loginForm ? "bg-main px-2" : ""
-                  }`}
-                  onClick={() => setLoginForm(false)}
+                    loginForm ? "bg-gray-900 text-white" : ""
+                  } px-3 h-[70px] absolute -top-5 hover:text-white pt-5 -left-[70px] flex `}
+                  // onClick={() => setLoginForm(false)}
                 >
                   Login
+                  <svg
+                    className="w-2.5 h-2.5 mt-1.5 ms-3"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 10 6"
+                  >
+                    <path
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="m1 1 4 4 4-4"
+                    />
+                  </svg>
                 </p>
                 {loginForm && (
                   <div
                     onMouseLeave={() => setLoginForm(false)}
-                    className="w-auto rounded-sm rounded-tr-none text-sm p-2 flex gap-1  flex-col bg-main bg-dark text-dark absolute top-5 -left-[72px] z-30 text-black"
+                    className="w-auto rounded-sm rounded-l text-sm rounded-tl-none p-2 flex gap-1 flex-col bg-gray-900 bg-dark text-dark absolute top-[50px] -left-[70px] z-30 text-black"
                   >
                     <input
                       type="email"
@@ -121,7 +136,7 @@ const Header = () => {
                       className="w-52 px-2 py-1 focus:outline-none focus:ring-0"
                       placeholder="password"
                     />
-                    <div className="flex items-center justify-between w-full">
+                    <div className="flex py-1 items-center justify-between w-full">
                       <p className="text-xs cursor-pointer hover:text-gray-100 text-white">
                         Forget password?
                       </p>
@@ -130,7 +145,7 @@ const Header = () => {
                         onClick={loginHandler}
                         title="Login"
                         color="bg-main"
-                        width="w-full lg:rounded-sm lg:px-2 lg:py-[2px]"
+                        width="w-full rounded-sm px-2 py-[2px]"
                       />
                     </div>
                   </div>
@@ -182,158 +197,262 @@ const Header = () => {
             xmlns="http://www.w3.org/2000/svg"
             width="24"
             height="24"
-            fill="currentColor"
+            fill="none"
             viewBox="0 0 24 24"
           >
-            <path d="M13.795 10.533 20.68 2h-3.073l-5.255 6.517L7.69 2H1l7.806 10.91L1.47 22h3.074l5.705-7.07L15.31 22H22l-8.205-11.467Zm-2.38 2.95L9.97 11.464 4.36 3.627h2.31l4.528 6.317 1.443 2.02 6.018 8.409h-2.31l-4.934-6.89Z" />
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18 17.94 6M18 18 6.06 6"
+            />
           </svg>
-          <ul className="py-6 h-[100vh] overflow-y-scroll w-full text-center">
-            <li className="me-2 ml-2" role="presentation">
+
+          <ul className="py-5 h-[100vh] overflow-y-scroll w-full">
+            <li className="mt-10" role="presentation">
               <Link
                 to="/"
-                className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
+                className="inline-block hover:text-[rgb(252,45,45)]  w-full p-5 font-medium rtl:text-right text-gray-500 border border-b-0 border-gray-300  focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 gap-3"
               >
                 Home
               </Link>
             </li>
-            <li className="me-2 ml-2" role="presentation">
+            <li className="" role="presentation">
               <Link
                 to="/local"
-                className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
+                className="inline-block hover:text-[rgb(252,45,45)]  w-full p-5 font-medium rtl:text-right text-gray-500 border border-b-0 border-gray-300  focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 gap-3"
               >
                 Local
               </Link>
             </li>
-            <li className="me-2 ml-2" role="presentation">
+            <li className="" role="presentation">
               <Link
                 to="/global"
-                className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
+                className="inline-block hover:text-[rgb(252,45,45)]  w-full p-5 font-medium rtl:text-right text-gray-500 border border-b-0 border-gray-300  focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 gap-3"
               >
                 Global
               </Link>
             </li>
-            <li className="me-2 ml-2" role="presentation">
+            <li className="" role="presentation">
               <Link
                 to="/news"
-                className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
+                className="inline-block hover:text-[rgb(252,45,45)]  w-full p-5 font-medium rtl:text-right text-gray-500 border border-b-0 border-gray-300  focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 gap-3"
               >
                 News
               </Link>
             </li>
-            <li className="me-2 ml-2" role="presentation">
+            <li className="" role="presentation">
               <Link
                 to="/job"
-                className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
+                className="inline-block hover:text-[rgb(252,45,45)]  w-full p-5 font-medium rtl:text-right text-gray-500 border border-b-0 border-gray-300  focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 gap-3"
               >
                 Job
               </Link>
             </li>
-            <li className="me-2 ml-2" role="presentation">
-              <p className="text-sm py-1 border-b border-dark">Languages</p>
-            </li>{" "}
-            <li className="me-2 ml-2" role="presentation">
-              <Link
-                to="/news"
-                className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
+            <div id="accordion-collapse" data-accordion="collapse">
+              <h2 id="accordion-collapse-heading-1">
+                <button
+                  type="button"
+                  class="flex items-center justify-between w-full p-5 font-medium rtl:text-right text-gray-500 border border-b-0 border-gray-300  focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 gap-3"
+                  data-accordion-target="#accordion-collapse-body-1"
+                  aria-expanded="false"
+                  aria-controls="accordion-collapse-body-1"
+                >
+                  <span>Languages</span>
+                  <svg
+                    data-accordion-icon
+                    class="w-3 h-3 rotate-180 shrink-0"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 10 6"
+                  >
+                    <path
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M9 5 5 1 1 5"
+                    />
+                  </svg>
+                </button>
+              </h2>
+              <div
+                id="accordion-collapse-body-1"
+                class="hidden"
+                aria-labelledby="accordion-collapse-heading-1"
               >
-                English
-              </Link>
-            </li>{" "}
-            <li className="me-2 ml-2" role="presentation">
-              <Link
-                to="/news"
-                className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
+                <div class="p-5 border border-b-0 border-gray-300 dark:border-gray-700">
+                  <li className="me-2 ml-2" role="presentation">
+                    <Link
+                      to="/news"
+                      className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
+                    >
+                      English
+                    </Link>
+                  </li>{" "}
+                  <li className="me-2 ml-2" role="presentation">
+                    <Link
+                      to="/news"
+                      className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
+                    >
+                      Amharic
+                    </Link>
+                  </li>{" "}
+                  <li className="me-2 ml-2" role="presentation">
+                    <Link
+                      to="/news"
+                      className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
+                    >
+                      Affan oromo
+                    </Link>
+                  </li>{" "}
+                  <li className="me-2 ml-2" role="presentation">
+                    <Link
+                      to="/news"
+                      className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
+                    >
+                      Tigirigna
+                    </Link>
+                  </li>{" "}
+                </div>
+              </div>
+              <h2 id="accordion-collapse-heading-2">
+                <button
+                  type="button"
+                  class="flex items-center justify-between w-full p-5 font-medium rtl:text-right text-gray-500 border border-b-0 border-gray-300 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 gap-3"
+                  data-accordion-target="#accordion-collapse-body-2"
+                  aria-expanded="false"
+                  aria-controls="accordion-collapse-body-2"
+                >
+                  <span>Resources</span>
+                  <svg
+                    data-accordion-icon
+                    class="w-3 h-3 rotate-180 shrink-0"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 10 6"
+                  >
+                    <path
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M9 5 5 1 1 5"
+                    />
+                  </svg>
+                </button>
+              </h2>
+              <div
+                id="accordion-collapse-body-2"
+                class="hidden"
+                aria-labelledby="accordion-collapse-heading-2"
               >
-                Amharic
-              </Link>
-            </li>{" "}
-            <li className="me-2 ml-2" role="presentation">
-              <Link
-                to="/news"
-                className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
+                <div class="p-5 border border-b-0 border-gray-300 dark:border-gray-700">
+                  <li className="me-2 ml-2" role="presentation">
+                    <Link
+                      to="/news"
+                      className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
+                    >
+                      Investment opportunities
+                    </Link>
+                  </li>{" "}
+                  <li className="me-2 ml-2" role="presentation">
+                    <Link
+                      to="/news"
+                      className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
+                    >
+                      Government office
+                    </Link>
+                  </li>{" "}
+                  <li className="me-2 ml-2" role="presentation">
+                    <Link
+                      to="/news"
+                      className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
+                    >
+                      License and related
+                    </Link>
+                  </li>{" "}
+                  <li className="me-2 ml-2" role="presentation">
+                    <Link
+                      to="/news"
+                      className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
+                    >
+                      Legal advisers
+                    </Link>
+                  </li>{" "}
+                </div>
+              </div>
+              <h2 id="accordion-collapse-heading-3">
+                <button
+                  type="button"
+                  class="flex items-center justify-between w-full p-5 font-medium rtl:text-right text-gray-500 border border-gray-300 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 gap-3"
+                  data-accordion-target="#accordion-collapse-body-3"
+                  aria-expanded="false"
+                  aria-controls="accordion-collapse-body-3"
+                >
+                  <span>Immigration Information</span>
+                  <svg
+                    data-accordion-icon
+                    class="w-3 h-3 rotate-180 shrink-0"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 10 6"
+                  >
+                    <path
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M9 5 5 1 1 5"
+                    />
+                  </svg>
+                </button>
+              </h2>
+              <div
+                id="accordion-collapse-body-3"
+                class="hidden"
+                aria-labelledby="accordion-collapse-heading-3"
               >
-                Affan oromo
-              </Link>
-            </li>{" "}
-            <li className="me-2 ml-2" role="presentation">
-              <Link
-                to="/news"
-                className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
-              >
-                Tigirigna
-              </Link>
-            </li>{" "}
-            <li className="me-2 ml-2" role="presentation">
-              <p className="text-sm py-1 border-b border-dark">Resources</p>
-            </li>{" "}
-            <li className="me-2 ml-2" role="presentation">
-              <Link
-                to="/news"
-                className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
-              >
-                Investment opportunities
-              </Link>
-            </li>{" "}
-            <li className="me-2 ml-2" role="presentation">
-              <Link
-                to="/news"
-                className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
-              >
-                Government office
-              </Link>
-            </li>{" "}
-            <li className="me-2 ml-2" role="presentation">
-              <Link
-                to="/news"
-                className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
-              >
-                License and related
-              </Link>
-            </li>{" "}
-            <li className="me-2 ml-2" role="presentation">
-              <Link
-                to="/news"
-                className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
-              >
-                Legal advisers
-              </Link>
-            </li>{" "}
-            <li className="me-2 ml-2" role="presentation">
-              <p className="text-sm py-1 border-b border-dark">
-                Immigration information
-              </p>
-            </li>{" "}
-            <li className="me-2 ml-2" role="presentation">
-              <Link
-                to="/news"
-                className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
-              >
-                New registration
-              </Link>
-            </li>{" "}
-            <li className="me-2 ml-2" role="presentation">
-              <Link
-                to="/news"
-                className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
-              >
-                Renew
-              </Link>
-            </li>
-            <li className="me-2 ml-2" role="presentation">
-              <Link
-                to="/news"
-                className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
-              >
-                Upgrade
-              </Link>
-            </li>
-            <div className="top-2 right-2 z-50">
-              <DarkThemeToggle />
+                <div class="p-5 border border-t-0 border-gray-300 dark:border-gray-700">
+                  <li className="me-2 ml-2" role="presentation">
+                    <Link
+                      to="/news"
+                      className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
+                    >
+                      New registration
+                    </Link>
+                  </li>{" "}
+                  <li className="me-2 ml-2" role="presentation">
+                    <Link
+                      to="/news"
+                      className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
+                    >
+                      Renew
+                    </Link>
+                  </li>
+                  <li className="me-2 ml-2" role="presentation">
+                    <Link
+                      to="/news"
+                      className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
+                    >
+                      Upgrade
+                    </Link>
+                  </li>
+                </div>
+              </div>
             </div>
-            <li className="me-2 ml-2" role="presentation">
+
+            <div className="flex items-center hover:text-[rgb(252,45,45)]  w-full p-5 font-medium rtl:text-right text-gray-500 border border-b-0 border-gray-300  focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 gap-3">
+              <DarkThemeToggle /> <p>Light mode</p>
+            </div>
+            <li className="" role="presentation">
               <p
                 onClick={logoutHandler}
-                className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
+                className="inline-block hover:text-[rgb(252,45,45)]  w-full p-5 font-medium rtl:text-right text-gray-500 border border-b-0 border-gray-300  focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 gap-3"
               >
                 Logout
               </p>
@@ -499,7 +618,7 @@ const Header = () => {
                 data-dropdown-toggle="dropdownDelay"
                 data-dropdown-delay="500"
                 data-dropdown-trigger="hover"
-                className="focus:ring-0 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center "
+                className="focus:ring-0 focus:outline-none mr-12 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center "
                 type="button"
               >
                 Languages{" "}
@@ -579,21 +698,36 @@ const Header = () => {
                 </p>
               </div>
             ) : (
-              <div className="flex gap-2">
+              <div className="flex gap-4">
                 <div className="relative">
                   <p
                     onMouseOver={() => setLoginForm(true)}
                     className={`cursor-pointer ${
-                      loginForm ? "bg-main px-2" : ""
-                    }`}
+                      loginForm ? "bg-gray-900" : ""
+                    } px-3 h-12 absolute -top-3 pt-3 -left-[70px] flex `}
                     onClick={() => setLoginForm(false)}
                   >
                     Login
+                    <svg
+                      className="w-2.5 h-2.5 mt-1.5 ms-3"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 10 6"
+                    >
+                      <path
+                        stroke="currentColor"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="m1 1 4 4 4-4"
+                      />
+                    </svg>
                   </p>
                   {loginForm && (
                     <div
                       onMouseLeave={() => setLoginForm(false)}
-                      className="w-auto rounded-sm rounded-tr-none text-sm p-2 flex gap-1 flex-col bg-main bg-dark text-dark absolute top-5 -left-[172px] z-30 text-black"
+                      className="w-auto rounded-sm rounded-tr-none text-sm p-2 flex gap-1 flex-col bg-gray-900 bg-dark text-dark absolute top-[34px] -left-[211px] z-30 text-black"
                     >
                       <input
                         type="email"
@@ -607,7 +741,7 @@ const Header = () => {
                         className="w-52 px-2 py-1 focus:outline-none focus:ring-0"
                         placeholder="password"
                       />
-                      <div className="flex items-center justify-between w-full">
+                      <div className="flex items-center py-1 justify-between w-full">
                         <p className="text-xs cursor-pointer hover:text-gray-100 text-white">
                           Forget password?
                         </p>

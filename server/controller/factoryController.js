@@ -3,13 +3,31 @@ import AppError from "../utils/AppError.js";
 import { selectModel } from "../utils/selectModel.js";
 import v2 from "./../config/cloudinary.js";
 import { Query } from "mongoose";
-
+const api = "http://localhost:5000/uploads/";
 const encrypt = (query) => {
   return btoa(query);
 };
 
 const decrypt = (query) => {
   return atob(query);
+};
+
+const fileHandler = (value, req) => {
+  if (req.files) {
+    if (req.files.galleries) {
+      value.galleries = req.files.galleries?.map((e) => api + e.filename);
+    }
+    if (req.files.logo) {
+      value.logo = api + req.files.logo[0].filename;
+    }
+    if (req.files.banner) {
+      value.banner = api + req.files.banner[0].filename;
+    }
+    if (req.files.video) {
+      value.video = api + req.files.video[0].filename;
+    }
+  }
+  return value;
 };
 
 //create
@@ -63,7 +81,6 @@ export const _create = asyncCatch(async (req, res, next) => {
 
 //read
 export const _read = asyncCatch(async (req, res, next) => {
-
   const model = selectModel(req.params.table, next);
   if (model) {
     // const total = await model.find({ _id: req.params.id });
@@ -154,15 +171,18 @@ export const _read = asyncCatch(async (req, res, next) => {
 //update
 export const _update = asyncCatch(async (req, res, next) => {
   const model = selectModel(req.params.table, next);
-  console.log(req.body, 'body');
-  console.log(req.files, "files",req.file,'file');
+  // console.log(req.body, 'body');
+  const value = { ...req.body };
+  const files = fileHandler(value, req);
+  console.log(req.files, "files", req.file, "file");
   if (model) {
     const data = await model.findOneAndUpdate(
       { _id: req.query.id },
-      { ...req.body }, 
+      { ...files },
       { runValidators: true }
     );
-  
+    
+
     if (!data)
       return next(
         new AppError("something went wrong unable to update the data")
