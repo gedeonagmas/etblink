@@ -171,11 +171,15 @@ export const _read = asyncCatch(async (req, res, next) => {
 //update
 export const _update = asyncCatch(async (req, res, next) => {
   const model = selectModel(req.params.table, next);
-  console.log(JSON.parse(req.body.socialMedias), 'body');
+  console.log(req.body, "body");
   const value = { ...req.body };
   const files = fileHandler(value, req);
-  value.socialMedias?value.socialMedias = JSON.parse(value.socialMedias):null;
-  value.workingDays? value.workingDays = JSON.parse(value.workingDays):null;
+  value.socialMedias
+    ? (value.socialMedias = JSON.parse(value.socialMedias))
+    : null;
+  value.workingDays
+    ? (value.workingDays = JSON.parse(value.workingDays))
+    : null;
   // console.log(req.files, "files", req.file, "file");
   if (model) {
     const data = await model.findOneAndUpdate(
@@ -183,7 +187,6 @@ export const _update = asyncCatch(async (req, res, next) => {
       { ...files },
       { runValidators: true }
     );
-    
 
     if (!data)
       return next(

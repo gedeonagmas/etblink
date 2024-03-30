@@ -17,7 +17,7 @@ const schema = new mongoose.Schema({
   type: {
     type: String,
     enum: ["local", "global"],
-    default: "Local",
+    default: "local",
     validate: valid.required("Type"),
   },
 

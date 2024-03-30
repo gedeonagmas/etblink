@@ -150,20 +150,20 @@ const Profile = () => {
   useEffect(() => {
     if (context?.user?.user) {
       const data = context?.user?.user;
-      setTitle(data.title);
-      setType(data.type);
-      setName(data.name);
-      setPhone(data.phone);
-      setVideo(data.video);
-      setWebsite(data.website);
-      setDescription(data.description);
-      setServices(data.services);
-      setFeatures(data.features);
-      setLogo(data.logo);
-      setBanner(data.banner);
-      setGalleries(data.galleries);
-      setSocialMedias(data.socialMedias);
-      setWorkingDays(data.workingDays);
+      setTitle(data?.title ? data.title : title);
+      setType(data?.type ? data.type : type);
+      setName(data?.name ? data.name : name);
+      setPhone(data?.phone ? data.phone : phone);
+      setVideo(data?.video ? data.video : video);
+      setWebsite(data?.website ? data.website : website);
+      setDescription(data?.description ? data.description : description);
+      setServices(data?.services ? data.services : services);
+      setFeatures(data?.features ? data.features : features);
+      setLogo(data?.logo ? data?.logo : logo);
+      setBanner(data?.banner ? data.banner : banner);
+      setGalleries(data?.galleries ? data?.galleries : "");
+      setSocialMedias(data?.socialMedias ? data.socialMedias : socialMedias);
+      setWorkingDays(data?.workingDays ? data.workingDays : workingDays);
     }
   }, [context]);
 
@@ -524,7 +524,7 @@ const Profile = () => {
               onChange={(e) =>
                 setSocialMedias({ ...socialMedias, facebook: e.target.value })
               }
-              value={socialMedias.facebook}
+              value={socialMedias?.facebook}
               type="text"
               className="w-full h-7 focus:outline-none bg-dark border-0 focus:ring-0"
               placeholder="skylight.facebook.com"
@@ -554,7 +554,7 @@ const Profile = () => {
               onChange={(e) =>
                 setSocialMedias({ ...socialMedias, instagram: e.target.value })
               }
-              value={socialMedias.instagram}
+              value={socialMedias?.instagram}
               type="text"
               className="w-full h-7 focus:outline-none bg-dark border-0 focus:ring-0"
               placeholder="skylight.facebook.com"
@@ -586,7 +586,7 @@ const Profile = () => {
               onChange={(e) =>
                 setSocialMedias({ ...socialMedias, twitter: e.target.value })
               }
-              value={socialMedias.twitter}
+              value={socialMedias?.twitter}
               type="text"
               className="w-full h-7 focus:outline-none bg-dark border-0 focus:ring-0"
               placeholder="skylight.facebook.com"
@@ -623,7 +623,7 @@ const Profile = () => {
               onChange={(e) =>
                 setSocialMedias({ ...socialMedias, linkedin: e.target.value })
               }
-              value={socialMedias.linkedin}
+              value={socialMedias?.linkedin}
               type="text"
               className="w-full h-7 focus:outline-none bg-dark border-0 focus:ring-0"
               placeholder="skylight.facebook.com"
