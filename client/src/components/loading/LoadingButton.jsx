@@ -10,7 +10,7 @@ const LoadingButton = (props) => {
         <button
           disabled
           type="button"
-          class={` ${props.width} ${props.color} text-white py-3 flex items-center justify-center rounded-md  focus:ring-0 focus:outline-none focus:ring-0 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 inline-flex items-center`}
+          class={` ${props.width} ${props.color} text-white justify-center focus:outline-none focus:ring-0 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 inline-flex items-center`}
         >
           <svg
             aria-hidden="true"
@@ -36,7 +36,7 @@ const LoadingButton = (props) => {
         <button
           onClick={() => props.onClick()}
           type="submit"
-          class={` ${props.width} ${props.color} text-white py-3 text-center flex items-center justify-center rounded-md focus:ring-0 focus:outline-none focus:ring-0 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 inline-flex items-center`}
+          class={` ${props.width} ${props.color} text-white justify-center focus:outline-none focus:ring-0 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 inline-flex items-center`}
         >
           {props.title}
         </button>

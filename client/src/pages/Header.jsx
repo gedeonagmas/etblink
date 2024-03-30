@@ -73,8 +73,396 @@ const Header = () => {
         setPending={setPending}
         redirectTo="/"
       />
-      <div className="w-full flex flex-col lg:flex-row ">
-        {/* <div className="relative pl-main bg-main-black w-full lg:w-[78%]">
+      <div className="flex lg:hidden fixed top-0 left-0 z-50 flex-col items-center w-full h-auto py-10 ">
+        <div className="flex bg-white bg-dark -mt-12 justify-between items-center px-2 h-full w-full">
+          <img
+            src="./logo.png"
+            alt=""
+            className="w-[80px] h-[65px]border-2 bg-white dark:bg-gray-500 rounded-sm"
+          />
+          {context.user ? (
+            <div className="flex items-center gap-3">
+              <p className="px-2 py-1 text-white rounded-xl bg-main">
+                {context.user.email.split("@")[0]}
+              </p>
+              <Link
+                to={`/dashboard/${context.user.role}`}
+                className="cursor-pointer"
+              >
+                Dashboard
+              </Link>
+            </div>
+          ) : (
+            <div className="flex relative gap-4">
+              <div className="">
+                <p
+                  onMouseOver={() => setLoginForm(true)}
+                  className={`cursor-pointer ${
+                    loginForm ? "bg-gray-900 text-white" : ""
+                  } px-3 h-[70px] absolute -top-5 hover:text-white pt-5 -left-[70px] flex `}
+                  // onClick={() => setLoginForm(false)}
+                >
+                  Login
+                  <svg
+                    className="w-2.5 h-2.5 mt-1.5 ms-3"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 10 6"
+                  >
+                    <path
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="m1 1 4 4 4-4"
+                    />
+                  </svg>
+                </p>
+                {loginForm && (
+                  <div
+                    onMouseLeave={() => setLoginForm(false)}
+                    className="w-auto rounded-sm rounded-l text-sm rounded-tl-none p-2 flex gap-1 flex-col bg-gray-900 bg-dark text-dark absolute top-[50px] -left-[70px] z-30 text-black"
+                  >
+                    <input
+                      type="email"
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="w-52  px-2 py-1 bg-white bg-dark focus:outline-none border-0 border-dark focus:ring-0"
+                      placeholder="Email"
+                    />
+                    <input
+                      onChange={(e) => setPassword(e.target.value)}
+                      type="password"
+                      className="w-52 px-2 py-1 focus:outline-none focus:ring-0"
+                      placeholder="password"
+                    />
+                    <div className="flex py-1 items-center justify-between w-full">
+                      <p className="text-xs cursor-pointer hover:text-gray-100 text-white">
+                        Forget password?
+                      </p>
+                      <LoadingButton
+                        pending={pending}
+                        onClick={loginHandler}
+                        title="Login"
+                        color="bg-main"
+                        width="w-full rounded-sm px-2 py-[2px]"
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
+              <p className="text-gray-600">|</p>
+              <div className="relative">
+                <Link to="/signup" className="cursor-pointer">
+                  Register
+                </Link>
+              </div>
+            </div>
+          )}
+
+          <svg
+            onClick={() => {
+              const id = document.getElementById("header-mobile");
+              id?.classList?.remove("hidden");
+              id?.classList?.add("flex");
+            }}
+            class="w-10 h-10 text-gray-800 dark:text-white"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-width="2"
+              d="M5 7h14M5 12h14M5 17h10"
+            />
+          </svg>
+        </div>
+        <div
+          id="header-mobile"
+          className="h-[100vh] hidden w-full bg-white bg-dark fixed top-0 left-0 z-50 items-center justify-center flex-col"
+        >
+          <svg
+            onClick={() => {
+              const id = document.getElementById("header-mobile");
+              id?.classList?.add("hidden");
+              id?.classList?.remove("flex");
+            }}
+            class="w-6 h-6 text-gray-800 dark:text-white absolute top-4 right-4 cursor-pointer"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18 17.94 6M18 18 6.06 6"
+            />
+          </svg>
+
+          <ul className="py-5 h-[100vh] overflow-y-scroll w-full">
+            <li className="mt-10" role="presentation">
+              <Link
+                to="/"
+                className="inline-block hover:text-[rgb(252,45,45)]  w-full p-5 font-medium rtl:text-right text-gray-500 border border-b-0 border-gray-300  focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 gap-3"
+              >
+                Home
+              </Link>
+            </li>
+            <li className="" role="presentation">
+              <Link
+                to="/local"
+                className="inline-block hover:text-[rgb(252,45,45)]  w-full p-5 font-medium rtl:text-right text-gray-500 border border-b-0 border-gray-300  focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 gap-3"
+              >
+                Local
+              </Link>
+            </li>
+            <li className="" role="presentation">
+              <Link
+                to="/global"
+                className="inline-block hover:text-[rgb(252,45,45)]  w-full p-5 font-medium rtl:text-right text-gray-500 border border-b-0 border-gray-300  focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 gap-3"
+              >
+                Global
+              </Link>
+            </li>
+            <li className="" role="presentation">
+              <Link
+                to="/news"
+                className="inline-block hover:text-[rgb(252,45,45)]  w-full p-5 font-medium rtl:text-right text-gray-500 border border-b-0 border-gray-300  focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 gap-3"
+              >
+                News
+              </Link>
+            </li>
+            <li className="" role="presentation">
+              <Link
+                to="/job"
+                className="inline-block hover:text-[rgb(252,45,45)]  w-full p-5 font-medium rtl:text-right text-gray-500 border border-b-0 border-gray-300  focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 gap-3"
+              >
+                Job
+              </Link>
+            </li>
+            <div id="accordion-collapse" data-accordion="collapse">
+              <h2 id="accordion-collapse-heading-1">
+                <button
+                  type="button"
+                  class="flex items-center justify-between w-full p-5 font-medium rtl:text-right text-gray-500 border border-b-0 border-gray-300  focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 gap-3"
+                  data-accordion-target="#accordion-collapse-body-1"
+                  aria-expanded="false"
+                  aria-controls="accordion-collapse-body-1"
+                >
+                  <span>Languages</span>
+                  <svg
+                    data-accordion-icon
+                    class="w-3 h-3 rotate-180 shrink-0"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 10 6"
+                  >
+                    <path
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M9 5 5 1 1 5"
+                    />
+                  </svg>
+                </button>
+              </h2>
+              <div
+                id="accordion-collapse-body-1"
+                class="hidden"
+                aria-labelledby="accordion-collapse-heading-1"
+              >
+                <div class="p-5 border border-b-0 border-gray-300 dark:border-gray-700">
+                  <li className="me-2 ml-2" role="presentation">
+                    <Link
+                      to="/news"
+                      className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
+                    >
+                      English
+                    </Link>
+                  </li>{" "}
+                  <li className="me-2 ml-2" role="presentation">
+                    <Link
+                      to="/news"
+                      className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
+                    >
+                      Amharic
+                    </Link>
+                  </li>{" "}
+                  <li className="me-2 ml-2" role="presentation">
+                    <Link
+                      to="/news"
+                      className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
+                    >
+                      Affan oromo
+                    </Link>
+                  </li>{" "}
+                  <li className="me-2 ml-2" role="presentation">
+                    <Link
+                      to="/news"
+                      className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
+                    >
+                      Tigirigna
+                    </Link>
+                  </li>{" "}
+                </div>
+              </div>
+              <h2 id="accordion-collapse-heading-2">
+                <button
+                  type="button"
+                  class="flex items-center justify-between w-full p-5 font-medium rtl:text-right text-gray-500 border border-b-0 border-gray-300 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 gap-3"
+                  data-accordion-target="#accordion-collapse-body-2"
+                  aria-expanded="false"
+                  aria-controls="accordion-collapse-body-2"
+                >
+                  <span>Resources</span>
+                  <svg
+                    data-accordion-icon
+                    class="w-3 h-3 rotate-180 shrink-0"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 10 6"
+                  >
+                    <path
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M9 5 5 1 1 5"
+                    />
+                  </svg>
+                </button>
+              </h2>
+              <div
+                id="accordion-collapse-body-2"
+                class="hidden"
+                aria-labelledby="accordion-collapse-heading-2"
+              >
+                <div class="p-5 border border-b-0 border-gray-300 dark:border-gray-700">
+                  <li className="me-2 ml-2" role="presentation">
+                    <Link
+                      to="/news"
+                      className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
+                    >
+                      Investment opportunities
+                    </Link>
+                  </li>{" "}
+                  <li className="me-2 ml-2" role="presentation">
+                    <Link
+                      to="/news"
+                      className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
+                    >
+                      Government office
+                    </Link>
+                  </li>{" "}
+                  <li className="me-2 ml-2" role="presentation">
+                    <Link
+                      to="/news"
+                      className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
+                    >
+                      License and related
+                    </Link>
+                  </li>{" "}
+                  <li className="me-2 ml-2" role="presentation">
+                    <Link
+                      to="/news"
+                      className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
+                    >
+                      Legal advisers
+                    </Link>
+                  </li>{" "}
+                </div>
+              </div>
+              <h2 id="accordion-collapse-heading-3">
+                <button
+                  type="button"
+                  class="flex items-center justify-between w-full p-5 font-medium rtl:text-right text-gray-500 border border-gray-300 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 gap-3"
+                  data-accordion-target="#accordion-collapse-body-3"
+                  aria-expanded="false"
+                  aria-controls="accordion-collapse-body-3"
+                >
+                  <span>Immigration Information</span>
+                  <svg
+                    data-accordion-icon
+                    class="w-3 h-3 rotate-180 shrink-0"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 10 6"
+                  >
+                    <path
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M9 5 5 1 1 5"
+                    />
+                  </svg>
+                </button>
+              </h2>
+              <div
+                id="accordion-collapse-body-3"
+                class="hidden"
+                aria-labelledby="accordion-collapse-heading-3"
+              >
+                <div class="p-5 border border-t-0 border-gray-300 dark:border-gray-700">
+                  <li className="me-2 ml-2" role="presentation">
+                    <Link
+                      to="/news"
+                      className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
+                    >
+                      New registration
+                    </Link>
+                  </li>{" "}
+                  <li className="me-2 ml-2" role="presentation">
+                    <Link
+                      to="/news"
+                      className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
+                    >
+                      Renew
+                    </Link>
+                  </li>
+                  <li className="me-2 ml-2" role="presentation">
+                    <Link
+                      to="/news"
+                      className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
+                    >
+                      Upgrade
+                    </Link>
+                  </li>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center hover:text-[rgb(252,45,45)]  w-full p-5 font-medium rtl:text-right text-gray-500 border border-b-0 border-gray-300  focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 gap-3">
+              <DarkThemeToggle /> <p>Light mode</p>
+            </div>
+            <li className="" role="presentation">
+              <p
+                onClick={logoutHandler}
+                className="inline-block hover:text-[rgb(252,45,45)]  w-full p-5 font-medium rtl:text-right text-gray-500 border border-b-0 border-gray-300  focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 gap-3"
+              >
+                Logout
+              </p>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div className="hidden lg:block">
+        <div className="w-full flex flex-col lg:flex-row ">
+          {/* <div className="relative pl-main bg-main-black w-full lg:w-[78%]">
           <Slide
             autoplay={false}
             infinite={true}
@@ -113,9 +501,9 @@ const Header = () => {
           </Slide>{" "}
         </div> */}
 
-        {/* advert action button and social media */}
-        {/* <div className="w-full px-main md:px-4  bg-main-black text-white dark:text-gray-200 p-2 h-auto  flex gap-2 "> */}
-        {/* <div className="flex w-full py-3 lg:py-0 pl-4 pr-main bg-main-black justify-center flex-col gap-3 items-center">
+          {/* advert action button and social media */}
+          {/* <div className="w-full px-main md:px-4  bg-main-black text-white dark:text-gray-200 p-2 h-auto  flex gap-2 "> */}
+          {/* <div className="flex w-full py-3 lg:py-0 pl-4 pr-main bg-main-black justify-center flex-col gap-3 items-center">
           <p
             href="#"
             className="inline-flex hover:bg-yellow-400 cursor-pointer  text-white rounded-full gap-2 px-4 py-[5px] border-2 border-white mt-1 text-[14px] font-bold items-center"
@@ -218,487 +606,202 @@ const Header = () => {
             </a>
           </div>
         </div> */}
-        {/* </div> */}
-      </div>
-
-      <div className="w-full text-sm text-white py-[5px] lg:px-[18%] bg-[rgb(5,4,4)] flex gap-4 justify-between items-center">
-        {/* <img src="etblogo.jpg" alt="" className="rounded-sm h-[30px]" /> */}
-        <div className="flex w-full items-center gap-2 justify-end">
-          <div className="me-2" role="presentation">
-            <button
-              id="dropdownDelayButton"
-              data-dropdown-toggle="dropdownDelay"
-              data-dropdown-delay="500"
-              data-dropdown-trigger="hover"
-              className="focus:ring-0 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center "
-              type="button"
-            >
-              Languages{" "}
-              <svg
-                className="w-2.5 h-2.5 ms-3"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 10 6"
-              >
-                <path
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="m1 1 4 4 4-4"
-                />
-              </svg>
-            </button>
-
-            <div
-              id="dropdownDelay"
-              className="z-50 -mt-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-auto dark:bg-gray-700"
-            >
-              <ul
-                className="py-2 text-sm text-start text-gray-700 dark:text-gray-200"
-                aria-labelledby="dropdownDelayButton"
-              >
-                <li>
-                  <a
-                    href="#"
-                    className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                  >
-                    English
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                  >
-                    Amharic
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                  >
-                    Affan oromo
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                  >
-                    Tigirigna
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-          {context.user ? (
-            <div className="flex items-center gap-3">
-              <p className="px-2 py-1 rounded-xl bg-main">
-                {context.user.email.split("@")[0]}
-              </p>
-              <Link
-                to={`/dashboard/${context.user.role}`}
-                className="cursor-pointer"
-              >
-                Dashboard
-              </Link>
-              <p onClick={logoutHandler} className="cursor-pointer">
-                Logout
-              </p>
-            </div>
-          ) : (
-            <div className="flex gap-2">
-              <div className="relative">
-                <p
-                  onMouseOver={() => setLoginForm(true)}
-                  className="cursor-pointer"
-                  onClick={() => setLoginForm(false)}
-                >
-                  Login
-                </p>
-                {loginForm && (
-                  <div className="w-auto text-sm flex flex-col bg-white bg-dark text-dark absolute top-7 -left-40 z-30 text-black">
-                    <input
-                      type="email"
-                      onChange={(e) => setEmail(e.target.value)}
-                      className="w-52  px-2 py-3 focus:outline-none focus:ring-0"
-                      placeholder="Email"
-                    />
-                    <input
-                      onChange={(e) => setPassword(e.target.value)}
-                      type="password"
-                      className="w-52 px-2 py-3  focus:outline-none focus:ring-0"
-                      placeholder="password"
-                    />
-                    <LoadingButton
-                      pending={pending}
-                      onClick={loginHandler}
-                      title="Login"
-                      color="bg-red-500"
-                      width="w-full py-1"
-                    />
-                  </div>
-                )}
-              </div>
-              <p className="text-gray-600">|</p>
-              <div className="relative">
-                <p
-                  onMouseOver={() => setRegisterForm(true)}
-                  className="cursor-pointer"
-                >
-                  Register
-                </p>
-                {registerForm && (
-                  <div
-                    onMouseLeave={() => setRegisterForm(false)}
-                    className="w-auto text-center text-sm flex flex-col bg-white bg-dark text-dark absolute top-7 -left-10 z-30 text-black"
-                  >
-                    <p className="text-sm font-bold border-b cursor-pointer p-1 w-32">
-                      Register as
-                    </p>
-                    <Link
-                      to="/signup"
-                      state={{ type: "visitor" }}
-                      className="text-sm flex items-center justify-between gap-1 border-b cursor-pointer p-1 hover:bg-red-500 hover:text-white w-32"
-                    >
-                      Visitor{" "}
-                      <svg
-                        class="w-6 h-6 text-gray-800 dark:text-white"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          stroke="currentColor"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M19 12H5m14 0-4 4m4-4-4-4"
-                        />
-                      </svg>
-                    </Link>
-                    <Link
-                      to="/signup"
-                      state={{ type: "company" }}
-                      className="text-sm flex items-center justify-between gap-1 border-b cursor-pointer p-1 hover:bg-red-500 hover:text-white w-32"
-                    >
-                      Company{" "}
-                      <svg
-                        class="w-6 h-6 text-gray-800 dark:text-white"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          stroke="currentColor"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M19 12H5m14 0-4 4m4-4-4-4"
-                        />
-                      </svg>
-                    </Link>
-                    <Link
-                      to="/signup"
-                      state={{ type: "sales" }}
-                      className="text-sm flex items-center justify-between gap-1 border-b cursor-pointer p-1 hover:bg-red-500 hover:text-white w-32"
-                    >
-                      Sales{" "}
-                      <svg
-                        class="w-6 h-6 text-gray-800 dark:text-white"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          stroke="currentColor"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M19 12H5m14 0-4 4m4-4-4-4"
-                        />
-                      </svg>
-                    </Link>
-
-                    {/* <button className="w-full py-[6px] font-bold hover:bg-red-500 bg-main text-white">
-                Register
-              </button> */}
-                  </div>
-                )}{" "}
-              </div>
-            </div>
-          )}
-          <div className="top-2 right-2 z-50">
-            <DarkThemeToggle />
-          </div>
+          {/* </div> */}
         </div>
-      </div>
 
-      {/* tabs */}
-      <div className="border-b relative shadow-2xl  py-2 md:py-1 border-gray-200 dark:border-gray-700">
-        <ul
-          className="flex mx-20d  relative gap-1 flex-wrap items-center justify-center -mb-px text-sm font-medium text-center"
-          id="default-tab"
-          data-tabs-toggle="#default-tab-content"
-          role="tablist"
-        >
-          <div className="hidden xl:block">
-            <div
-              className={`${
-                currencies ? "block" : "hidden"
-              } h-auto absolute shadow-2xl shadow-gray-500 z-20 right-[8%] -top-[20px] w-[65px]`}
-            >
-              <p className="absolute z-20  top-4 left-2 text-white">Today</p>
-              <svg
-                id="trapezoid"
-                viewbox="0 0 100 100"
-                preserveAspectRatio="none"
-                width="100%"
-                className="absoluted -mt-2"
+        <div className="w-full text-sm text-white py-[5px] lg:px-[18%] bg-[rgb(5,4,4)] flex gap-4 justify-between items-center">
+          {/* <img src="etblogo.jpg" alt="" className="rounded-sm h-[30px]" /> */}
+          <div className="flex w-full items-center gap-2 justify-end">
+            <div className="me-2" role="presentation">
+              <button
+                id="dropdownDelayButton"
+                data-dropdown-toggle="dropdownDelay"
+                data-dropdown-delay="500"
+                data-dropdown-trigger="hover"
+                className="focus:ring-0 focus:outline-none mr-12 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center "
+                type="button"
               >
-                <path
-                  d="M0,5 L110,30 L660,65 L0,56z"
-                  fill="rgb(252,45,45)"
-                ></path>
-              </svg>
-              <div className="bg-gray-200 bg-dark text-[13px] shadow-2xl -mt-[94px] w-full pb-2">
-                <div className="flex py-1 relative border-b border-gray-400 font-semibold w-full px-1 flex-col border-dark items-center justify-center">
-                  <div className="flex  w-full gap-1 items-center justify-center">
+                Languages{" "}
+                <svg
+                  className="w-2.5 h-2.5 ms-3"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 10 6"
+                >
+                  <path
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="m1 1 4 4 4-4"
+                  />
+                </svg>
+              </button>
+
+              <div
+                id="dropdownDelay"
+                className="z-50 -mt-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-auto dark:bg-gray-700"
+              >
+                <ul
+                  className="py-2 text-sm text-start text-gray-700 dark:text-gray-200"
+                  aria-labelledby="dropdownDelayButton"
+                >
+                  <li>
+                    <a
+                      href="#"
+                      className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                    >
+                      English
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="#"
+                      className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                    >
+                      Amharic
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="#"
+                      className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                    >
+                      Affan oromo
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="#"
+                      className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                    >
+                      Tigirigna
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            {context.user ? (
+              <div className="flex items-center gap-3">
+                <p className="px-2 py-1 rounded-xl bg-main">
+                  {context.user.email.split("@")[0]}
+                </p>
+                <Link
+                  to={`/dashboard/${context.user.role}`}
+                  className="cursor-pointer"
+                >
+                  Dashboard
+                </Link>
+                <p onClick={logoutHandler} className="cursor-pointer">
+                  Logout
+                </p>
+              </div>
+            ) : (
+              <div className="flex gap-4">
+                <div className="relative">
+                  <p
+                    onMouseOver={() => setLoginForm(true)}
+                    className={`cursor-pointer ${
+                      loginForm ? "bg-gray-900" : ""
+                    } px-3 h-12 absolute -top-3 pt-3 -left-[70px] flex `}
+                    onClick={() => setLoginForm(false)}
+                  >
+                    Login
                     <svg
-                      className="w-4 h-4"
+                      className="w-2.5 h-2.5 mt-1.5 ms-3"
                       aria-hidden="true"
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
-                      viewBox="0 0 24 24"
+                      viewBox="0 0 10 6"
                     >
                       <path
                         stroke="currentColor"
                         strokeLinecap="round"
                         strokeLinejoin="round"
                         strokeWidth="2"
-                        d="M8 17.3a5 5 0 0 0 2.6 1.7c2.2.6 4.5-.5 5-2.3.4-2-1.3-4-3.6-4.5-2.3-.6-4-2.7-3.5-4.5.5-1.9 2.7-3 5-2.3 1 .2 1.8.8 2.5 1.6m-3.9 12v2m0-18v2.2"
+                        d="m1 1 4 4 4-4"
                       />
                     </svg>
-                  </div>
-                  <p className="font-normal text-[13px]">52.64</p>
-                </div>
-                <div className="flex py-1 font-semibold w-full flex-col border-b border-gray-400 border-dark items-center justify-center">
-                  <div className="flex w-full items-center justify-center">
-                    <svg
-                      class="w-4 h-4 "
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
+                  </p>
+                  {loginForm && (
+                    <div
+                      onMouseLeave={() => setLoginForm(false)}
+                      className="w-auto rounded-sm rounded-tr-none text-sm p-2 flex gap-1 flex-col bg-gray-900 bg-dark text-dark absolute top-[34px] -left-[211px] z-30 text-black"
                     >
-                      <path
-                        stroke="currentColor"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M6 10h9.2M6 14h9.2M18 5a6 6 0 0 0-3.4-1C11 4 7.8 7.6 7.8 12s3 8 6.8 8a6 6 0 0 0 3.4-1"
+                      <input
+                        type="email"
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="w-52  px-2 py-1 bg-white bg-dark focus:outline-none border-0 border-dark focus:ring-0"
+                        placeholder="Email"
                       />
-                    </svg>
-                  </div>
-                  <p className="font-normal">56.75</p>
-                </div>
-                <div className="flex text-sm font-semibold w-full py-1 flex-col border-b border-gray-400 border-dark items-center justify-center">
-                  <div className="flex w-full items-center justify-center">
-                    <svg
-                      class="w-4 h-4 "
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        stroke="currentColor"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M6 10h9.2M6 14h9.2M18 5a6 6 0 0 0-3.4-1C11 4 7.8 7.6 7.8 12s3 8 6.8 8a6 6 0 0 0 3.4-1"
+                      <input
+                        onChange={(e) => setPassword(e.target.value)}
+                        type="password"
+                        className="w-52 px-2 py-1 focus:outline-none focus:ring-0"
+                        placeholder="password"
                       />
-                    </svg>
-                  </div>
-                  <p className="font-normal">62.50</p>
+                      <div className="flex items-center py-1 justify-between w-full">
+                        <p className="text-xs cursor-pointer hover:text-gray-100 text-white">
+                          Forget password?
+                        </p>
+                        <LoadingButton
+                          pending={pending}
+                          onClick={loginHandler}
+                          title="Login"
+                          color="bg-main"
+                          width="w-full lg:rounded-sm lg:px-2 lg:py-[2px]"
+                        />
+                      </div>
+                    </div>
+                  )}
                 </div>
-                <div className="flex text-sm font-semibold w-full py-1 flex-col border-b border-gray-400 border-dark items-center justify-center">
-                  <div className="flex w-full items-center justify-center">
-                    <svg
-                      class="w-4 h-4 "
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        stroke="currentColor"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M6 10h9.2M6 14h9.2M18 5a6 6 0 0 0-3.4-1C11 4 7.8 7.6 7.8 12s3 8 6.8 8a6 6 0 0 0 3.4-1"
-                      />
-                    </svg>
-                  </div>
-                  <p className="font-normal">72.50</p>
+                <p className="text-gray-600">|</p>
+                <div className="relative">
+                  <Link to="/signup" className="cursor-pointer">
+                    Register
+                  </Link>
                 </div>
-                <div className="flex text-sm font-semibold w-full py-1 flex-col items-center justify-center">
-                  <div className="flex w-full items-center justify-center">
-                    <svg
-                      class="w-4 h-4 "
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        stroke="currentColor"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M6 10h9.2M6 14h9.2M18 5a6 6 0 0 0-3.4-1C11 4 7.8 7.6 7.8 12s3 8 6.8 8a6 6 0 0 0 3.4-1"
-                      />
-                    </svg>
-                  </div>
-                  <p className="font-normal">52.32</p>
-                </div>
-                <div className="absolute shadow-2xl bottom-0 w-full h-1 rounded-sm bg-[rgb(252,45,45)] "></div>
               </div>
+            )}
+            <div className="top-2 right-2 z-50">
+              <DarkThemeToggle />
             </div>
           </div>
+        </div>
 
-          <li className="me-2">
-            <div className="flex relative items-center justify-center gap-6">
-              {/*  */}
-              <div className="flex absolute z-20 shadow-sm -top-[75px] -left-7 lg:-left-20 h-auto w-[120px] gap-3 items-center justify-center">
-                <img
-                  src="./logo.png"
-                  alt=""
-                  className="w-[80px] h-[65px] lg:w-[200px] lg:h-[112px] border-2 lg:border-0 bg-white dark:bg-gray-500 rounded-sm"
-                />
-              </div>
-            </div>
-          </li>
-          <li className="me-2 ml-14" role="presentation">
-            <Link
-              to="/"
-              className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
-            >
-              Home
-            </Link>
-          </li>
-          <li className="me-2 ml-2" role="presentation">
-            <Link
-              to="/local"
-              className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
-            >
-              Local
-            </Link>
-          </li>
-          <li className="me-2 ml-2" role="presentation">
-            <Link
-              to="/global"
-              className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
-            >
-              Global
-            </Link>
-          </li>
-          <li className="me-2 ml-2" role="presentation">
-            <Link
-              to="/news"
-              className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
-            >
-              News
-            </Link>
-          </li>
-          <li className="me-2 ml-2" role="presentation">
-            <Link
-              to="/job"
-              className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
-            >
-              Job
-            </Link>
-          </li>
-          <li className="me-2 relative" role="presentation">
-            <button
-              onClick={() => {
-                const ids = document.getElementById("resource-dropdown");
-                ids?.classList?.value.includes("hidden")
-                  ? ids?.classList.remove("hidden")
-                  : ids?.classList?.add("hidden");
-              }}
-              className="focus:ring-0 focus:outline-none font-medium hover:text-[rgb(252,45,45)] rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center "
-              type="button"
-            >
-              Resources{" "}
-              <svg
-                className="w-2.5 h-2.5 ms-3"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 10 6"
+        {/* tabs */}
+        <div className="border-b relative shadow-2xl  py-2 md:py-1 border-gray-200 dark:border-gray-700">
+          <ul
+            className="flex relative gap-4 flex-wrap items-center justify-center -mb-px text-sm font-medium text-center"
+            id="default-tab"
+            data-tabs-toggle="#default-tab-content"
+            role="tablist"
+          >
+            <div className="hidden xl:block">
+              <div
+                className={`${
+                  currencies ? "block" : "hidden"
+                } h-auto absolute shadow-2xl shadow-gray-500 z-20 right-[8%] -top-[20px] w-[65px]`}
               >
-                <path
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="m1 1 4 4 4-4"
-                />
-              </svg>
-            </button>
-
-            <div
-              id="resource-dropdown"
-              onMouseOver={() => {
-                const ids = document.getElementById("resource-dropdown");
-                ids?.classList?.remove("hidden");
-              }}
-              onMouseLeave={() => {
-                const ids = document.getElementById("resource-dropdown");
-                ids?.classList?.add("hidden");
-              }}
-              className="z-50 absolute hidden h-auto p-2 divide-y divide-gray-100 rounded-lg shadow w-auto "
-            >
-              <div className=" bg-white divide-y divide-gray-100 rounded-lg shadow w-[210px] dark:bg-gray-700">
-                <ul
-                  className="py-2 text-start w-full h-auto text-sm text-gray-700 dark:text-gray-200"
-                  // aria-labelledby="dropdownDelayButton"
+                <p className="absolute z-20  top-4 left-2 text-white">Today</p>
+                <svg
+                  id="trapezoid"
+                  viewbox="0 0 100 100"
+                  preserveAspectRatio="none"
+                  width="100%"
+                  className="absoluted -mt-2"
                 >
-                  <li className="w-full ">
-                    <Link
-                      to="/investment"
-                      className="block w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                    >
-                      Investment opportunities
-                    </Link>
-                  </li>
-                  <li
-                    onMouseOver={() => {
-                      const ids = document.getElementById("license-dropdown");
-                      ids?.classList?.remove("hidden");
-                    }}
-                    className="w-full"
-                  >
-                    <a
-                      href="#"
-                      className=" flex gap-2 items-center justify-start w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                    >
-                      License and related{" "}
+                  <path
+                    d="M0,5 L110,30 L660,65 L0,56z"
+                    fill="rgb(252,45,45)"
+                  ></path>
+                </svg>
+                <div className="bg-gray-200 bg-dark text-[13px] shadow-2xl -mt-[94px] w-full pb-2">
+                  <div className="flex py-1 relative border-b border-gray-400 font-semibold w-full px-1 flex-col border-dark items-center justify-center">
+                    <div className="flex  w-full gap-1 items-center justify-center">
                       <svg
-                        className="w-[24px] h-[24px] text-gray-800 dark:text-white"
+                        className="w-4 h-4"
                         aria-hidden="true"
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
@@ -709,80 +812,318 @@ const Header = () => {
                           strokeLinecap="round"
                           strokeLinejoin="round"
                           strokeWidth="2"
-                          d="m10 16 4-4-4-4"
+                          d="M8 17.3a5 5 0 0 0 2.6 1.7c2.2.6 4.5-.5 5-2.3.4-2-1.3-4-3.6-4.5-2.3-.6-4-2.7-3.5-4.5.5-1.9 2.7-3 5-2.3 1 .2 1.8.8 2.5 1.6m-3.9 12v2m0-18v2.2"
                         />
                       </svg>
-                    </a>
-                  </li>
-                  <li className="w-full">
-                    <Link
-                      to="/legal"
-                      className="block w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                    >
-                      Legal advisers
-                    </Link>
-                  </li>
-                  <li className="w-full">
-                    <Link
-                      to="/immigration"
-                      className="block w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                    >
-                      Immigration Information
-                    </Link>
-                  </li>
-                  <li className="w-full">
-                    <Link
-                      to="/government"
-                      className="block w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                    >
-                      Government office
-                    </Link>
-                  </li>
-                </ul>
+                    </div>
+                    <p className="font-normal text-[13px]">52.64</p>
+                  </div>
+                  <div className="flex py-1 font-semibold w-full flex-col border-b border-gray-400 border-dark items-center justify-center">
+                    <div className="flex w-full items-center justify-center">
+                      <svg
+                        class="w-4 h-4 "
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M6 10h9.2M6 14h9.2M18 5a6 6 0 0 0-3.4-1C11 4 7.8 7.6 7.8 12s3 8 6.8 8a6 6 0 0 0 3.4-1"
+                        />
+                      </svg>
+                    </div>
+                    <p className="font-normal">56.75</p>
+                  </div>
+                  <div className="flex text-sm font-semibold w-full py-1 flex-col border-b border-gray-400 border-dark items-center justify-center">
+                    <div className="flex w-full items-center justify-center">
+                      <svg
+                        class="w-4 h-4 "
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M6 10h9.2M6 14h9.2M18 5a6 6 0 0 0-3.4-1C11 4 7.8 7.6 7.8 12s3 8 6.8 8a6 6 0 0 0 3.4-1"
+                        />
+                      </svg>
+                    </div>
+                    <p className="font-normal">62.50</p>
+                  </div>
+                  <div className="flex text-sm font-semibold w-full py-1 flex-col border-b border-gray-400 border-dark items-center justify-center">
+                    <div className="flex w-full items-center justify-center">
+                      <svg
+                        class="w-4 h-4 "
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M6 10h9.2M6 14h9.2M18 5a6 6 0 0 0-3.4-1C11 4 7.8 7.6 7.8 12s3 8 6.8 8a6 6 0 0 0 3.4-1"
+                        />
+                      </svg>
+                    </div>
+                    <p className="font-normal">72.50</p>
+                  </div>
+                  <div className="flex text-sm font-semibold w-full py-1 flex-col items-center justify-center">
+                    <div className="flex w-full items-center justify-center">
+                      <svg
+                        class="w-4 h-4 "
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M6 10h9.2M6 14h9.2M18 5a6 6 0 0 0-3.4-1C11 4 7.8 7.6 7.8 12s3 8 6.8 8a6 6 0 0 0 3.4-1"
+                        />
+                      </svg>
+                    </div>
+                    <p className="font-normal">52.32</p>
+                  </div>
+                  <div className="absolute shadow-2xl bottom-0 w-full h-1 rounded-sm bg-[rgb(252,45,45)] "></div>
+                </div>
               </div>
+            </div>
+
+            <li className="me-2">
+              <div className="flex items-center justify-center gap-6">
+                {/*  */}
+                <div className="flex absolute z-20 shadow-sm -top-[50px] left-[8%] h-auto w-[120px] gap-3 items-center justify-center">
+                  <img
+                    src="./logo.png"
+                    alt=""
+                    className="w-[200px] h-[112px] border-2 lg:border-0 bg-white dark:bg-gray-500 rounded-sm"
+                  />
+                </div>
+              </div>
+            </li>
+            <li className="me-2 ml-2" role="presentation">
+              <Link
+                to="/"
+                className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
+              >
+                Home
+              </Link>
+            </li>
+            <li className="me-2 ml-2" role="presentation">
+              <Link
+                to="/local"
+                className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
+              >
+                Local
+              </Link>
+            </li>
+            <li className="me-2 ml-2" role="presentation">
+              <Link
+                to="/global"
+                className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
+              >
+                Global
+              </Link>
+            </li>
+            <li className="me-2 ml-2" role="presentation">
+              <Link
+                to="/news"
+                className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
+              >
+                News
+              </Link>
+            </li>
+            <li className="me-2 ml-2" role="presentation">
+              <Link
+                to="/job"
+                className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
+              >
+                Job
+              </Link>
+            </li>
+            <li className="me-2 ml-2" role="presentation">
+              <Link
+                to="/job"
+                className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
+              >
+                Job
+              </Link>
+            </li>
+            <li className="me-2 ml-2" role="presentation">
+              <Link
+                to="/job"
+                className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
+              >
+                Job
+              </Link>
+            </li>
+
+            <li className="me-2 relative" role="presentation">
+              <button
+                onClick={() => {
+                  const ids = document.getElementById("resource-dropdown");
+                  ids?.classList?.value.includes("hidden")
+                    ? ids?.classList.remove("hidden")
+                    : ids?.classList?.add("hidden");
+                }}
+                className="focus:ring-0 focus:outline-none font-medium hover:text-[rgb(252,45,45)] rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center "
+                type="button"
+              >
+                Resources{" "}
+                <svg
+                  className="w-2.5 h-2.5 ms-3"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 10 6"
+                >
+                  <path
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="m1 1 4 4 4-4"
+                  />
+                </svg>
+              </button>
 
               <div
-                id="license-dropdown"
+                id="resource-dropdown"
+                onMouseOver={() => {
+                  const ids = document.getElementById("resource-dropdown");
+                  ids?.classList?.remove("hidden");
+                }}
                 onMouseLeave={() => {
-                  const ids = document.getElementById("license-dropdown");
+                  const ids = document.getElementById("resource-dropdown");
                   ids?.classList?.add("hidden");
                 }}
-                className="z-50 hidden px-4 border-none -mt-[150px] -ml-[180px] lg:ml-[200px]"
+                className="z-50 absolute hidden h-auto p-2 divide-y divide-gray-100 rounded-lg shadow w-auto "
               >
-                <div className=" bg-white  rounded-lg shadow w-40 dark:bg-gray-700">
-                  <ul className="py-2 text-start w-full h-auto text-sm text-gray-700 dark:text-gray-200">
+                <div className=" bg-white divide-y divide-gray-100 rounded-lg shadow w-[210px] dark:bg-gray-700">
+                  <ul
+                    className="py-2 text-start w-full h-auto text-sm text-gray-700 dark:text-gray-200"
+                    // aria-labelledby="dropdownDelayButton"
+                  >
                     <li className="w-full ">
                       <Link
-                        to="/license-register"
+                        to="/investment"
                         className="block w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                       >
-                        New registration
+                        Investment opportunities
                       </Link>
                     </li>
-                    <li className="w-full ">
+                    <li
+                      onMouseOver={() => {
+                        const ids = document.getElementById("license-dropdown");
+                        ids?.classList?.remove("hidden");
+                      }}
+                      className="w-full"
+                    >
+                      <a
+                        href="#"
+                        className=" flex gap-2 items-center justify-start w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                      >
+                        License and related{" "}
+                        <svg
+                          className="w-[24px] h-[24px] text-gray-800 dark:text-white"
+                          aria-hidden="true"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            stroke="currentColor"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="m10 16 4-4-4-4"
+                          />
+                        </svg>
+                      </a>
+                    </li>
+                    <li className="w-full">
                       <Link
-                        to="/license-renew"
+                        to="/legal"
                         className="block w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                       >
-                        Renew
+                        Legal advisers
                       </Link>
                     </li>
-                    <li className="w-full ">
+                    <li className="w-full">
                       <Link
-                        to="/upgrade"
+                        to="/immigration"
                         className="block w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                       >
-                        Upgrade
+                        Immigration Information
+                      </Link>
+                    </li>
+                    <li className="w-full">
+                      <Link
+                        to="/government"
+                        className="block w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                      >
+                        Government office
                       </Link>
                     </li>
                   </ul>
                 </div>
+
+                <div
+                  id="license-dropdown"
+                  onMouseLeave={() => {
+                    const ids = document.getElementById("license-dropdown");
+                    ids?.classList?.add("hidden");
+                  }}
+                  className="z-50 hidden px-4 border-none -mt-[150px] -ml-[180px] lg:ml-[200px]"
+                >
+                  <div className=" bg-white  rounded-lg shadow w-40 dark:bg-gray-700">
+                    <ul className="py-2 text-start w-full h-auto text-sm text-gray-700 dark:text-gray-200">
+                      <li className="w-full ">
+                        <Link
+                          to="/license-register"
+                          className="block w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                        >
+                          New registration
+                        </Link>
+                      </li>
+                      <li className="w-full ">
+                        <Link
+                          to="/license-renew"
+                          className="block w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                        >
+                          Renew
+                        </Link>
+                      </li>
+                      <li className="w-full ">
+                        <Link
+                          to="/upgrade"
+                          className="block w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                        >
+                          Upgrade
+                        </Link>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
               </div>
-            </div>
-          </li>
-          <li className="me-2 hidden lg:block">
-            <div className="flex w-full py-3 relative lg:py-0 pl-4 pr-main justify-center flex-col gap-3 items-center">
-              <div className="flex flex-col lg:flex-row w-auto h-auto absolute -right-20 lg:-right-32 z-20 items-center justify-center gap-2">
+            </li>
+            <li className="me-2">
+              <div className="flex w-full relative pr-main justify-center gap-5 items-center">
+                {/* <div className="flex flex-col lg:flex-row w-auto h-auto absolute -right-20 lg:-right-24 z-20 items-center justify-center gap-2"> */}
                 <a
                   href="#"
                   className="h-6 w-6  flex items-center justify-center  rounded-full bg-white bg-dark text-[rgb(252,45,45)]"
@@ -861,10 +1202,11 @@ const Header = () => {
 
                   <span className="sr-only">GitHub account</span>
                 </a>
+                {/* </div> */}
               </div>
-            </div>
-          </li>
-        </ul>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   );

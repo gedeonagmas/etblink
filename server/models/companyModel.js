@@ -1,11 +1,11 @@
 import mongoose from "mongoose";
-import uniqueValidator from "mongoose-unique-validator";
+// import uniqueValidator from "mongoose-unique-validator";
 import * as valid from "../utils/validator.js";
 
 const schema = new mongoose.Schema({
   name: {
     type: String,
-    validate: valid.paragraph("Name", 4, 200),
+    validate: valid.paragraph("Name", 4, 100),
     // index: {
     //   unique: true,
     //   partialFilterExpression: { name: { $type: "string" } },
@@ -15,8 +15,10 @@ const schema = new mongoose.Schema({
   },
 
   type: {
-    enum: ["Local", "Global"],
-    // required: [true, "type must be either Local or Global"],
+    type: String,
+    enum: ["local", "global"],
+    default: "Local",
+    validate: valid.required("Type"),
   },
 
   title: {
@@ -24,44 +26,9 @@ const schema = new mongoose.Schema({
     validate: valid.paragraph("Title", 4, 200),
   },
 
-  banner: {
-    type: [String],
-    required: [true, "Banner is required"],
-  },
-
-  highlightServices: {
-    type: [String],
-    // validate: valid.paragraph("Highlight services", 4, 200),
-  },
-
-  secondPhone: {
+  phone: {
     type: String,
-  },
-
-  description: {
-    type: String,
-    validate: valid.paragraph("description", 100, 1000),
-  },
-
-  latitude: {
-    type: String,
-    validate: valid.paragraph("latitude", 100, 1000),
-  },
-
-  longitude: {
-    type: String,
-    validate: valid.paragraph("latitude", 100, 1000),
-  },
-
-  amenities: {
-    //main features
-    type: [String],
-    // validate: valid.paragraph("Amenities", 100, 1000),
-  },
-
-  photoGallery: {
-    type: [String],
-    required: [true, "Photo galleries are required"],
+    validate: valid.phone("Phone"),
   },
 
   video: {
@@ -72,14 +39,65 @@ const schema = new mongoose.Schema({
     type: String,
   },
 
-  socialMedia: {
-    type: [Object],
-    required: [true, "Social media link is required"],
+  description: {
+    type: String,
+    validate: valid.paragraph("description", 100, 1000),
+  },
+
+  latitude: {
+    type: String,
+  },
+
+  longitude: {
+    type: String,
+  },
+
+  services: {
+    type: [
+      {
+        type: String,
+        validate: valid.required("Services"),
+      },
+    ],
+    // validate: valid.required(""),
+  },
+
+  features: {
+    type: [
+      {
+        type: String,
+        validate: valid.required("Features"),
+      },
+    ],
+  },
+
+  logo: {
+    type: String,
+    validate: valid.required("Logo"),
+  },
+
+  banner: {
+    type: String,
+    validate: valid.required("Banner"),
+  },
+
+  galleries: {
+    type: [
+      {
+        type: String,
+        validate: valid.required("Gallery"),
+      },
+    ],
+  },
+
+  socialMedias: {
+    type: Object,
+    validate: valid.required("Social medias"),
   },
 
   workingDays: {
-    type: [Object],
-    required: [true, "Working days is required"],
+    type: Object,
+    validate: valid.required("Working days"),
   },
 
   registeredBy: {
@@ -90,10 +108,6 @@ const schema = new mongoose.Schema({
   sales: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "user",
-  },
-
-  priceRange: {
-    type: [Object],
   },
 
   profileFillStatus: {
@@ -107,36 +121,37 @@ schema.pre("findOneAndUpdate", function (next) {
 });
 
 schema.pre("save", function (next) {
-  let percent = 15;
+  let percent = 20;
   const fields = [
     "name",
     "type",
     "title",
-    "banner",
-    "highlightServices",
-    "secondPhone",
+    "phone",
+    "video",
+    "website",
     "description",
     "latitude",
     "longitude",
-    "amenities",
-    "photoGallery",
-    "video",
-    "website",
-    "socialMedia",
+    "services",
+    "features",
+    "logo",
+    "banner",
+    "galleries",
+    "socialMedias",
     "workingDays",
-    "sales",
-    "priceRange",
   ];
   fields.map((field) => {
     if (this[field]?.length > 0) {
       percent += 5;
     }
+    return percent;
   });
 
+  console.log(percent, "percent");
   this.profileFillStatus = percent;
   next();
 });
 
-uniqueValidator.defaults.message = "{PATH} '{VALUE}' is taken";
-schema.plugin(uniqueValidator);
+// uniqueValidator.defaults.message = "{PATH} '{VALUE}' is taken";
+// schema.plugin(uniqueValidator);
 export const Company = mongoose.model("company", schema);

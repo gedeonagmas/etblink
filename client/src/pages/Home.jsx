@@ -34,8 +34,8 @@ const Home = () => {
 
   return (
     <>
-      <Header />
-      <div className="relative pt-24 rounded-lg bg-gray-50 bg-dark">
+      {/* <Header /> */}
+      <div className="relative pt-14 lg:pt-24 rounded-lg bg-gray-50 bg-dark">
         {/* slides */}
         <div className="w-full pb-11 h-full">
           <div
@@ -594,18 +594,18 @@ const Home = () => {
           <Banner />
         </div>
 
-        <div className="w-full  py-8 flex  bg-dark text-dark flex-col items-center justify-center">
+        <div className="w-full  py-20 flex  bg-dark text-dark flex-col items-center justify-center">
           <p className="text-4xl text-center font-semibold text-gray-700">
             Top & Popular <span className="text-main">Listings</span>
           </p>
-          <p className="text-[17px] px-main mt-3 py-1 font-light text-gray-500">
+          <p className="text-[17px] px-main mt-3 py-3 font-light text-gray-500">
             <center>
               At Vero Eos Et Accusamus Et Iusto Odio Dignissimos Ducimus Qui
               Blanditiis Praesentium Voluptatum Deleniti Atque Corrupti Quos
               Dolores Et Quas Molestias Excepturi
             </center>
           </p>
-          <div className="grid px-main mt-5 grid-cols-1 md:grid-cols-2 lg:grid-cols-3  w-full place-items-centers gap-7">
+          <div className="grid px-main mt-7 grid-cols-1 md:grid-cols-2 lg:grid-cols-3  w-full place-items-centers gap-7">
             {[0, 1, 2, 3, 4, 5].map((e, i) => {
               return <CompanyItems value={i} phoneNo="+251 9541**" />;
             })}
@@ -620,7 +620,7 @@ const Home = () => {
             <p className="text-[17px] mt-3 py-1 font-light text-gray-500">
               our top news
             </p>
-            <div className="grid px-main grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid px-main grid-cols-1 mt-3 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {[0, 1, 2].map((e, i) => {
                 return (
                   <div

@@ -5,27 +5,36 @@ import Response from "../components/Response";
 import LoadingButton from "../components/loading/LoadingButton";
 
 const Signup = () => {
-  const location = useLocation();
   const [signupData, signupResponse] = useUserRegisterMutation();
   const [pending, setPending] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [role, setRole] = useState("visitor");
 
   const signupHandler = () => {
     signupData({
-      role: location?.state?.type,
+      role,
       email,
       password,
       confirmPassword,
     });
   };
 
-  console.log(location.state.type, "location");
   return (
     <div className="pt-52 pb-32">
       <Response response={signupResponse} setPending={setPending} />
       <div class="max-w-sm mx-auto">
+        <select
+          name=""
+          id=""
+          className="w-full rounded-lg p-3"
+          onChange={(e) => setRole(e.target.value)}
+        >
+          <option value="visitor">Visitor</option>
+          <option value="company">COmpany</option>
+          <option value="sales">Sales</option>
+        </select>
         <div class="mb-5">
           <label
             for="email"
