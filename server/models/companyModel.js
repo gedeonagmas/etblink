@@ -91,10 +91,8 @@ const schema = new mongoose.Schema({
   },
 
   socialMedias: {
-      type: {
-        type: String,
-        validate: valid.required("Social medias"),
-      },
+    type: Object,
+    validate: valid.required("Social medias"),
   },
 
   workingDays: {
@@ -149,7 +147,7 @@ schema.pre("save", function (next) {
     return percent;
   });
 
-  console.log(percent,'percent');
+  console.log(percent, "percent");
   this.profileFillStatus = percent;
   next();
 });

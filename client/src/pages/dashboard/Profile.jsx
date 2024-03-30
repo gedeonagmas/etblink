@@ -159,14 +159,21 @@ const Profile = () => {
       setDescription(data.description);
       setServices(data.services);
       setFeatures(data.features);
-      // setLogo(data.logo);
-      // setBanner(data.banner);
+      setLogo(data.logo);
+      setBanner(data.banner);
+      setGalleries(data.galleries);
       setSocialMedias(data.socialMedias);
       setWorkingDays(data.workingDays);
     }
-  }, [context])
-  
-console.log(socialMedias,'social');
+  }, [context]);
+
+  function meridian(value) {
+    var [h, m] = value.split(":");
+    console.log(h, m);
+    return h >= 12 ? `${h}:${m} PM` : `${h}:${m} AM`;
+  }
+
+  console.log(workingDays, "social");
   const updateHandler = () => {
     const formData = new FormData();
     formData.append("name", name);
@@ -181,8 +188,8 @@ console.log(socialMedias,'social');
     formData.append("logo", logo);
     formData.append("banner", banner);
     // formData.append("pricingRange", pricingRange);
-    formData.append("socialMedias", socialMedias);
-    formData.append("workingDays", workingDays);
+    formData.append("socialMedias", JSON.stringify(socialMedias));
+    formData.append("workingDays", JSON.stringify(workingDays));
     formData.append("url", `/user/companies?id=${context?.user?.user?._id}`);
     formData.append("tag", ["users", "companies"]);
     galleries?.length > 0
@@ -199,7 +206,7 @@ console.log(socialMedias,'social');
     updateData(formData);
   };
 
-  console.log(context, "context");
+  // console.log(context, "context");
   return (
     <div className="w-full p-5 flex pb-10 flex-col rounded-lg border gap-2 items-start justify-center">
       <Response response={updateResponse} setPending={setPending} />
@@ -356,7 +363,10 @@ console.log(socialMedias,'social');
       <div className="grid w-full grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-2">
         <div className="mb-5">
           <label class="block text-sm font-medium">Logo</label>
-          <div class="mt-4 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+          <div
+            style={{ backgroundImage: `url(${context?.user?.user?.logo})` }}
+            class={`mt-4  flex justify-center object-cover object-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md`}
+          >
             <div class="space-y-1 text-center">
               <svg
                 class="mx-auto text-main h-12 w-12"
@@ -395,7 +405,10 @@ console.log(socialMedias,'social');
         </div>
         <div className="mb-5">
           <label class="block text-sm font-medium">Banner</label>
-          <div class="mt-4 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+          <div
+            style={{ backgroundImage: `url(${context?.user?.user?.banner})` }}
+            class="mt-4 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md"
+          >
             <div class="space-y-1 text-center">
               <svg
                 class="mx-auto text-main h-12 w-12"
@@ -437,7 +450,12 @@ console.log(socialMedias,'social');
           <label class="block text-sm font-medium">
             Photo Galleries(maximum 10)
           </label>
-          <div class="mt-4 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+          <div
+            style={{
+              backgroundImage: `url(${context?.user?.user?.galleries[0]})`,
+            }}
+            class="mt-4 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md"
+          >
             <div class="space-y-1 text-center">
               <svg
                 class="mx-auto text-main h-12 w-12"
@@ -623,13 +641,16 @@ console.log(socialMedias,'social');
               onChange={(e) =>
                 setWorkingDays({
                   ...workingDays,
-                  monday: { from: e.target.value, to: workingDays.monday.to },
+                  monday: {
+                    from: meridian(e.target.value),
+                    to: workingDays?.monday?.to,
+                  },
                 })
               }
-              // value={workingDays.monday.from}
+              value={workingDays?.monday?.from?.split(" ")[0]}
               type="time"
               name=""
-              id=""
+              id="monday-from"
               className="bg-gray-50 border w-full border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-fulls p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             />
           </div>
@@ -640,10 +661,13 @@ console.log(socialMedias,'social');
               onChange={(e) =>
                 setWorkingDays({
                   ...workingDays,
-                  monday: { from: workingDays.monday.from, to: e.target.value },
+                  monday: {
+                    from: workingDays?.monday?.from,
+                    to: meridian(e.target.value),
+                  },
                 })
               }
-              // value={workingDays.monday.to}
+              value={workingDays?.monday?.to?.split(" ")[0]}
               type="time"
               name=""
               id=""
@@ -659,9 +683,13 @@ console.log(socialMedias,'social');
               onChange={(e) =>
                 setWorkingDays({
                   ...workingDays,
-                  tuesday: { from: e.target.value, to: workingDays.tuesday.to },
+                  tuesday: {
+                    from: meridian(e.target.value),
+                    to: workingDays?.tuesday?.to,
+                  },
                 })
               }
+              value={workingDays?.tuesday?.from?.split(" ")[0]}
               type="time"
               name=""
               id=""
@@ -676,11 +704,12 @@ console.log(socialMedias,'social');
                 setWorkingDays({
                   ...workingDays,
                   tuesday: {
-                    from: workingDays.tuesday.from,
-                    to: e.target.value,
+                    from: workingDays?.tuesday?.from,
+                    to: meridian(e.target.value),
                   },
                 })
               }
+              value={workingDays?.tuesday?.to?.split(" ")[0]}
               type="time"
               name=""
               id=""
@@ -697,11 +726,12 @@ console.log(socialMedias,'social');
                 setWorkingDays({
                   ...workingDays,
                   wednesday: {
-                    from: e.target.value,
-                    to: workingDays.wednesday.to,
+                    from: meridian(e.target.value),
+                    to: workingDays?.wednesday?.to,
                   },
                 })
               }
+              value={workingDays?.wednesday?.from?.split(" ")[0]}
               type="time"
               name=""
               id=""
@@ -716,11 +746,12 @@ console.log(socialMedias,'social');
                 setWorkingDays({
                   ...workingDays,
                   wednesday: {
-                    from: workingDays.wednesday.from,
-                    to: e.target.value,
+                    from: workingDays?.wednesday?.from,
+                    to: meridian(e.target.value),
                   },
                 })
               }
+              value={workingDays?.wednesday?.to?.split(" ")[0]}
               type="time"
               name=""
               id=""
@@ -737,11 +768,12 @@ console.log(socialMedias,'social');
                 setWorkingDays({
                   ...workingDays,
                   thursday: {
-                    from: e.target.value,
-                    to: workingDays.thursday.to,
+                    from: meridian(e.target.value),
+                    to: workingDays?.thursday?.to,
                   },
                 })
               }
+              value={workingDays?.thursday?.from?.split(" ")[0]}
               type="time"
               name=""
               id=""
@@ -756,11 +788,12 @@ console.log(socialMedias,'social');
                 setWorkingDays({
                   ...workingDays,
                   thursday: {
-                    from: workingDays.thursday.from,
-                    to: e.target.value,
+                    from: workingDays?.thursday?.from,
+                    to: meridian(e.target.value),
                   },
                 })
               }
+              value={workingDays?.thursday?.to?.split(" ")[0]}
               type="time"
               name=""
               id=""
@@ -776,9 +809,13 @@ console.log(socialMedias,'social');
               onChange={(e) =>
                 setWorkingDays({
                   ...workingDays,
-                  friday: { from: e.target.value, to: workingDays.friday.to },
+                  friday: {
+                    from: meridian(e.target.value),
+                    to: workingDays?.friday?.to,
+                  },
                 })
               }
+              value={workingDays?.friday?.from?.split(" ")[0]}
               type="time"
               name=""
               id=""
@@ -792,9 +829,13 @@ console.log(socialMedias,'social');
               onChange={(e) =>
                 setWorkingDays({
                   ...workingDays,
-                  friday: { from: workingDays.friday.from, to: e.target.value },
+                  friday: {
+                    from: workingDays?.friday?.from,
+                    to: meridian(e.target.value),
+                  },
                 })
               }
+              value={workingDays?.friday?.to?.split(" ")[0]}
               type="time"
               name=""
               id=""
@@ -811,11 +852,12 @@ console.log(socialMedias,'social');
                 setWorkingDays({
                   ...workingDays,
                   saturday: {
-                    from: e.target.value,
-                    to: workingDays.saturday.to,
+                    from: meridian(e.target.value),
+                    to: workingDays?.saturday?.to,
                   },
                 })
               }
+              value={workingDays?.saturday?.from?.split(" ")[0]}
               type="time"
               name=""
               id=""
@@ -830,11 +872,12 @@ console.log(socialMedias,'social');
                 setWorkingDays({
                   ...workingDays,
                   saturday: {
-                    from: workingDays.saturday.from,
-                    to: e.target.value,
+                    from: workingDays?.saturday?.from,
+                    to: meridian(e.target.value),
                   },
                 })
               }
+              value={workingDays?.saturday?.to?.split(" ")[0]}
               type="time"
               name=""
               id=""
@@ -850,9 +893,13 @@ console.log(socialMedias,'social');
               onChange={(e) =>
                 setWorkingDays({
                   ...workingDays,
-                  sunday: { from: e.target.value, to: workingDays.sunday.to },
+                  sunday: {
+                    from: meridian(e.target.value),
+                    to: workingDays?.sunday?.to,
+                  },
                 })
               }
+              value={workingDays?.sunday?.from?.split(" ")[0]}
               type="time"
               name=""
               id=""
@@ -866,9 +913,13 @@ console.log(socialMedias,'social');
               onChange={(e) =>
                 setWorkingDays({
                   ...workingDays,
-                  sunday: { from: workingDays.sunday.from, to: e.target.value },
+                  sunday: {
+                    from: workingDays?.sunday?.from,
+                    to: meridian(e.target.value),
+                  },
                 })
               }
+              value={workingDays?.sunday?.to?.split(" ")[0]}
               type="time"
               name=""
               id=""

@@ -3,7 +3,7 @@ import AppError from "../utils/AppError.js";
 import { selectModel } from "../utils/selectModel.js";
 import v2 from "./../config/cloudinary.js";
 import { Query } from "mongoose";
-const api = "http://localhost:5000/uploads/";
+const api = "http://localhost:3001/uploads/";
 const encrypt = (query) => {
   return btoa(query);
 };
@@ -171,10 +171,12 @@ export const _read = asyncCatch(async (req, res, next) => {
 //update
 export const _update = asyncCatch(async (req, res, next) => {
   const model = selectModel(req.params.table, next);
-  // console.log(req.body, 'body');
+  console.log(JSON.parse(req.body.socialMedias), 'body');
   const value = { ...req.body };
   const files = fileHandler(value, req);
-  console.log(req.files, "files", req.file, "file");
+  value.socialMedias?value.socialMedias = JSON.parse(value.socialMedias):null;
+  value.workingDays? value.workingDays = JSON.parse(value.workingDays):null;
+  // console.log(req.files, "files", req.file, "file");
   if (model) {
     const data = await model.findOneAndUpdate(
       { _id: req.query.id },
