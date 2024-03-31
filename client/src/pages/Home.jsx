@@ -607,7 +607,9 @@ const Home = () => {
           </p>
           <div className="grid px-main mt-7 grid-cols-1 md:grid-cols-2 lg:grid-cols-3  w-full place-items-centers gap-7">
             {[0, 1, 2, 3, 4, 5].map((e, i) => {
-              return <CompanyItems value={i} phoneNo="+251 9541**" />;
+              return (
+                <CompanyItems value={i} phoneNo="+251 9541**" type="large" />
+              );
             })}
           </div>
 

@@ -64,9 +64,10 @@ const Header = () => {
     logout({});
   };
 
+  console.log(context?.user, 'context in header');
   return (
     // fixed bg-white bg-dark top-0 left-0 w-full z-50 h-auto
-    <div className="fixed w-full z-40 bg-white bg-dark">
+    <div className="fixed w-full z-50 bg-white bg-dark">
       <Response response={loginResponse} setPending={setPending} type="login" />
       <Response
         response={logoutResponse}
@@ -78,7 +79,7 @@ const Header = () => {
           <img
             src="./logo.png"
             alt=""
-            className="w-[80px] h-[65px]border-2 bg-white dark:bg-gray-500 rounded-sm"
+            className="w-[80px] relative z-50 h-[65px]border-2 bg-white dark:bg-gray-500 rounded-sm"
           />
           {context.user ? (
             <div className="flex items-center gap-3">
@@ -618,7 +619,7 @@ const Header = () => {
                 data-dropdown-toggle="dropdownDelay"
                 data-dropdown-delay="500"
                 data-dropdown-trigger="hover"
-                className="focus:ring-0 focus:outline-none mr-12 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center "
+                className={`focus:ring-0 focus:outline-none ${context.user?'-mr-4':'mr-12'} font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center`}
                 type="button"
               >
                 Languages{" "}
@@ -629,7 +630,7 @@ const Header = () => {
                   fill="none"
                   viewBox="0 0 10 6"
                 >
-                  <path
+                  <path 
                     stroke="currentColor"
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -683,7 +684,7 @@ const Header = () => {
               </div>
             </div>
             {context.user ? (
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-5">
                 <p className="px-2 py-1 rounded-xl bg-main">
                   {context.user.email.split("@")[0]}
                 </p>
@@ -773,7 +774,7 @@ const Header = () => {
         {/* tabs */}
         <div className="border-b relative shadow-2xl  py-2 md:py-1 border-gray-200 dark:border-gray-700">
           <ul
-            className="flex relative gap-4 flex-wrap items-center justify-center -mb-px text-sm font-medium text-center"
+            className="flex relative z-40  gap-4 flex-wrap items-center justify-center -mb-px text-sm font-medium text-center"
             id="default-tab"
             data-tabs-toggle="#default-tab-content"
             role="tablist"

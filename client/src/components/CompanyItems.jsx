@@ -3,7 +3,7 @@ import VerifiedOutlinedIcon from "@mui/icons-material/VerifiedOutlined";
 import VerifiedOutlined from "@mui/icons-material/VerifiedOutlined";
 import "./bubble.css";
 
-const CompanyItems = ({ value, phoneNo }) => {
+const CompanyItems = ({ value, phoneNo,type }) => {
   const [phone, setPhone] = useState(phoneNo);
   return (
     <div
@@ -47,12 +47,14 @@ const CompanyItems = ({ value, phoneNo }) => {
           <img
             src="./image-1.jpg"
             alt=""
-            className="w-full brightness-[0.5] h-[190px] rounded-b-none rounded-xl"
+            className={`w-full brightness-[0.5] ${
+              type === "large" ? "h-[190px]" : "h-[140px]"
+            } rounded-b-none rounded-xl`}
           />
           <div className="absolute top-4 border-4 border-gray-300 border-dashed left-2 rounded-full shadow-lg px-4 py-1 bg-white text-black">
             Open
           </div>
-          <p className="absolute px-2 py-1 rounded-md bg-main ml-1 gap-1 shadow-lg bottom-1 text-white flex items-center justify-center left-2">
+          <p className="absolute px-1 py-1 rounded-md bg-main ml-1 gap-1 shadow-lg bottom-1 text-white flex items-center justify-center left-2">
             {" "}
             <svg
               className="w-5 h-5 "
@@ -70,7 +72,7 @@ const CompanyItems = ({ value, phoneNo }) => {
             2.5k
           </p>
 
-          <p className="absolute mr-1 gap-1 shadow-lg bottom-1 text-white flex items-center justify-center right-2">
+          <p className="absolute border rounded-lg px-1 py-1 mr-1 gap-1 shadow-lg bottom-1 text-white flex items-center justify-center right-2">
             {" "}
             <svg
               className="w-5 h-5 "
@@ -84,17 +86,33 @@ const CompanyItems = ({ value, phoneNo }) => {
             1.2k
           </p>
         </div>
-        <div className="absolute bg-white bg-dark w-[130px] h-[130px] top-[125px] rounded-l-mds border-[6px] border-spacing-7 z-10  border-gray-200 rounded-full   flex items-center justify-center">
+        <div
+          className={`absolute bg-white bg-dark ${
+            type === "large"
+              ? "w-[130px] top-[125px] h-[130px]  border-[6px]"
+              : "w-[80px] top-[100px] h-[80px] border-[4px]"
+          } border-spacing-7 z-10  border-gray-200 rounded-full   flex items-center justify-center`}
+        >
           <img
             src="./image-1.jpg"
             alt=""
             className="w-full h-full rounded-full"
           />
-          <div className="w-5 absolute top-1 right-2 h-5 bg-emerald-400 p-1 border-2 border-white rounded-full"></div>
+          <div
+            className={`${
+              type === "large"
+                ? "w-5 h-5 top-1 right-2"
+                : "w-4 h-4 top-2 -right-1"
+            } absolute bg-emerald-400 p-1 border-2 border-white rounded-full`}
+          ></div>
         </div>
       </div>
 
-      <div className="flex flex-col gap- w-full mt-16 items-center justify-center">
+      <div
+        className={`flex flex-col gap- w-full ${
+          type === "large" ? "mt-16" : "mt-10"
+        } items-center justify-center`}
+      >
         <div class="flex mt-3 items-center">
           <svg
             class="w-4 h-4 text-yellow-300 me-1"
@@ -142,7 +160,7 @@ const CompanyItems = ({ value, phoneNo }) => {
             <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
           </svg>
         </div>
-        <p className="text-[20px] flex items-center justify-center gap-3 mt-3 font-semibold text-gray-700">
+        <p className="text-[20px] flex items-center justify-center gap-3 mt-3 font-semibold text-gray-700 dark:text-gray-100">
           Healthy Food{" "}
           <svg
             class="w-6 h-6 text-emerald-500"
@@ -162,10 +180,14 @@ const CompanyItems = ({ value, phoneNo }) => {
         </p>
         <p className="text-[15px] font-light mt-2">Outdoor, luxury for you</p>
 
-        <div className="w-full px-4 py-2 border-b border-gray-200 mt-2 text-gray-500 dark:text-white flex items-center justify-between">
+        <div
+          className={`w-full px-4 py-2 border-b border-gray-200 mt-2 text-gray-500 dark:text-white flex ${
+            type === "large" ? "flex-row items-center" : "flex-col items-start"
+          } justify-between`}
+        >
           <div className="flex -ml-2 items-center text-[16px] font-light  gap-1 justify-center">
             <svg
-              class="w-8 h-8 "
+              class={`${type === "large" ? "w-8 h-8" : "w-6 h-6"}`}
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -188,9 +210,9 @@ const CompanyItems = ({ value, phoneNo }) => {
             </svg>
             Adiss ababa
           </div>
-          <div className="flex gap-1 items-center text-[16px] font-light justify-center">
+          <div className="flex -ml-2 gap-1 items-center text-[16px] font-light justify-center">
             <svg
-              class="w-8 h-8"
+              class={`${type === "large" ? "w-8 h-8" : "w-7 h-7"}`}
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -220,7 +242,7 @@ const CompanyItems = ({ value, phoneNo }) => {
         </div>
       </div>
       <div className="flex my-3 w-full items-center justify-between px-3 ">
-        <div className="flex items-center px-2 rounded-full hover:bg-orange-500 hover:text-white border border-gray-300 cursor-pointer text-[14px]  justify-center">
+        <div className={`flex items-center ${type==='large'?'px-2':'px-1'} rounded-full hover:bg-orange-500 hover:text-white border border-gray-300 cursor-pointer text-[14px]  justify-center`}>
           {/* <div className="p-2  bg-[rgb(252,45,45)] rounded-full text-white">
             <svg
               class="w-6 h-6"
@@ -243,7 +265,7 @@ const CompanyItems = ({ value, phoneNo }) => {
         </div>
 
         <button
-          className={`py-[8px] px-10 ${
+          className={` ${type==='large'?'py-[8px] px-10':'px-4'} py-[6px] ${
             value === 1
               ? "bg-[#00aeff]"
               : value === 2

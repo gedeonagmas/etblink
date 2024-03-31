@@ -241,11 +241,27 @@ const Footer = () => {
         </div>
         {/* <div className="h-52 -ml-14 border-gray-700 w-[1px] border border-dotted"></div> */}
         <div className="mt-7 ml-5">
-          <img src="./appstore.png" alt="" className="w-52 h-24 rounded-sm" />
+          <div className="flex flex-col items-start gap-4 justify-start">
+            <div className="w-52 px-2 py-1 cursor-pointer hover:border-gray-400 h-auto rounded-lg border">
+              <img
+                src="./appstores.png"
+                alt=""
+                className="w-full h-12 rounded-lg"
+              />
+            </div>
+            <div className="w-52 px-2 py-1 cursor-pointer hover:border-gray-400 h-auto rounded-lg border">
+              <img
+                src="./google.png"
+                alt=""
+                className="w-full h-12 rounded-lg"
+              />
+            </div>
+          </div>
+
           <div className="flex w-auto mt-5 h-auto items-center justify-center gap-4">
             <a href="#" className="h-6 w-6  flex items-center justify-center">
               <svg
-                className="w-5 h-5"
+                className="w-6 h-6"
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="currentColor"
@@ -261,7 +277,7 @@ const Footer = () => {
             </a>
             <a href="#" className="h-6 w-6 flex items-center justify-center">
               <svg
-                className="w-5 h-5 "
+                className="w-6 h-6 "
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="currentColor"
@@ -293,7 +309,7 @@ const Footer = () => {
             </a>
             <a href="#" className="h-6 w-6 flex items-center justify-center">
               <svg
-                className="w-5 h-5 "
+                className="w-6 h-6 "
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="currentColor"
@@ -329,8 +345,15 @@ const Footer = () => {
           <p className="text-lg font-bold uppercase">
             About skylight technologies
           </p>
-          <p className="text-xs">Copyright Skylight technologies @2024</p>
-          <p className="text-xs">Technology share company in ethiopia</p>
+          <p className="text-xs">
+            Copyright Skylight technologies @2024 Technology share company in
+            ethiopia Technology share company in ethiopia
+          </p>
+          <p className="text-xs">
+            Technology share company in ethiopia Technology share company in
+            ethiopia Technology share company in ethiopia Technology share
+            company in ethiopia
+          </p>
         </div>
         <div className="mt-5">
           {/* <img

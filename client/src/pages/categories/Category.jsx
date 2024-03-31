@@ -33,27 +33,29 @@ const markers = [
 
 const Category = () => {
   return (
-    <div className="w-full relative pt-24 bg-gray-50 bg-dark h-auto">
-      <div className="absolute text-lg font-bold  z-30 top-[100px] left-[10%]">
+    <div className="w-full relative pb-6 pt-24 bg-gray-50 bg-dark h-auto">
+      <div className="absolute text-lg font-bold  z-30 top-[500px] left-[2%]">
         We provide more than <br /> 245 total companies <br /> for your business
       </div>
       {/* <Map markers={[...markers]} height="82vh" /> */}
-      <iframe
-        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d65325188.17043557!2d-19.40065217965568!3d2.1022195001665533!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x10a06c0a948cf5d5%3A0x108270c99e90f0b3!2sAfrica!5e0!3m2!1sen!2set!4v1710817332813!5m2!1sen!2set"
-        width="1600"
-        height="550"
-        // style="border:0;"
-        allowfullscreen=""
-        loading="lazy"
-        referrerpolicy="no-referrer-when-downgrade"
-      ></iframe>
+      <div className="relative z-40">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d65325188.17043557!2d-19.40065217965568!3d2.1022195001665533!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x10a06c0a948cf5d5%3A0x108270c99e90f0b3!2sAfrica!5e0!3m2!1sen!2set!4v1710817332813!5m2!1sen!2set"
+          width="1600"
+          height="550"
+          // style="border:0;"
+          allowfullscreen=""
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+        ></iframe>{" "}
+      </div>
       <div className="w-full relative px-main mt-10 flex flex-col items-center justify-center h-auto">
-        <div className="absolute px-main z-30 w-full px-4 py-2 rounded-md hidden sm:block -mt-80 md:-mt-64 lg:-mt-52 h-32">
+        {/* <div className="absolute px-main z-30 w-full px-4 py-2 rounded-md hidden sm:block -mt-80 md:-mt-64 lg:-mt-52 h-32">
           <div className="w-64 text-center rounded-md h-20 bg-dark bg-gray-200">
             <div className="bg-green-400 h-2  w-full"></div>
             <p className="text-lg font-bold mt-5">Find your business here</p>
           </div>
-        </div>
+        </div> */}
         <div className="grid grid-cols-1 items-center justify-between sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 w-full gap-10 place-items-center">
           <form class="rounded-sm h-12 w-full bg-white bg-dark mx-auto">
             <div class="relative">
@@ -221,12 +223,14 @@ const Category = () => {
           <div className="grid mt-5 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full place-items-centers gap-6">
             {[0, 1, 2, 3, 4, 5, 6, 7, 8].map((e, i) => {
               // return <CompanyItemsCompany value={i} type="category" />;
-              return <CompanyItems />;
+              return (
+                <CompanyItems type="small" value={i} phoneNo="+251954*****" />
+              );
             })}
           </div>
         </div>
-        <div className="flex flex-col gap-4 w-full lg:w-[20%] bg-green-500f">
-          <div className="flex w-full mt-4 mb-1 justify-between items-center">
+        <div className="flex flex-col gap-4 w-full lg:w-[20%]">
+          <div className="flex w-full mb-1 justify-between items-center">
             <p className="font-bold">Featured</p>
             <div className="flex gap-2 items-center justify-center">
               <svg
@@ -261,8 +265,73 @@ const Category = () => {
               </svg>
             </div>
           </div>
-          <CompanyItemsCompany />
+          <div className="">
+            <img src="./sofi.jpeg" alt="" className="w-full h-[500px]" />
+          </div>
         </div>
+      </div>
+      <div className="w-full flex items-center justify-center mt-10">
+        <nav aria-label="Page navigation example">
+          <ul class="inline-flex -space-x-px text-base h-10">
+            <li>
+              <a
+                href="#"
+                class="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+              >
+                Previous
+              </a>
+            </li>
+            <li>
+              <a
+                href="#"
+                class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+              >
+                1
+              </a>
+            </li>
+            <li>
+              <a
+                href="#"
+                class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+              >
+                2
+              </a>
+            </li>
+            <li>
+              <a
+                href="#"
+                aria-current="page"
+                class="flex items-center justify-center px-4 h-10 text-blue-600 border border-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white"
+              >
+                3
+              </a>
+            </li>
+            <li>
+              <a
+                href="#"
+                class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+              >
+                4
+              </a>
+            </li>
+            <li>
+              <a
+                href="#"
+                class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+              >
+                5
+              </a>
+            </li>
+            <li>
+              <a
+                href="#"
+                class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+              >
+                Next
+              </a>
+            </li>
+          </ul>
+        </nav>
       </div>
     </div>
   );
