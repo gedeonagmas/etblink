@@ -8,17 +8,17 @@ const NewsItem = ({ value }) => {
       className="w-full relative h-auto bg-white dark:bg-gray-700 rounded-md shadow-md shadow-gray-400 flex flex-col items-start justify-start"
     >
       <div className="w-full relative  flex items-center justify-center">
-        <div className="relative w-full">
+        <div className="relative max-w-xs overflow-hidden rounded-md bg-cover bg-no-repeat w-full">
           <img
             src="./image-1.jpg"
             alt=""
-            className="w-full h-52 rounded-md rounded-b-none"
+            className="w-[300px] h-52 transition duration-300 ease-in-out hover:scale-125 rounded-md rounded-b-none"
           />
         </div>
       </div>
 
-      <div className="flex w-auto self-center bg-white rounded-md text-gray-600 items-center justify-center -mt-16 z-20 relative">
-        <div className="flex px-3 py-1 rounded-md rounded-r-none text-sm text-white bg-main flex-col items-center justify-center">
+      <div className="flex w-auto self-center bg-white rounded-sm text-gray-600 items-center justify-center -mt-16 z-20 relative">
+        <div className="flex px-3 py-1 rounded-sm rounded-r-none text-sm text-white bg-main flex-col items-center justify-center">
           <p>30</p>
           <p>May</p>
         </div>
@@ -67,12 +67,12 @@ const NewsItem = ({ value }) => {
           <p> Views(3.2k)</p>
         </div>
       </div>
-      <div className="mt-5 bg-white bg-dark relative flex flex-col gap-3 items-start rounded-md">
-        <div className="w-full border-b py-5 border-gray-300">
-          <p className="font-bold px-5">
+      <div className="mt-3 bg-white bg-dark px-5 relative flex flex-col gap-3 items-start rounded-t-none rounded-md">
+        <div className="w-full border-b  py-5 border-gray-300">
+          <p className="font-bold  border-gray-300">
             Ethiopian business link is launch a new portal check
           </p>
-          <p className="text-sm px-5 mt-4">
+          <p className="text-sm mt-2">
             Lorem ipsum dolor sit amet consect adipisicing elit. Lorem ipsum
             dolor sit amet consectetur adipisi.
           </p>

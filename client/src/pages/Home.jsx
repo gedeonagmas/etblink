@@ -67,18 +67,19 @@ const Home = () => {
             </Slide>
 
             {/* hero page content */}
-            <div className="flex absolute top-60 ml-0 lg:ml-[8%] z-30 w-[440px]  h-auto gap-2 items-start justify-start">
+            <div className="flex absolute top-60 ml-0 lg:ml-[8%] z-30 w-[540px]  h-auto gap-2 items-start justify-start">
               <div className="absolute -mt-32 p-5 rounded-sm bg-black/35 mx-auto">
                 <h1 className="mb-2 tracking-wider text-4xl font-extrabold leading-none text-white dark:text-gray-300 ">
-                  Your investment
+                  Connecting Businesses
                 </h1>
-                <h1 className="mb-6 tracking-wider text-4xl font-extrabold leading-none text-white dark:text-gray-300 ">
-                  destination
+                <h1 className="mb-6 mt-4 tracking-wider text-4xl font-extrabold leading-none text-white dark:text-gray-300 ">
+                  Worldwide
                 </h1>
 
                 <p className=" text-sm mx-1 lg:mx-0 font-normal text-gray-200 text-dark">
-                  Here at ETBLINK we focus on markets where technology, <br />
-                  innovation, and capital can unlock long-term value.
+                  Unlock endless opportunities with our B2B portal - Connecting
+                  businesses, fostering partnerships, and showcasing your
+                  services or products!
                 </p>
               </div>
             </div>
@@ -596,13 +597,16 @@ const Home = () => {
 
         <div className="w-full  py-20 flex  bg-dark text-dark flex-col items-center justify-center">
           <p className="text-4xl text-center font-semibold text-gray-700">
-            Top & Popular <span className="text-main">Listings</span>
+            Join Thousands of Global <span className="text-main">Businesses</span> Who Trust in Us
+           
           </p>
           <p className="text-[17px] px-main mt-3 py-3 font-light text-gray-500">
             <center>
-              At Vero Eos Et Accusamus Et Iusto Odio Dignissimos Ducimus Qui
-              Blanditiis Praesentium Voluptatum Deleniti Atque Corrupti Quos
-              Dolores Et Quas Molestias Excepturi
+              Ethiopian Business Directory (ETB Link) is a comprehensive online
+              platform that facilitates connections between businesses and
+              potential customers, wholesalers, retailers, manufacturers, and
+              service providers in Ethiopia. And as will as wholesalers and
+              manufacturers worldwide
             </center>
           </p>
           <div className="grid px-main mt-7 grid-cols-1 md:grid-cols-2 lg:grid-cols-3  w-full place-items-centers gap-7">

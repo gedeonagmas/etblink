@@ -183,6 +183,7 @@ const Header = () => {
             />
           </svg>
         </div>
+
         <div
           id="header-mobile"
           className="h-[100vh] hidden w-full bg-white bg-dark fixed top-0 left-0 z-50 items-center justify-center flex-col"
@@ -240,6 +241,14 @@ const Header = () => {
                 to="/news"
                 className="inline-block hover:text-[rgb(252,45,45)]  w-full p-5 font-medium rtl:text-right text-gray-500 border border-b-0 border-gray-300  focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 gap-3"
               >
+                Event
+              </Link>
+            </li>
+            <li className="" role="presentation">
+              <Link
+                to="/news"
+                className="inline-block hover:text-[rgb(252,45,45)]  w-full p-5 font-medium rtl:text-right text-gray-500 border border-b-0 border-gray-300  focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 gap-3"
+              >
                 News
               </Link>
             </li>
@@ -248,9 +257,19 @@ const Header = () => {
                 to="/job"
                 className="inline-block hover:text-[rgb(252,45,45)]  w-full p-5 font-medium rtl:text-right text-gray-500 border border-b-0 border-gray-300  focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 gap-3"
               >
-                Job
+                Jobs
               </Link>
             </li>
+
+            <li className="" role="presentation">
+              <Link
+                to="/investment"
+                className="inline-block hover:text-[rgb(252,45,45)]  w-full p-5 font-medium rtl:text-right text-gray-500 border border-b-0 border-gray-300  focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 gap-3"
+              >
+                Investment
+              </Link>
+            </li>
+
             <div id="accordion-collapse" data-accordion="collapse">
               <h2 id="accordion-collapse-heading-1">
                 <button
@@ -354,95 +373,28 @@ const Header = () => {
                 <div class="p-5 border border-b-0 border-gray-300 dark:border-gray-700">
                   <li className="me-2 ml-2" role="presentation">
                     <Link
-                      to="/news"
+                      to="/opportunity"
                       className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
                     >
-                      Investment opportunities
+                      Business Opportunity
                     </Link>
                   </li>{" "}
                   <li className="me-2 ml-2" role="presentation">
                     <Link
-                      to="/news"
+                      to="/proclamation"
                       className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
                     >
-                      Government office
+                      Proclamation
                     </Link>
                   </li>{" "}
                   <li className="me-2 ml-2" role="presentation">
                     <Link
-                      to="/news"
+                      to="/visa"
                       className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
                     >
-                      License and related
+                      VISA information
                     </Link>
                   </li>{" "}
-                  <li className="me-2 ml-2" role="presentation">
-                    <Link
-                      to="/news"
-                      className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
-                    >
-                      Legal advisers
-                    </Link>
-                  </li>{" "}
-                </div>
-              </div>
-              <h2 id="accordion-collapse-heading-3">
-                <button
-                  type="button"
-                  class="flex items-center justify-between w-full p-5 font-medium rtl:text-right text-gray-500 border border-gray-300 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 gap-3"
-                  data-accordion-target="#accordion-collapse-body-3"
-                  aria-expanded="false"
-                  aria-controls="accordion-collapse-body-3"
-                >
-                  <span>Immigration Information</span>
-                  <svg
-                    data-accordion-icon
-                    class="w-3 h-3 rotate-180 shrink-0"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 10 6"
-                  >
-                    <path
-                      stroke="currentColor"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M9 5 5 1 1 5"
-                    />
-                  </svg>
-                </button>
-              </h2>
-              <div
-                id="accordion-collapse-body-3"
-                class="hidden"
-                aria-labelledby="accordion-collapse-heading-3"
-              >
-                <div class="p-5 border border-t-0 border-gray-300 dark:border-gray-700">
-                  <li className="me-2 ml-2" role="presentation">
-                    <Link
-                      to="/news"
-                      className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
-                    >
-                      New registration
-                    </Link>
-                  </li>{" "}
-                  <li className="me-2 ml-2" role="presentation">
-                    <Link
-                      to="/news"
-                      className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
-                    >
-                      Renew
-                    </Link>
-                  </li>
-                  <li className="me-2 ml-2" role="presentation">
-                    <Link
-                      to="/news"
-                      className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
-                    >
-                      Upgrade
-                    </Link>
-                  </li>
                 </div>
               </div>
             </div>
@@ -461,6 +413,7 @@ const Header = () => {
           </ul>
         </div>
       </div>
+
       <div className="hidden lg:block">
         <div className="w-full flex flex-col lg:flex-row ">
           {/* <div className="relative pl-main bg-main-black w-full lg:w-[78%]">
@@ -773,10 +726,11 @@ const Header = () => {
           </div>
         </div>
 
-        {/* tabs */}
+        {/* tabs desktop header nav */}
+
         <div className="border-b relative shadow-2xl  py-2 md:py-1 border-gray-200 dark:border-gray-700">
           <ul
-            className="flex relative z-40  gap-4 flex-wrap items-center justify-center -mb-px text-sm font-medium text-center"
+            className="flex relative z-40  gap-1 flex-wrap items-center justify-center -mb-px text-sm font-medium text-center"
             id="default-tab"
             data-tabs-toggle="#default-tab-content"
             role="tablist"
@@ -905,7 +859,6 @@ const Header = () => {
                 </div>
               </div>
             </div>
-
             <li className="me-2">
               <div className="flex items-center justify-center gap-6">
                 {/*  */}
@@ -918,7 +871,7 @@ const Header = () => {
                 </div>
               </div>
             </li>
-            <li className="me-2 ml-2" role="presentation">
+            <li className="me-2 ml-7" role="presentation">
               <Link
                 to="/"
                 className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
@@ -944,6 +897,14 @@ const Header = () => {
             </li>
             <li className="me-2 ml-2" role="presentation">
               <Link
+                to="/event"
+                className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
+              >
+                Event
+              </Link>
+            </li>{" "}
+            <li className="me-2 ml-2" role="presentation">
+              <Link
                 to="/news"
                 className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
               >
@@ -955,26 +916,17 @@ const Header = () => {
                 to="/job"
                 className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
               >
-                Job
+                Jobs
               </Link>
             </li>
             <li className="me-2 ml-2" role="presentation">
               <Link
-                to="/job"
+                to="/investment"
                 className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
               >
-                Job
+                Investment
               </Link>
             </li>
-            <li className="me-2 ml-2" role="presentation">
-              <Link
-                to="/job"
-                className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
-              >
-                Job
-              </Link>
-            </li>
-
             <li className="me-2 relative" role="presentation">
               <button
                 onClick={() => {
@@ -1026,10 +978,10 @@ const Header = () => {
                         to="/investment"
                         className="block w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                       >
-                        Investment opportunities
+                        Business Opportunities
                       </Link>
                     </li>
-                    <li
+                    {/* <li
                       onMouseOver={() => {
                         const ids = document.getElementById("license-dropdown");
                         ids?.classList?.remove("hidden");
@@ -1057,13 +1009,13 @@ const Header = () => {
                           />
                         </svg>
                       </a>
-                    </li>
+                    </li> */}
                     <li className="w-full">
                       <Link
                         to="/legal"
                         className="block w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                       >
-                        Legal advisers
+                        Proclamation
                       </Link>
                     </li>
                     <li className="w-full">
@@ -1071,15 +1023,7 @@ const Header = () => {
                         to="/immigration"
                         className="block w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                       >
-                        Immigration Information
-                      </Link>
-                    </li>
-                    <li className="w-full">
-                      <Link
-                        to="/government"
-                        className="block w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                      >
-                        Government office
+                        VISA Information
                       </Link>
                     </li>
                   </ul>

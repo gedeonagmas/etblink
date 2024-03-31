@@ -11,10 +11,10 @@ const Footer = () => {
         <div className="w-full flex items-center justify-between h-auto">
           <div className="w-full items-center justify-center flex flex-col">
             <p className="text-4xl font-semibold text-gray-700">
-              Our top <span className="text-main">Sellers</span>
+              Our <span className="text-main">Representatives</span>
             </p>
             <p className="text-[17px] mt-3 py-1 font-light text-gray-500">
-              our top sellers
+              our top Representatives
             </p>
           </div>
         </div>
@@ -261,7 +261,7 @@ const Footer = () => {
           </p>
           <ul className="mt-5 text-sm flex flex-col gap-1">
             <a href="#" className="hover:underline">
-              Talk to Sales
+              Talk to Representatives
             </a>
             <a href="#" className="hover:underline">
               News Department

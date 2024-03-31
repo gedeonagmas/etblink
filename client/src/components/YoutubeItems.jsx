@@ -1,7 +1,18 @@
 import { Visibility } from "@mui/icons-material";
 import "./bubble.css";
+import YouTube from "react-youtube";
 
 const YoutubeItems = () => {
+  const opts = {
+    // width: "100%",
+    borderRadius: "2rem",
+    playerVars: { autoplay: 1 },
+  };
+
+  const videoReady = (event) => {
+    event.target.pauseVideo();
+  };
+
   return (
     <div className="w-full bg-gray-200 bg-dark mt-10 py-10 px-main h-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid cols-5 place-items-center gap-3">
       <div className="flex pr-7  w-full justify-start gap-4 flex-col items-enter">
@@ -117,20 +128,14 @@ const YoutubeItems = () => {
         </div>
       </div>
 
-      {[0, 1, 2, 3].map((e, i) => {
+      {["tLQ_AulO0Ag", "2N_d1ZpwdJ8", "qF0gUOBMfQU"].map((e, i) => {
         return (
           <div
             key={i}
             className="flex w-full rounded-sm relative justify-start py-4 gap-1 flex-col items-enter"
           >
             {/* <img src="./image-3.jpg" alt="" className="w-full" /> */}
-            <video
-              src="video.mp4"
-              controls
-              autoplay
-              muted
-              className="w-full h-40"
-            ></video>
+            <YouTube videoId={e} opts={opts} onReady={videoReady} />
             <p className="font-bold flex items-center justify-start gap-2 text-sm mt-4">
               {" "}
               <svg
