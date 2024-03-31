@@ -9,7 +9,11 @@ const NewsItem = ({ value }) => {
     >
       <div className="w-full relative  flex items-center justify-center">
         <div className="relative w-full">
-          <img src="./image-1.jpg" alt="" className="w-full h-52 rounded-md" />
+          <img
+            src="./image-1.jpg"
+            alt=""
+            className="w-full h-52 rounded-md rounded-b-none"
+          />
         </div>
       </div>
 
@@ -63,33 +67,21 @@ const NewsItem = ({ value }) => {
           <p> Views(3.2k)</p>
         </div>
       </div>
-      <div className="p-4 mt-5 bg-white bg-dark relative flex flex-col gap-3 items-start rounded-md">
-        <p className="px-4 flex items-center justify-center gap-2 w-auto py-2 bg-main rounded-lg text-white">
-          <svg
-            class="w-6 h-6 "
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              fill-rule="evenodd"
-              d="M2 12a10 10 0 1 1 20 0 10 10 0 0 1-20 0Zm11-4a1 1 0 1 0-2 0v4c0 .3.1.5.3.7l3 3a1 1 0 0 0 1.4-1.4L13 11.6V8Z"
-              clip-rule="evenodd"
-            />
-          </svg>
-          jan 22 2024
-        </p>
-        <p className="font-bold">
-          Ethiopian business link is launch a new portal
-        </p>
-        <p className="">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit.
-        </p>
+      <div className="mt-5 bg-white bg-dark relative flex flex-col gap-3 items-start rounded-md">
+        <div className="w-full border-b py-5 border-gray-300">
+          <p className="font-bold px-5">
+            Ethiopian business link is launch a new portal check
+          </p>
+          <p className="text-sm px-5 mt-4">
+            Lorem ipsum dolor sit amet consect adipisicing elit. Lorem ipsum
+            dolor sit amet consectetur adipisi.
+          </p>
+        </div>
         <div
           onClick={() => navigate("/news-detail")}
-          className="flex gap-2 cursor-pointer mt-2 rounded-full py-[6px] px-3 items-center justify-center"
+          className="flex gap-2 cursor-pointer w-full shadow-sm rounded-full px-5 items-center justify-between pb-4 pt-1"
         >
+          Read more
           <svg
             className="w-6 h-6"
             aria-hidden="true"
@@ -105,7 +97,6 @@ const NewsItem = ({ value }) => {
               d="M19 12H5m14 0-4 4m4-4-4-4"
             />
           </svg>
-          Read more
         </div>
       </div>
     </div>
