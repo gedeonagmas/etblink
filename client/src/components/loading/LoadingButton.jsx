@@ -1,6 +1,5 @@
 import React from "react";
 import "./loading.css";
-import Loading from "./Loading";
 
 const LoadingButton = (props) => {
   return (

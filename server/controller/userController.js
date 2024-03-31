@@ -3,7 +3,6 @@ import asyncCatch from "express-async-catch";
 import { User } from "../models/userModel.js";
 import { tokenGenerator } from "../utils/tokenGenerator.js";
 import crypto from "crypto";
-import { sendEmailMessage } from "./emailController.js";
 // import { Lawyer } from "../models/lawyerModel.js";
 // import { CaseManager } from "../models/caseManagerModel.js";
 import { Institution } from "../models/organizationModel.js";
@@ -74,14 +73,18 @@ export const forgetPassword = asyncCatch(async (req, res, next) => {
     return next(new AppError("please provide your email address", 404));
   const user = await User.findOne({ email });
   if (!user)
-    return next(new AppError("There is no email registered by this email"));
+    return next(new AppError("There is no user registered by this email"));
 
   const resetTokenUrl = await user.createResetToken();
   await user.save({ validateBeforeSave: true });
   const passwordResetUrl = `${req.protocol}:/${req.originalUrl}/${resetTokenUrl}`; // this url will sent via email
 
   //email sent logic here
-  sendEmailMessage(passwordResetUrl, user, res);
+  const subject = "Reset your password";
+  const message =
+    "We have just sent a verification link via your email address please check. it's valid only for 30 minutes";
+  const html = `<div>This is your verification link click <a style={{background:'yellow',padding:'5px', border-radius:'20px',color:white,padding:10px;}} href="${passwordResetUrl}">here</a> to reset your password</div>`;
+  sendEmailHandler(email, res, next, subject, message, html);
 });
 
 export const resetPassword = asyncCatch(async (req, res, next) => {

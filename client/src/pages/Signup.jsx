@@ -5,6 +5,7 @@ import Response from "../components/Response";
 import LoadingButton from "../components/loading/LoadingButton";
 
 const Signup = () => {
+  window.scrollTo({top:0})
   const [signupData, signupResponse] = useUserRegisterMutation();
   const [pending, setPending] = useState(false);
   const [email, setEmail] = useState("");
@@ -22,19 +23,27 @@ const Signup = () => {
   };
 
   return (
-    <div className="pt-52 pb-32">
-      <Response response={signupResponse} setPending={setPending} />
-      <div class="max-w-sm mx-auto">
-        <select
-          name=""
-          id=""
-          className="w-full rounded-lg p-3"
-          onChange={(e) => setRole(e.target.value)}
-        >
-          <option value="visitor">Visitor</option>
-          <option value="company">COmpany</option>
-          <option value="sales">Sales</option>
-        </select>
+    <div className="pt-32 pb-10">
+      <Response response={signupResponse} setPending={setPending} type='signup'/>
+      <div class="max-w-sm px-12 py-8 rounded-lg border shadow-lg mx-auto">
+        <div class="mb-5">
+          <label
+            for="email"
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+          >
+           Register as
+          </label>
+          <select
+            name=""
+            id=""
+            className="w-full border-gray-300 border rounded-lg p-3"
+            onChange={(e) => setRole(e.target.value)}
+          >
+            <option value="visitor">Visitor</option>
+            <option value="company">Company</option>
+            <option value="sales">Sales</option>
+          </select>
+        </div>
         <div class="mb-5">
           <label
             for="email"

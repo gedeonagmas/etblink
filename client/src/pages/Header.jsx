@@ -64,7 +64,7 @@ const Header = () => {
     logout({});
   };
 
-  console.log(context?.user, 'context in header');
+  console.log(context?.user, "context in header");
   return (
     // fixed bg-white bg-dark top-0 left-0 w-full z-50 h-auto
     <div className="fixed w-full z-50 bg-white bg-dark">
@@ -619,7 +619,9 @@ const Header = () => {
                 data-dropdown-toggle="dropdownDelay"
                 data-dropdown-delay="500"
                 data-dropdown-trigger="hover"
-                className={`focus:ring-0 focus:outline-none ${context.user?'-mr-4':'mr-12'} font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center`}
+                className={`focus:ring-0 focus:outline-none ${
+                  context.user ? "-mr-4" : "mr-12"
+                } font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center`}
                 type="button"
               >
                 Languages{" "}
@@ -630,7 +632,7 @@ const Header = () => {
                   fill="none"
                   viewBox="0 0 10 6"
                 >
-                  <path 
+                  <path
                     stroke="currentColor"
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -728,7 +730,7 @@ const Header = () => {
                   {loginForm && (
                     <div
                       onMouseLeave={() => setLoginForm(false)}
-                      className="w-auto rounded-sm rounded-tr-none text-sm p-2 flex gap-1 flex-col bg-gray-900 bg-dark text-dark absolute top-[34px] -left-[211px] z-30 text-black"
+                      className="w-auto z-50 rounded-sm rounded-tr-none text-sm p-2 flex gap-1 flex-col bg-gray-900 bg-dark text-dark absolute top-[34px] -left-[211px] text-black"
                     >
                       <input
                         type="email"

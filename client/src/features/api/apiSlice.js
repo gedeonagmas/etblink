@@ -72,6 +72,35 @@ export const apiSlice = createApi({
       }),
     }),
 
+    //user forget
+    forgetPassword: builder.mutation({
+      query: (data) => ({
+        url: "/user/forgetPassword",
+        method: "POST",
+        body: data,
+        credentials: "include",
+      }),
+    }),
+
+    //user forget
+    resetPassword: builder.mutation({
+      query: (data) => ({
+        url: `/user/resetPassword?resetToken=${data.resetToken}`,
+        method: "POST",
+        body: data,
+        credentials: "include",
+      }),
+    }),
+
+    //user forget
+    updatePassword: builder.mutation({
+      query: (data) => ({
+        url: `/account/updatePassword`,
+        method: "PUT",
+        body: data,
+        credentials: "include",
+      }),
+    }),
     //create
     create: builder.mutation({
       query: (data) => {
@@ -182,6 +211,9 @@ export const {
   useUserRegisterMutation,
   useUserLoginMutation,
   useUserLogoutMutation,
+  useForgetPasswordMutation,
+  useResetPasswordMutation,
+  useUpdatePasswordMutation,
 
   useCreateMutation,
   useReadQuery,

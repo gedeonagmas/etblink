@@ -12,14 +12,27 @@ const Response = ({ response, setPending, redirectTo, type }) => {
   useEffect(() => {
     response.status === "pending" ? setPending(true) : setPending(false);
 
-    let dashboard = "";
+    // response.status === "fulfilled" && dashboard?.length > 0
+    //   ? (setError(false),
+    //     setSuccess(true),
+    //     setSuccessMessage(response?.data?.message),
+    //     type === "login"
+    //       ? navigate(dashboard, { replace: true })
+    //       : redirectTo && redirectTo?.length > 0
+    //       ? (navigate(redirectTo, { replace: true }), window.location.reload())
+    //       : setTimeout(() => {
+    //           setSuccess(false);
+    //         }, 6000))
+    //   : null;
+
+    let dashboard = "#";
     if (response.status === "fulfilled") {
       switch (response?.data?.data?.role) {
         case "company":
           dashboard = "/dashboard/company";
           break;
-        case "salles":
-          dashboard = "/dashboard/salles";
+        case "sales":
+          dashboard = "/dashboard/sales";
           break;
         case "visitor":
           dashboard = "/dashboard/visitor";
@@ -27,20 +40,41 @@ const Response = ({ response, setPending, redirectTo, type }) => {
         default:
           dashboard = "/";
       }
-    }
 
-    response.status === "fulfilled" && dashboard?.length > 0
-      ? (setError(false),
-        setSuccess(true),
-        setSuccessMessage(response?.data?.message),
-        type === "login"
-          ? navigate(dashboard, { replace: true })
-          : redirectTo && redirectTo?.length > 0
-          ? (navigate(redirectTo, { replace: true }), window.location.reload())
-          : setTimeout(() => {
-              setSuccess(false);
-            }, 6000))
-      : null;
+      setError(false);
+      setSuccess(true);
+      setSuccessMessage(response?.data?.message);
+      setTimeout(
+        () => {
+          setSuccess(false);
+        },
+        type === "forget" ? 20000 : 6000
+      );
+
+      if (type === "login" || type === "signUp") {
+        setTimeout(() => {
+          navigate(dashboard);
+          navigate(0);
+        }, 2000);
+      } else if (type === "payment") {
+        localStorage.removeItem("macuta_law_firm_system");
+        navigate(redirectTo, { replace: true });
+      } else if (type === "reset") {
+        setTimeout(() => {
+          navigate(redirectTo, { replace: true });
+        }, 3000);
+      } else if (type === "logout") {
+        setTimeout(() => {
+          navigate("/");
+          navigate(0);
+        }, 1000);
+      } else if (redirectTo && redirectTo?.length > 0) {
+        navigate(redirectTo, {
+          replace: true,
+          state: { role: response?.data?.data?.role },
+        });
+      }
+    }
 
     response.status === "rejected"
       ? (setError(true),

@@ -214,34 +214,73 @@ const Footer = () => {
       </div>
 
       <div className="w-full h-auto bg-black text-white px-main grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 flex-col py-10 items-start justify-between">
-        <div className="">
-          <p className="text-xl font-bold mt-5 uppercase">Services</p>
+        <div className="w-auto">
+          <p className="text-xl font-bold mt-5 w-32 uppercase py-2 border-b">
+            About Us
+          </p>
           <ul className="mt-5 text-sm flex flex-col gap-1">
-            <li>Services</li>
-            <li>Pricint plan</li>
-            <li>Customers</li>
-            <li>Blog</li>
-          </ul>
-        </div>{" "}
-        <div className="">
-          <p className="text-xl font-bold mt-5 uppercase">Services</p>
-          <ul className="mt-5 text-sm flex flex-col gap-1">
-            <li>Services</li>
-            <li>Pricint plan</li>
-            <li>Customers</li>
-            <li>Top companies</li>
-          </ul>
-        </div>
-        <div className=" border-r w-44 h-44 border-dotted">
-          <p className="text-xl font-bold mt-5 uppercase">Blog</p>
-          <ul className="mt-5 text-sm flex flex-col gap-1">
-            <li>Services</li>
-            <li>Pricint plan</li>
+            <a href="#" className="hover:underline">
+              Company
+            </a>
+            <a href="#" className="hover:underline">
+              Vision & Mission
+            </a>
+            <a href="#" className="hover:underline">
+              Social Responsibility
+            </a>
+            <a href="#" className="hover:underline">
+              Membership Price/Package
+            </a>
+            <a href="#" className="hover:underline">
+              Our Partners
+            </a>
           </ul>
         </div>
+        <div className="">
+          <p className="text-xl font-bold mt-5 w-32 uppercase py-2 border-b">
+            Partners
+          </p>
+          <ul className="mt-5 text-sm flex flex-col gap-1">
+            <a href="#" className="hover:underline">
+              Advertise with Us
+            </a>
+            <a href="#" className="hover:underline">
+              Become Representative
+            </a>
+            <a href="#" className="hover:underline">
+              Become a Member
+            </a>
+            <a href="#" className="hover:underline">
+              Work with Us
+            </a>
+          </ul>
+        </div>
+        <div className=" ">
+          <p className="text-xl font-bold mt-5 w-32 uppercase py-2 border-b">
+            Contact
+          </p>
+          <ul className="mt-5 text-sm flex flex-col gap-1">
+            <a href="#" className="hover:underline">
+              Talk to Sales
+            </a>
+            <a href="#" className="hover:underline">
+              News Department
+            </a>
+            <a href="#" className="hover:underline">
+              Technical Support
+            </a>
+            <a href="#" className="hover:underline">
+              Job Department
+            </a>
+            <a href="#" className="hover:underline">
+              Comment/Suggestion
+            </a>
+          </ul>
+        </div>
+
         {/* <div className="h-52 -ml-14 border-gray-700 w-[1px] border border-dotted"></div> */}
-        <div className="mt-7 ml-5">
-          <div className="flex flex-col items-start gap-4 justify-start">
+        <div className="mt-7 ">
+          <div className="flex flex-col items-center gap-4 justify-center w-full">
             <div className="w-52 px-2 py-1 cursor-pointer hover:border-gray-400 h-auto rounded-lg border">
               <img
                 src="./appstores.png"
@@ -258,7 +297,7 @@ const Footer = () => {
             </div>
           </div>
 
-          <div className="flex w-auto mt-5 h-auto items-center justify-center gap-4">
+          <div className="flex  w-auto mt-5 h-auto items-center justify-center gap-4">
             <a href="#" className="h-6 w-6  flex items-center justify-center">
               <svg
                 className="w-6 h-6"
@@ -328,41 +367,50 @@ const Footer = () => {
           </div>
         </div>
         <div className="ml-5">
-          <p className="text-xl font-bold mt-5 uppercase">Contact us</p>
+          {/* <p className="text-xl font-bold mt-5 uppercase w-40 py-2 border-b">
+            Contact us
+          </p>
           <input
             type="text"
             placeholder="email"
             className="py-1 px-2 w-52 rounded-sm focus:outline-none bg-white text-black my-2"
+          /> */}
+
+          <img
+            src="./etblogofooter.png"
+            alt=""
+            className="w-[200px] h-[90px] border-2 lg:border-0 dark:bg-gray-500 rounded-sm"
           />
-          <p className="mt-2 text-xs">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eligendi
-            ullam neque dolores facere earum reprehenderit nemo quos at.
+          <p className="mt-2 text-sm">
+            We are dedicated to providing a comprehensive and user-friendly
+            platform that seamlessly connects businesses and consumers.
           </p>
         </div>
       </div>
       <div className="px-main flex text-white pb-4 bg-black w-full text-sm items-center justify-between">
         <div className="mt-5">
-          <p className="text-lg font-bold uppercase">
-            About skylight technologies
-          </p>
-          <p className="text-xs">
+          <p className="text-lg font-bold uppercase">Ethiopian business Link</p>
+          {/* <p className="text-xs">
             Copyright Skylight technologies @2024 Technology share company in
             ethiopia Technology share company in ethiopia
-          </p>
-          <p className="text-xs">
-            Technology share company in ethiopia Technology share company in
-            ethiopia Technology share company in ethiopia Technology share
-            company in ethiopia
+          </p> */}
+          <p className="text-xs mr-20">
+            Ethiopian Business Link is a sister company of Skylight Technologies
+            PLC. Skylight Technologies is a reputable technology company
+            offering website design, software development, and networking
+            solutions. They are known for their innovative approach and
+            expertise in technology. Their commitment to quality and customer
+            satisfaction sets them apart in the industry.
           </p>
         </div>
         <div className="mt-5">
-          {/* <img
-              src="./logo.png"
-              alt=""
-              className="w-[200px] h-[65px] bg-gray-500 rounded-sm"
-            /> */}
-          <p className="text-2xl font-extrabold uppercase italic">Skylight</p>
-          <p className="ml-10 text-sm">Technologies</p>
+          <img
+            src="./skylight.png"
+            alt=""
+            className="w-[300px] h-[60px] border-2 lg:border-0 dark:bg-gray-500 rounded-sm"
+          />
+          {/* <p className="text-2xl font-extrabold uppercase italic">Skylight</p>
+          <p className="ml-10 text-sm">Technologies</p> */}
         </div>
       </div>
     </div>

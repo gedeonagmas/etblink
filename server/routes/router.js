@@ -34,6 +34,7 @@ import asyncCatch from "express-async-catch";
 
 const router = express.Router();
 const chatRouter = express.Router();
+const accountRouter = express.Router();
 
 const files = upload.fields([
   { name: "profilePicture", maxCount: 1 },
@@ -60,7 +61,7 @@ router
   .route("/updateProfilePicture")
   .put(authentication, files, updateProfilePicture);
 
-router.route("/updatePassword").put(authentication, updatePassword);
+accountRouter.route("/updatePassword").put(authentication, updatePassword);
 
 //factory route
 router.route("/:table/:id").get(authentication, _read_single);
@@ -84,4 +85,4 @@ chatRouter
 
 //aggregation
 // router.route("/stats/:table").patch(authentication, authorization, firstPhase);
-export { router, chatRouter };
+export { router, chatRouter,accountRouter };

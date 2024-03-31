@@ -20,6 +20,9 @@ import { createContext, useEffect, useState } from "react";
 // import Cookies from "js-cookie";
 import { useReadQuery } from "./features/api/apiSlice";
 import Profile from "./pages/dashboard/Profile";
+import Forget from "./pages/Forget";
+import Reset from "./pages/Reset";
+import ChangePassword from "./pages/dashboard/ChangePassword";
 
 export const userContext = createContext();
 
@@ -31,7 +34,7 @@ function App() {
 
   // useEffect(() => {});
   // const user = { data: { email: "gedi@gmail.com" } };
-  // console.log(user?.data, "from app js");
+  console.log(user?.data, "from app js");
   return (
     <Flowbite>
       <userContext.Provider value={{ user: user?.data }}>
@@ -40,6 +43,8 @@ function App() {
             <Route path="/" element={<HomeTemplate />}>
               <Route path="/" element={<Home />}></Route>
               <Route path="/signup" element={<Signup />}></Route>
+              <Route path="/forget" element={<Forget />}></Route>
+              <Route path="/reset" element={<Reset />}></Route>
               <Route path="/local" element={<Category type="local" />}></Route>
               <Route
                 path="/global"
@@ -59,7 +64,15 @@ function App() {
               <Route path="/dashboard/company" element={<Company />}></Route>
               <Route path="/dashboard/sales" element={<Sellers />}></Route>
               <Route path="/dashboard/visitor" element={<Visitors />}></Route>
-              <Route path="/dashboard/company/profile" element={<Profile />}></Route>
+              <Route
+                path="/dashboard/company/profile"
+                element={<Profile />}
+              ></Route>
+              <Route
+                path="/dashboard/company/change-password"
+                element={<ChangePassword />}
+              ></Route>
+
               <Route path="*" element={<PageNotFound />}></Route>
             </Route>
             <Route path="*" element={<PageNotFound />}></Route>

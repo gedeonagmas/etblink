@@ -335,6 +335,7 @@ const Dashboard = () => {
       : id?.classList?.add("hidden");
   };
 
+  console.log(context?.user, "context from dashboard");
   return (
     <div>
       <nav class="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
@@ -342,13 +343,14 @@ const Dashboard = () => {
           response={logoutResponse}
           setPending={setPending}
           redirectTo="/"
+          type="logout"
         />
         <div class="px-3 py-3 lg:px-5 lg:pl-3">
           <div class="flex items-center justify-between">
             <div class="flex w-full justify-between items-center">
               <a
                 href="/"
-                className="text-sm font-bold p-2 hover:text-gray-800 absolute hidden lg:block items-center  gap-1 left-2 top-4 cursor-pointer text-gray-400 "
+                className="text-sm lg:flex hidden font-bold p-2 hover:text-gray-800 absolute  items-center  gap-1 left-2 top-4 cursor-pointer text-gray-400 "
               >
                 <svg
                   class="w-6 h-6 "
@@ -367,6 +369,7 @@ const Dashboard = () => {
                     d="M5 12h14M5 12l4-4m-4 4 4 4"
                   />
                 </svg>
+                <p className="text-xs">back to home</p>
               </a>
               <div class="flex items-center w-full justify-end ms-3">
                 <div
@@ -582,7 +585,7 @@ const Dashboard = () => {
                     </p>
                   </div>
                   <ul class="py-1" role="none">
-                    <li>
+                    {/* <li>
                       <a
                         href={`/dashboard/${context?.user?.role}`}
                         class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
@@ -590,16 +593,27 @@ const Dashboard = () => {
                       >
                         Dashboard
                       </a>
-                    </li>
+                    </li> */}
 
                     <li>
-                      <a
-                        href={`/dashboard/${context?.user?.role}/profile`}
-                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                        role="menuitem"
-                      >
-                        Profile
-                      </a>
+                      {context?.user?.role && (
+                        <a
+                          href={`/dashboard/${context?.user?.role}/profile`}
+                          class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                          role="menuitem"
+                        >
+                          Profile
+                        </a>
+                      )}
+                      {context?.user?.role && (
+                        <a
+                          href={`/dashboard/${context?.user?.role}/change-password`}
+                          class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                          role="menuitem"
+                        >
+                          Security
+                        </a>
+                      )}
                     </li>
                     <li>
                       <p
@@ -607,7 +621,7 @@ const Dashboard = () => {
                         class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
                         role="menuitem"
                       >
-                        Sign out
+                        Log out
                       </p>
                     </li>
                   </ul>
