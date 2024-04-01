@@ -97,7 +97,7 @@ const Header = () => {
             <div className="flex relative gap-4">
               <div className="">
                 <p
-                  onMouseOver={() => setLoginForm(true)}
+                  onClick={() => setLoginForm(!loginForm)}
                   className={`cursor-pointer ${
                     loginForm ? "bg-gray-900 text-white" : ""
                   } px-3 h-[70px] absolute -top-5 hover:text-white pt-5 -left-[70px] flex `}
@@ -122,7 +122,7 @@ const Header = () => {
                 </p>
                 {loginForm && (
                   <div
-                    onMouseLeave={() => setLoginForm(false)}
+                    // onMouseLeave={() => setLoginForm(false)}
                     className="w-auto rounded-sm rounded-l text-sm rounded-tl-none p-2 flex gap-1 flex-col bg-gray-900 bg-dark text-dark absolute top-[50px] -left-[70px] z-30 text-black"
                   >
                     <input
@@ -138,9 +138,12 @@ const Header = () => {
                       placeholder="password"
                     />
                     <div className="flex py-1 items-center justify-between w-full">
-                      <p className="text-xs cursor-pointer hover:text-gray-100 text-white">
+                      <Link
+                        to="/forget"
+                        className="text-xs cursor-pointer hover:text-gray-100 text-white"
+                      >
                         Forget password?
-                      </p>
+                      </Link>
                       <LoadingButton
                         pending={pending}
                         onClick={loginHandler}
@@ -698,9 +701,12 @@ const Header = () => {
                         placeholder="password"
                       />
                       <div className="flex items-center py-1 justify-between w-full">
-                        <p className="text-xs cursor-pointer hover:text-gray-100 text-white">
+                        <Link
+                          to="/forget"
+                          className="text-xs cursor-pointer hover:text-gray-100 text-white"
+                        >
                           Forget password?
-                        </p>
+                        </Link>
                         <LoadingButton
                           pending={pending}
                           onClick={loginHandler}

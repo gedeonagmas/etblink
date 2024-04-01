@@ -23,6 +23,9 @@ import Profile from "./pages/dashboard/Profile";
 import Forget from "./pages/Forget";
 import Reset from "./pages/Reset";
 import ChangePassword from "./pages/dashboard/ChangePassword";
+import Admin from "./pages/dashboard/Admin";
+import AddNews from "./pages/dashboard/AddNews";
+import AddYouTube from "./pages/dashboard/AddYouTube";
 
 export const userContext = createContext();
 
@@ -64,6 +67,12 @@ function App() {
               <Route path="/dashboard/company" element={<Company />}></Route>
               <Route path="/dashboard/sales" element={<Sellers />}></Route>
               <Route path="/dashboard/visitor" element={<Visitors />}></Route>
+              <Route path="/dashboard/admin" element={<Admin />}></Route>
+              <Route path="/dashboard/admin/news" element={<AddNews />}></Route>
+              <Route
+                path="/dashboard/admin/youtube"
+                element={<AddYouTube />}
+              ></Route>
               <Route
                 path="/dashboard/company/profile"
                 element={<Profile />}

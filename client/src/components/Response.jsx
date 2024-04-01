@@ -37,6 +37,9 @@ const Response = ({ response, setPending, redirectTo, type }) => {
         case "visitor":
           dashboard = "/dashboard/visitor";
           break;
+        case "admin":
+          dashboard = "/dashboard/admin";
+          break;
         default:
           dashboard = "/";
       }

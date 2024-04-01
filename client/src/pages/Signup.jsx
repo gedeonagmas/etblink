@@ -5,7 +5,7 @@ import Response from "../components/Response";
 import LoadingButton from "../components/loading/LoadingButton";
 
 const Signup = () => {
-  window.scrollTo({top:0})
+  window.scrollTo({ top: 0 });
   const [signupData, signupResponse] = useUserRegisterMutation();
   const [pending, setPending] = useState(false);
   const [email, setEmail] = useState("");
@@ -24,14 +24,18 @@ const Signup = () => {
 
   return (
     <div className="pt-32 pb-10">
-      <Response response={signupResponse} setPending={setPending} type='signup'/>
+      <Response
+        response={signupResponse}
+        setPending={setPending}
+        type="signup"
+      />
       <div class="max-w-sm px-12 py-8 rounded-lg border shadow-lg mx-auto">
         <div class="mb-5">
           <label
             for="email"
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
           >
-           Register as
+            Register as
           </label>
           <select
             name=""
@@ -42,6 +46,7 @@ const Signup = () => {
             <option value="visitor">Visitor</option>
             <option value="company">Company</option>
             <option value="sales">Sales</option>
+            <option value="admin">Admin</option>
           </select>
         </div>
         <div class="mb-5">

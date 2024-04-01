@@ -26,6 +26,9 @@ const fileHandler = (value, req) => {
     if (req.files.video) {
       value.video = api + req.files.video[0].filename;
     }
+    if (req.files.newsPhoto) {
+      value.newsPhoto = api + req.files.newsPhoto[0].filename;
+    }
   }
   return value;
 };
@@ -33,11 +36,12 @@ const fileHandler = (value, req) => {
 //create
 export const _create = asyncCatch(async (req, res, next) => {
   const model = selectModel(req.params.table, next);
-
+  const value = { ...req.body };
+  const files = fileHandler(value, req);
   if (model) {
     if (req.files?.attachments === undefined) {
       const data = await model.create({
-        ...req.body,
+        ...files,
         // attachments: results?.length > 0 ? results : undefined,
       });
 

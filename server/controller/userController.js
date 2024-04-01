@@ -9,7 +9,8 @@ import { Institution } from "../models/organizationModel.js";
 import v2 from "./../config/cloudinary.js";
 import { Private } from "../models/privateModel.js";
 import { Company } from "../models/companyModel.js";
-
+import { sendEmailHandler } from "./emailController.js";
+const api='http://localhost:4000/'
 export const signupHandler = asyncCatch(async (req, res, next) => {
   const user = await User.create(req.body);
   if (user) {
@@ -77,7 +78,7 @@ export const forgetPassword = asyncCatch(async (req, res, next) => {
 
   const resetTokenUrl = await user.createResetToken();
   await user.save({ validateBeforeSave: true });
-  const passwordResetUrl = `${req.protocol}:/${req.originalUrl}/${resetTokenUrl}`; // this url will sent via email
+  const passwordResetUrl = `${api}?${resetTokenUrl}`; // this url will sent via email
 
   //email sent logic here
   const subject = "Reset your password";

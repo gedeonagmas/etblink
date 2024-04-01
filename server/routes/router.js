@@ -41,6 +41,7 @@ const files = upload.fields([
   { name: "logo", maxCount: 1 },
   { name: "banner", maxCount: 1 },
   { name: "galleries", maxCount: 10 },
+  { name: "newsPhoto", maxCount: 1 },
 ]);
 
 //user account route
@@ -85,4 +86,4 @@ chatRouter
 
 //aggregation
 // router.route("/stats/:table").patch(authentication, authorization, firstPhase);
-export { router, chatRouter,accountRouter };
+export { router, chatRouter, accountRouter };

@@ -4,13 +4,14 @@ import YouTube from "react-youtube";
 
 const YoutubeItems = () => {
   const opts = {
-    // width: "100%",
+    width: "97%",
+    height:'180px',
     borderRadius: "2rem",
     playerVars: { autoplay: 1 },
-  };
+  }; 
 
   const videoReady = (event) => {
-    event.target.pauseVideo();
+    event.target.pauseVideo(); 
   };
 
   return (
@@ -128,35 +129,36 @@ const YoutubeItems = () => {
         </div>
       </div>
 
-      {["tLQ_AulO0Ag", "2N_d1ZpwdJ8", "qF0gUOBMfQU"].map((e, i) => {
-        return (
-          <div
-            key={i}
-            className="flex w-full rounded-sm relative justify-start py-4 gap-1 flex-col items-enter"
-          >
-            {/* <img src="./image-3.jpg" alt="" className="w-full" /> */}
-            <YouTube videoId={e} opts={opts} onReady={videoReady} />
-            <p className="font-bold flex items-center justify-start gap-2 text-sm mt-4">
-              {" "}
-              <svg
-                className="w-6 h-6 text-[rgb(252,45,45)]"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M21.7 8c0-.7-.4-1.3-.8-2-.5-.5-1.2-.8-2-.8C16.2 5 12 5 12 5s-4.2 0-7 .2c-.7 0-1.4.3-2 .9-.3.6-.6 1.2-.7 2l-.2 3.1v1.5c0 1.1 0 2.2.2 3.3 0 .7.4 1.3.8 2 .6.5 1.4.8 2.2.8l6.7.2s4.2 0 7-.2c.7 0 1.4-.3 2-.9.3-.5.6-1.2.7-2l.2-3.1v-1.6c0-1 0-2.1-.2-3.2ZM10 14.6V9l5.4 2.8-5.4 2.8Z"
-                  clipRule="evenodd"
-                />
-              </svg>
-              Video title
-            </p>
-            <p className="text-sm mt-2">
-              Videos sub title and video description
-            </p>
-            {/* <div className="flex gap-2 items-center justify-between w-full">
+      {["tLQ_AulO0Ag", "2N_d1ZpwdJ8", "qF0gUOBMfQU", "tfMfkRLPXHA"].map(
+        (e, i) => {
+          return (
+            <div
+              key={i}
+              className="flex w-full rounded-sm relative justify-start py-4 gap-1 flex-col items-enter"
+            >
+              {/* <img src="./image-3.jpg" alt="" className="w-full" /> */}
+              <YouTube videoId={e} opts={opts} onReady={videoReady} />
+              <p className="font-bold flex items-center justify-start gap-2 text-sm mt-4">
+                {" "}
+                <svg
+                  className="w-6 h-6 text-[rgb(252,45,45)]"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M21.7 8c0-.7-.4-1.3-.8-2-.5-.5-1.2-.8-2-.8C16.2 5 12 5 12 5s-4.2 0-7 .2c-.7 0-1.4.3-2 .9-.3.6-.6 1.2-.7 2l-.2 3.1v1.5c0 1.1 0 2.2.2 3.3 0 .7.4 1.3.8 2 .6.5 1.4.8 2.2.8l6.7.2s4.2 0 7-.2c.7 0 1.4-.3 2-.9.3-.5.6-1.2.7-2l.2-3.1v-1.6c0-1 0-2.1-.2-3.2ZM10 14.6V9l5.4 2.8-5.4 2.8Z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                Video title
+              </p>
+              <p className="text-sm mt-2">
+                Videos sub title and video description
+              </p>
+              {/* <div className="flex gap-2 items-center justify-between w-full">
               <div className="flex items-center justify-center gap-2">
                 <Visibility sx={{ width: 20, height: 20 }} />{" "}
                 <p className="text-xs">2500 views</p>
@@ -176,9 +178,10 @@ const YoutubeItems = () => {
                 <p className="text-xs">2000 likes</p>
               </div>
             </div> */}
-          </div>
-        );
-      })}
+            </div>
+          );
+        }
+      )}
     </div>
   );
 };

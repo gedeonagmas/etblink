@@ -1,14 +1,11 @@
 import { Application } from "../models/applicationModel.js";
 import { Company } from "../models/companyModel.js";
-// import { CaseManager } from "../models/caseManagerModel.js";
-// import { Case } from "../models/caseModel.js";
-// import { Category } from "../models/categoryModel.js";
 import { Group } from "../models/groupModel.js";
-// import { Lawyer } from "../models/lawyerModel.js";
+import { News } from "../models/newsModel.js";
 import { Institution } from "../models/organizationModel.js";
 import { Payment } from "../models/paymentModel.js";
-// import { Permission } from "../models/permissionModel.js";
 import { User } from "../models/userModel.js";
+import { Youtube } from "../models/youtube.js";
 import AppError from "./AppError.js";
 
 export const selectModel = (name, next) => {
@@ -43,6 +40,12 @@ export const selectModel = (name, next) => {
       break;
     case "groups":
       model = Group;
+      break;
+    case "youtubes":
+      model = Youtube;
+      break;
+    case "news":
+      model = News;
       break;
     default:
       return next(new AppError("something went wrong please try again!.", 500));

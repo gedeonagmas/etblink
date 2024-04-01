@@ -104,10 +104,21 @@ export const apiSlice = createApi({
     //create
     create: builder.mutation({
       query: (data) => {
-        data?.tag.map((d) => tag.push(d));
-        // console.log(data.url, encrypt(data.url), "both");
+        let newUrl = "";
+        let newTag;
+        if (!data.url) {
+          for (var key of data.entries()) {
+            if (key[0] === "url") newUrl = key[1];
+            if (key[0] === "tag") newTag = key[1].split(",");
+          }
+        } else {
+          newTag = data.tag;
+        }
+
+        newTag.map((d) => tag.push(d));
+
         return {
-          url: data.url,
+          url: data.url ? data.url : newUrl,
           method: "POST",
           body: data,
           credentials: "include",
@@ -117,6 +128,21 @@ export const apiSlice = createApi({
         return [...new Set(tag)];
       },
     }),
+
+    //   query: (data) => {
+    //     data?.tag.map((d) => tag.push(d));
+    //     // console.log(data.url, encrypt(data.url), "both");
+    //     return {
+    //       url: data.url,
+    //       method: "POST",
+    //       body: data,
+    //       credentials: "include",
+    //     };
+    //   },
+    //   invalidatesTags: () => {
+    //     return [...new Set(tag)];
+    //   },
+    // }),
 
     //read
     read: builder.query({
