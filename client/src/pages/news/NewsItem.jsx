@@ -13,7 +13,7 @@ const NewsItem = ({ value }) => {
             src="./image-1.jpg"
             alt=""
             className="w-[300px] h-52 transition duration-300 ease-in-out hover:scale-125 rounded-md rounded-b-none"
-          />
+          /> 
         </div>
       </div>
 

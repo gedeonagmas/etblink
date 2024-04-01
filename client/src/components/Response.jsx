@@ -68,8 +68,9 @@ const Response = ({ response, setPending, redirectTo, type }) => {
         }, 3000);
       } else if (type === "logout") {
         setTimeout(() => {
-          navigate("/");
+          navigate("/", { replace: true });
           navigate(0);
+          window.location.reload();
         }, 1000);
       } else if (redirectTo && redirectTo?.length > 0) {
         navigate(redirectTo, {

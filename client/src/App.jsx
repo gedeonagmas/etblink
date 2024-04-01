@@ -24,7 +24,7 @@ import Forget from "./pages/Forget";
 import Reset from "./pages/Reset";
 import ChangePassword from "./pages/dashboard/ChangePassword";
 import Admin from "./pages/dashboard/Admin";
-import AddNews from "./pages/dashboard/AddNews";
+import AddNews from "./pages/dashboard/news/AddNews";
 import AddYouTube from "./pages/dashboard/AddYouTube";
 
 export const userContext = createContext();
