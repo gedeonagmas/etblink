@@ -3,17 +3,17 @@ import * as valid from "../utils/validator.js";
 
 const youtubeSchema = new mongoose.Schema(
   {
-    link: {
+    videoId: {
       type: String,
-      validate: valid.required("Link"),
+      validate: valid.required("Video Id"),
     },
     title: {
       type: String,
       validate: valid.required("Title"),
     },
-    subTitle: {
+    subtitle: {
       type: String,
-      validate: valid.required("Sub title"),
+      validate: valid.required("Subtitle"),
     },
     date: {
       type: String,

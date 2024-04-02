@@ -338,7 +338,7 @@ const Dashboard = () => {
   console.log(context?.user, "context from dashboard");
   return (
     <div>
-      <nav class="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+      <nav class="fixed top-0 z-50 w-full bg-white bg-dark border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
         <Response
           response={logoutResponse}
           setPending={setPending}
@@ -395,7 +395,11 @@ const Dashboard = () => {
                 </div>
 
                 <p className="text-xl hidden lg:block font-bold self-start mr-40 rounded-md p-3 bg-gray-100 dark:bg-gray-700">
-                  Welcome back Gedi 👋
+                  Welcome{" "}
+                  {context?.user?.role === "company"
+                    ? context?.user?.user?.name
+                    : ""}{" "}
+                  👋
                 </p>
 
                 {/* <form class="max-w-md mx-auto">
@@ -540,12 +544,35 @@ const Dashboard = () => {
                   >
                     <span class="sr-only">Open user menu</span>
                     <div className="flex gap-2 items-center">
-                      <img
-                        class="w-10 h-10 rounded-full"
-                        src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
-                        alt="user photo"
-                      />
-                      <span className="hidden lg:block">gedion</span>
+                      {context?.user?.role !== "company" &&
+                      context?.user?.profilePicture?.length < 1 ? (
+                        <div className="w-12 h-12 p-1 text-xs rounded-full flex items-center justify-center bg-main text-white text-center">
+                          {context?.user?.role}
+                        </div>
+                      ) : context?.user?.role !== "company" &&
+                        context?.user?.profilePicture?.length > 1 ? (
+                        <img
+                          class="w-10 h-10 rounded-full"
+                          src={context?.user?.profilePicture}
+                          alt="user photo"
+                        />
+                      ) : (
+                        <img
+                          class="w-10 h-10 rounded-full"
+                          src={
+                            context?.user?.role === "company"
+                              ? context?.user?.user?.logo
+                              : ""
+                          }
+                          alt="user photo"
+                        />
+                      )}
+
+                      <span className="hidden lg:block">
+                        {context?.user?.role === "company"
+                          ? context?.user?.user?.name?.substring(0,7)
+                          : ""}
+                      </span>
                       <svg
                         class="w-6 h-6 hidden lg:block text-gray-800 dark:text-white"
                         aria-hidden="true"
@@ -571,12 +598,12 @@ const Dashboard = () => {
                   id="dropdown-user"
                 >
                   <div class="px-4 py-3" role="none">
-                    <p
+                    {/* <p
                       class="text-sm text-gray-900 dark:text-white"
                       role="none"
                     >
                       Skylight technology
-                    </p>
+                    </p> */}
                     <p
                       class="text-sm font-medium text-gray-900 truncate dark:text-gray-300"
                       role="none"
@@ -637,7 +664,7 @@ const Dashboard = () => {
         class="fixed hidden lg:block top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform  bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
         aria-label="Sidebar"
       >
-        <div class="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
+        <div class="h-full px-3 pb-4 overflow-y-auto bg-white bg-dark dark:bg-gray-800">
           <ul class="space-y-2 font-medium">
             <a href="/" class="flex ms-2 md:me-24">
               <img src={logo} class="w-[200px] h-[112px] me-3" alt="etblink" />
@@ -874,7 +901,10 @@ const Dashboard = () => {
         </div>
       </aside>
 
-      <div onClick={() => sidebarHandler("off")} class="p-4 mt-20 lg:ml-64">
+      <div
+        onClick={() => sidebarHandler("off")}
+        class="p-4 mt-20 bg-dark bg-white lg:ml-64"
+      >
         {/* <Routes>
           <Route path="/company" element={<Company />} />
         </Routes> */}

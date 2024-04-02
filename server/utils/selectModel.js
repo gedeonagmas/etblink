@@ -5,7 +5,7 @@ import { News } from "../models/newsModel.js";
 import { Institution } from "../models/organizationModel.js";
 import { Payment } from "../models/paymentModel.js";
 import { User } from "../models/userModel.js";
-import { Youtube } from "../models/youtube.js";
+import { Youtube } from "../models/youtubeModel.js";
 import AppError from "./AppError.js";
 
 export const selectModel = (name, next) => {

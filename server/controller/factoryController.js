@@ -209,9 +209,8 @@ export const _delete = asyncCatch(async (req, res, next) => {
   const model = selectModel(req.params.table, next);
 
   if (model) {
-    const data = await model.findByIdAndUpdate(
-      { _id: req.query.id },
-      { deleted: req.body.type === "delete" ? true : false }
+    const data = await model.findByIdAndDelete(
+      req.query.id 
     );
 
     if (!data)

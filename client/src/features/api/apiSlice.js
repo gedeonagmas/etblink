@@ -40,6 +40,8 @@ export const apiSlice = createApi({
     "lawyers",
     "groups",
     "chats",
+    "news",
+    "youtubes",
   ],
   endpoints: (builder) => ({
     //user signup
@@ -172,9 +174,7 @@ export const apiSlice = createApi({
         } else {
           newTag = data.tag;
         }
-
         newTag.map((d) => tag.push(d));
-
         return {
           url: data.url ? data.url : newUrl,
           method: "PUT",

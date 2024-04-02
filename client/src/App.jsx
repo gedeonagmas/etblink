@@ -25,7 +25,10 @@ import Reset from "./pages/Reset";
 import ChangePassword from "./pages/dashboard/ChangePassword";
 import Admin from "./pages/dashboard/Admin";
 import AddNews from "./pages/dashboard/news/AddNews";
-import AddYouTube from "./pages/dashboard/AddYouTube";
+import AddYouTube from "./pages/dashboard/youtube/AddYoutube";
+import NewsDetailAdmin from "./pages/dashboard/news/UpdateNews";
+import AddYoutube from "./pages/dashboard/youtube/AddYoutube";
+import UpdateYoutube from "./pages/dashboard/youtube/UpdateYoutube";
 
 export const userContext = createContext();
 
@@ -70,11 +73,27 @@ function App() {
               <Route path="/dashboard/admin" element={<Admin />}></Route>
               <Route path="/dashboard/admin/news" element={<AddNews />}></Route>
               <Route
+                path="/dashboard/admin/news/detail"
+                element={<NewsDetailAdmin />}
+              ></Route>
+              <Route
                 path="/dashboard/admin/youtube"
-                element={<AddYouTube />}
+                element={<AddYoutube />}
+              ></Route>
+              <Route
+                path="/dashboard/admin/youtube/detail"
+                element={<UpdateYoutube />}
               ></Route>
               <Route
                 path="/dashboard/company/profile"
+                element={<Profile />}
+              ></Route>
+              <Route
+                path="/dashboard/sales/profile"
+                element={<Profile />}
+              ></Route>
+              <Route
+                path="/dashboard/visitor/profile"
                 element={<Profile />}
               ></Route>
               <Route

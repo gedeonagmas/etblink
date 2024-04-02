@@ -9,40 +9,52 @@ import {
 import Response from "../../../components/Response";
 import { format } from "timeago.js";
 import Loading from "../../../components/loading/Loading";
+import YouTube from "react-youtube";
 
-const AddNews = () => {
+const AddYoutube = () => {
   const {
-    data: news,
+    data: youtubes,
     isFetching,
     isError,
-  } = useReadQuery({ url: "/user/news", tag: ["news"] });
+  } = useReadQuery({ url: "/user/youtubes", tag: ["youtubes"] });
 
   const [addData, addResponse] = useCreateMutation();
   const [deleteData, deleteResponse] = useDeleteMutation();
   const [pending, setPending] = useState(false);
   const [deletePending, setDeletePending] = useState(false);
   const [add, setAdd] = useState(false);
-  const [photo, setPhoto] = useState("");
+  const [videoId, setVideoId] = useState("");
   const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
+  const [subtitle, setSubtitle] = useState("");
 
   const addHandler = () => {
-    const formData = new FormData();
-    formData.append("newsPhoto", photo);
-    formData.append("title", title);
-    formData.append("description", description);
-    formData.append("url", `/user/news`);
-    formData.append("tag", ["news"]);
-    addData(formData);
+    addData({
+      videoId,
+      title,
+      subtitle,
+      url: "/user/youtubes",
+      tag: ["youtubes"],
+    });
   };
 
   const deleteHandler = (id) => {
-    deleteData({ url: `/user/news?id=${id}`, tag: ["news"] });
+    deleteData({ url: `/user/youtubes?id=${id}`, tag: ["youtubes"] });
   };
 
-  console.log(news, "news");
+  const opts = {
+    width: "97%",
+    height: "180px",
+    borderRadius: "2rem",
+    playerVars: { autoplay: 1 },
+  };
+
+  const videoReady = (event) => {
+    event.target.pauseVideo();
+  };
+
+  console.log(youtubes, "youtubes");
   return (
-    <div className="flex pb-5 min-h-[85vh]  relative bg-dark bg-white flex-col h-auto w-full gap-5">
+    <div className="flex min-h-[85vh] pb-5 relative bg-dark bg-white flex-col h-auto w-full gap-5">
       <Response response={addResponse} setPending={setPending} />
       <Response response={deleteResponse} setPending={setDeletePending} />
 
@@ -54,59 +66,25 @@ const AddNews = () => {
       </button>
       <div className="grid w-full grid-cols-1 md:grid-cols-2 gap-5 lg:grid-cols-3">
         {isFetching && <Loading />}
-        {isError && <p>Something went wrong for reading news data</p>}
-        {news && news?.data?.length > 0 ? (
-          news?.data?.map((e) => {
+        {isError && <p>Something went wrong for reading video data</p>}
+        {youtubes && youtubes?.data?.length > 0 ? (
+          youtubes?.data?.map((e) => {
             return (
               <div
                 key={e._id}
-                className="flex flex-col gap-2 rounded-lg p-4 border border-gray-300 shadow-lg"
+                className="flex w-full border px-4 border-dark rounded-lg relative justify-start py-4 gap-1 flex-col items-enter"
               >
-                <div className="relative">
-                  <img
-                    src={e?.newsPhoto}
-                    alt=""
-                    className="h-40 w-full rounded-sm"
-                  />
-                  <div className=" absolute  text-white top-[126px] right-2">
-                    <div
-                      class="block relative mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                      for="file_input"
-                    >
-                      <svg
-                        class="w-6 h-6 text-gray-800 dark:text-white"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          stroke="currentColor"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M4 18V8a1 1 0 0 1 1-1h1.5l1.707-1.707A1 1 0 0 1 8.914 5h6.172a1 1 0 0 1 .707.293L17.5 7H19a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1Z"
-                        />
-                        <path
-                          stroke="currentColor"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
-                        />
-                      </svg>{" "}
-                      <input
-                        onChange={(e) => setPhoto(e.target.files[0])}
-                        class="block z-20 opacity-0 absolute top-0 left-0 w-6 h-6 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                        id="file_input"
-                        type="file"
-                      />
-                    </div>
-                  </div>
+                <YouTube videoId={e.videoId} opts={opts} onReady={videoReady} />
+                <div className="flex flex-col gap-1">
+                  <p className=" py-1 border-b font-bold">Title</p>
+                  <p className="font-bold flex items-center justify-start gap-2 text-sm">
+                    {e.title}
+                  </p>
                 </div>
-
-                <p className="font-bold">{e?.title}</p>
-                <p className="text-sm">{e?.description}</p>
+                <div className="mt-2 flex flex-col gap-1">
+                  <p className="py-1 border-b font-bold">Subtitle</p>
+                  <p className="">{e.subtitle}</p>
+                </div>
                 <p className="text-sm self-end font-light">{format(e?.date)}</p>
                 <div className="flex w-full items-center justify-between">
                   <LoadingButton
@@ -117,7 +95,7 @@ const AddNews = () => {
                     width="w-32"
                   />
                   <a
-                    href={`/dashboard/admin/news/detail?${e._id}`}
+                    href={`/dashboard/admin/youtube/detail?${e._id}`}
                     className="py-2 w-36 rounded-lg bg-emerald-500 text-center text-white"
                   >
                     Detail
@@ -154,31 +132,17 @@ const AddNews = () => {
           </div>
           <div className="mb-5 mt-5">
             <label
-              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              for="file_input"
-            >
-              Upload file
-            </label>
-            <input
-              onChange={(e) => setPhoto(e.target.files[0])}
-              class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-              id="file_input"
-              type="file"
-            />
-          </div>
-          <div className="mb-5">
-            <label
               for="name"
               class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
             >
-              Company name
+              Video ID
             </label>
             <input
-              onChange={(e) => setTitle(e.target.value)}
+              onChange={(e) => setVideoId(e.target.value)}
               type="text"
               id="name"
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              placeholder="Skylight Technologies"
+              placeholder="Video id"
               required
             />
           </div>
@@ -187,17 +151,33 @@ const AddNews = () => {
               for="name"
               class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
             >
-              Description
+              Title
             </label>
-            <textarea
-              onChange={(e) => setDescription(e.target.value)}
-              name=""
-              id=""
-              cols="30"
-              rows="3"
-              placeholder="Description"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            ></textarea>
+            <input
+              onChange={(e) => setTitle(e.target.value)}
+              type="text"
+              id="name"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              placeholder="Title"
+              required
+            />
+          </div>
+
+          <div className="mb-5">
+            <label
+              for="name"
+              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            >
+              Subtitle
+            </label>
+            <input
+              onChange={(e) => setSubtitle(e.target.value)}
+              type="text"
+              id="name"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              placeholder="Subtitle"
+              required
+            />
           </div>
           <LoadingButton
             pending={pending}
@@ -212,4 +192,4 @@ const AddNews = () => {
   );
 };
 
-export default AddNews;
+export default AddYoutube;
