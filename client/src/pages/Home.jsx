@@ -14,8 +14,67 @@ import {
 } from "@mui/icons-material";
 import Header from "./Header";
 import Footer from "./Footer";
+import { useEffect, useState } from "react";
+import { useReadQuery } from "../features/api/apiSlice";
+import Loading from "../components/loading/Loading";
+import { format } from "timeago.js";
 
 const Home = () => {
+  const {
+    data: company,
+    isFetching: companyFetching,
+    isError: companyError,
+  } = useReadQuery({
+    url: "/user/companies?isBoosted[eq]=true",
+    tag: ["companies"],
+  });
+
+  const {
+    data: newses,
+    isFetching: newsFetching,
+    isError: newsError,
+  } = useReadQuery({
+    url: "/user/news?limits=12",
+    tag: ["news"],
+  });
+
+  const {
+    data: youtube,
+    isFetching: youtubeFetching,
+    isError: youtubeError,
+  } = useReadQuery({
+    url: "/user/youtubes?limits=4",
+    tag: ["youtubes"],
+  });
+
+  const [companies, setCompanies] = useState([]);
+  const [news, setNews] = useState([]);
+  const [youtubes, setYoutubes] = useState([]);
+
+  useEffect(() => {
+    if (company?.data) {
+      setCompanies(company?.data);
+    }
+  }, [company]);
+
+  useEffect(() => {
+    if (newses?.data) {
+      setNews(newses?.data);
+    }
+  }, [newses]);
+
+  useEffect(() => {
+    if (youtube?.data) {
+      setYoutubes(youtube?.data);
+    }
+  }, [youtube]);
+
+  // const hoverHandler = (id) => {
+  //   const ids = document.getElementById(id);
+  //   ids?.classList?.value?.includes("hidden")
+  //     ? ids?.classList?.remove("hidden")
+  //     : ids?.classList?.add("hidden");
+  // };
   const divStyle = {
     display: "flex",
     alignItems: "center",
@@ -24,13 +83,6 @@ const Home = () => {
     height: "440px",
   };
   const slideImages = ["etblink.jpg", "etblink2.jpg", "etblink3.jpg"];
-
-  // const hoverHandler = (id) => {
-  //   const ids = document.getElementById(id);
-  //   ids?.classList?.value?.includes("hidden")
-  //     ? ids?.classList?.remove("hidden")
-  //     : ids?.classList?.add("hidden");
-  // };
 
   return (
     <>
@@ -597,8 +649,8 @@ const Home = () => {
 
         <div className="w-full  py-20 flex  bg-dark text-dark flex-col items-center justify-center">
           <p className="text-4xl text-center font-semibold text-gray-700">
-            Join Thousands of Global <span className="text-main">Businesses</span> Who Trust in Us
-           
+            Join Thousands of Global{" "}
+            <span className="text-main">Businesses</span> Who Trust in Us
           </p>
           <p className="text-[17px] px-main mt-3 py-3 font-light text-gray-500">
             <center>
@@ -609,15 +661,36 @@ const Home = () => {
               manufacturers worldwide
             </center>
           </p>
+
           <div className="grid px-main mt-7 grid-cols-1 md:grid-cols-2 lg:grid-cols-3  w-full place-items-centers gap-7">
-            {[0, 1, 2, 3, 4, 5].map((e, i) => {
-              return (
-                <CompanyItems value={i} phoneNo="+251 9541**" type="large" />
-              );
-            })}
+            {companyFetching ? (
+              <Loading />
+            ) : companyError ? (
+              <p>Something went error unable to read the data.</p>
+            ) : companies?.length > 0 ? (
+              companies?.map((e, i) => {
+                return (
+                  <CompanyItems
+                    value={e._id}
+                    phoneNo="+251 9541**"
+                    type="large"
+                  />
+                );
+              })
+            ) : (
+              <p>There is no data to display.</p>
+            )}
           </div>
 
-          <YoutubeItems />
+          {youtubeFetching ? (
+            <Loading />
+          ) : youtubeError ? (
+            <p>Something went error unable to read the data.</p>
+          ) : youtubes?.length > 0 ? (
+            <YoutubeItems data={youtubes} />
+          ) : (
+            <p>There is no data to display.</p>
+          )}
 
           <div className="w-full  py-8 flex flex-col items-center justify-center">
             <p className="text-4xl font-semibold text-gray-700">
@@ -627,7 +700,37 @@ const Home = () => {
               our top news
             </p>
             <div className="grid px-main grid-cols-1 mt-3 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {[0, 1, 2].map((e, i) => {
+              {newsFetching ? (
+                <Loading />
+              ) : newsError ? (
+                <p>Something went error unable to read the data.</p>
+              ) : news?.length > 0 ? (
+                news?.map((e, i) => {
+                  if (i < 3) {
+                    return (
+                      <div
+                        key={e?._id}
+                        className="flex w-full rounded-sm relative justify-start py-4 flex-col items-enter"
+                      >
+                        <img
+                          src={e?.newsPhoto}
+                          className="w-full lg:w-[400px] h-[230px] rounded-sm"
+                        />
+                        <p className="flex items-center justify-start gap-2 text-main text-[12px] mt-1">
+                          {format(e?.date)}
+                        </p>
+                        <p className="font-bold flex items-center text-lg justify-start gap-2">
+                          {e?.title}
+                        </p>
+                        <p className="text-sm">{e?.subtitle}</p>
+                      </div>
+                    );
+                  }
+                })
+              ) : news?.length < 0 ? (
+                <p>There is no data to display.</p>
+              ) : null}
+              {/* {[0, 1, 2].map((e, i) => {
                 return (
                   <div
                     key={i}
@@ -645,7 +748,7 @@ const Home = () => {
                     </p>
                   </div>
                 );
-              })}
+              })} */}
             </div>
             <div className="w-full px-main mt-3 gap-4 center">
               <svg
@@ -689,7 +792,37 @@ const Home = () => {
                 Ethiopian business link news
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 w-full">
-                {[0, 1, 2, 3, 4, 5, 6, 7].map((e, i) => {
+                {newsFetching ? (
+                  <Loading />
+                ) : newsError ? (
+                  <p>Something went error unable to read the data.</p>
+                ) : news?.length > 0 ? (
+                  news?.map((e, i) => {
+                    if (i >= 3) {
+                      return (
+                        <div
+                          key={e?._id}
+                          className="flex w-full rounded-sm relative justify-start py-4 flex-col items-enter"
+                        >
+                          <img
+                            src={e?.newsPhoto}
+                            className="w-full h-[120px] rounded-sm"
+                          />
+                          <p className="flex items-center justify-start gap-2 text-main text-[12px] mt-1">
+                            {format(e?.date)}
+                          </p>
+                          <p className="font-bold flex items-center text-lg justify-start gap-2">
+                            {e?.title}
+                          </p>
+                          <p className="text-sm">{e?.subtitle}</p>
+                        </div>
+                      );
+                    }
+                  })
+                ) : news?.length < 0 ? (
+                  <p>There is no data to display.</p>
+                ) : null}
+                {/* {[0, 1, 2, 3, 4, 5, 6, 7].map((e, i) => {
                   return (
                     <div
                       key={i}
@@ -711,7 +844,7 @@ const Home = () => {
                       <p className="text-sm">News sub title</p>
                     </div>
                   );
-                })}
+                })} */}
               </div>
             </div>
             <div className="flex flex-col shadow-lg bg-white items-start border-t-4 border-main bg-dark p-4 gap-4 flex-[30%]">
