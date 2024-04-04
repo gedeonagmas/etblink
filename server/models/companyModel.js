@@ -59,7 +59,6 @@ const schema = new mongoose.Schema({
         validate: valid.required("Services"),
       },
     ],
-    // validate: valid.required(""),
   },
 
   features: {
@@ -108,6 +107,11 @@ const schema = new mongoose.Schema({
   sales: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "user",
+  },
+
+  isBoosted: {
+    type: Boolean,
+    default: false,
   },
 
   profileFillStatus: {
