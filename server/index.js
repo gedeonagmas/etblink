@@ -41,7 +41,7 @@ app.use("/etblink/app/v1/chat", chatRouter);
 app.use("/etblink/app/v1/account", accountRouter);
 
 app.get("/", (req, res) => {
-  res.json("Hello from etblink server");
+  res.json("Hello from etb link server");
 });
 
 app.all("*", (req, res, next) => {
