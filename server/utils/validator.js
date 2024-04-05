@@ -73,7 +73,6 @@ export const date = (field) => {
 export const paragraph = (field, min, max) => {
   return {
     validator: function (v) {
-      console.log(v, "value");
       return v.toString().length < max && v.toString().length > min;
     },
     message: `${field} must between ${min} and ${max} characters`,

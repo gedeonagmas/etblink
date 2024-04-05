@@ -73,6 +73,9 @@ const schema = new mongoose.Schema({
   logo: {
     type: String,
     validate: valid.required("Logo"),
+    // data: Buffer,
+    // contentTYpe:String,
+    
   },
 
   banner: {

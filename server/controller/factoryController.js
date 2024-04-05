@@ -11,23 +11,56 @@ const encrypt = (query) => {
 const decrypt = (query) => {
   return atob(query);
 };
+//   const data = await User.create({
+//     ...req.body,
+//     profilePicture: result.url,
+//   });
+//   const token = tokenGenerator(res, data._id);
+//   return res
+//     .status(200)
+//     .json({ message: "Account Created Successfully", token, data });
+// }
 
-const fileHandler = (value, req) => {
+const fileHandler = (value, req, res) => {
+  // const cloud = (files) => {
+  //   v2.uploader.upload(files, async function (err, result) {
+  //     if (err) {
+  //       console.log(err, "errors cloud");
+  //       return res
+  //         .status(500)
+  //         .json({ message: "something went wrong account not created" });
+  //     } else {
+  //       console.log(result, "cloud result");
+  //       return result.url;
+  //     }
+  //   });
+  // };
+
   if (req.files) {
     if (req.files.galleries) {
-      value.galleries = req.files.galleries?.map((e) => api + e.filename);
+      value.galleries = req.files.galleries?.map((e) => cloud(e).path);
     }
     if (req.files.logo) {
-      value.logo = api + req.files.logo[0].filename;
+      v2.uploader.upload(req.files.logo[0].path, async function (err, result) {
+        if (err) {
+          console.log(err, "errors cloud");
+          return res
+            .status(500)
+            .json({ message: "something went wrong account not created" });
+        } else if (!err) {
+          value.logo = result.url;
+          console.log(value, "value after");
+        }
+      });
     }
     if (req.files.banner) {
-      value.banner = api + req.files.banner[0].filename;
+      value.banner = cloud(req.files.banner[0].path);
     }
     if (req.files.video) {
-      value.video = api + req.files.video[0].filename;
+      value.video = cloud(req.files.video[0].path);
     }
     if (req.files.newsPhoto) {
-      value.newsPhoto = api + req.files.newsPhoto[0].filename;
+      value.newsPhoto = cloud(req.files.newsPhoto[0].path);
     }
   }
   return value;
@@ -58,7 +91,7 @@ export const _create = asyncCatch(async (req, res, next) => {
     } else {
       let results = [];
       req.files?.attachments?.map(async (file, i) => {
-        console.log(file, "files");
+        // console.log(file, "files");
         results.push(file[0].path);
 
         if (results.length === req.files.attachments.length) {
@@ -175,9 +208,15 @@ export const _read = asyncCatch(async (req, res, next) => {
 //update
 export const _update = asyncCatch(async (req, res, next) => {
   const model = selectModel(req.params.table, next);
-  console.log(req.body, "body");
+  // console.log(req.body, "body");
   const value = { ...req.body };
-  const files = fileHandler(value, req);
+  const files = fileHandler(value, req, res);
+  console.log(files, "files");
+  //image:{
+  // data: req.file.buffer,
+  //   contentType:req.file.mimetype
+  //image:image.data.toString('base-64)
+  // }
   value.socialMedias
     ? (value.socialMedias = JSON.parse(value.socialMedias))
     : null;
@@ -209,9 +248,7 @@ export const _delete = asyncCatch(async (req, res, next) => {
   const model = selectModel(req.params.table, next);
 
   if (model) {
-    const data = await model.findByIdAndDelete(
-      req.query.id 
-    );
+    const data = await model.findByIdAndDelete(req.query.id);
 
     if (!data)
       return next(
