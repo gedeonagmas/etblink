@@ -3,8 +3,10 @@ import { Carousel, Rating } from "flowbite-react";
 import { useState, useEffect } from "react";
 import Map from "../../components/Map";
 import { useLocation } from "react-router-dom";
-import { useReadQuery } from "../../features/api/apiSlice";
+import { useCreateMutation, useReadQuery } from "../../features/api/apiSlice";
 import Loading from "../../components/loading/Loading";
+import LoadingButton from "../../components/loading/LoadingButton";
+import Response from "../../components/Response";
 
 const markers = [
   {
@@ -16,22 +18,42 @@ const markers = [
 
 const CompanyDetail = (props) => {
   const location = useLocation();
-  const [rating, setRating] = useState("3.5");
+
   const { data, isFetching, isError } = useReadQuery({
     url: `/user/users?user[eq]=${location?.state?.id}&populatingType=users&populatingValue=user`,
     tag: ["companies", "users"],
   });
 
+  const [rateData, rateResponse] = useCreateMutation();
   const [company, setCompany] = useState({});
+  const [pending, setPending] = useState(false);
+  const [rating, setRating] = useState("3.5");
+  const [email, setEmail] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [message, setMessage] = useState("");
+
   useEffect(() => {
     if (data?.data[0]) {
       setCompany(data?.data[0]?.user);
     }
   }, [data]);
 
+  const rateHandler = () => {
+    rateData({
+      fullName,
+      email,
+      message,
+      company: data?.data[0]?._id,
+      value: rating,
+      url: "/user/rates",
+      tag: ["rates"],
+    });
+  };
+
   console.log(company, "from detail");
   return (
     <div className="relative overflow-hidden z-20">
+      <Response response={rateResponse} setPending={setPending} />
       {isFetching && <Loading />}
       {isError && <p>Something went wrong unable to read the data</p>}
       {company ? (
@@ -84,24 +106,6 @@ const CompanyDetail = (props) => {
                   </svg>{" "}
                   save
                 </p>
-                {/* <p className="py-2  px-3 cursor-pointer rounded-sm border border-gray-200  text-white flex items-center justify-center  gap-2">
-              <svg
-                class="w-5 h-5 text-white"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M12 6C6.5 1 1 8 5.8 13l6.2 7 6.2-7C23 8 17.5 1 12 6Z"
-                />
-              </svg>{" "}
-              save
-            </p> */}
               </div>
             </div>
           </div>
@@ -109,24 +113,6 @@ const CompanyDetail = (props) => {
           <div className="w-full flex flex-col lg:flex-row gap-0">
             <div className="h-auto px-main mt-4 py-4 flex flex-col gap-10 bg-yellow-500f w-full lg:w-[67%]">
               <div className="flex flex-col lg:flex-row text-sm items-center justify-between">
-                {/* <p className="py-2  px-3 cursor-pointer rounded-sm flex items-center justify-center  gap-2">
-              <svg
-                class="w-5 h-5 text-gray-800 dark:text-white"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="m11.5 11.5 2 2M4 10h5m11 0h-1.5M12 7V4M7 7V4m10 3V4m-7 13H8v-2l5.2-5.3a1.5 1.5 0 0 1 2 2L10 17Zm-5 3h14c.6 0 1-.4 1-1V7c0-.6-.4-1-1-1H5a1 1 0 0 0-1 1v12c0 .6.4 1 1 1Z"
-                />
-              </svg>
-              Hotel
-            </p> */}
                 <p className="py-2  px-3 cursor-pointer rounded-sm flex items-center justify-center  gap-2">
                   <svg
                     class="w-5 h-5 text-gray-800 dark:text-white"
@@ -238,26 +224,20 @@ const CompanyDetail = (props) => {
               <div className="">
                 <p className="text-xl font-bold">About us</p>
                 <p className="mt-5">{company?.description}</p>
-                <p className="mt-2">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Dolorum porro ipsam, sequi non numquam ipsa illo ad recusandae
-                  unde ex, repellat, nisi beatae adipisci! Est minus atque quam
-                  sit. Ratione? Lorem ipsum dolor sit amet consectetur
-                  adipisicing elit. Exercitationem necessitatibus odio omnis
-                  optio qui quasi, suscipit libero maiores molestias dolorum
-                  velit totam inventore quidem sed aut voluptatum laborum labore
-                  illo.
-                </p>
               </div>
 
               {/* carousel */}
               <div className="h-56 sm:h-64 xl:h-80 2xl:h-96">
                 <Carousel>
-                  <img src="./image-1.jpg" alt="..." />
-                  <img src="./image-2.jpg" alt="..." />
-                  <img src="./image-3.jpg" alt="..." />
-                  <img src="./image-1.jpg" alt="..." />
-                  <img src="./image-1.jpg" alt="..." />
+                  {company?.galleries?.map((e) => {
+                    return (
+                      <img
+                        src={e}
+                        alt="..."
+                        className="object-cover object-center h-full w-full"
+                      />
+                    );
+                  })}
                 </Carousel>
               </div>
 
@@ -266,237 +246,44 @@ const CompanyDetail = (props) => {
                 <p className="text-xl mt-10 font-bold">Services</p>
                 <div className="grid grid-cols-1 w-full mt-7 sm:grid-cols-2 md:grid-cols-3">
                   <div className="flex flex-col gap-4 items-start justify-start">
-                    <div class="flex items-center">
-                      <input
-                        checked
-                        id="checked-checkbox"
-                        type="checkbox"
-                        value=""
-                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-0 dark:bg-gray-700 dark:border-gray-600"
-                      />
-                      <label
-                        for="checked-checkbox"
-                        class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                      >
-                        Branding and design
-                      </label>
-                    </div>
-                    <div class="flex items-center">
-                      <input
-                        checked
-                        id="checked-checkbox"
-                        type="checkbox"
-                        value=""
-                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-0 dark:bg-gray-700 dark:border-gray-600"
-                      />
-                      <label
-                        for="checked-checkbox"
-                        class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                      >
-                        Full web development
-                      </label>
-                    </div>
-                    <div class="flex items-center">
-                      <input
-                        checked
-                        id="checked-checkbox"
-                        type="checkbox"
-                        value=""
-                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-0 dark:bg-gray-700 dark:border-gray-600"
-                      />
-                      <label
-                        for="checked-checkbox"
-                        class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                      >
-                        Branding and advert
-                      </label>
-                    </div>
-                    <div class="flex items-center">
-                      <input
-                        checked
-                        id="checked-checkbox"
-                        type="checkbox"
-                        value=""
-                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-0 dark:bg-gray-700 dark:border-gray-600"
-                      />
-                      <label
-                        for="checked-checkbox"
-                        class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                      >
-                        Web support
-                      </label>
-                    </div>
-                  </div>
-
-                  <div className="flex flex-col gap-4 items-start justify-start">
-                    <div class="flex items-center">
-                      <input
-                        checked
-                        id="checked-checkbox"
-                        type="checkbox"
-                        value=""
-                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-0 dark:bg-gray-700 dark:border-gray-600"
-                      />
-                      <label
-                        for="checked-checkbox"
-                        class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                      >
-                        Branding and design
-                      </label>
-                    </div>
-                    <div class="flex items-center">
-                      <input
-                        checked
-                        id="checked-checkbox"
-                        type="checkbox"
-                        value=""
-                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-0 dark:bg-gray-700 dark:border-gray-600"
-                      />
-                      <label
-                        for="checked-checkbox"
-                        class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                      >
-                        Full web development
-                      </label>
-                    </div>
-                    <div class="flex items-center">
-                      <input
-                        checked
-                        id="checked-checkbox"
-                        type="checkbox"
-                        value=""
-                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-0 dark:bg-gray-700 dark:border-gray-600"
-                      />
-                      <label
-                        for="checked-checkbox"
-                        class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                      >
-                        Branding and advert
-                      </label>
-                    </div>
-                    <div class="flex items-center">
-                      <input
-                        checked
-                        id="checked-checkbox"
-                        type="checkbox"
-                        value=""
-                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-0 dark:bg-gray-700 dark:border-gray-600"
-                      />
-                      <label
-                        for="checked-checkbox"
-                        class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                      >
-                        Web support
-                      </label>
-                    </div>
-                  </div>
-
-                  <div className="flex flex-col gap-4 items-start justify-start">
-                    <div class="flex items-center">
-                      <input
-                        checked
-                        id="checked-checkbox"
-                        type="checkbox"
-                        value=""
-                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-0 dark:bg-gray-700 dark:border-gray-600"
-                      />
-                      <label
-                        for="checked-checkbox"
-                        class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                      >
-                        Branding and design
-                      </label>
-                    </div>
-                    <div class="flex items-center">
-                      <input
-                        checked
-                        id="checked-checkbox"
-                        type="checkbox"
-                        value=""
-                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-0 dark:bg-gray-700 dark:border-gray-600"
-                      />
-                      <label
-                        for="checked-checkbox"
-                        class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                      >
-                        Full web development
-                      </label>
-                    </div>
-                    <div class="flex items-center">
-                      <input
-                        checked
-                        id="checked-checkbox"
-                        type="checkbox"
-                        value=""
-                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-0 dark:bg-gray-700 dark:border-gray-600"
-                      />
-                      <label
-                        for="checked-checkbox"
-                        class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                      >
-                        Branding and advert
-                      </label>
-                    </div>
-                    <div class="flex items-center">
-                      <input
-                        checked
-                        id="checked-checkbox"
-                        type="checkbox"
-                        value=""
-                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-0 dark:bg-gray-700 dark:border-gray-600"
-                      />
-                      <label
-                        for="checked-checkbox"
-                        class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                      >
-                        Web support
-                      </label>
-                    </div>
+                    {company?.services?.map((e, i) => {
+                      return (
+                        <div key={i} class="flex items-center">
+                          <input
+                            checked
+                            id="checked-checkbox"
+                            type="checkbox"
+                            value=""
+                            class="w-4 h-4 text-main bg-gray-100 border-gray-300 rounded focus:ring-0 dark:bg-gray-700 dark:border-gray-600"
+                          />
+                          <label
+                            for="checked-checkbox"
+                            class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                          >
+                            {e}
+                          </label>
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
               </div>
 
-              {/* services */}
+              {/* videos */}
               <div className="w-full">
                 <p className="text-xl mt-10 font-bold">Videos</p>
-                <div className="grid grid-cols-1 gap-7 w-full mt-5 sm:grid-cols-2 md:grid-cols-3">
-                  {[0, 1, 2].map((e, i) => {
-                    return (
-                      <div
-                        key={i}
-                        className="flex w-full rounded-sm relative justify-start py-4 gap-1 flex-col items-enter"
-                      >
-                        <img
-                          src="./image-3.jpg"
-                          alt=""
-                          className="w-full h-28"
-                        />
-                        <p className="font-bold text-sm mt-1">Video title</p>
-                        <p className="text-sm">Videos sub title description</p>
-                        <div className="flex gap-2 items-center justify-between w-full">
-                          <div className="flex items-center justify-center gap-2">
-                            <Visibility sx={{ width: 20, height: 20 }} />{" "}
-                            <p className="text-xs">2500 views</p>
-                          </div>
-
-                          <div className="flex items-center justify-center gap-2">
-                            <svg
-                              className="w-5 h-5 text-gray-800 dark:text-white"
-                              aria-hidden="true"
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path d="m12.7 20.7 6.2-7.1c2.7-3 2.6-6.5.8-8.7A5 5 0 0 0 16 3c-1.3 0-2.7.4-4 1.4A6.3 6.3 0 0 0 8 3a5 5 0 0 0-3.7 1.9c-1.8 2.2-2 5.8.8 8.7l6.2 7a1 1 0 0 0 1.4 0Z" />
-                            </svg>
-
-                            <p className="text-xs">2000 likes</p>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
+                {/* <div className="grid grid-cols-1 gap-7 w-full mt-5 sm:grid-cols-2 md:grid-cols-3"> */}
+                <div className="flex w-full mt-5 rounded-lg border relative justify-start py-4 gap-1 flex-col items-enter">
+                  {company?.video && (
+                    <video
+                      src={company?.video}
+                      alt=""
+                      className="w-full rounded-lg"
+                      controls
+                    />
+                  )}
                 </div>
+                {/* </div> */}
               </div>
 
               {/* ratings */}
@@ -564,9 +351,11 @@ const CompanyDetail = (props) => {
                         Your full name
                       </label>
                       <input
+                        value={fullName}
+                        onChange={(e) => setFullName(e.target.value)}
                         type="text"
                         id="text"
-                        class="shadow-sm w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-0 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white  dark:focus:border-blue-500 dark:shadow-sm-light"
+                        class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-0 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white  dark:focus:border-blue-500 dark:shadow-sm-light"
                         placeholder="name@flowbite.com"
                         required
                       />
@@ -579,9 +368,11 @@ const CompanyDetail = (props) => {
                         Your email
                       </label>
                       <input
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
                         type="email"
                         id="email"
-                        class="shadow-sm w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-0 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white  dark:focus:border-blue-500 dark:shadow-sm-light"
+                        class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-0 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white  dark:focus:border-blue-500 dark:shadow-sm-light"
                         required
                       />
                     </div>
@@ -593,14 +384,22 @@ const CompanyDetail = (props) => {
                     Your message
                   </label>
                   <textarea
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
                     id="message"
                     rows="4"
                     class="block p-2.5 w-full text-sm text-gray-900 bg-gra0y-50 rounded-lg border border-gray-300 focus:ring-blue-50 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-0 dark:focus:border-blue-500"
                     placeholder="Leave a comment..."
                   ></textarea>
-                  <button className="w-40 mt-5 py-3 rounded-lg font-bold bg-blue-500 text-white">
-                    Submit
-                  </button>
+                  <div className="mt-6">
+                    <LoadingButton
+                      pending={pending}
+                      onClick={rateHandler}
+                      title="Submit"
+                      color="bg-main"
+                      width="w-52"
+                    />
+                  </div>
                 </div>
                 <p className="text-lg mt-10 font-bold">Peoples who rate us</p>
 

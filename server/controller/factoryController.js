@@ -169,7 +169,8 @@ export const _read = asyncCatch(async (req, res, next) => {
         return res.status(200).json({ message: "you are in the last page" });
     }
     if (data.length < 1)
-      return next(new AppError("There is no data to display", 400));
+      // return next(new AppError("There is no data to display", 400));
+      return res.status(201).json({ message: "There is no data to display!" });
 
     return res.status(200).json({
       status: "success",

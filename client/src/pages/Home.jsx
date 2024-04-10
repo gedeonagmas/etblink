@@ -572,7 +572,7 @@ const Home = () => {
               <p>Something went error unable to read the data.</p>
             ) : companies?.length > 0 ? (
               companies?.map((e, i) => {
-                return (
+                return ( 
                   <CompanyItems
                     value={e._id}
                     phoneNo="+251 9541**"
@@ -582,7 +582,7 @@ const Home = () => {
                 );
               })
             ) : (
-              <p>There is no data to display.</p>
+              <p></p>
             )}
           </div>
 
@@ -593,7 +593,7 @@ const Home = () => {
           ) : youtubes?.length > 0 ? (
             <YoutubeItems data={youtubes} />
           ) : (
-            <p>There is no data to display.</p>
+            <p></p>
           )}
 
           <div className="w-full  py-8 flex flex-col items-center justify-center">

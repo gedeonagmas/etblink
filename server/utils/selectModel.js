@@ -4,6 +4,7 @@ import { Group } from "../models/groupModel.js";
 import { News } from "../models/newsModel.js";
 import { Institution } from "../models/organizationModel.js";
 import { Payment } from "../models/paymentModel.js";
+import { Rate } from "../models/ratesModel.js";
 import { User } from "../models/userModel.js";
 import { Youtube } from "../models/youtubeModel.js";
 import AppError from "./AppError.js";
@@ -46,6 +47,9 @@ export const selectModel = (name, next) => {
       break;
     case "news":
       model = News;
+      break;
+    case "rates":
+      model = Rate;
       break;
     default:
       return next(new AppError("something went wrong please try again!.", 500));
