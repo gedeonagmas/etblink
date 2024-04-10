@@ -21,46 +21,22 @@ const decrypt = (query) => {
 //     .json({ message: "Account Created Successfully", token, data });
 // }
 
-const fileHandler = (value, req, res) => {
-  // const cloud = (files) => {
-  //   v2.uploader.upload(files, async function (err, result) {
-  //     if (err) {
-  //       console.log(err, "errors cloud");
-  //       return res
-  //         .status(500)
-  //         .json({ message: "something went wrong account not created" });
-  //     } else {
-  //       console.log(result, "cloud result");
-  //       return result.url;
-  //     }
-  //   });
-  // };
-
+const fileHandler = (value, req) => {
   if (req.files) {
     if (req.files.galleries) {
-      value.galleries = req.files.galleries?.map((e) => cloud(e).path);
+      value.galleries = req.files.galleries?.map((e) => api + e.filename);
     }
     if (req.files.logo) {
-      v2.uploader.upload(req.files.logo[0].path, async function (err, result) {
-        if (err) {
-          console.log(err, "errors cloud");
-          return res
-            .status(500)
-            .json({ message: "something went wrong account not created" });
-        } else if (!err) {
-          value.logo = result.url;
-          console.log(value, "value after");
-        }
-      });
+      value.logo = api + req.files.logo[0].filename;
     }
     if (req.files.banner) {
-      value.banner = cloud(req.files.banner[0].path);
+      value.banner = api + req.files.banner[0].filename;
     }
     if (req.files.video) {
-      value.video = cloud(req.files.video[0].path);
+      value.video = api + req.files.video[0].filename;
     }
     if (req.files.newsPhoto) {
-      value.newsPhoto = cloud(req.files.newsPhoto[0].path);
+      value.newsPhoto = api + req.files.newsPhoto[0].filename;
     }
   }
   return value;
@@ -210,7 +186,7 @@ export const _update = asyncCatch(async (req, res, next) => {
   const model = selectModel(req.params.table, next);
   // console.log(req.body, "body");
   const value = { ...req.body };
-  const files = fileHandler(value, req, res);
+  const files = fileHandler(value, req);
   console.log(files, "files");
   //image:{
   // data: req.file.buffer,
@@ -228,7 +204,7 @@ export const _update = asyncCatch(async (req, res, next) => {
     const data = await model.findOneAndUpdate(
       { _id: req.query.id },
       { ...files },
-      { runValidators: true }
+      { runValidators: true, new: true }
     );
 
     if (!data)
@@ -238,7 +214,7 @@ export const _update = asyncCatch(async (req, res, next) => {
 
     return res
       .status(201)
-      .json({ status: "Success", message: "data updated successfully" });
+      .json({ status: "Success", message: "data updated successfully", data });
   }
   return next(new AppError("something went wrong please try again!!", 500));
 });

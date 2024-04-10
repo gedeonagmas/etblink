@@ -13,7 +13,7 @@ import cookieParser from "cookie-parser";
 const app = express();
 // let cache = apicache.middleware;
 // app.use(cache("5 minutes"));
-// const __dirname = path.resolve();
+const __dirname = path.resolve();
 
 // process.on("uncaughtException", (err) => {
 //   console.log("SHUTTING DOWN ");
@@ -34,7 +34,7 @@ app.use(
 );
 
 app.use(express.json());
-// app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use(cookieParser());
 app.use("/etblink/app/v1/user", router);
 app.use("/etblink/app/v1/chat", chatRouter);

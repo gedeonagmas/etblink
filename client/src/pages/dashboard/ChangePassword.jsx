@@ -1,12 +1,9 @@
-import React, { useContext, useEffect, useState } from "react";
-import { userContext } from "../../App";
+import React, { useEffect, useState } from "react";
 import { useUpdatePasswordMutation } from "../../features/api/apiSlice";
 import Response from "../../components/Response";
 import LoadingButton from "../../components/loading/LoadingButton";
 
 const ChangePassword = () => {
-  const context = useContext(userContext);
-
   const [updateData, updateResponse] = useUpdatePasswordMutation();
   const [pending, setPending] = useState(false);
 
@@ -18,7 +15,6 @@ const ChangePassword = () => {
     updateData({ currentPassword, newPassword, confirmPassword });
   };
 
-  console.log(context, "context");
   return (
     <div className="w-full items-center justify-center py-5 px-5 flex flex-col gap-3">
       <Response

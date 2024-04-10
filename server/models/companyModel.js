@@ -26,6 +26,11 @@ const schema = new mongoose.Schema({
     validate: valid.paragraph("Title", 4, 200),
   },
 
+  address: {
+    type: String,
+    validate: valid.paragraph("Address", 4, 200),
+  },
+
   phone: {
     type: String,
     validate: valid.phone("Phone"),
@@ -75,7 +80,6 @@ const schema = new mongoose.Schema({
     validate: valid.required("Logo"),
     // data: Buffer,
     // contentTYpe:String,
-    
   },
 
   banner: {

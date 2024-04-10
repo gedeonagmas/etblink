@@ -1,20 +1,9 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import LoadingButton from "../../components/loading/LoadingButton";
 import Response from "../../components/Response";
 import { useUpdateMutation } from "../../features/api/apiSlice";
-import { userContext } from "../../App";
 
 const List = (props) => {
-  // import axios from "axios";
-  // if (navigator.geolocation) {
-  //   navigator.geolocation.getCurrentPosition(function (position) {
-  //     const latitude = position.coords.latitude;
-  //     const longitude = position.coords.longitude;
-  //     console.log(`Latitude: ${latitude}, Longitude: ${longitude}`, position);
-  //   });
-  // } else {
-  //   console.log("Geolocation is not supported by this browser.");
-  // }
   return (
     <div className="flex mt-5 w-full flex-col gap-2">
       <label
@@ -91,17 +80,19 @@ const List = (props) => {
 };
 
 const Profile = () => {
-  const context = useContext(userContext);
   const [updateData, updateResponse] = useUpdateMutation();
   const [pending, setPending] = useState(false);
-
+  const [user, setUser] = useState({});
   const [name, setName] = useState("");
   const [type, setType] = useState("Local");
   const [title, setTitle] = useState("");
+  const [address, setAddress] = useState("");
   const [phone, setPhone] = useState("");
   const [video, setVideo] = useState("");
   const [website, setWebsite] = useState("");
   const [description, setDescription] = useState("");
+  const [latitude, setLatitude] = useState("");
+  const [longitude, setLongitude] = useState("");
   const [service, setService] = useState("");
   const [services, setServices] = useState([]);
   const [feature, setFeature] = useState("");
@@ -147,9 +138,23 @@ const Profile = () => {
     }
   };
 
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function (position) {
+      setLatitude(position.coords.latitude);
+      setLongitude(position.coords.longitude);
+      // console.log(`Latitude: ${latitude}, Longitude: ${longitude}`, position);
+    });
+  } else {
+    console.log("Geolocation is not supported by this browser.");
+  }
+
   useEffect(() => {
-    if (context?.user?.user) {
-      const data = context?.user?.user;
+    setUser(JSON.parse(localStorage.getItem("etblink_user")));
+  }, []);
+
+  useEffect(() => {
+    if (user) {
+      const data = user?.user;
       setTitle(data?.title ? data.title : title);
       setType(data?.type ? data.type : type);
       setName(data?.name ? data.name : name);
@@ -160,20 +165,19 @@ const Profile = () => {
       setServices(data?.services ? data.services : services);
       setFeatures(data?.features ? data.features : features);
       setLogo(data?.logo ? data?.logo : logo);
+      setAddress(data?.address ? data?.address : address);
       setBanner(data?.banner ? data.banner : banner);
       setGalleries(data?.galleries ? data?.galleries : "");
       setSocialMedias(data?.socialMedias ? data.socialMedias : socialMedias);
       setWorkingDays(data?.workingDays ? data.workingDays : workingDays);
     }
-  }, [context]);
+  }, [user]);
 
   function meridian(value) {
     var [h, m] = value.split(":");
-    console.log(h, m);
     return h >= 12 ? `${h}:${m} PM` : `${h}:${m} AM`;
   }
 
-  console.log(workingDays, "social");
   const updateHandler = () => {
     const formData = new FormData();
     formData.append("name", name);
@@ -187,10 +191,12 @@ const Profile = () => {
     formData.append("features", features);
     formData.append("logo", logo);
     formData.append("banner", banner);
-    // formData.append("pricingRange", pricingRange);
+    formData.append("address", address);
+    formData.append("latitude", latitude);
+    formData.append("longitude", longitude);
     formData.append("socialMedias", JSON.stringify(socialMedias));
     formData.append("workingDays", JSON.stringify(workingDays));
-    formData.append("url", `/user/companies?id=${context?.user?.user?._id}`);
+    formData.append("url", `/user/companies?id=${user?.user?._id}`);
     formData.append("tag", ["users", "companies"]);
     galleries?.length > 0
       ? [...galleries].forEach((image) => {
@@ -202,14 +208,18 @@ const Profile = () => {
     //   console.log(key[0] + ", " + key[1]);
     // }
 
-    // updateData({ url: `/user/companies?id=${context?.user?.user?._id}`, tag: ["users", "companies"] });
+    // updateData({ url: `/user/companies?id=${user?._id}`, tag: ["users", "companies"] });
     updateData(formData);
   };
 
-  // console.log(context, "context");
+  // console.log(user, "user");
   return (
     <div className="w-full p-5 flex pb-10 flex-col rounded-lg border gap-2 items-start justify-center">
-      <Response response={updateResponse} setPending={setPending} />
+      <Response
+        response={updateResponse}
+        setPending={setPending}
+        type="update"
+      />
       <p className="text-lg font-semibold">Your company information</p>
       <p className="text-sm max-w-[700px]">
         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Labore
@@ -326,6 +336,23 @@ const Profile = () => {
           />
         </div>
       </div>
+      <div className="mb-5 w-full">
+        <label
+          for="name"
+          class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+        >
+          Address
+        </label>
+        <input
+          onChange={(e) => setAddress(e.target.value)}
+          value={address}
+          type="text"
+          id="name"
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          placeholder="addis ababa"
+          required
+        />
+      </div>
       <label
         for="name"
         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -364,8 +391,8 @@ const Profile = () => {
         <div className="mb-5">
           <label class="block text-sm font-medium">Logo</label>
           <div
-            style={{ backgroundImage: `url(${context?.user?.user?.logo})` }}
-            class={`mt-4  flex justify-center object-cover object-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md`}
+            style={{ backgroundImage: `url(${user?.user?.logo})` }}
+            class={`mt-4  flex justify-center object-fill object-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md`}
           >
             <div class="space-y-1 text-center">
               <svg
@@ -385,7 +412,7 @@ const Profile = () => {
               <div class="flex text-sm text-gray-600">
                 <label
                   for="file-upload1"
-                  class="relative cursor-pointer bg-white bg-dark rounded-md font-medium text-main hover:text-red-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
+                  class="relative cursor-pointer rounded-md font-medium text-main hover:text-red-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
                 >
                   <span class="">Upload a file</span>
                   <input
@@ -406,7 +433,7 @@ const Profile = () => {
         <div className="mb-5">
           <label class="block text-sm font-medium">Banner</label>
           <div
-            style={{ backgroundImage: `url(${context?.user?.user?.banner})` }}
+            style={{ backgroundImage: `url(${user?.user?.banner})` }}
             class="mt-4 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md"
           >
             <div class="space-y-1 text-center">
@@ -427,7 +454,7 @@ const Profile = () => {
               <div class="flex text-sm text-gray-600">
                 <label
                   for="file-upload2"
-                  class="relative cursor-pointer bg-white bg-dark rounded-md font-medium text-main hover:text-red-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
+                  class="relative cursor-pointer rounded-md font-medium text-main hover:text-red-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
                 >
                   <span class="">Upload a file</span>
                   <input
@@ -452,7 +479,7 @@ const Profile = () => {
           </label>
           <div
             style={{
-              backgroundImage: `url(${context?.user?.user?.galleries[0]})`,
+              backgroundImage: `url(${user?.user?.galleries[0]})`,
             }}
             class="mt-4 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md"
           >
@@ -474,7 +501,7 @@ const Profile = () => {
               <div class="flex text-sm text-gray-600">
                 <label
                   for="file-upload3"
-                  class="relative cursor-pointer bg-white bg-dark rounded-md font-medium text-main hover:text-red-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
+                  class="relative cursor-pointer rounded-md font-medium text-main hover:text-red-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
                 >
                   <span class="">Upload a file</span>
                   <input

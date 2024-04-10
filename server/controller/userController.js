@@ -10,7 +10,7 @@ import v2 from "./../config/cloudinary.js";
 import { Private } from "../models/privateModel.js";
 import { Company } from "../models/companyModel.js";
 import { sendEmailHandler } from "./emailController.js";
-const api = 'http://localhost:4000/'
+const api = "http://localhost:4000/";
 
 export const signupHandler = asyncCatch(async (req, res, next) => {
   const user = await User.create(req.body);
@@ -45,7 +45,9 @@ export const loginHandler = asyncCatch(async (req, res, next) => {
   const { email, password } = req.body;
   if (!email || !password)
     return next(new AppError("provide email and password", 404));
-  const user = await User.findOne({ email }).select("+password");
+  const user = await User.findOne({ email })
+    .select("+password")
+    .populate("user");
   if (!user) return next(new AppError("Invalid email or password", 404));
 
   const isPasswordCorrect = await user.passwordCheck(user.password, password);
@@ -54,10 +56,13 @@ export const loginHandler = asyncCatch(async (req, res, next) => {
 
   const token = tokenGenerator(res, user._id);
 
+  const data = { ...user };
+  delete data._doc.password;
+  // console.log(data._doc, "ddddd");
   res.status(200).json({
     status: "success",
     message: "you are logged in successfully",
-    data: user,
+    data:data._doc,
     token,
   });
 });

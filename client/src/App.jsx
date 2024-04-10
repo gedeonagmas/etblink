@@ -38,9 +38,14 @@ function App() {
     tag: ["users"],
   });
 
+  useEffect(() => {
+    if (user) {
+      localStorage.setItem('etblink_user', JSON.stringify(user));
+    }
+  }, []);
   // useEffect(() => {});
   // const user = { data: { email: "gedi@gmail.com" } };
-  console.log(user?.data, "from app js");
+  // console.log(user?.data, "from app js");
   return (
     <Flowbite>
       <userContext.Provider value={{ user: user?.data }}>

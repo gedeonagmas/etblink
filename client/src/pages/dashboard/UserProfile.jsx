@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { userContext } from "../../../../App";
 import { useUpdateMutation } from "../../../../features/api/apiSlice";
 import Response from "../../../../components/Response";
@@ -8,11 +8,12 @@ import { MdDelete } from "react-icons/md";
 import customerImage from "../../../../assets/images/customers/customer-i.jpg";
 
 const UserProfile = () => {
-  const context = useContext(userContext);
-
   const [updateData, updateResponse] = useUpdateMutation();
   const [pending, setPending] = useState(false);
-
+  const [user, setUser] = useState();
+  useEffect(() => {
+    setUser(JSON.parse(localStorage.getItem("etblink_user")));
+  }, []);
   const [firstName, setFirstName] = useState("");
   const [middleName, setMiddleName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -23,8 +24,8 @@ const UserProfile = () => {
   const [profilePicture, setProfilePicture] = useState("");
 
   useEffect(() => {
-    if (context?.user?.user) {
-      const data = context?.user?.user;
+    if (user) {
+      const data = user?.user;
       setFirstName(data?.firstName ? data.firstName : firstName);
       setMiddleName(data?.middleName ? data.middleName : middleName);
       setLastName(data?.lastName ? data.lastName : lastName);
@@ -36,7 +37,7 @@ const UserProfile = () => {
         data?.profilePicture ? data.profilePicture : profilePicture
       );
     }
-  }, [context]);
+  }, [user]);
 
   const updateHandler = () => {
     const formData = new FormData();
@@ -48,15 +49,19 @@ const UserProfile = () => {
     formData.append("address", address);
     formData.append("nationality", nationality);
     formData.append("profilePicture", profilePicture);
-    formData.append("url", `/user/privates?id=${context?.user?.user?._id}`);
+    formData.append("url", `/user/privates?id=${user?.user?._id}`);
     formData.append("tag", ["users", "privates"]);
     updateData(formData);
   };
 
-  console.log(context, profilePicture, "context");
+  // console.log(context, profilePicture, "context");
   return (
     <div className="w-full h-[100vh] pb-10 pt-5 overflow-y-scroll px-5 flex flex-col gap-3">
-      <Response response={updateResponse} setPending={setPending} />
+      <Response
+        response={updateResponse}
+        setPending={setPending}
+        type="update"
+      />
       <div className="mb-5">
         <label
           for="name"
@@ -187,9 +192,9 @@ const UserProfile = () => {
         >
           Profile Picture
         </label>
-        {context?.user?.user?.profilePicture?.length > 0 ? (
+        {user?.user?.profilePicture?.length > 0 ? (
           <img
-            src={context?.user?.user?.profilePicture}
+            src={user?.user?.profilePicture}
             alt=""
             className="w-[150px] h-[100px] rounded-sm"
           />

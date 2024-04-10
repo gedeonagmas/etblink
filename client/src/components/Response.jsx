@@ -55,10 +55,17 @@ const Response = ({ response, setPending, redirectTo, type }) => {
       );
 
       if (type === "login" || type === "signUp") {
-        setTimeout(() => {
-          navigate(dashboard);
-          navigate(0);
-        }, 2000);
+        localStorage.setItem(
+          "etblink_user",
+          JSON.stringify(response?.data?.data)
+        );
+        navigate(dashboard);
+      }
+      if (type === "update") {
+        const data = JSON.parse(localStorage.getItem("etblink_user"));
+        const user = { ...data, user: { ...response?.data?.data } };
+        localStorage.setItem("etblink_user", JSON.stringify(user));
+        window.location.reload();
       } else if (type === "payment") {
         localStorage.removeItem("macuta_law_firm_system");
         navigate(redirectTo, { replace: true });
@@ -67,11 +74,9 @@ const Response = ({ response, setPending, redirectTo, type }) => {
           navigate(redirectTo, { replace: true });
         }, 3000);
       } else if (type === "logout") {
-        setTimeout(() => {
-          navigate("/", { replace: true });
-          navigate(0);
-          window.location.reload();
-        }, 1000);
+        localStorage.removeItem("etblink_user");
+        navigate("/", { replace: true });
+        window.location.reload();
       } else if (redirectTo && redirectTo?.length > 0) {
         navigate(redirectTo, {
           replace: true,
