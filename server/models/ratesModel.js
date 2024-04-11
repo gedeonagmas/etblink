@@ -51,31 +51,31 @@ rateSchema.pre("findOneAndUpdate", function (next) {
   next();
 });
 
-rateSchema.pre(["findOneAndUpdate", "create"], async function (next) {
-  const company = await Rate.aggregate([
-    // { $unwind: "$_id" },
-    // {
-    //   $match: {
-    //     accepter: this.accepter,
-    //   },
-    // },
+// rateSchema.pre(["findOneAndUpdate", "create"], async function (next) {
+//   const company = await Rate.aggregate([
+//     // { $unwind: "$_id" },
+//     // {
+//     //   $match: {
+//     //     accepter: this.accepter,
+//     //   },
+//     // },
 
-    {
-      $group: {
-        _id: this.accepter,
-        total: {
-          $sum: 1,
-        },
-        average: { $avg: "$value" },
-      },
-    },
+//     {
+//       $group: {
+//         _id: this.accepter,
+//         total: {
+//           $sum: 1,
+//         },
+//         average: { $avg: "$value" },
+//       },
+//     },
 
-    // { $addFields: { date: "2024-02" } },
-    // { $sort: { _id: 1 } },
-  ]);
-  // console.log(company, "company");
-  console.log(this, "this");
-  next();
-});
+//     // { $addFields: { date: "2024-02" } },
+//     // { $sort: { _id: 1 } },
+//   ]);
+//   // console.log(company, "company"); 
+//   console.log(this, "this");
+//   next();
+// }); 
 
 export const Rate = mongoose.model("rate", rateSchema);

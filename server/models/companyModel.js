@@ -117,7 +117,10 @@ const schema = new mongoose.Schema({
   },
 
   rating: {
-    type: Number,
+    type: {
+      total: { type: Number, default: 0 },
+      average: { type: Number, default: 0 },
+    },
   },
 
   isBoosted: {

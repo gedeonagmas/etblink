@@ -3,7 +3,26 @@ import { Company } from "../models/companyModel.js";
 import { Rate } from "../models/ratesModel.js";
 
 export const createRate = asyncCatch(async (req, res, next) => {
-  // let message = "your rate is created successfully";
+  const rateHandler = async () => {
+    const rate = await Rate.aggregate([
+      {
+        $group: {
+          _id: req.body.accepter,
+          total: {
+            $sum: 1,
+          },
+          average: { $avg: "$value" },
+        },
+      },
+    ]);
+
+    const company = await Company.findById(req.body.accepter);
+
+    company.rating.total = rate[0]?.total;
+    company.rating.average = rate[0]?.average.toFixed(1);
+
+    await company.save();
+  };
 
   const data = await Rate.find({
     rater: req.body.rater,
@@ -12,36 +31,17 @@ export const createRate = asyncCatch(async (req, res, next) => {
 
   if (data.length > 0) {
     await Rate.findOneAndUpdate({ _id: data[0]._id }, { ...req.body });
+    rateHandler();
     return res
       .status(200)
       .json({ status: "Created", message: "rating is just updated" });
   } else {
     await Rate.create(req.body);
+    rateHandler();
     return res
       .status(200)
       .json({ status: "Created", message: "rating is added successfully" });
   }
-
-  // const d = await Rate.find({
-  //   accepter: req.body.accepter,
-  //   rater: req.body.rater,
-  // });
-
-  // let sum = 0;
-  // d.map((e) => {
-  //   sum = sum + e.value;
-  //   return sum;
-  // });
-
-  // const accepter =
-  //   req.body.type === "company"
-  //     ? await Company.findOne({ _id: req.body.accepter })
-  //     : null;
-  // console.log(req.body.accepter, req.body.type, "dd");
-  // accepter.rating = (sum / d.length).toFixed(1);
-
-  // await accepter.save();
-  // res.status(200).json({ status: "Created", message });
 });
 
 export const readRate = asyncCatch(async (req, res, next) => {

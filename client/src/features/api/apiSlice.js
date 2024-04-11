@@ -242,7 +242,7 @@ export const apiSlice = createApi({
         body: data,
         credentials: "include",
       }),
-      invalidatesTags: ["hotels", "rate", "rate-multiple"],
+      invalidatesTags: ["companies", "rate", "rate-multiple"],
     }),
 
     //create rate
@@ -252,7 +252,7 @@ export const apiSlice = createApi({
         method: "GET",
         credentials: "include",
       }),
-      providesTags: ["rates", "rate-multiple"],
+      providesTags: ["companies", "rate", "rate-multiple"],
     }),
 
     //read rate multiple
@@ -262,7 +262,7 @@ export const apiSlice = createApi({
         method: "GET",
         credentials: "include",
       }),
-      providesTags: ["rate-multiple"],
+      providesTags: ["companies", "rate", "rate-multiple"],
     }),
 
     //delete rate
@@ -273,7 +273,7 @@ export const apiSlice = createApi({
         body: data,
         credentials: "include",
       }),
-      invalidatesTags: ["rates", "companies", "rate-multiple"],
+      invalidatesTags: ["companies", "rate", "rate-multiple"],
     }),
   }),
 });
