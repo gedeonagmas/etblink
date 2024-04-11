@@ -116,6 +116,10 @@ const schema = new mongoose.Schema({
     ref: "user",
   },
 
+  totalRating: {
+    type: Number,
+  },
+
   isBoosted: {
     type: Boolean,
     default: false,

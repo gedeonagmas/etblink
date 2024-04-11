@@ -31,10 +31,16 @@ import {
 import CryptoJS from "crypto-js";
 import crypto from "crypto";
 import asyncCatch from "express-async-catch";
+import {
+  createRate,
+  deleteRate,
+  readMultipleRate,
+  readRate,
+} from "../controller/utilityController.js";
 
 const router = express.Router();
 const chatRouter = express.Router();
-const accountRouter = express.Router();
+const utilityRouter = express.Router();
 
 const files = upload.fields([
   { name: "profilePicture", maxCount: 1 },
@@ -63,7 +69,11 @@ router
   .route("/updateProfilePicture")
   .put(authentication, files, updateProfilePicture);
 
-accountRouter.route("/updatePassword").put(authentication, updatePassword);
+utilityRouter.route("/updatePassword").put(authentication, updatePassword);
+utilityRouter.route("/rate").post( createRate);
+utilityRouter.route("/rate").get(readRate);
+utilityRouter.route("/rateMultiple").get(authentication, readMultipleRate);
+utilityRouter.route("/rate").delete(authentication, deleteRate);
 
 //factory route
 router.route("/:table/:id").get(authentication, _read_single);
@@ -71,7 +81,7 @@ router.route("/:table/:id").get(authentication, _read_single);
 router
   .route("/:table")
   .post(authentication, files, _create)
-  .get(authentication, _read)
+  .get(_read)
   .put(authentication, files, _update)
   .delete(authentication, _delete)
   .patch(authentication, aggregate);
@@ -87,4 +97,4 @@ chatRouter
 
 //aggregation
 // router.route("/stats/:table").patch(authentication, authorization, firstPhase);
-export { router, chatRouter, accountRouter };
+export { router, chatRouter, utilityRouter };

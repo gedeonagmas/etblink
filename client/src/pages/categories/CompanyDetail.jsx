@@ -3,7 +3,12 @@ import { Carousel, Rating } from "flowbite-react";
 import { useState, useEffect } from "react";
 import Map from "../../components/Map";
 import { useLocation } from "react-router-dom";
-import { useCreateMutation, useReadQuery } from "../../features/api/apiSlice";
+import {
+  useCreateMutation,
+  useReadQuery,
+  useCreateRateMutation,
+  useReadRateQuery,
+} from "../../features/api/apiSlice";
 import Loading from "../../components/loading/Loading";
 import LoadingButton from "../../components/loading/LoadingButton";
 import Response from "../../components/Response";
@@ -24,7 +29,13 @@ const CompanyDetail = (props) => {
     tag: ["companies", "users"],
   });
 
-  const [rateData, rateResponse] = useCreateMutation();
+  const {
+    data: rates,
+    isFetching: rateIsFetching,
+    isError: rateIsError,
+  } = useReadRateQuery({ id: data?.data[0]?._id });
+
+  const [rateData, rateResponse] = useCreateRateMutation();
   const [company, setCompany] = useState({});
   const [pending, setPending] = useState(false);
   const [rating, setRating] = useState("3.5");
@@ -33,7 +44,7 @@ const CompanyDetail = (props) => {
   const [message, setMessage] = useState("");
 
   useEffect(() => {
-    if (data?.data[0]) {
+    if (data?.data) {
       setCompany(data?.data[0]?.user);
     }
   }, [data]);
@@ -41,16 +52,16 @@ const CompanyDetail = (props) => {
   const rateHandler = () => {
     rateData({
       fullName,
-      email,
+      rater: JSON.parse(localStorage.getItem("etblink_user"))?._id,
       message,
-      company: data?.data[0]?._id,
+      type: "company",
+      accepter: data?.data[0]?.user?._id,
       value: rating,
-      url: "/user/rates",
-      tag: ["rates"],
     });
   };
 
   console.log(company, "from detail");
+  console.log(rates, "rates");
   return (
     <div className="relative overflow-hidden z-20">
       <Response response={rateResponse} setPending={setPending} />
@@ -360,7 +371,7 @@ const CompanyDetail = (props) => {
                         required
                       />
                     </div>
-                    <div class="mb-5 w-full">
+                    {/* <div class="mb-5 w-full">
                       <label
                         for="email"
                         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -375,7 +386,7 @@ const CompanyDetail = (props) => {
                         class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-0 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white  dark:focus:border-blue-500 dark:shadow-sm-light"
                         required
                       />
-                    </div>
+                    </div> */}
                   </div>
                   <label
                     for="message"
