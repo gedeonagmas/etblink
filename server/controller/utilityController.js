@@ -3,39 +3,45 @@ import { Company } from "../models/companyModel.js";
 import { Rate } from "../models/ratesModel.js";
 
 export const createRate = asyncCatch(async (req, res, next) => {
+  // let message = "your rate is created successfully";
+
   const data = await Rate.find({
     rater: req.body.rater,
     accepter: req.body.accepter,
   });
-  let message = "your rate is created successfully";
+
   if (data.length > 0) {
-    await Rate.findOneAndDelete({
-      rater: req.body.rater,
-      accepter: req.body.accepter,
-    });
-    message = "rating is just updated";
+    await Rate.findOneAndUpdate({ _id: data[0]._id }, { ...req.body });
+    return res
+      .status(200)
+      .json({ status: "Created", message: "rating is just updated" });
+  } else {
+    await Rate.create(req.body);
+    return res
+      .status(200)
+      .json({ status: "Created", message: "rating is added successfully" });
   }
-  await Rate.create(req.body);
-  const d = await Rate.find({
-    accepter: req.body.accepter,
-    rater: req.body.rater,
-  });
 
-  let sum = 0;
-  d.map((e) => {
-    sum = sum + e.value;
-    return sum;
-  });
+  // const d = await Rate.find({
+  //   accepter: req.body.accepter,
+  //   rater: req.body.rater,
+  // });
 
-  const accepter =
-    req.body.type === "company"
-      ? await Company.findOne({ _id: req.body.accepter })
-      : null;
-  console.log(req.body.accepter, req.body.type, "dd");
-  accepter.totalRating = (sum / d.length).toFixed(1);
+  // let sum = 0;
+  // d.map((e) => {
+  //   sum = sum + e.value;
+  //   return sum;
+  // });
 
-  await accepter.save();
-  res.status(200).json({ status: "Created", message });
+  // const accepter =
+  //   req.body.type === "company"
+  //     ? await Company.findOne({ _id: req.body.accepter })
+  //     : null;
+  // console.log(req.body.accepter, req.body.type, "dd");
+  // accepter.rating = (sum / d.length).toFixed(1);
+
+  // await accepter.save();
+  // res.status(200).json({ status: "Created", message });
 });
 
 export const readRate = asyncCatch(async (req, res, next) => {

@@ -116,7 +116,7 @@ const schema = new mongoose.Schema({
     ref: "user",
   },
 
-  totalRating: {
+  rating: {
     type: Number,
   },
 
@@ -162,7 +162,7 @@ schema.pre("save", function (next) {
     return percent;
   });
 
-  console.log(percent, "percent");
+  // console.log(percent, "percent");
   this.profileFillStatus = percent;
   next();
 });

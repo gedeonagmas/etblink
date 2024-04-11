@@ -70,7 +70,7 @@ router
   .put(authentication, files, updateProfilePicture);
 
 utilityRouter.route("/updatePassword").put(authentication, updatePassword);
-utilityRouter.route("/rate").post( createRate);
+utilityRouter.route("/rate").post( authentication,createRate);
 utilityRouter.route("/rate").get(readRate);
 utilityRouter.route("/rateMultiple").get(authentication, readMultipleRate);
 utilityRouter.route("/rate").delete(authentication, deleteRate);

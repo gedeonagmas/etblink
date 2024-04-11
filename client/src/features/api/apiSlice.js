@@ -240,6 +240,7 @@ export const apiSlice = createApi({
         url: `/utility/rate`,
         method: "POST",
         body: data,
+        credentials: "include",
       }),
       invalidatesTags: ["hotels", "rate", "rate-multiple"],
     }),
@@ -249,6 +250,7 @@ export const apiSlice = createApi({
       query: (arg) => ({
         url: `/utility/rate?id=${arg.id}`,
         method: "GET",
+        credentials: "include",
       }),
       providesTags: ["rates", "rate-multiple"],
     }),
@@ -258,6 +260,7 @@ export const apiSlice = createApi({
       query: () => ({
         url: `/utility/rateMultiple`,
         method: "GET",
+        credentials: "include",
       }),
       providesTags: ["rate-multiple"],
     }),
@@ -268,6 +271,7 @@ export const apiSlice = createApi({
         url: `/utility/rate?id=${data.id}`,
         method: "DELETE",
         body: data,
+        credentials: "include",
       }),
       invalidatesTags: ["rates", "companies", "rate-multiple"],
     }),
