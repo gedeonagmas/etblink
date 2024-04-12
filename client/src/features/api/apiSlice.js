@@ -295,6 +295,7 @@ export const {
 
   useCreateRateMutation,
   useReadRateQuery,
+  useLazyReadRateQuery,
   useReadMultipleRateQuery,
   useDeleteRateMutation,
 } = apiSlice;

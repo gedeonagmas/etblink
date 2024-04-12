@@ -79,6 +79,15 @@ export const paragraph = (field, min, max) => {
   };
 };
 
+export const textMax = (field, max) => {
+  return {
+    validator: function (v) {
+      return v.toString().length < max;
+    },
+    message: `${field} must be less than ${max} characters`,
+  };
+};
+
 export const numberLower = (field, min) => {
   return {
     validator: function (v) {
