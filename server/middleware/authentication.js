@@ -14,7 +14,10 @@ export const authentication = async (req, res, next) => {
   if (token === "null" || !token || token === "")
     return next(new AppError("Please login to proceed!"));
 
-  const decode = await promisify(jwt.verify)(token, process.env.JWT_SECRET_KEY);
+  const decode = await promisify(jwt.verify)(
+    token,
+    "jfam43dcyp434k5l3k5k3j043ek0afsf"
+  );
 
   user = await User.findById(decode.id);
   if (!user) return next(new AppError("users not found", 404));
