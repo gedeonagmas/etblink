@@ -55,10 +55,17 @@ const Response = ({ response, setPending, redirectTo, type }) => {
       );
 
       if (type === "login" || type === "signUp") {
-        setTimeout(() => {
-          navigate(dashboard);
-          navigate(0);
-        }, 2000);
+        localStorage.setItem(
+          "etblink_user",
+          JSON.stringify(response?.data?.data)
+        );
+        navigate(dashboard);
+      }
+      if (type === "update") {
+        const data = JSON.parse(localStorage.getItem("etblink_user"));
+        const user = { ...data, user: { ...response?.data?.data } };
+        localStorage.setItem("etblink_user", JSON.stringify(user));
+        window.location.reload();
       } else if (type === "payment") {
         localStorage.removeItem("macuta_law_firm_system");
         navigate(redirectTo, { replace: true });
@@ -67,11 +74,9 @@ const Response = ({ response, setPending, redirectTo, type }) => {
           navigate(redirectTo, { replace: true });
         }, 3000);
       } else if (type === "logout") {
-        setTimeout(() => {
-          navigate("/", { replace: true });
-          navigate(0);
-          window.location.reload();
-        }, 1000);
+        localStorage.removeItem("etblink_user");
+        navigate("/", { replace: true });
+        window.location.reload();
       } else if (redirectTo && redirectTo?.length > 0) {
         navigate(redirectTo, {
           replace: true,
@@ -94,7 +99,7 @@ const Response = ({ response, setPending, redirectTo, type }) => {
     <div>
       {error && errorMessage && (
         <div
-          class="flex p-4 mb-4 max-w-xl z-50 shadow-xl fixed top-10 right-20 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+          class="flex p-4 mb-4 max-w-xl z-50 shadow-xl fixed top-32 right-20 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
           role="alert"
         >
           <div>
@@ -152,7 +157,7 @@ const Response = ({ response, setPending, redirectTo, type }) => {
       {success && successMessage && (
         <div
           id="alert-3"
-          class="flex items-center p-4 mb-4 fixed top-20 z-50 right-20 max-w-[400px] text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
+          class="flex items-center p-4 mb-4 fixed top-32 z-50 right-20 max-w-[400px] text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
           role="alert"
         >
           <svg

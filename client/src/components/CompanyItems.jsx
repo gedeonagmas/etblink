@@ -2,9 +2,11 @@ import { useState } from "react";
 import VerifiedOutlinedIcon from "@mui/icons-material/VerifiedOutlined";
 import VerifiedOutlined from "@mui/icons-material/VerifiedOutlined";
 import "./bubble.css";
+import { Link } from "react-router-dom";
 
-const CompanyItems = ({ value, phoneNo,type }) => {
+const CompanyItems = ({ value, phoneNo, type, data }) => {
   const [phone, setPhone] = useState(phoneNo);
+  // console.log(data, "datas");
   return (
     <div
       key={value}
@@ -45,7 +47,7 @@ const CompanyItems = ({ value, phoneNo,type }) => {
       <div className="w-full relative rounded-xl   flex items-center justify-center gap-4">
         <div className="relative w-full">
           <img
-            src="./image-1.jpg"
+            src={data?.banner}
             alt=""
             className={`w-full brightness-[0.5] ${
               type === "large" ? "h-[190px]" : "h-[140px]"
@@ -93,11 +95,7 @@ const CompanyItems = ({ value, phoneNo,type }) => {
               : "w-[80px] top-[100px] h-[80px] border-[4px]"
           } border-spacing-7 z-10  border-gray-200 rounded-full   flex items-center justify-center`}
         >
-          <img
-            src="./image-1.jpg"
-            alt=""
-            className="w-full h-full rounded-full"
-          />
+          <img src={data?.logo} alt="" className="w-full h-full rounded-full" />
           <div
             className={`${
               type === "large"
@@ -161,7 +159,7 @@ const CompanyItems = ({ value, phoneNo,type }) => {
           </svg>
         </div>
         <p className="text-[20px] flex items-center justify-center gap-3 mt-3 font-semibold text-gray-700 dark:text-gray-100">
-          Healthy Food{" "}
+          {data?.title}
           <svg
             class="w-6 h-6 text-emerald-500"
             aria-hidden="true"
@@ -178,7 +176,7 @@ const CompanyItems = ({ value, phoneNo,type }) => {
             />
           </svg>
         </p>
-        <p className="text-[15px] font-light mt-2">Outdoor, luxury for you</p>
+        <p className="text-[15px] font-light mt-2">{data?.title}</p>
 
         <div
           className={`w-full px-4 py-2 border-b border-gray-200 mt-2 text-gray-500 dark:text-white flex ${
@@ -208,7 +206,7 @@ const CompanyItems = ({ value, phoneNo,type }) => {
                 d="M17.8 14h0a7 7 0 1 0-11.5 0h0l.1.3.3.3L12 21l5.1-6.2.6-.7.1-.2Z"
               />
             </svg>
-            Adiss ababa
+            {data?.address}
           </div>
           <div className="flex -ml-2 gap-1 items-center text-[16px] font-light justify-center">
             <svg
@@ -230,7 +228,7 @@ const CompanyItems = ({ value, phoneNo,type }) => {
             <p
               id={value}
               onClick={() => {
-                setPhone("+251 954104637");
+                setPhone(data?.phone);
                 const id = document.getElementById(value);
                 id?.classList?.add("hidden");
               }}
@@ -242,7 +240,11 @@ const CompanyItems = ({ value, phoneNo,type }) => {
         </div>
       </div>
       <div className="flex my-3 w-full items-center justify-between px-3 ">
-        <div className={`flex items-center ${type==='large'?'px-2':'px-1'} rounded-full hover:bg-orange-500 hover:text-white border border-gray-300 cursor-pointer text-[14px]  justify-center`}>
+        <div
+          className={`flex items-center ${
+            type === "large" ? "px-2" : "px-1"
+          } rounded-full hover:bg-orange-500 hover:text-white border border-gray-300 cursor-pointer text-[14px]  justify-center`}
+        >
           {/* <div className="p-2  bg-[rgb(252,45,45)] rounded-full text-white">
             <svg
               class="w-6 h-6"
@@ -264,8 +266,12 @@ const CompanyItems = ({ value, phoneNo,type }) => {
           <p className="mr-3">chat</p>
         </div>
 
-        <button
-          className={` ${type==='large'?'py-[8px] px-10':'px-4'} py-[6px] ${
+        <Link
+          to="/company-detail"
+          state={{ id: value }}
+          className={` ${
+            type === "large" ? "py-[8px] px-10" : "px-4"
+          } py-[6px] ${
             value === 1
               ? "bg-[#00aeff]"
               : value === 2
@@ -274,7 +280,7 @@ const CompanyItems = ({ value, phoneNo,type }) => {
           }  text-white rounded-sm`}
         >
           Detail{" "}
-        </button>
+        </Link>
       </div>
     </div>
   );

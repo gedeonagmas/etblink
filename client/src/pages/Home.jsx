@@ -103,7 +103,7 @@ const Home = () => {
               indicators={false}
               pauseOnHover={false}
               responsive={true}
-            >
+            > 
               {slideImages.map((slideImage, index) => (
                 <div key={index}>
                   <div
@@ -214,103 +214,6 @@ const Home = () => {
                   <p className="text-lg  text-center uppercase">Search</p>
                 </div>
               </div>
-              {/* <div className="w-full mt-10 gap-5 py-5 md:py-0 flex px-4 flex-col items-center justify-center bg-main-black text-white">
-                <div className="w-full flex justify-between items-center">
-                  <p className="font-bold text-gray-200">
-                    Top listed magazines
-                  </p>
-                </div>
-
-                <div className="w-full relative my-2 flex gap-2 items-center justify-center bg-main-black text-white">
-                  <div className="flex flex-col items-center justify-center w-auto">
-                    <img
-                      src="./magazine2.jpg"
-                      alt=""
-                      className="h-24 rounded-sm w-24"
-                    />
-                    <div className="w-28 shadow-2xl shadow-blue-500 h-14 px-1 py-1 text-center rounded-sm bg-[#00aeff] text-white">
-                      <p className="font-bold text-sm">Addiss</p>
-                      <p className="text-sm cursor-pointer flex items-center justify-center">
-                        read more
-                        <svg
-                          className="w-3 h-3 ms-2.5 rtl:rotate-[270deg]"
-                          aria-hidden="true"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 18 18"
-                        >
-                          <path
-                            stroke="currentColor"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M15 11v4.833A1.166 1.166 0 0 1 13.833 17H2.167A1.167 1.167 0 0 1 1 15.833V4.167A1.166 1.166 0 0 1 2.167 3h4.618m4.447-2H17v5.768M9.111 8.889l7.778-7.778"
-                          />
-                        </svg>
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex flex-col items-center justify-center w-auto">
-                    <img
-                      src="./magazine1.jpg"
-                      alt=""
-                      className="h-24 rounded-sm w-24"
-                    />
-                    <div className="w-28 h-14 shadow-2xl shadow-blue-600 px-1 py-1 text-center rounded-sm bg-blue-500 text-white">
-                      <p className="font-bold text-sm">Reporter</p>
-                      <p className="text-sm cursor-pointer flex items-center justify-center">
-                        read more{" "}
-                        <svg
-                          className="w-3 h-3 ms-2.5 rtl:rotate-[270deg]"
-                          aria-hidden="true"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 18 18"
-                        >
-                          <path
-                            stroke="currentColor"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M15 11v4.833A1.166 1.166 0 0 1 13.833 17H2.167A1.167 1.167 0 0 1 1 15.833V4.167A1.166 1.166 0 0 1 2.167 3h4.618m4.447-2H17v5.768M9.111 8.889l7.778-7.778"
-                          />
-                        </svg>
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex flex-col items-center justify-center w-auto">
-                    <img
-                      src="./magazine3.jpg"
-                      alt=""
-                      className="h-24 rounded-sm w-24"
-                    />
-                    <div
-                      style={{ background: "orange" }}
-                      className="w-28 h-14 px-1 shadow-2xl shadow-yellow-500 py-1 text-center rounded-sm  text-white"
-                    >
-                      <p className="font-bold text-sm">Tribune</p>
-                      <p className="text-sm flex cursor-pointer items-center justify-center">
-                        read more{" "}
-                        <svg
-                          className="w-3 h-3 ms-2.5 rtl:rotate-[270deg]"
-                          aria-hidden="true"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 18 18"
-                        >
-                          <path
-                            stroke="currentColor"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M15 11v4.833A1.166 1.166 0 0 1 13.833 17H2.167A1.167 1.167 0 0 1 1 15.833V4.167A1.166 1.166 0 0 1 2.167 3h4.618m4.447-2H17v5.768M9.111 8.889l7.778-7.778"
-                          />
-                        </svg>
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div> */}
 
               <div className="absolute hidden lg:flex right-0 text-[13px] py-2 lg:-top-[150px] z-30 mr-main w-[380px] h-auto justify-end items-center">
                 <div className="absolute right-0 top-0 z-30 bg-dark w-full">
@@ -669,16 +572,17 @@ const Home = () => {
               <p>Something went error unable to read the data.</p>
             ) : companies?.length > 0 ? (
               companies?.map((e, i) => {
-                return (
+                return ( 
                   <CompanyItems
                     value={e._id}
                     phoneNo="+251 9541**"
                     type="large"
+                    data={e}
                   />
                 );
               })
             ) : (
-              <p>There is no data to display.</p>
+              <p></p>
             )}
           </div>
 
@@ -689,7 +593,7 @@ const Home = () => {
           ) : youtubes?.length > 0 ? (
             <YoutubeItems data={youtubes} />
           ) : (
-            <p>There is no data to display.</p>
+            <p></p>
           )}
 
           <div className="w-full  py-8 flex flex-col items-center justify-center">

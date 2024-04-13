@@ -26,6 +26,11 @@ const schema = new mongoose.Schema({
     validate: valid.paragraph("Title", 4, 200),
   },
 
+  address: {
+    type: String,
+    validate: valid.paragraph("Address", 4, 200),
+  },
+
   phone: {
     type: String,
     validate: valid.phone("Phone"),
@@ -73,6 +78,8 @@ const schema = new mongoose.Schema({
   logo: {
     type: String,
     validate: valid.required("Logo"),
+    // data: Buffer,
+    // contentTYpe:String,
   },
 
   banner: {
@@ -107,6 +114,13 @@ const schema = new mongoose.Schema({
   sales: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "user",
+  },
+
+  rating: {
+    type: {
+      total: { type: Number, default: 0 },
+      average: { type: Number, default: 0 },
+    },
   },
 
   isBoosted: {
@@ -151,7 +165,7 @@ schema.pre("save", function (next) {
     return percent;
   });
 
-  console.log(percent, "percent");
+  // console.log(percent, "percent");
   this.profileFillStatus = percent;
   next();
 });

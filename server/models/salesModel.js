@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import * as valid from "../utils/validator.js";
 
-const visitorSchema = new mongoose.Schema(
+const salesSchema = new mongoose.Schema(
   {
     firstName: {
       type: String,
@@ -63,12 +63,12 @@ const visitorSchema = new mongoose.Schema(
   }
 );
 
-visitorSchema.pre("findOneAndUpdate", function (next) {
+salesSchema.pre("findOneAndUpdate", function (next) {
   this.options.runValidators = true;
   next();
 });
 
-visitorSchema.pre("save", function (next) {
+salesSchema.pre("save", function (next) {
   let percent = 20;
   const fields = [
     "firstName",
@@ -90,4 +90,4 @@ visitorSchema.pre("save", function (next) {
   next();
 });
 
-export const Visitor = mongoose.model("visitor", visitorSchema);
+export const Sales = mongoose.model("sales", salesSchema);

@@ -11,6 +11,15 @@ const encrypt = (query) => {
 const decrypt = (query) => {
   return atob(query);
 };
+//   const data = await User.create({
+//     ...req.body,
+//     profilePicture: result.url,
+//   });
+//   const token = tokenGenerator(res, data._id);
+//   return res
+//     .status(200)
+//     .json({ message: "Account Created Successfully", token, data });
+// }
 
 const fileHandler = (value, req) => {
   if (req.files) {
@@ -58,7 +67,7 @@ export const _create = asyncCatch(async (req, res, next) => {
     } else {
       let results = [];
       req.files?.attachments?.map(async (file, i) => {
-        console.log(file, "files");
+        // console.log(file, "files");
         results.push(file[0].path);
 
         if (results.length === req.files.attachments.length) {
@@ -160,7 +169,8 @@ export const _read = asyncCatch(async (req, res, next) => {
         return res.status(200).json({ message: "you are in the last page" });
     }
     if (data.length < 1)
-      return next(new AppError("There is no data to display", 400));
+      // return next(new AppError("There is no data to display", 400));
+      return res.status(201).json({ message: "There is no data to display!" });
 
     return res.status(200).json({
       status: "success",
@@ -175,9 +185,15 @@ export const _read = asyncCatch(async (req, res, next) => {
 //update
 export const _update = asyncCatch(async (req, res, next) => {
   const model = selectModel(req.params.table, next);
-  console.log(req.body, "body");
+  // console.log(req.body, "body");
   const value = { ...req.body };
   const files = fileHandler(value, req);
+  console.log(files, "files");
+  //image:{
+  // data: req.file.buffer,
+  //   contentType:req.file.mimetype
+  //image:image.data.toString('base-64)
+  // }
   value.socialMedias
     ? (value.socialMedias = JSON.parse(value.socialMedias))
     : null;
@@ -189,7 +205,7 @@ export const _update = asyncCatch(async (req, res, next) => {
     const data = await model.findOneAndUpdate(
       { _id: req.query.id },
       { ...files },
-      { runValidators: true }
+      { runValidators: true, new: true }
     );
 
     if (!data)
@@ -199,7 +215,7 @@ export const _update = asyncCatch(async (req, res, next) => {
 
     return res
       .status(201)
-      .json({ status: "Success", message: "data updated successfully" });
+      .json({ status: "Success", message: "data updated successfully", data });
   }
   return next(new AppError("something went wrong please try again!!", 500));
 });
@@ -209,9 +225,7 @@ export const _delete = asyncCatch(async (req, res, next) => {
   const model = selectModel(req.params.table, next);
 
   if (model) {
-    const data = await model.findByIdAndDelete(
-      req.query.id 
-    );
+    const data = await model.findByIdAndDelete(req.query.id);
 
     if (!data)
       return next(

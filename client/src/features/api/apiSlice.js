@@ -42,6 +42,8 @@ export const apiSlice = createApi({
     "chats",
     "news",
     "youtubes",
+    "rates",
+    "rate-multiple",
   ],
   endpoints: (builder) => ({
     //user signup
@@ -97,12 +99,13 @@ export const apiSlice = createApi({
     //user forget
     updatePassword: builder.mutation({
       query: (data) => ({
-        url: `/account/updatePassword`,
+        url: `/utility/updatePassword`,
         method: "PUT",
         body: data,
         credentials: "include",
       }),
     }),
+
     //create
     create: builder.mutation({
       query: (data) => {
@@ -230,6 +233,48 @@ export const apiSlice = createApi({
         return [...new Set(tag)];
       },
     }),
+
+    //create rate
+    createRate: builder.mutation({
+      query: (data) => ({
+        url: `/utility/rate`,
+        method: "POST",
+        body: data,
+        credentials: "include",
+      }),
+      invalidatesTags: ["companies", "rate", "rate-multiple"],
+    }),
+
+    //create rate
+    readRate: builder.query({
+      query: (arg) => ({
+        url: `/utility/rate?id=${arg.id}`,
+        method: "GET",
+        credentials: "include",
+      }),
+      providesTags: ["companies", "rate", "rate-multiple"],
+    }),
+
+    //read rate multiple
+    readMultipleRate: builder.query({
+      query: () => ({
+        url: `/utility/rateMultiple`,
+        method: "GET",
+        credentials: "include",
+      }),
+      providesTags: ["companies", "rate", "rate-multiple"],
+    }),
+
+    //delete rate
+    deleteRate: builder.mutation({
+      query: (data) => ({
+        url: `/utility/rate?id=${data.id}`,
+        method: "DELETE",
+        body: data,
+        credentials: "include",
+      }),
+      invalidatesTags: ["companies", "rate", "rate-multiple"],
+    }),
   }),
 });
 
@@ -247,4 +292,10 @@ export const {
   useDeleteMutation,
 
   useLazyReadChatQuery,
+
+  useCreateRateMutation,
+  useReadRateQuery,
+  useLazyReadRateQuery,
+  useReadMultipleRateQuery,
+  useDeleteRateMutation,
 } = apiSlice;

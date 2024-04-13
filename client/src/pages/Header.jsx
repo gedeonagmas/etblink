@@ -4,7 +4,7 @@ import { DarkThemeToggle } from "flowbite-react";
 import { Slide } from "react-slideshow-image";
 import "react-slideshow-image/dist/styles.css";
 import { Link } from "react-router-dom";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Response from "../components/Response";
 import LoadingButton from "../components/loading/LoadingButton";
 import {
@@ -12,11 +12,12 @@ import {
   useUserLoginMutation,
   useUserLogoutMutation,
 } from "../features/api/apiSlice";
-import { userContext } from "../App";
+// import { userContext } from "../App";
 
 const Header = () => {
-  const context = useContext(userContext);
-  // console.log(context.user, "user from header");
+  // const context = useContext(userContext);
+  const user = JSON.parse(localStorage.getItem("etblink_user"));
+  // console.log(user, "user from header");
   const [loginData, loginResponse] = useUserLoginMutation();
   const [logout, logoutResponse] = useUserLogoutMutation();
   const [pending, setPending] = useState(false);
@@ -64,7 +65,7 @@ const Header = () => {
     logout({});
   };
 
-  console.log(context?.user, "context in header");
+  // console.log(context?.user, "context in header");
   return (
     // fixed bg-white bg-dark top-0 left-0 w-full z-50 h-auto
     <div className="fixed w-full z-50 bg-white bg-dark">
@@ -73,6 +74,7 @@ const Header = () => {
         response={logoutResponse}
         setPending={setPending}
         redirectTo="/"
+        type="logout"
       />
       <div className="flex lg:hidden fixed top-0 left-0 z-50 flex-col items-center w-full h-auto py-10 ">
         <div className="flex bg-white bg-dark -mt-12 justify-between items-center px-2 h-full w-full">
@@ -81,13 +83,13 @@ const Header = () => {
             alt=""
             className="w-[80px] relative z-50 h-[65px]border-2 bg-white dark:bg-gray-500 rounded-sm"
           />
-          {context.user ? (
+          {user ? (
             <div className="flex items-center gap-3">
               <p className="px-2 py-1 text-white rounded-xl bg-main">
-                {context.user.email.split("@")[0]}
+                {user.email.split("@")[0]}
               </p>
               <Link
-                to={`/dashboard/${context.user.role}`}
+                to={`/dashboard/${user.role}`}
                 className="cursor-pointer"
               >
                 Dashboard
@@ -576,7 +578,7 @@ const Header = () => {
                 data-dropdown-delay="500"
                 data-dropdown-trigger="hover"
                 className={`focus:ring-0 focus:outline-none ${
-                  context.user ? "-mr-4" : "mr-12"
+                  user ? "-mr-4" : "mr-12"
                 } font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center`}
                 type="button"
               >
@@ -641,13 +643,13 @@ const Header = () => {
                 </ul>
               </div>
             </div>
-            {context.user ? (
+            {user ? (
               <div className="flex items-center gap-5">
                 <p className="px-2 py-1 rounded-xl bg-main">
-                  {context.user.email.split("@")[0]}
+                  {user.email.split("@")[0]}
                 </p>
                 <Link
-                  to={`/dashboard/${context.user.role}`}
+                  to={`/dashboard/${user.role}`}
                   className="cursor-pointer"
                 >
                   Dashboard
