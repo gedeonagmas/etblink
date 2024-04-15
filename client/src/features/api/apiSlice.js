@@ -330,6 +330,7 @@ export const {
   useLazyReadChatQuery,
 
   useCreateRateMutation,
+  useLazyReadRateQuery,
   useReadRateQuery,
   useReadMultipleRateQuery,
   useDeleteRateMutation,

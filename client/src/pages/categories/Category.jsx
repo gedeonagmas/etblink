@@ -49,9 +49,6 @@ const Category = () => {
   console.log(currentPage, "ccccccccc"); 
   const [page, setPage] = useState(0);
   const [lastPage, setLastPage] = useState("");
-  const [totalPage, setTotalPage] = useState(0);
-  const [pagination, setPagination] = useState([1, 2, 3, 4, 5]);
-  const [index, setIndex] = useState(0);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("");
 
@@ -79,7 +76,6 @@ const Category = () => {
       tag: ["companies"],
     });
 
-    indicatorHandler();
   }, [page]);
 
   useEffect(() => {
@@ -97,60 +93,10 @@ const Category = () => {
       url: `/user/companies?limit=2&page=${page}${cat}`,
       tag: ["companies"],
     });
-
-    indicatorHandler();
   }, [category]);
 
-  const indicatorHandler = () => {
-    // console.log(Math.ceil(company?.total / 2), "cccccc");
-    if (page === pagination[pagination?.length - 1]) {
-      pagination.shift();
-      if (pagination.length === Math.ceil(company?.total / 2)) {
-        setPage(Math.ceil(company?.total / 2));
-        // return;
-      }
-      pagination.push(page + 1);
-    } else if (pagination[0] > 1) {
-      pagination.pop();
-      if (page <= 1) {
-        setPage(1);
-      }
-      pagination.unshift(pagination[0] - 1);
-    }
-  };
 
-  useEffect(() => {
-    pagination.map((e) => {
-      const ids = document.getElementById(e);
-      // console.log(e, "eeee", page, "page", e === page);
-      ids?.classList?.remove("bg-main", "text-white");
-      ids?.classList?.add(
-        "bg-white",
-        "text-gray-500",
-        "dark:bg-gray-800",
-        "dark:text-gray-400"
-      );
-      let a = page <= 4 ? page : page - 1;
-      if (e === a) {
-        ids?.classList?.remove(
-          "bg-white",
-          "text-gray-500",
-          "dark:bg-gray-800",
-          "dark:text-gray-400",
-          "dark:hover:bg-gray-700"
-        );
-        ids?.classList?.add(
-          "bg-main",
-          "text-white",
-          "hover:bg-red-500",
-          "hover:text-white"
-        );
-      }
-    });
-  }, [page]);
-  // console.log(pagination, "pagination");
-  // console.log(page, "page", index, "index");
-  // console.log(Math.ceil(totalPage / 2), "company");
+ 
 
   console.log(company, "company");
   return (
