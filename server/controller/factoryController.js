@@ -147,14 +147,14 @@ export const _read = asyncCatch(async (req, res, next) => {
     const limit = req.query.limit * 1 || null;
     const skip = (page - 1) * limit;
     query.skip(skip).limit(limit);
-
+    
     //populating
     switch (req.query.populatingType) {
       case "users":
         query.populate(req.query.populatingValue);
         break;
-      case "application":
-        query.populate(req.query.pp_ff.split(",").join(" "));
+      case "saves":
+        query.populate(req.query.populatingValue.split(",").join(" "));
       default:
         query;
     }

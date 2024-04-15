@@ -102,10 +102,10 @@ export const forgetPassword = asyncCatch(async (req, res, next) => {
 
   //email sent logic here
   const subject = "Reset your password";
-  const message =
+  const response =
     "We have just sent a verification link via your email address please check. it's valid only for 30 minutes";
   const html = `<div>This is your verification link click <a style={{background:'yellow',padding:'5px', border-radius:'20px',color:white,padding:10px;}} href="${passwordResetUrl}">here</a> to reset your password</div>`;
-  sendEmailHandler(email, res, next, subject, message, html);
+  sendEmailHandler(email, res, next, subject, response, html);
 });
 
 export const resetPassword = asyncCatch(async (req, res, next) => {

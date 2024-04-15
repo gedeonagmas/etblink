@@ -5,7 +5,9 @@ import { News } from "../models/newsModel.js";
 import { Institution } from "../models/organizationModel.js";
 import { Payment } from "../models/paymentModel.js";
 import { Rate } from "../models/ratesModel.js";
+import { Save } from "../models/saveModel.js";
 import { User } from "../models/userModel.js";
+import { View } from "../models/viewModel.js";
 import { Youtube } from "../models/youtubeModel.js";
 import AppError from "./AppError.js";
 
@@ -50,6 +52,12 @@ export const selectModel = (name, next) => {
       break;
     case "rates":
       model = Rate;
+      break;
+    case "saves":
+      model = Save;
+      break;
+    case "views":
+      model = View;
       break;
     default:
       return next(new AppError("something went wrong please try again!.", 500));

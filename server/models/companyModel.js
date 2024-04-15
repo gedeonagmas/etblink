@@ -128,6 +128,15 @@ const schema = new mongoose.Schema({
     default: false,
   },
 
+  saves: {
+    total: { type: Number, default: 0 },
+    available: { type: Number, default: 0 },
+  },
+
+  views: {
+    total: { type: Number, default: 0 },
+  },
+
   profileFillStatus: {
     type: Number,
   },
