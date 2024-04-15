@@ -45,6 +45,7 @@ const salesSchema = new mongoose.Schema(
 
     profilePicture: {
       type: String,
+      default: "",
     },
 
     profileFillStatus: {

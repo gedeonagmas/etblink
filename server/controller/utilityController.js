@@ -44,14 +44,13 @@ export const createRate = asyncCatch(async (req, res, next) => {
       .status(200)
       .json({ status: "Created", message: "rating is added successfully" });
   }
-}); 
+});
 
 export const readRate = asyncCatch(async (req, res, next) => {
   const data = await Rate.find({ accepter: req.query.id })
     .populate("rater accepter")
     .limit(20)
     .sort("-createdAt");
-  // console.log(req.query, "rate");
   res.status(200).json({
     status: "Read",
     data,
@@ -98,8 +97,31 @@ export const createSave = asyncCatch(async (req, res, next) => {
   });
 });
 
-export const createView = asyncCatch(async (req, res, next) => {
+export const deleteSave = asyncCatch(async (req, res, next) => {
   console.log(req.body);
+  // const saves = await Save.find({
+  //   company: req.body.company,
+  //   saver: req.body.saver,
+  // });
+  // if (saves?.length > 0) {
+  //   return res
+  //     .status(200)
+  //     .json({ message: "Company is already in your list." });
+  // }
+  // await Save.create(req.body);
+
+  // const company = await Company.findById(req.body.company);
+  // company.saves.total = company.saves.total + 1;
+  // company.saves.available = company.saves.available + 1;
+  // await company.save();
+
+  // res.status(200).json({
+  //   status: "Created",
+  //   message: "company added to your list.",
+  // });
+});
+
+export const createView = asyncCatch(async (req, res, next) => {
   const views = await View.find({
     company: req.body.company,
     viewer: req.body.viewer,

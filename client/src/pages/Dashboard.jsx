@@ -10,14 +10,34 @@ import Company from "./dashboard/Company";
 import logo from "./../assets/logo.png";
 import callCenterImage from "../assets/promotion.avif";
 import gedi from "../assets/gedi.jpg";
-import { useUserLogoutMutation } from "../features/api/apiSlice";
+import { useReadQuery, useUserLogoutMutation } from "../features/api/apiSlice";
 import Response from "../components/Response";
 
 const Dashboard = () => {
-  const [user, setUser] = useState();
-  useEffect(() => {
-    setUser(JSON.parse(localStorage.getItem("etblink_user")));
-  }, []);
+  const user = JSON.parse(localStorage.getItem("etblink_user"));
+  const {
+    data: saves,
+    isFetching: savesIsFetching,
+    isError: savesIsError,
+  } = useReadQuery({
+    url:
+      user?.role === "company"
+        ? `/user/saves?company[eq]=${user?.user?._id}&populatingType=saves&populatingValue=company,saver`
+        : `/user/saves?saver[eq]=${user?.user?._id}&populatingType=saves&populatingValue=company,saver`,
+    tag: ["saves", "company"],
+  });
+
+  const {
+    data: views,
+    isFetching: viewsIsFetching,
+    isError: viewsIsError,
+  } = useReadQuery({
+    url:
+      user?.role === "company"
+        ? `/user/views?company[eq]=${user?.user?._id}&populatingType=views&populatingValue=company,viewer`
+        : `/user/views?viewer[eq]=${user?.user?._id}&populatingType=views&populatingValue=company,viewer`,
+    tag: ["views", "company"],
+  });
 
   const [logout, logoutResponse] = useUserLogoutMutation();
   const [pending, setPending] = useState(false);
@@ -437,7 +457,10 @@ const Dashboard = () => {
                 </form> */}
 
                 <div className="flex relative gap-3 text-xs lg:gap-6 lg:mr-10 self-end items-center">
-                  <div className="items-center flex flex-col justify-center ">
+                  <Link
+                    to="/"
+                    className="items-center cursor-pointer flex flex-col justify-center "
+                  >
                     <svg
                       class="w-6 h-6 text-gray-800 dark:text-white"
                       aria-hidden="true"
@@ -454,58 +477,63 @@ const Dashboard = () => {
                       />
                     </svg>
                     home
-                  </div>
+                  </Link>
 
-                  <div className="items-center flex flex-col justify-center">
-                    <button
-                      type="button"
-                      class="relative inline-flex items-center p-1s text-sm font-medium text-center t"
-                    >
-                      <svg
-                        class="w-6 h-6 text-gray-800 dark:text-white"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        fill="currentColor"
-                        viewBox="0 0 24 24"
+                  <Link to={`/dashboard/saves`} className="cursor-pointer">
+                    <div className="items-center flex flex-col justify-center">
+                      <button
+                        type="button"
+                        class="relative inline-flex items-center p-1s text-sm font-medium text-center t"
                       >
-                        <path
-                          fill-rule="evenodd"
-                          d="M4.998 7.78C6.729 6.345 9.198 5 12 5c2.802 0 5.27 1.345 7.002 2.78a12.713 12.713 0 0 1 2.096 2.183c.253.344.465.682.618.997.14.286.284.658.284 1.04s-.145.754-.284 1.04a6.6 6.6 0 0 1-.618.997 12.712 12.712 0 0 1-2.096 2.183C17.271 17.655 14.802 19 12 19c-2.802 0-5.27-1.345-7.002-2.78a12.712 12.712 0 0 1-2.096-2.183 6.6 6.6 0 0 1-.618-.997C2.144 12.754 2 12.382 2 12s.145-.754.284-1.04c.153-.315.365-.653.618-.997A12.714 12.714 0 0 1 4.998 7.78ZM12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"
-                          clip-rule="evenodd"
-                        />
-                      </svg>
+                        <svg
+                          class="w-7 h-7"
+                          aria-hidden="true"
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          fill="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path d="m12.75 20.66 6.184-7.098c2.677-2.884 2.559-6.506.754-8.705-.898-1.095-2.206-1.816-3.72-1.855-1.293-.034-2.652.43-3.963 1.442-1.315-1.012-2.678-1.476-3.973-1.442-1.515.04-2.825.76-3.724 1.855-1.806 2.201-1.915 5.823.772 8.706l6.183 7.097c.19.216.46.34.743.34a.985.985 0 0 0 .743-.34Z" />
+                        </svg>
 
-                      <div class="absolute inline-flex items-center justify-center w-6 h-6 font-bold text-white bg-red-500 border-2 border-white rounded-full -top-3 -end-3 dark:border-gray-900">
-                        20
-                      </div>
-                    </button>
-                    views
-                  </div>
-                  <div className="items-center flex flex-col justify-center">
-                    <button
-                      type="button"
-                      class="relative inline-flex items-center p-1s text-sm font-medium text-center t"
-                    >
-                      <svg
-                        class="w-6 h-6 text-gray-800 dark:text-white"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        fill="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path d="m12.75 20.66 6.184-7.098c2.677-2.884 2.559-6.506.754-8.705-.898-1.095-2.206-1.816-3.72-1.855-1.293-.034-2.652.43-3.963 1.442-1.315-1.012-2.678-1.476-3.973-1.442-1.515.04-2.825.76-3.724 1.855-1.806 2.201-1.915 5.823.772 8.706l6.183 7.097c.19.216.46.34.743.34a.985.985 0 0 0 .743-.34Z" />
-                      </svg>
+                        <div class="absolute inline-flex items-center justify-center w-6 h-6 text-xs p-1 font-bold text-white bg-main border-2 border-white rounded-full -top-2 -end-2 dark:border-gray-900">
+                          {saves ? saves?.data?.length : 0}
+                        </div>
+                      </button>
+                    </div>
+                  </Link>
 
-                      <div class="absolute inline-flex items-center justify-center w-6 h-6 font-bold text-white bg-red-500 border-2 border-white rounded-full -top-3 -end-3 dark:border-gray-900">
-                        20
+                  {user?.role === "company" && (
+                    <Link to={`/dashboard/views`} className="cursor-pointer">
+                      <div className="items-center flex flex-col justify-center">
+                        <button
+                          type="button"
+                          class="relative inline-flex items-center p-1s text-sm font-medium text-center t"
+                        >
+                          <svg
+                            class="w-7 h-7"
+                            aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            fill="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              d="M4.998 7.78C6.729 6.345 9.198 5 12 5c2.802 0 5.27 1.345 7.002 2.78a12.713 12.713 0 0 1 2.096 2.183c.253.344.465.682.618.997.14.286.284.658.284 1.04s-.145.754-.284 1.04a6.6 6.6 0 0 1-.618.997 12.712 12.712 0 0 1-2.096 2.183C17.271 17.655 14.802 19 12 19c-2.802 0-5.27-1.345-7.002-2.78a12.712 12.712 0 0 1-2.096-2.183 6.6 6.6 0 0 1-.618-.997C2.144 12.754 2 12.382 2 12s.145-.754.284-1.04c.153-.315.365-.653.618-.997A12.714 12.714 0 0 1 4.998 7.78ZM12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"
+                              clip-rule="evenodd"
+                            />
+                          </svg>
+
+                          <div class="absolute inline-flex items-center justify-center w-6 h-6 font-bold text-white bg-main border-2 border-white rounded-full -top-2 -end-2 dark:border-gray-900">
+                            {views?.data?.length}
+                          </div>
+                        </button>
                       </div>
-                    </button>
-                    saves
-                  </div>
+                    </Link>
+                  )}
                   <div className="items-center flex flex-col justify-center">
                     <button
                       type="button"
@@ -544,22 +572,22 @@ const Dashboard = () => {
                     <span class="sr-only">Open user menu</span>
                     <div className="flex gap-2 items-center">
                       {user?.role !== "company" &&
-                      user?.profilePicture?.length < 1 ? (
+                      user?.user?.profilePicture?.length < 1 ? (
                         <div className="w-12 h-12 p-1 text-xs rounded-full flex items-center justify-center bg-main text-white text-center">
                           {user?.role}
                         </div>
                       ) : user?.role !== "company" &&
-                        user?.profilePicture?.length > 1 ? (
+                        user?.user?.profilePicture?.length > 1 ? (
                         <img
                           class="w-10 h-10 rounded-full"
-                          src={user?.profilePicture}
-                          alt="user photo"
+                          src={user?.user?.profilePicture}
+                          alt="photo"
                         />
                       ) : (
                         <img
                           class="w-10 h-10 rounded-full"
                           src={user?.role === "company" ? user?.user?.logo : ""}
-                          alt="user photo"
+                          alt="user"
                         />
                       )}
 

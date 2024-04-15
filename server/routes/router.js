@@ -36,6 +36,7 @@ import {
   createSave,
   createView,
   deleteRate,
+  deleteSave,
   readMultipleRate,
   readRate,
 } from "../controller/utilityController.js";
@@ -78,8 +79,9 @@ utilityRouter.route("/rate").get(readRate);
 utilityRouter.route("/rateMultiple").get(authentication, readMultipleRate);
 utilityRouter.route("/rate").delete(authentication, deleteRate);
 utilityRouter.route("/save").post(authentication, createSave);
+utilityRouter.route("/save").delete(authentication, deleteSave); 
 utilityRouter.route("/view").post(authentication, createView);
-
+ 
 //factory route
 router.route("/:table/:id").get(authentication, _read_single);
 router.route("/sendEmail").post(async (req, res, next) => {

@@ -300,6 +300,17 @@ export const apiSlice = createApi({
     }),
 
     //create rate
+    deleteSave: builder.mutation({
+      query: (data) => ({
+        url: `/utility/save`,
+        method: "DELETE",
+        body: data,
+        credentials: "include",
+      }),
+      invalidatesTags: ["companies", "save"],
+    }),
+
+    //create rate
     createView: builder.mutation({
       query: (data) => ({
         url: `/utility/view`,
@@ -336,5 +347,6 @@ export const {
   useDeleteRateMutation,
 
   useCreateSaveMutation,
+  useDeleteSaveMutation,
   useCreateViewMutation,
 } = apiSlice;
