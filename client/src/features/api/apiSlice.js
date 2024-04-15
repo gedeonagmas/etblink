@@ -26,7 +26,7 @@ let tag = [];
 export const apiSlice = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://etblink.vercel.app/etblink/app/v1",
+    baseUrl: "http://localhost:3001/etblink/app/v1",
   }),
   tagTypes: [
     "users",
@@ -44,6 +44,8 @@ export const apiSlice = createApi({
     "youtubes",
     "rates",
     "rate-multiple",
+    "view",
+    "save",
   ],
   endpoints: (builder) => ({
     //user signup
@@ -80,6 +82,16 @@ export const apiSlice = createApi({
     forgetPassword: builder.mutation({
       query: (data) => ({
         url: "/user/forgetPassword",
+        method: "POST",
+        body: data,
+        credentials: "include",
+      }),
+    }),
+
+    //user forget
+    sendEmail: builder.mutation({
+      query: (data) => ({
+        url: "/user/sendEmail",
         method: "POST",
         body: data,
         credentials: "include",
@@ -275,6 +287,28 @@ export const apiSlice = createApi({
       }),
       invalidatesTags: ["companies", "rate", "rate-multiple"],
     }),
+
+    //create rate
+    createSave: builder.mutation({
+      query: (data) => ({
+        url: `/utility/save`,
+        method: "POST",
+        body: data,
+        credentials: "include",
+      }),
+      invalidatesTags: ["companies", "save"],
+    }),
+
+    //create rate
+    createView: builder.mutation({
+      query: (data) => ({
+        url: `/utility/view`,
+        method: "POST",
+        body: data,
+        credentials: "include",
+      }),
+      invalidatesTags: ["companies", "view"],
+    }),
   }),
 });
 
@@ -285,6 +319,7 @@ export const {
   useForgetPasswordMutation,
   useResetPasswordMutation,
   useUpdatePasswordMutation,
+  useSendEmailMutation,
 
   useCreateMutation,
   useReadQuery,
@@ -298,4 +333,7 @@ export const {
   useLazyReadRateQuery,
   useReadMultipleRateQuery,
   useDeleteRateMutation,
+
+  useCreateSaveMutation,
+  useCreateViewMutation,
 } = apiSlice;

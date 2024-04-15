@@ -1,6 +1,5 @@
 import { Search } from "@mui/icons-material";
 import { DarkThemeToggle } from "flowbite-react";
-// import SportsHandBall from "@mui/icons-material/SportsHandBall";
 import { Slide } from "react-slideshow-image";
 import "react-slideshow-image/dist/styles.css";
 import { Link } from "react-router-dom";
@@ -12,12 +11,34 @@ import {
   useUserLoginMutation,
   useUserLogoutMutation,
 } from "../features/api/apiSlice";
-// import { userContext } from "../App";
 
 const Header = () => {
-  // const context = useContext(userContext);
   const user = JSON.parse(localStorage.getItem("etblink_user"));
-  // console.log(user, "user from header");
+  const {
+    data: saves,
+    isFetching: savesIsFetching,
+    isError: savesIsError,
+  } = useReadQuery({
+    url:
+      user?.role === "company"
+        ? `/user/saves?company[eq]=${user?._id}&populatingType=saves&populatingValue=company,saver`
+        : `/user/saves?saver[eq]=${user?._id}&populatingType=saves&populatingValue=company,saver`,
+    tag: ["saves", "company"],
+  });
+
+  const {
+    data: views,
+    isFetching: viewsIsFetching,
+    isError: viewsIsError,
+  } = useReadQuery({
+    url:
+      user?.role === "company"
+        ? `/user/views?company[eq]=${user?._id}&populatingType=views&populatingValue=company,viewer`
+        : `/user/views?viewer[eq]=${user?._id}&populatingType=views&populatingValue=company,viewer`,
+    tag: ["views", "company"],
+  });
+
+  console.log(saves, "saves");
   const [loginData, loginResponse] = useUserLoginMutation();
   const [logout, logoutResponse] = useUserLogoutMutation();
   const [pending, setPending] = useState(false);
@@ -65,9 +86,7 @@ const Header = () => {
     logout({});
   };
 
-  // console.log(context?.user, "context in header");
   return (
-    // fixed bg-white bg-dark top-0 left-0 w-full z-50 h-auto
     <div className="fixed w-full z-50 bg-white bg-dark">
       <Response response={loginResponse} setPending={setPending} type="login" />
       <Response
@@ -88,10 +107,7 @@ const Header = () => {
               <p className="px-2 py-1 text-white rounded-xl bg-main">
                 {user.email.split("@")[0]}
               </p>
-              <Link
-                to={`/dashboard/${user.role}`}
-                className="cursor-pointer"
-              >
+              <Link to={`/dashboard/${user.role}`} className="cursor-pointer">
                 Dashboard
               </Link>
             </div>
@@ -648,11 +664,37 @@ const Header = () => {
                 <p className="px-2 py-1 rounded-xl bg-main">
                   {user.email.split("@")[0]}
                 </p>
-                <Link
-                  to={`/dashboard/${user.role}`}
-                  className="cursor-pointer"
-                >
+                <Link to={`/dashboard/${user.role}`} className="cursor-pointer">
                   Dashboard
+                </Link>
+                <Link to={`/dashboard/saves`} className="cursor-pointer">
+                  <div className="items-center flex flex-col justify-center">
+                    <button
+                      type="button"
+                      class="relative inline-flex items-center p-1s text-sm font-medium text-center t"
+                    >
+                      <svg
+                        class="w-6 h-6 text-white"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        fill="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path d="m12.75 20.66 6.184-7.098c2.677-2.884 2.559-6.506.754-8.705-.898-1.095-2.206-1.816-3.72-1.855-1.293-.034-2.652.43-3.963 1.442-1.315-1.012-2.678-1.476-3.973-1.442-1.515.04-2.825.76-3.724 1.855-1.806 2.201-1.915 5.823.772 8.706l6.183 7.097c.19.216.46.34.743.34a.985.985 0 0 0 .743-.34Z" />
+                      </svg>
+
+                      <div class="absolute inline-flex items-center justify-center w-6 h-6 font-bold text-white bg-main border-2 border-white rounded-full -top-3 -end-3 dark:border-gray-900">
+                        {saves?.data?.length}
+                      </div>
+                      {user?.role === "company" && (
+                        <div class="absolute inline-flex items-center justify-center w-6 h-6 font-bold text-white bg-main border-2 border-white rounded-full -top-3 -end-3 dark:border-gray-900">
+                          {views?.data?.length}
+                        </div>
+                      )}
+                    </button>
+                  </div>
                 </Link>
                 <p onClick={logoutHandler} className="cursor-pointer">
                   Logout

@@ -1,8 +1,12 @@
+import { useState } from "react";
 import Banner from "../../components/Banner";
 import CompanyItemsCompany from "../../components/CompanyItemCategory";
 import CompanyItems from "../../components/CompanyItems";
 import Map from "../../components/Map";
 import SmallBanner from "../../components/SmallBanner";
+
+import ResponsivePagination from "react-responsive-pagination";
+import "./pagination.css";
 
 const markers = [
   {
@@ -33,6 +37,14 @@ const markers = [
 ];
 
 const Category = () => {
+  const totalPages = 5;
+  const [currentPage, setCurrentPage] = useState(1);
+
+  function handlePageChange(page) {
+    setCurrentPage(page);
+  }
+
+  console.log(currentPage, "ccccccccc");
   return (
     <div className="w-full relative pb-6 pt-24 bg-gray-50 bg-dark h-auto">
       <div className="absolute text-lg font-bold  z-30 top-[500px] left-[2%]">
@@ -221,79 +233,30 @@ const Category = () => {
               </span>
             </p>
           </div>
-          <div className="grid mt-5 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full place-items-centers gap-6">
-            {[0, 1, 2, 3, 4, 5, 6, 7, 8].map((e, i) => {
-              // return <CompanyItemsCompany value={i} type="category" />;
-              return (
-                <CompanyItems type="small" value={i} phoneNo="+251954*****" />
-              );
-            })}
+          <div className="flex flex-col gap-10">
+            <div className="grid mt-5 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full place-items-centers gap-6">
+              {[0, 1, 2, 3, 4, 5, 6, 7, 8].map((e, i) => {
+                // return <CompanyItemsCompany value={i} type="category" />;
+                return (
+                  <CompanyItems type="small" value={i} phoneNo="+251954*****" />
+                );
+              })}
+            </div>
+
+            <div className="py-10">
+              <ResponsivePagination
+                total={totalPages}
+                current={currentPage}
+                onPageChange={(page) => handlePageChange(page)}
+                previousLabel="Previous"
+                previousClassName="w-24"
+                nextClassName="w-24"
+                nextLabel="Next"
+              />
+            </div>
           </div>
         </div>
         <SmallBanner />
-      </div>
-      <div className="w-full flex items-center justify-center mt-10">
-        <nav aria-label="Page navigation example">
-          <ul class="inline-flex -space-x-px text-base h-10">
-            <li>
-              <a
-                href="#"
-                class="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-              >
-                Previous
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-              >
-                1
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-              >
-                2
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                aria-current="page"
-                class="flex items-center justify-center px-4 h-10 text-blue-600 border border-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white"
-              >
-                3
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-              >
-                4
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-              >
-                5
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-              >
-                Next
-              </a>
-            </li>
-          </ul>
-        </nav>
       </div>
     </div>
   );

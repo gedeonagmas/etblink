@@ -29,6 +29,7 @@ import AddYouTube from "./pages/dashboard/youtube/AddYoutube";
 import NewsDetailAdmin from "./pages/dashboard/news/UpdateNews";
 import AddYoutube from "./pages/dashboard/youtube/AddYoutube";
 import UpdateYoutube from "./pages/dashboard/youtube/UpdateYoutube";
+import Saves from "./pages/dashboard/Saves";
 
 export const userContext = createContext();
 
@@ -40,7 +41,7 @@ function App() {
 
   useEffect(() => {
     if (user) {
-      localStorage.setItem('etblink_user', JSON.stringify(user));
+      localStorage.setItem("etblink_user", JSON.stringify(user));
     }
   }, []);
   // useEffect(() => {});
@@ -76,6 +77,7 @@ function App() {
               <Route path="/dashboard/sales" element={<Sellers />}></Route>
               <Route path="/dashboard/visitor" element={<Visitors />}></Route>
               <Route path="/dashboard/admin" element={<Admin />}></Route>
+              <Route path="/dashboard/saves" element={<Saves />}></Route>
               <Route path="/dashboard/admin/news" element={<AddNews />}></Route>
               <Route
                 path="/dashboard/admin/news/detail"

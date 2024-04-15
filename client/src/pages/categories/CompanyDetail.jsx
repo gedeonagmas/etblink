@@ -9,6 +9,9 @@ import {
   useCreateRateMutation,
   useReadRateQuery,
   useLazyReadRateQuery,
+  useSendEmailMutation,
+  useCreateSaveMutation,
+  useCreateViewMutation,
 } from "../../features/api/apiSlice";
 import Loading from "../../components/loading/Loading";
 import LoadingButton from "../../components/loading/LoadingButton";
@@ -25,7 +28,8 @@ const markers = [
 
 const CompanyDetail = (props) => {
   const location = useLocation();
-
+  const currentUser = JSON.parse(localStorage.getItem("etblink_user"));
+  const [emailData, emailResponse] = useSendEmailMutation();
   const { data, isFetching, isError } = useReadQuery({
     url: `/user/users?user[eq]=${location?.state?.id}&populatingType=users&populatingValue=user`,
     tag: ["companies", "users"],
@@ -46,12 +50,18 @@ const CompanyDetail = (props) => {
   } = useReadRateQuery({ id: location?.state?.id });
 
   const [rateData, rateResponse] = useCreateRateMutation();
+  const [saveData, saveResponse] = useCreateSaveMutation();
+  const [viewData, viewResponse] = useCreateViewMutation();
   const [company, setCompany] = useState({});
   const [pending, setPending] = useState(false);
+  const [emailPending, setEmailPending] = useState(false);
+  const [savePending, setSavePending] = useState(false);
+  const [viewPending, setViewPending] = useState(false);
   const [rating, setRating] = useState("3.5");
-  const [email, setEmail] = useState("");
+  const [from, setFrom] = useState("");
   const [fullName, setFullName] = useState("");
   const [message, setMessage] = useState("");
+  const [subject, setSubject] = useState("");
 
   // useEffect(() => {
   //   console.log(data?.data[0], "uuuuuuu");
@@ -69,20 +79,48 @@ const CompanyDetail = (props) => {
   const rateHandler = () => {
     rateData({
       fullName,
-      rater: JSON.parse(localStorage.getItem("etblink_user"))?.user?._id,
+      rater: currentUser?.user?._id,
       message,
       type: "company",
       accepter: data?.data[0]?.user?._id,
       value: rating,
-      role: JSON.parse(localStorage.getItem("etblink_user"))?.role,
+      role: currentUser?.role,
     });
   };
 
-  console.log(company, "from detail");
+  const sendEmailHandler = () => {
+    emailData({ from, to: data?.data[0]?.email, subject, message, fullName });
+  };
+
+  const saveHandler = () => {
+    saveData({
+      company: location?.state?.id,
+      saver: currentUser?._id,
+      role: currentUser?.role,
+    });
+  };
+
+  const viewHandler = () => {
+    viewData({
+      company: location?.state?.id,
+      viewer: currentUser?._id,
+      role: currentUser?.role,
+    });
+  };
+
+  useEffect(() => {
+   location&& viewHandler();
+  }, []);
+
+  console.log(location, "from detail");
   console.log(rates?.data, "rates");
   return (
     <div className="relative overflow-hidden z-20">
       <Response response={rateResponse} setPending={setPending} />
+      <Response response={emailResponse} setPending={setEmailPending} />
+      <Response response={saveResponse} setPending={setSavePending} />
+      <Response response={viewResponse} setPending={setViewPending} />
+
       {isFetching && <Loading />}
       {isError && <p>Something went wrong unable to read the data</p>}
       {company ? (
@@ -115,27 +153,32 @@ const CompanyDetail = (props) => {
                   </p>
                 </div>
               </div>
-
-              <div className="flex gap-4 items-center justify-center">
-                <p className="py-2 hover:bg-red-500 hover:text-white shadow  px-3 cursor-pointer rounded-full border border-gray-200 text-white flex items-endjustify-end gap-2">
-                  <svg
-                    class="w-5 h-5 text-white"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke="currentColor"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M12 6C6.5 1 1 8 5.8 13l6.2 7 6.2-7C23 8 17.5 1 12 6Z"
-                    />
-                  </svg>{" "}
-                  save
-                </p>
-              </div>
+              <LoadingButton
+                pending={savePending}
+                onClick={saveHandler}
+                title={
+                  <div className="flex gap-4 text-sm items-center justify-center">
+                    <svg
+                      class="w-5 h-5 text-white"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M12 6C6.5 1 1 8 5.8 13l6.2 7 6.2-7C23 8 17.5 1 12 6Z"
+                      />
+                    </svg>{" "}
+                    Save
+                  </div>
+                }
+                color="bg-main"
+                width="w-36 sm:rounded-full sm:border sm:py-2 sm:px-5 sm:hover:bg-red-500"
+              />
             </div>
           </div>
 
@@ -819,6 +862,7 @@ const CompanyDetail = (props) => {
                     Full Name
                   </label>
                   <input
+                    onChange={(e) => setFullName(e.target.value)}
                     type="text"
                     id="first_name"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -834,10 +878,28 @@ const CompanyDetail = (props) => {
                     Email
                   </label>
                   <input
+                    onChange={(e) => setFrom(e.target.value)}
                     type="email"
                     id="last_name"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     placeholder="example@gmail.com"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label
+                    for="last_name"
+                    class="block mb-2 text-sm mt-4 font-medium text-gray-900 dark:text-white"
+                  >
+                    Subject
+                  </label>
+                  <input
+                    onChange={(e) => setSubject(e.target.value)}
+                    type="text"
+                    id="last_name"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="Subject..."
                     required
                   />
                 </div>
@@ -849,15 +911,20 @@ const CompanyDetail = (props) => {
                   Your message
                 </label>
                 <textarea
+                  onChange={(e) => setMessage(e.target.value)}
                   id="message"
                   rows="4"
                   class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  placeholder="Write your thoughts here..."
+                  placeholder="Write your message here..."
                 ></textarea>
 
-                <button className="py-3 w-full bg-main rounded-md text-white mt-4">
-                  Submit
-                </button>
+                <LoadingButton
+                  pending={emailPending}
+                  onClick={sendEmailHandler}
+                  title="Submit"
+                  color="bg-main"
+                  width="w-full"
+                />
               </div>
 
               <div className="w-full text-sm p-5 rounded-md border shadow-lg shadow-gray-300">
