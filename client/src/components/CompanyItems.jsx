@@ -159,7 +159,7 @@ const CompanyItems = ({ value, phoneNo, type, data }) => {
           </svg>
         </div>
         <p className="text-[20px] flex items-center justify-center gap-3 mt-3 font-semibold text-gray-700 dark:text-gray-100">
-          {data?.title}
+          {data?.name}
           <svg
             class="w-6 h-6 text-emerald-500"
             aria-hidden="true"

@@ -325,12 +325,12 @@ export const {
   useReadQuery,
   useUpdateMutation,
   useDeleteMutation,
+  useLazyReadQuery,
 
   useLazyReadChatQuery,
 
   useCreateRateMutation,
   useReadRateQuery,
-  useLazyReadRateQuery,
   useReadMultipleRateQuery,
   useDeleteRateMutation,
 

@@ -4,4 +4,4 @@ const mongodb = async () => {
   console.log("JMS database connected successfully");
 };
 
-export default mongodb;
+export default mongodb; 

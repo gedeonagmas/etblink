@@ -35,19 +35,20 @@ const CompanyDetail = (props) => {
     tag: ["companies", "users"],
   });
 
+  const {
+    data: rates,
+    isFetching: ratedIsFetching,
+    isError: isErr,
+  } = useReadQuery({
+    url: `/user/rates?accepter[eq]=${data?.data[0]?.user?._id}&populatingType=rates&populatingValue=rater`,
+    tag: ["companies", "users"],
+  });
+
   // const {
   //   data: rates,
   //   isFetching: rateIsFetching,
   //   isError: rateIsError,
-  // } = useReadRateQuery({ id: data?.data[0]?._id });
-
-  //
-
-  const {
-    data: rates,
-    isFetching: rateIsFetching,
-    isError: rateIsError,
-  } = useReadRateQuery({ id: location?.state?.id });
+  // } = useReadRateQuery({ id: data?.data[0]?.user?._id });
 
   const [rateData, rateResponse] = useCreateRateMutation();
   const [saveData, saveResponse] = useCreateSaveMutation();
@@ -62,13 +63,6 @@ const CompanyDetail = (props) => {
   const [fullName, setFullName] = useState("");
   const [message, setMessage] = useState("");
   const [subject, setSubject] = useState("");
-
-  // useEffect(() => {
-  //   console.log(data?.data[0], "uuuuuuu");
-  //   trigger({
-  //     id: company?._id,
-  //   });
-  // }, [company]);
 
   useEffect(() => {
     if (data?.data) {
@@ -90,9 +84,9 @@ const CompanyDetail = (props) => {
 
   const sendEmailHandler = () => {
     emailData({ from, to: data?.data[0]?.email, subject, message, fullName });
-  };
+  }; 
 
-  const saveHandler = () => {
+  const saveHandler = () => { 
     saveData({
       company: location?.state?.id,
       saver: currentUser?._id,
@@ -109,9 +103,9 @@ const CompanyDetail = (props) => {
   };
 
   useEffect(() => {
-   location&& viewHandler();
+    location && viewHandler();
   }, []);
-
+ 
   console.log(location, "from detail");
   console.log(rates?.data, "rates");
   return (
@@ -387,7 +381,7 @@ const CompanyDetail = (props) => {
                 <p className="text-lg mt-7 font-bold">Rate us</p>
 
                 <div>
-                  <div className="flex my-4 items-center gap-2 w-full">
+                  <div className="flex my-4 items-center gap-2 w-full"> 
                     <label
                       className="w-[300px] gap-2 flex items-center"
                       for="file"
@@ -403,7 +397,7 @@ const CompanyDetail = (props) => {
                     </label>
                     <input
                       value={rating}
-                      className="ml-2 text-yellow-500 w-[70%]"
+                      className="ml-2 text-yellow-500 w-full"
                       type="range"
                       id="points"
                       min="1"
@@ -428,7 +422,7 @@ const CompanyDetail = (props) => {
                         type="text"
                         id="text"
                         class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-0 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white  dark:focus:border-blue-500 dark:shadow-sm-light"
-                        placeholder="Full name"
+                        placeholder="name@flowbite.com"
                         required
                       />
                     </div>
@@ -479,36 +473,21 @@ const CompanyDetail = (props) => {
                   rates?.data?.map((e) => {
                     return (
                       <div className="mt-10">
-                        <div class="flex items-start mb-2 gap-4">
-                          <div>
-                            {e?.rater?.profilePicture &&
-                            e?.rater?.profilePicture?.length < 1 ? (
-                              <div className="w-12 h-12 p-2 text-xs rounded-full flex items-center justify-center bg-main text-white text-center">
-                                {e?.fullName.substring(0, 4)}
-                              </div>
-                            ) : e?.rater?.profilePicture &&
-                              e?.rater?.profilePicture?.length > 1 ? (
-                              <img
-                                class="w-10 h-10 rounded-full"
-                                src={e.rater?.profilePicture}
-                                alt="user photo"
-                              />
-                            ) : e?.rater?.logo && e?.rater?.logo?.length > 1 ? (
-                              <img
-                                class="w-10 h-10 rounded-full"
-                                src={e?.rater?.logo}
-                                alt="user photo"
-                              />
-                            ) : (
-                              <div className="w-12 h-12 p-2 text-xs rounded-full flex items-center justify-center bg-main text-white text-center">
-                                {e?.fullName.substring(0, 4)}
-                              </div>
-                            )}
-                          </div>
-                          <div>
-                            <p className="">{e?.fullName}</p>
-                            <p className="font-light text-sm">
-                              {format(e?.updatedAt)}
+                        <div class="flex items-center mb-4">
+                          <img
+                            class="w-10 h-10 me-4 rounded-full"
+                            src="./gedi.jpg"
+                            alt=""
+                          />
+                          <div class="font-medium dark:text-white">
+                            <p>
+                              {e?.fullName}
+                              <time
+                                datetime="2014-08-16 19:00"
+                                class="block text-sm text-gray-500 dark:text-gray-400"
+                              >
+                                {format(e?.createdAt)}
+                              </time>
                             </p>
                           </div>
                         </div>
@@ -520,13 +499,13 @@ const CompanyDetail = (props) => {
                             <Rating.Star />
                             <Rating.Star filled={false} />
                           </Rating>
-                          <p>{e?.value}</p>
+                          <p>{e?.rating?.average}</p>
                         </div>
                         <p className="mt-1 ml-14">{e?.message}</p>
                       </div>
                     );
                   })}
-              </div>
+              </div>  
             </div>
 
             <div className="flex relative lg:-mt-52  mt-10 pl-4 py-4 pr-[7%] flex-col gap-10 w-full shadow-lg lg:w-[33%] bg-white bg-dark">
@@ -566,14 +545,8 @@ const CompanyDetail = (props) => {
                     Get directions
                   </p>
                 </div>
-                <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d65325188.17043557!2d-19.40065217965568!3d2.1022195001665533!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x10a06c0a948cf5d5%3A0x108270c99e90f0b3!2sAfrica!5e0!3m2!1sen!2set!4v1710817332813!5m2!1sen!2set"
-                  width="250"
-                  height="200"
-                  allowfullscreen=""
-                  loading="lazy"
-                  referrerpolicy="no-referrer-when-downgrade"
-                ></iframe>
+                <Map markers={[...markers]} height="35vh" />
+
                 <div className="mt-7 gap-2 flex flex-col">
                   <p className="py-2 cursor-pointer rounded-sm flex items-center justify-start  gap-2">
                     <svg
@@ -598,7 +571,7 @@ const CompanyDetail = (props) => {
                         d="M17.8 14h0a7 7 0 1 0-11.5 0h0l.1.3.3.3L12 21l5.1-6.2.6-.7.1-.2Z"
                       />
                     </svg>
-                    {company?.address}
+                    London
                   </p>
                   <p className="py-2 cursor-pointer rounded-sm flex items-center justify-start  gap-2">
                     <svg
@@ -653,6 +626,7 @@ const CompanyDetail = (props) => {
                     456 saves
                   </p>
                 </div>
+
                 <p className="py-2 cursor-pointer rounded-sm flex items-center justify-start  gap-2">
                   <svg
                     class="w-5 h-5 text-gray-800 dark:text-white"
@@ -775,44 +749,44 @@ const CompanyDetail = (props) => {
                       clip-rule="evenodd"
                     />
                   </svg>
-                  Opening Hours
+                  Opening Hours 
                 </p>
 
                 <div className="py-2 px-3 mt-2 flex items-center justify-between border-b">
                   <p className="font-semibold">Sunday</p>
-                  <p>
+                  <p> 
                     {company?.workingDays?.sunday?.from} -{" "}
                     {company?.workingDays?.sunday?.to}
                   </p>
                 </div>
                 <div className="py-2 px-3 mt-2 flex items-center justify-between border-b">
                   <p className="font-semibold">Monday</p>
-                  {company?.workingDays?.monday?.from} -{" "}
+                  {company?.workingDays?.monday?.from} -{" "} 
                   {company?.workingDays?.monday?.to}
                 </div>
                 <div className="py-2 px-3 mt-2 flex items-center justify-between border-b">
                   <p className="font-semibold">Tuesday</p>
-                  {company?.workingDays?.tuesday?.from} -{" "}
+                  {company?.workingDays?.tuesday?.from} -{" "} 
                   {company?.workingDays?.tuesday?.to}
                 </div>
                 <div className="py-2 px-3 mt-2 flex items-center justify-between border-b">
-                  <p className="font-semibold">Wednesday</p>
+                  <p className="font-semibold">Wednesday</p> 
                   {company?.workingDays?.wednesday?.from} -{" "}
-                  {company?.workingDays?.wednesday?.to}
+                  {company?.workingDays?.wednesday?.to} 
                 </div>
                 <div className="py-2 px-3 mt-2 flex items-center justify-between border-b">
                   <p className="font-semibold">Thursday</p>
-                  {company?.workingDays?.thursday?.from} -{" "}
+                  {company?.workingDays?.thursday?.from} -{" "} 
                   {company?.workingDays?.thursday?.to}
                 </div>
                 <div className="py-2 px-3 mt-2 flex items-center justify-between border-b">
                   <p className="font-semibold">Friday</p>
-                  {company?.workingDays?.friday?.from} -{" "}
+                  {company?.workingDays?.friday?.from} -{" "} 
                   {company?.workingDays?.friday?.to}
                 </div>
                 <div className="py-2 px-3 mt-2 flex items-center justify-between border-b">
                   <p className="font-semibold">Saturday</p>
-                  {company?.workingDays?.saturday?.from} -{" "}
+                  {company?.workingDays?.saturday?.from} -{" "} 
                   {company?.workingDays?.saturday?.to}
                 </div>
               </div>
@@ -838,17 +812,18 @@ const CompanyDetail = (props) => {
                 <div class="flex items-center mt-6 mb-4">
                   <img
                     class="w-12 h-12 me-4 rounded-full"
-                    src={company?.logo}
+                    src={company?.logo} 
                     alt=""
                   />
                   <div class="font-medium dark:text-white">
                     <p>
                       {company?.name}
+
                       <time
                         datetime="2014-08-16 19:00"
                         class="block text-sm text-gray-500 dark:text-gray-400"
                       >
-                        {data?.data[0]?.email}
+                        {data?.data[0]?.email} 
                       </time>
                     </p>
                   </div>
@@ -859,14 +834,14 @@ const CompanyDetail = (props) => {
                     for="first_name"
                     class="block mb-2 mt-4 text-sm font-medium text-gray-900 dark:text-white"
                   >
-                    Full Name
+                    First name
                   </label>
                   <input
                     onChange={(e) => setFullName(e.target.value)}
                     type="text"
                     id="first_name"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="Full name"
+                    placeholder="John"
                     required
                   />
                 </div>
@@ -875,14 +850,14 @@ const CompanyDetail = (props) => {
                     for="last_name"
                     class="block mb-2 text-sm mt-4 font-medium text-gray-900 dark:text-white"
                   >
-                    Email
+                    Last name
                   </label>
                   <input
-                    onChange={(e) => setFrom(e.target.value)}
+                    onChange={(e) => setFrom(e.target.value)} 
                     type="email"
                     id="last_name"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="example@gmail.com"
+                    placeholder="Doe" 
                     required
                   />
                 </div>
@@ -903,7 +878,7 @@ const CompanyDetail = (props) => {
                     required
                   />
                 </div>
-
+ 
                 <label
                   for="message"
                   class="block mb-2 mt-4 text-sm font-medium text-gray-900 dark:text-white"

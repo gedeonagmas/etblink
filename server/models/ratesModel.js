@@ -19,14 +19,6 @@ const rateSchema = new mongoose.Schema(
       validate: valid.numberLower("Value", 1),
     },
 
-    type: {
-      type: String,
-    },
-
-    role: {
-      type: String,
-    },
-
     rater: {
       type: mongoose.Schema.Types.ObjectId,
       ref: function () {

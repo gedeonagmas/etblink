@@ -44,16 +44,16 @@ export const createRate = asyncCatch(async (req, res, next) => {
       .status(200)
       .json({ status: "Created", message: "rating is added successfully" });
   }
-});
+}); 
 
 export const readRate = asyncCatch(async (req, res, next) => {
   const data = await Rate.find({ accepter: req.query.id })
-    .populate("rater")
+    .populate("rater accepter")
+    .limit(20)
     .sort("-createdAt");
   // console.log(req.query, "rate");
   res.status(200).json({
     status: "Read",
-    message: "rating added successfully",
     data,
   });
 });

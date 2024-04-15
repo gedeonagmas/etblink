@@ -151,10 +151,18 @@ export const _read = asyncCatch(async (req, res, next) => {
     //populating
     switch (req.query.populatingType) {
       case "users":
+        query.populate(req.query.populatingValue); 
+        break;
+      case "saves": 
+        query.populate(req.query.populatingValue.split(",").join(" "));
+      case "rates":
         query.populate(req.query.populatingValue);
         break;
-      case "saves":
-        query.populate(req.query.populatingValue.split(",").join(" "));
+      case "views":
+        query.populate(req.query.populatingValue);
+        break;
+      case "application":
+        query.populate(req.query.pp_ff.split(",").join(" "));
       default:
         query;
     }
@@ -172,12 +180,13 @@ export const _read = asyncCatch(async (req, res, next) => {
       // return next(new AppError("There is no data to display", 400));
       return res.status(201).json({ message: "There is no data to display!" });
 
-    return res.status(200).json({
-      status: "success",
-      length: data.length,
-      total: total,
-      data: data,
-    });
+  
+      return res.status(200).json({
+        status: "success",
+        length: data.length,
+        total: total,
+        data: data,
+      });
   }
   return next(new AppError("something went wrong please try again!!", 500));
 });
