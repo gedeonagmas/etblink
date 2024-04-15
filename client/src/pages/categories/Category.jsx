@@ -1,8 +1,11 @@
+import { useEffect, useState } from "react";
 import Banner from "../../components/Banner";
 import CompanyItemsCompany from "../../components/CompanyItemCategory";
 import CompanyItems from "../../components/CompanyItems";
 import Map from "../../components/Map";
 import SmallBanner from "../../components/SmallBanner";
+import { useLazyReadQuery, useReadQuery } from "../../features/api/apiSlice";
+import Loading from "../../components/loading/Loading";
 
 const markers = [
   {
@@ -33,8 +36,116 @@ const markers = [
 ];
 
 const Category = () => {
+  const [page, setPage] = useState(0);
+  const [lastPage, setLastPage] = useState("");
+  const [totalPage, setTotalPage] = useState(0);
+  const [pagination, setPagination] = useState([1, 2, 3, 4, 5]);
+  const [index, setIndex] = useState(0);
+  const [search, setSearch] = useState("");
+  const [category, setCategory] = useState("");
+
+  const [
+    trigger,
+    { data: company, isFetching: companyFetching, isError: companyError },
+  ] = useLazyReadQuery();
+
+  useEffect(() => {
+    setPage(1);
+  }, []);
+
+  useEffect(() => {
+    setTotalPage(company?.total);
+    if (company?.message) {
+      setLastPage(company?.message);
+    } else {
+      setLastPage("");
+    }
+  }, [company]);
+
+  useEffect(() => {
+    trigger({
+      url: `/user/companies?limit=2&page=${page}`,
+      tag: ["companies"],
+    });
+
+    indicatorHandler();
+  }, [page]);
+
+  useEffect(() => {
+    trigger({
+      url: `/user/companies?limit=2&page=${page}&searchField=name&searchValue=${search}`,
+      tag: ["companies"],
+    });
+
+    indicatorHandler();
+  }, [search]);
+
+  useEffect(() => {
+    const cat = category ? `&category=${category}` : null;
+    trigger({
+      url: `/user/companies?limit=2&page=${page}${cat}`,
+      tag: ["companies"],
+    });
+
+    indicatorHandler();
+  }, [category]);
+
+  const indicatorHandler = () => {
+    // console.log(Math.ceil(company?.total / 2), "cccccc");
+    if (page === pagination[pagination?.length - 1]) {
+      pagination.shift();
+      if (pagination.length === Math.ceil(company?.total / 2)) {
+        setPage(Math.ceil(company?.total / 2));
+        // return;
+      }
+      pagination.push(page + 1);
+    } else if (pagination[0] > 1) {
+      pagination.pop();
+      if (page <= 1) {
+        setPage(1);
+      }
+      pagination.unshift(pagination[0] - 1);
+    }
+  };
+
+  useEffect(() => {
+    pagination.map((e) => {
+      const ids = document.getElementById(e);
+      // console.log(e, "eeee", page, "page", e === page);
+      ids?.classList?.remove("bg-main", "text-white");
+      ids?.classList?.add(
+        "bg-white",
+        "text-gray-500",
+        "dark:bg-gray-800",
+        "dark:text-gray-400"
+      );
+      let a = page <= 4 ? page : page - 1;
+      if (e === a) {
+        ids?.classList?.remove(
+          "bg-white",
+          "text-gray-500",
+          "dark:bg-gray-800",
+          "dark:text-gray-400",
+          "dark:hover:bg-gray-700"
+        );
+        ids?.classList?.add(
+          "bg-main",
+          "text-white",
+          "hover:bg-red-500",
+          "hover:text-white"
+        );
+      }
+    });
+  }, [page]);
+  // console.log(pagination, "pagination");
+  // console.log(page, "page", index, "index");
+  // console.log(Math.ceil(totalPage / 2), "company");
+
+  console.log(company, "company");
   return (
     <div className="w-full relative pb-6 pt-24 bg-gray-50 bg-dark h-auto">
+      {/* {companyFetching && <Loading />} */}
+      {companyError && <p>Something went wrong unable to fetch the data!</p>}
       <div className="absolute text-lg font-bold  z-30 top-[500px] left-[2%]">
         We provide more than <br /> 245 total companies <br /> for your business
       </div>
@@ -78,10 +189,11 @@ const Category = () => {
                 </svg>
               </div>
               <input
+                onChange={(e) => setSearch(e.target.value)}
                 type="search"
                 id="default-search"
                 class="block w-full px-4 h-12 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Search Mockups, Logos..."
+                placeholder="Search..."
                 required
               />
               {/* <button
@@ -93,95 +205,113 @@ const Category = () => {
             </div>
           </form>
 
-          <select
-            name=""
-            id=""
-            className="w-full px-4 h-12 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          >
-            <option defaultChecked>Filter by country</option>
-            <option value="">Europe</option>
-            <option value="">Europe</option>
-            <option value="">Europe</option>
-          </select>
-
-          <select
-            name=""
-            id=""
-            className="w-full px-4 h-12 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          >
-            <option defaultChecked>Filter by country</option>
-            <option value="">Europe</option>
-            <option value="">Europe</option>
-            <option value="">Europe</option>
-          </select>
-
           <button className="w-full bg-black text-white px-4 h-12 ps-10 text-sm  border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
             Search
           </button>
+          <select
+            onChange={(e) => setCategory(e.target.value)}
+            name=""
+            id=""
+            className="w-full px-4 h-12 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          >
+            <option value="" defaultChecked>
+              Filter by Category
+            </option>
+            <option value="">All</option>
+            <option value="agriculture">Agriculture</option>
+            <option value="government">Government</option>
+            <option value="tourism">Tourism</option>
+            <option value="construction">Construction</option>
+            <option value="exporting">Exporting</option>
+            <option value="embassy">Embassy</option>
+          </select>
+
+          <select
+            name=""
+            id=""
+            className="w-full px-4 h-12 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          >
+            <option defaultChecked>Filter by continent</option>
+            <option value="">Africa</option>
+            <option value="">Asia</option>
+            <option value="">Europe</option>
+            <option value="">Australia</option>
+            <option value="">USA</option>
+            <option value="">South america</option>
+          </select>
         </div>
 
-        <ul class="items-start mt-4 w-full gap-4 text-sm font-medium  rounded-sm sm:flex ">
-          <li class="w-full md:w-44 border-r border-dark border-gray-300 focus:ring-0">
+        <ul class="items-start mt-4 mb-5 w-full gap-4 text-sm font-medium  rounded-sm grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6">
+          <li class="w-full px-3 border-r border-dark border-gray-300 focus:ring-0">
             <div class="flex items-center ps-3">
-              <input
+              {/* <input
                 id="vue-checkbox-list"
                 type="checkbox"
                 value=""
                 class="w-4 h-4 text-red-600 bg-white border-gray-300 rounded focus:ring-0 dark:bg-gray-600 dark:border-gray-500"
-              />
+              /> */}
+              <p className="font-bold">433</p>
               <label
                 for="vue-checkbox-list"
                 class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
               >
-                Business
+                Agriculture
               </label>
             </div>
           </li>
-          <li class="w-44 border-r border-dark border-gray-300 focus:ring-0">
+          <li class="w-full px-3 border-0 md:border-r border-dark border-gray-300 focus:ring-0">
             <div class="flex items-center ps-3">
-              <input
-                id="react-checkbox-list"
-                type="checkbox"
-                value=""
-                class="w-4 h-4 text-blue-600 bg-white border-gray-300 rounded focus:ring-0 dark:bg-gray-600 dark:border-gray-500"
-              />
+              <p className="font-bold">652</p>
               <label
-                for="react-checkbox-list"
+                for="vue-checkbox-list"
                 class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
               >
-                Hotels
+                Government
               </label>
             </div>
           </li>
-          <li class="w-44 border-r border-dark border-gray-300 focus:ring-0">
+          <li class="w-full px-3 border-r md:border-0 xl:border-r border-dark border-gray-300 focus:ring-0">
             <div class="flex items-center ps-3">
-              <input
-                id="angular-checkbox-list"
-                type="checkbox"
-                value=""
-                class="w-4 h-4 text-yellow-600 bg-white border-gray-300 rounded focus:ring-0 dark:bg-gray-600 dark:border-gray-500"
-              />
+              <p className="font-bold">652</p>
               <label
-                for="angular-checkbox-list"
+                for="vue-checkbox-list"
                 class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
               >
-                Importing
+                Tourism
               </label>
             </div>
           </li>
-          <li class="w-44 dark:border-gray-600">
+          <li class="w-full px-3 border-0 md:border-r border-dark border-gray-300 focus:ring-0">
             <div class="flex items-center ps-3">
-              <input
-                id="laravel-checkbox-list"
-                type="checkbox"
-                value=""
-                class="w-4 h-4 text-green-600 bg-white border-gray-300 rounded focus:ring-0 dark:bg-gray-600 dark:border-gray-500"
-              />
+              <p className="font-bold">652</p>
               <label
-                for="laravel-checkbox-list"
+                for="vue-checkbox-list"
+                class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+              >
+                Construction
+              </label>
+            </div>
+          </li>
+          <li class="w-full px-3 border-r border-dark border-gray-300 focus:ring-0">
+            <div class="flex items-center ps-3">
+              <p className="font-bold">433</p>
+              <label
+                for="vue-checkbox-list"
                 class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
               >
                 Exporting
+              </label>
+            </div>
+          </li>
+
+          <li class="w-full px-3 border-0  border-dark border-gray-300 focus:ring-0">
+            <div class="flex items-center ps-3">
+              <p className="font-bold">652</p>
+              <label
+                for="vue-checkbox-list"
+                class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+              >
+                Embassy
               </label>
             </div>
           </li>
@@ -221,76 +351,87 @@ const Category = () => {
               </span>
             </p>
           </div>
-          <div className="grid mt-5 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full place-items-centers gap-6">
-            {[0, 1, 2, 3, 4, 5, 6, 7, 8].map((e, i) => {
-              // return <CompanyItemsCompany value={i} type="category" />;
-              return (
-                <CompanyItems type="small" value={i} phoneNo="+251954*****" />
-              );
-            })}
+          <div className="grid mt-5 grid-cols-1  md:grid-cols-2 lg:grid-cols-3 w-full place-items-center gap-6">
+            {companyFetching ? (
+              <Loading />
+            ) : lastPage?.length > 0 ? (
+              <p>{lastPage}</p>
+            ) : companyError ? (
+              <p>Something went error unable to read the data.</p>
+            ) : company?.data?.length > 0 ? (
+              company?.data?.map((e, i) => {
+                return (
+                  <CompanyItems
+                    value={e._id}
+                    phoneNo={`${e?.phone?.substring(0, 5)}**`}
+                    type="small"
+                    data={e}
+                  />
+                );
+              })
+            ) : (
+              <p></p>
+            )}
           </div>
         </div>
         <SmallBanner />
       </div>
+
       <div className="w-full flex items-center justify-center mt-10">
         <nav aria-label="Page navigation example">
           <ul class="inline-flex -space-x-px text-base h-10">
             <li>
-              <a
+              <button
+                onClick={() => {
+                  if (page <= 1) {
+                    setPage(1);
+                  } else {
+                    setPage(page - 1);
+                  }
+                }}
                 href="#"
                 class="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
               >
                 Previous
-              </a>
+              </button>
             </li>
+            {pagination?.map((e, i) => {
+              return (
+                <li>
+                  <button
+                    onClick={() => {
+                      setIndex(i);
+                      if (e > Math.ceil(company?.total / 2)) {
+                        setPage(page);
+                        setLastPage("");
+                        return;
+                      }
+                      setPage(e);
+                      // paginationHandler(page);
+                    }}
+                    id={e}
+                    class={`flex bg-white items-center justify-center px-4 h-10 leading-tight text-gray-500 border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white`}
+                  >
+                    {e}
+                  </button>
+                </li>
+              );
+            })}
             <li>
-              <a
-                href="#"
-                class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-              >
-                1
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-              >
-                2
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                aria-current="page"
-                class="flex items-center justify-center px-4 h-10 text-blue-600 border border-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white"
-              >
-                3
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-              >
-                4
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-              >
-                5
-              </a>
-            </li>
-            <li>
-              <a
+              <button
+                onClick={() => {
+                  if (page === Math.ceil(company?.total / 2)) {
+                    setPage(page);
+                    return;
+                  } else {
+                    setPage(page + 1);
+                  }
+                }}
                 href="#"
                 class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
               >
                 Next
-              </a>
+              </button>
             </li>
           </ul>
         </nav>

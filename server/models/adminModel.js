@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import * as valid from "../utils/validator.js";
 
-const adminSchema = new mongoose.Schema(
+const privateSchema = new mongoose.Schema(
   {
     firstName: {
       type: String,
@@ -57,9 +57,9 @@ const adminSchema = new mongoose.Schema(
   }
 );
 
-adminSchema.pre("findOneAndUpdate", function (next) {
+privateSchema.pre("findOneAndUpdate", function (next) {
   this.options.runValidators = true;
   next();
 });
 
-export const Admin = mongoose.model("admin", adminSchema);
+export const Private = mongoose.model("private", privateSchema);

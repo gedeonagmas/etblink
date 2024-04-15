@@ -25,9 +25,9 @@ const Home = () => {
     isFetching: companyFetching,
     isError: companyError,
   } = useReadQuery({
-    url: "/user/companies?isBoosted[eq]=true",
+    url: "/user/companies?isBoosted[eq]=true&limit=6&page=1",
     tag: ["companies"],
-  });
+  }); 
 
   const {
     data: newses,
