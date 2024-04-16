@@ -77,7 +77,7 @@ const schema = new mongoose.Schema({
 
   logo: {
     type: String,
-    default: "",
+    // default: "",
     validate: valid.required("Logo"),
     // data: Buffer,
     // contentTYpe:String,

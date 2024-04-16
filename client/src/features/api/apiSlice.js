@@ -320,6 +320,17 @@ export const apiSlice = createApi({
       }),
       invalidatesTags: ["companies", "view"],
     }),
+
+    //upgrade
+    upgrade: builder.mutation({
+      query: (data) => ({
+        url: `/utility/upgrade`,
+        method: "POST",
+        body: data,
+        credentials: "include",
+      }),
+      invalidatesTags: ["users"],
+    }),
   }),
 });
 
@@ -349,4 +360,5 @@ export const {
   useCreateSaveMutation,
   useDeleteSaveMutation,
   useCreateViewMutation,
+  useUpgradeMutation,
 } = apiSlice;

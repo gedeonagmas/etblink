@@ -4,6 +4,8 @@ import { Rate } from "../models/ratesModel.js";
 import { Save } from "../models/saveModel.js";
 import { View } from "../models/viewModel.js";
 import AppError from "../utils/AppError.js";
+import { User } from "../models/userModel.js";
+import { Sales } from "../models/salesModel.js";
 
 export const createRate = asyncCatch(async (req, res, next) => {
   const rateHandler = async () => {
@@ -99,19 +101,19 @@ export const createSave = asyncCatch(async (req, res, next) => {
 });
 
 export const deleteSave = asyncCatch(async (req, res, next) => {
-  console.log(req.body);
+  // console.log(req.body);
   const remove = await Save.findOneAndDelete({
     company: req.body.company,
     saver: req.body.saver,
   });
 
-  console.log((remove, "remove"));
+  // console.log((remove, "remove"));
   if (remove) {
-    const company = await Company.findById(req.body.company); 
+    const company = await Company.findById(req.body.company);
     company.saves.available = company.saves.available - 1;
     await company.save();
     return res.status(200).json({
-      status: "Created", 
+      status: "Created",
       message: "Company removed from your list.",
     });
   } else {
@@ -141,5 +143,39 @@ export const createView = asyncCatch(async (req, res, next) => {
   res.status(200).json({
     status: "Created",
     message: "company added to your list.",
+  });
+});
+
+export const upgradeHandler = asyncCatch(async (req, res, next) => {
+  // console.log(req.body);
+  const account =
+    req.body.role === "company"
+      ? await Company.create({})
+      : await Sales.create({});
+
+  if (account._id) {
+    await User.findByIdAndUpdate(
+      { _id: req.body._id },
+      {
+        $set: { user: account._id },
+      }
+    );
+  }
+
+  const saves = await Save.updateMany(
+    { saver: req.body.user },
+    { $set: { saver: account._id } }
+  );
+
+  const views = await View.updateMany(
+    { viewer: req.body.user },
+    { $set: { viewer: account._id } }
+  ); 
+
+  // const user = await User.findById(req.body.user);
+  console.log(saves, views, "user", req.body.user);
+  res.status(200).json({
+    status: "Created",
+    message: "Account upgraded successfully Please Login Again to Continue.",
   });
 });
