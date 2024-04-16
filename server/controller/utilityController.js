@@ -147,7 +147,7 @@ export const createView = asyncCatch(async (req, res, next) => {
 });
 
 export const upgradeHandler = asyncCatch(async (req, res, next) => {
-  // console.log(req.body);
+  console.log(req.body);
   const account =
     req.body.role === "company"
       ? await Company.create({})
@@ -157,7 +157,7 @@ export const upgradeHandler = asyncCatch(async (req, res, next) => {
     await User.findByIdAndUpdate(
       { _id: req.body._id },
       {
-        $set: { user: account._id },
+        $set: { user: account._id, role: req.body.role },
       }
     );
   }
@@ -170,10 +170,15 @@ export const upgradeHandler = asyncCatch(async (req, res, next) => {
   const views = await View.updateMany(
     { viewer: req.body.user },
     { $set: { viewer: account._id } }
-  ); 
+  );
+
+  const rates = await Rate.updateMany(
+    { rater: req.body.user },
+    { $set: { rater: account._id } }
+  );
 
   // const user = await User.findById(req.body.user);
-  console.log(saves, views, "user", req.body.user);
+  console.log(saves, views, rates, "user", req.body.user);
   res.status(200).json({
     status: "Created",
     message: "Account upgraded successfully Please Login Again to Continue.",

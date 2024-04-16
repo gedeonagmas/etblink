@@ -12,7 +12,7 @@ const Upgrade = () => {
   const user = JSON.parse(localStorage.getItem("etblink_user"));
   const [upgradeData, upgradeResponse] = useUpgradeMutation();
   const [pending, setPending] = useState(false);
-  const [role, setRole] = useState("visitor");
+  const [role, setRole] = useState("company");
 
   const upgradeHandler = () => {
     upgradeData({
