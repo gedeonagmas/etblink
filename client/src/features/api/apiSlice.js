@@ -42,7 +42,7 @@ export const apiSlice = createApi({
     "chats",
     "news",
     "youtubes",
-    "rates",
+    "rate",
     "rate-multiple",
     "view",
     "save",

@@ -80,6 +80,7 @@ const CompanyDetail = (props) => {
       accepter: data?.data[0]?.user?._id,
       value: rating,
       role: currentUser?.role,
+      tag: ["companies,rate"],
     });
   };
 
@@ -92,6 +93,7 @@ const CompanyDetail = (props) => {
       company: location?.state?.id,
       saver: currentUser?.user,
       role: currentUser?.role,
+      tag: ["companies,save"],
     });
   };
 
@@ -100,6 +102,7 @@ const CompanyDetail = (props) => {
       company: location?.state?.id,
       viewer: currentUser?.user,
       role: currentUser?.role,
+      tag: ["companies,view"],
     });
   };
 
@@ -500,7 +503,7 @@ const CompanyDetail = (props) => {
                             <Rating.Star />
                             <Rating.Star filled={false} />
                           </Rating>
-                          <p>{e?.rating?.average}</p>
+                          <p>{e?.value}</p>
                         </div>
                         <p className="mt-1 ml-14">{e?.message}</p>
                       </div>

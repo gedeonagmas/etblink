@@ -12,6 +12,7 @@ import callCenterImage from "../assets/promotion.avif";
 import gedi from "../assets/gedi.jpg";
 import { useReadQuery, useUserLogoutMutation } from "../features/api/apiSlice";
 import Response from "../components/Response";
+import Banner from "./../components/Banner";
 
 const Dashboard = () => {
   const user = JSON.parse(localStorage.getItem("etblink_user"));
@@ -417,9 +418,10 @@ const Dashboard = () => {
                   </svg>
                 </div>
 
-                <p className="text-xl hidden lg:block font-bold self-start mr-40 rounded-md p-3 bg-gray-100 dark:bg-gray-700">
+                {/* <p className="text-xl hidden lg:block font-bold self-start mr-40 rounded-md p-3 bg-gray-100 dark:bg-gray-700">
                   Welcome {user?.role === "company" ? user?.user?.name : ""} 👋
-                </p>
+                </p> */}
+                {/* <Banner /> */}
 
                 {/* <form class="max-w-md mx-auto">
                   <label
@@ -483,10 +485,10 @@ const Dashboard = () => {
                     <div className="items-center flex flex-col justify-center">
                       <button
                         type="button"
-                        class="relative inline-flex items-center p-1s text-sm font-medium text-center t"
+                        class="relative flex flex-col items-center text-sm font-medium text-center t"
                       >
                         <svg
-                          class="w-7 h-7"
+                          class="w-6 h-6"
                           aria-hidden="true"
                           xmlns="http://www.w3.org/2000/svg"
                           width="24"
@@ -500,6 +502,7 @@ const Dashboard = () => {
                         <div class="absolute inline-flex items-center justify-center w-6 h-6 text-xs p-1 font-bold text-white bg-main border-2 border-white rounded-full -top-2 -end-2 dark:border-gray-900">
                           {saves ? saves?.data?.length : 0}
                         </div>
+                        <p className="text-xs">saves</p>
                       </button>
                     </div>
                   </Link>

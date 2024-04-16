@@ -3,47 +3,69 @@ import VerifiedOutlinedIcon from "@mui/icons-material/VerifiedOutlined";
 import VerifiedOutlined from "@mui/icons-material/VerifiedOutlined";
 import "./bubble.css";
 import { Link } from "react-router-dom";
+import {
+  useCreateSaveMutation,
+  useDeleteSaveMutation,
+  useReadQuery,
+} from "../features/api/apiSlice";
+import { SavedSearch } from "@mui/icons-material";
 
 const CompanyItems = ({ value, phoneNo, type, data }) => {
   const [phone, setPhone] = useState(phoneNo);
-  // console.log(data, "datas");
+  const user = JSON.parse(localStorage.getItem("etblink_user"));
+  const [removeData, removeResponse] = useDeleteSaveMutation();
+  const [saveData, saveResponse] = useCreateSaveMutation();
+
+  const {
+    data: saves,
+    isFetching: savesIsFetching,
+    isError: savesIsError,
+  } = useReadQuery({
+    url:
+      user?.role === "company"
+        ? `/user/saves?company=${value}&saver=${user?.user?._id}&populatingType=saves&populatingValue=company,saver`
+        : `/user/saves?company=${value}&saver=${user?.user?._id}&populatingType=saves&populatingValue=company,saver`,
+    tag: ["saves", "company"],
+  });
+
+  const {
+    data: views,
+    isFetching: viewsIsFetching,
+    isError: viewsIsError,
+  } = useReadQuery({
+    url:
+      user?.role === "company"
+        ? `/user/views?company=${value}&viewer=${user?.user?._id}&populatingType=saves&populatingValue=company,viewer`
+        : `/user/views?company=${value}&viewer=${user?.user?._id}&populatingType=saves&populatingValue=company,viewer`,
+    tag: ["views", "company"],
+  });
+
+  const removeHandler = () => {
+    removeData({
+      company: value,
+      saver: user?.user?._id,
+      role: user?.role,
+      tag: ["save", "company"],
+    });
+  };
+
+  const saveHandler = () => {
+    saveData({
+      company: value,
+      saver: user?.user?._id,
+      role: user?.role,
+      tag: ["save", "company"],
+    });
+  };
+
+  console.log(views, "views");
+  console.log(user?.user?._id, "current user");
+  console.log(value, "company");
   return (
     <div
       key={value}
       className="w-full relative h-auto bg-white dark:bg-gray-700 rounded-md shadow-xl shadow-gray-200 flex flex-col items-start text-sm justify-start"
     >
-      {/* <p className="mt-7 font-bold">Ethiopian business link portal</p> */}
-
-      {/* rotated banner */}
-      {/* <div className="flex rotate-[270deg] absolute z-20 -left-[38px] -top-[11px] gap-x-3">
-        <svg color="blue" width="100" height="100" viewBox="-150 -150 400 400">
-          <polygon
-            points=" 200 200,0 0, 200 0,"
-            fill={
-              value === 0 || value === 5 || value === 7
-                ? "#00A9A8"
-                : value === 1 || value === 4 || value === 9
-                ? "#FFA500"
-                : "#FF5A1F"
-            }
-          />
-        </svg>
-        <p className="absolute rotate-45 top-11 left-16 text-white">0{ value}</p>
-      </div> */}
-      {/* <div
-        className={`absolute ${
-          value === 0
-            ? "bg-yellow-400"
-            : value === 1
-            ? "bg-red-500"
-            : value === 2
-            ? "bg-emerald-400"
-            : "bg-white"
-        } top-0 left-0 h-[8px] rounded-md rounded-b-none w-full `}
-      ></div> */}
-      {/* <p className="text-dark text-gray-500 text-dark mt-2">
-        Ethiopian business
-      </p> */}
       <div className="w-full relative rounded-xl   flex items-center justify-center gap-4">
         <div className="relative w-full">
           <img
@@ -56,36 +78,84 @@ const CompanyItems = ({ value, phoneNo, type, data }) => {
           <div className="absolute top-4 border-4 border-gray-300 border-dashed left-2 rounded-full shadow-lg px-4 py-1 bg-white text-black">
             Open
           </div>
-          <p className="absolute px-1 py-1 rounded-md bg-main ml-1 gap-1 shadow-lg bottom-1 text-white flex items-center justify-center left-2">
-            {" "}
-            <svg
-              className="w-5 h-5 "
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                fillRule="evenodd"
-                d="M5 7.8C6.7 6.3 9.2 5 12 5s5.3 1.3 7 2.8a12.7 12.7 0 0 1 2.7 3.2c.2.2.3.6.3 1s-.1.8-.3 1a2 2 0 0 1-.6 1 12.7 12.7 0 0 1-9.1 5c-2.8 0-5.3-1.3-7-2.8A12.7 12.7 0 0 1 2.3 13c-.2-.2-.3-.6-.3-1s.1-.8.3-1c.1-.4.3-.7.6-1 .5-.7 1.2-1.5 2.1-2.2Zm7 7.2a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"
-                clipRule="evenodd"
-              />
-            </svg>
-            2.5k
-          </p>
-
-          <p className="absolute border rounded-lg px-1 py-1 mr-1 gap-1 shadow-lg bottom-1 text-white flex items-center justify-center right-2">
-            {" "}
-            <svg
-              className="w-5 h-5 "
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path d="m12.7 20.7 6.2-7.1c2.7-3 2.6-6.5.8-8.7A5 5 0 0 0 16 3c-1.3 0-2.7.4-4 1.4A6.3 6.3 0 0 0 8 3a5 5 0 0 0-3.7 1.9c-1.8 2.2-2 5.8.8 8.7l6.2 7a1 1 0 0 0 1.4 0Z" />
-            </svg>
-            1.2k
+          <Link
+            to="/dashboard/views"
+            className="absolute px-1 py-1 hover:bg-red-500 cursor-pointer rounded-md bg-main ml-1 gap-1 shadow-lg bottom-1 text-white flex items-center justify-center left-2"
+          >
+            {views?.message ? (
+              <svg
+                class="w-5 h-5"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-width="2"
+                  d="M21 12c0 1.2-4.03 6-9 6s-9-4.8-9-6c0-1.2 4.03-6 9-6s9 4.8 9 6Z"
+                />
+                <path
+                  stroke="currentColor"
+                  stroke-width="2"
+                  d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                />
+              </svg>
+            ) : (
+              <svg
+                className="w-5 h-5 "
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M5 7.8C6.7 6.3 9.2 5 12 5s5.3 1.3 7 2.8a12.7 12.7 0 0 1 2.7 3.2c.2.2.3.6.3 1s-.1.8-.3 1a2 2 0 0 1-.6 1 12.7 12.7 0 0 1-9.1 5c-2.8 0-5.3-1.3-7-2.8A12.7 12.7 0 0 1 2.3 13c-.2-.2-.3-.6-.3-1s.1-.8.3-1c.1-.4.3-.7.6-1 .5-.7 1.2-1.5 2.1-2.2Zm7 7.2a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            )}
+            {data?.views?.total}
+          </Link>
+          <p
+            onClick={() => {
+              saves?.data?.length > 0 ? removeHandler() : saveHandler();
+            }}
+            className="absolute border cursor-pointer hover:bg-gray-300/20 rounded-lg px-1 py-1 mr-1 gap-1 shadow-lg bottom-1 text-white flex items-center justify-center right-2"
+          >
+            {saves?.data?.length > 0 ? (
+              <svg
+                className="w-5 h-5 "
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path d="m12.7 20.7 6.2-7.1c2.7-3 2.6-6.5.8-8.7A5 5 0 0 0 16 3c-1.3 0-2.7.4-4 1.4A6.3 6.3 0 0 0 8 3a5 5 0 0 0-3.7 1.9c-1.8 2.2-2 5.8.8 8.7l6.2 7a1 1 0 0 0 1.4 0Z" />
+              </svg>
+            ) : (
+              <svg
+                class="w-5 h-5 "
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12.01 6.001C6.5 1 1 8 5.782 13.001L12.011 20l6.23-7C23 8 17.5 1 12.01 6.002Z"
+                />
+              </svg>
+            )}
+            {data?.saves?.total}
           </p>
         </div>
         <div

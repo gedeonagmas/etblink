@@ -99,7 +99,7 @@ export const _read = asyncCatch(async (req, res, next) => {
     // const total = await model.find({ _id: req.params.id });
     const total = await model.countDocuments();
     const params = { ...req.query };
-
+    console.log(req.query);
     //removing unnecessary queries for filtering
     const remove = [
       "sort",
@@ -146,7 +146,7 @@ export const _read = asyncCatch(async (req, res, next) => {
     const page = req.query.page * 1 || 1;
     const limit = req.query.limit * 1 || null;
     const skip = (page - 1) * limit;
-    query.skip(skip).limit(limit); 
+    query.skip(skip).limit(limit);
 
     //populating
     switch (req.query.populatingType) {
