@@ -20,11 +20,19 @@ export const signupHandler = asyncCatch(async (req, res, next) => {
     const user = await User.create(req.body);
     if (user) {
       const account = await model.create({});
+      const sales =
+        req.body.role === "company"
+          ? {
+              sales: req.body.sales,
+              registeredBy: req.body.registeredBy,
+            }
+          : null;
+
       if (account._id) {
         const data = await User.findByIdAndUpdate(
           { _id: user._id },
           {
-            $set: { user: account._id },
+            $set: { user: account._id, ...sales },
           }
         );
 

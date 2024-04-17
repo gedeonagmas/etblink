@@ -6,6 +6,7 @@ import { View } from "../models/viewModel.js";
 import AppError from "../utils/AppError.js";
 import { User } from "../models/userModel.js";
 import { Sales } from "../models/salesModel.js";
+import { Visitor } from "../models/visitorModel.js";
 
 export const createRate = asyncCatch(async (req, res, next) => {
   const rateHandler = async () => {
@@ -143,15 +144,31 @@ export const createView = asyncCatch(async (req, res, next) => {
   res.status(200).json({
     status: "Created",
     message: "company added to your list.",
-  }); 
+  });
 });
 
 export const upgradeHandler = asyncCatch(async (req, res, next) => {
-  // console.log(req.body);
+  const sales =
+    req.body.role === "sales" && (await Visitor.findById(req.body.user));
+
   const account =
     req.body.role === "company"
       ? await Company.create({})
-      : await Sales.create({});
+      : await Sales.create({
+          firstName: sales.firstName ? sales.firstName : undefined,
+          middleName: sales.middleName ? sales.middleName : undefined,
+          lastName: sales.lastName ? sales.lastName : undefined,
+          bio: sales.bio ? sales.bio : undefined,
+          gender: sales.gender ? sales.gender : undefined,
+          phone: sales.phone ? sales.phone : undefined,
+          address: sales.address ? sales.address : undefined,
+          profilePicture: sales.profilePicture
+            ? sales.profilePicture
+            : undefined,
+          profileFillStatus: sales.profileFillStatus
+            ? sales.profileFillStatus
+            : undefined,
+        });
 
   if (account._id) {
     await User.findByIdAndUpdate(
@@ -185,7 +202,4 @@ export const upgradeHandler = asyncCatch(async (req, res, next) => {
       new AppError("something went wrong unable to upgrade your account!")
     );
   }
-
-  // const user = await User.findById(req.body.user);
-  // console.log(saves, views, rates, "user", req.body.user);
 });

@@ -38,11 +38,6 @@ const salesSchema = new mongoose.Schema(
       validate: valid.paragraph("Address", 4, 200),
     },
 
-    isPro: {
-      type: Boolean,
-      default: false,
-    },
-
     profilePicture: {
       type: String,
       default: "",

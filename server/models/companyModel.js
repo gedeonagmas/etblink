@@ -2,146 +2,162 @@ import mongoose from "mongoose";
 // import uniqueValidator from "mongoose-unique-validator";
 import * as valid from "../utils/validator.js";
 
-const schema = new mongoose.Schema({
-  name: {
-    type: String,
-    validate: valid.paragraph("Name", 4, 100),
-    // index: {
-    //   unique: true,
-    //   partialFilterExpression: { name: { $type: "string" } },
+const schema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      validate: valid.paragraph("Name", 4, 100),
+      // index: {
+      //   unique: true,
+      //   partialFilterExpression: { name: { $type: "string" } },
 
-    // },
-    // default: null,
-  },
+      // },
+      // default: null,
+    },
 
-  type: {
-    type: String,
-    enum: ["local", "global"],
-    default: "local",
-    validate: valid.required("Type"),
-  },
+    category: {
+      type: String,
+      validate: valid.required("Category"),
+    },
 
-  title: {
-    type: String,
-    validate: valid.paragraph("Title", 4, 200),
-  },
-
-  address: {
-    type: String,
-    validate: valid.paragraph("Address", 4, 200),
-  },
-
-  phone: {
-    type: String,
-    validate: valid.phone("Phone"),
-  },
-
-  video: {
-    type: String,
-  },
-
-  website: {
-    type: String,
-  },
-
-  description: {
-    type: String,
-    validate: valid.paragraph("description", 100, 1000),
-  },
-
-  latitude: {
-    type: String,
-  },
-
-  longitude: {
-    type: String,
-  },
-
-  services: {
-    type: [
-      {
-        type: String,
-        validate: valid.required("Services"),
-      },
-    ],
-  },
-
-  features: {
-    type: [
-      {
-        type: String,
-        validate: valid.required("Features"),
-      },
-    ],
-  },
-
-  logo: {
-    type: String,
-    // default: "",
-    validate: valid.required("Logo"),
-    // data: Buffer,
-    // contentTYpe:String,
-  },
-
-  banner: {
-    type: String,
-    validate: valid.required("Banner"),
-  },
-
-  galleries: {
-    type: [
-      {
-        type: String,
-        validate: valid.required("Gallery"),
-      },
-    ],
-  },
-
-  socialMedias: {
-    type: Object,
-    validate: valid.required("Social medias"),
-  },
-
-  workingDays: {
-    type: Object,
-    validate: valid.required("Working days"),
-  },
-
-  registeredBy: {
-    type: String,
-    default: "Self",
-  },
-
-  sales: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "user",
-  },
-
-  rating: {
     type: {
+      type: String,
+      enum: ["local", "global"],
+      default: "local",
+      validate: valid.required("Type"),
+    },
+
+    title: {
+      type: String,
+      validate: valid.paragraph("Title", 4, 200),
+    },
+
+    address: {
+      type: String,
+      validate: valid.paragraph("Address", 4, 200),
+    },
+
+    phone: {
+      type: String,
+      validate: valid.phone("Phone"),
+    },
+
+    video: {
+      type: String,
+    },
+
+    website: {
+      type: String,
+    },
+
+    description: {
+      type: String,
+      validate: valid.paragraph("description", 100, 1000),
+    },
+
+    latitude: {
+      type: String,
+    },
+
+    longitude: {
+      type: String,
+    },
+
+    services: {
+      type: [
+        {
+          type: String,
+          validate: valid.required("Services"),
+        },
+      ],
+    },
+
+    features: {
+      type: [
+        {
+          type: String,
+          validate: valid.required("Features"),
+        },
+      ],
+    },
+
+    logo: {
+      type: String,
+      // default: "",
+      validate: valid.required("Logo"),
+      // data: Buffer,
+      // contentTYpe:String,
+    },
+
+    banner: {
+      type: String,
+      validate: valid.required("Banner"),
+    },
+
+    galleries: {
+      type: [
+        {
+          type: String,
+          validate: valid.required("Gallery"),
+        },
+      ],
+    },
+
+    socialMedias: {
+      type: Object,
+      validate: valid.required("Social medias"),
+    },
+
+    workingDays: {
+      type: Object,
+      validate: valid.required("Working days"),
+    },
+
+    registeredBy: {
+      type: String,
+      default: "Self",
+    },
+
+    sales: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "user",
+    },
+
+    rating: {
+      type: {
+        total: { type: Number, default: 0 },
+        average: { type: Number, default: 0 },
+      },
+    },
+
+    isBoosted: {
+      type: Boolean,
+      default: false,
+    },
+
+    saves: {
       total: { type: Number, default: 0 },
-      average: { type: Number, default: 0 },
+      available: { type: Number, default: 0 },
+    },
+
+    views: {
+      total: { type: Number, default: 0 },
+    },
+
+    profileFillStatus: {
+      type: Number,
     },
   },
-
-  isBoosted: {
-    type: Boolean,
-    default: false,
-  },
-
-  saves: {
-    total: { type: Number, default: 0 },
-    available: { type: Number, default: 0 },
-  },
-
-  views: {
-    total: { type: Number, default: 0 },
-  },
-
-  profileFillStatus: {
-    type: Number,
-  },
-});
+  {
+    timestamps: true,
+    toJSON: {
+      virtuals: true,
+    },
+    toObject: {
+      virtuals: true,
+    },
+  }
+);
 
 schema.pre("findOneAndUpdate", function (next) {
   this.options.runValidators = true;

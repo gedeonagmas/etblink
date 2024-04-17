@@ -32,6 +32,8 @@ import UpdateYoutube from "./pages/dashboard/youtube/UpdateYoutube";
 import Saves from "./pages/dashboard/Saves";
 import Views from "./pages/dashboard/Views";
 import Upgrade from "./pages/dashboard/Upgrade";
+import SalesCompany from "./pages/dashboard/sales/SalesCompany";
+import Referrals from "./pages/dashboard/sales/Referrals";
 
 export const userContext = createContext();
 
@@ -77,6 +79,14 @@ function App() {
             <Route path="/dashboard" element={<Dashboard />}>
               <Route path="/dashboard/company" element={<Company />}></Route>
               <Route path="/dashboard/sales" element={<Sellers />}></Route>
+              <Route
+                path="/dashboard/sales/company"
+                element={<SalesCompany />}
+              ></Route>
+              <Route
+                path="/dashboard/sales/referrals"
+                element={<Referrals />}
+              ></Route>
               <Route path="/dashboard/visitor" element={<Visitors />}></Route>
               <Route path="/dashboard/admin" element={<Admin />}></Route>
               <Route path="/dashboard/saves" element={<Saves />}></Route>

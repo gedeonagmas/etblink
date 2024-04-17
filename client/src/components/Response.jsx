@@ -82,7 +82,7 @@ const Response = ({ response, setPending, redirectTo, type }) => {
         setTimeout(() => {
           navigate("/", { replace: true });
           window.location.reload();
-        }, 6000);
+        }, 4000);
       } else if (redirectTo && redirectTo?.length > 0) {
         navigate(redirectTo, {
           replace: true,

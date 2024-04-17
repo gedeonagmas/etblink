@@ -117,7 +117,7 @@ export const _read = asyncCatch(async (req, res, next) => {
     //filtering
     let queryObject = JSON.parse(
       JSON.stringify(params).replace(
-        /\b(gte|lte|lt|gt|eq|neq)\b/g,
+        /\b(gte|lte|lt|gt|eq|ne)\b/g,
         (match) => `$${match}`
       )
     );
@@ -151,7 +151,7 @@ export const _read = asyncCatch(async (req, res, next) => {
     //populating
     switch (req.query.populatingType) {
       case "users":
-        query.populate(req.query.populatingValue); 
+        query.populate(req.query.populatingValue);
         break;
       case "saves":
         query.populate(req.query.populatingValue.split(",").join(" "));
@@ -180,13 +180,12 @@ export const _read = asyncCatch(async (req, res, next) => {
       // return next(new AppError("There is no data to display", 400));
       return res.status(201).json({ message: "There is no data to display!" });
 
-  
-      return res.status(200).json({
-        status: "success",
-        length: data.length,
-        total: total,
-        data: data,
-      });
+    return res.status(200).json({
+      status: "success",
+      length: data.length,
+      total: total,
+      data: data,
+    });
   }
   return next(new AppError("something went wrong please try again!!", 500));
 });

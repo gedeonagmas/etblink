@@ -6,6 +6,7 @@ import LoadingButton from "../components/loading/LoadingButton";
 
 const Signup = () => {
   window.scrollTo({ top: 0 });
+  const location = useLocation()?.search?.split("?id=")[1];
   const [signupData, signupResponse] = useUserRegisterMutation();
   const [pending, setPending] = useState(false);
   const [email, setEmail] = useState("");
@@ -17,6 +18,8 @@ const Signup = () => {
     signupData({
       role,
       email,
+      registeredBy: location ? "sales" : "Self",
+      sales: location ? location : undefined,
       password,
       confirmPassword,
     });
@@ -95,7 +98,7 @@ const Signup = () => {
             required
           />
         </div>
-        
+
         <LoadingButton
           pending={pending}
           onClick={signupHandler}
