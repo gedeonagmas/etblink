@@ -80,7 +80,15 @@ function App() {
               <Route path="/dashboard/visitor" element={<Visitors />}></Route>
               <Route path="/dashboard/admin" element={<Admin />}></Route>
               <Route path="/dashboard/saves" element={<Saves />}></Route>
+              <Route
+                path="/dashboard/company/saves"
+                element={<Saves type="company" />}
+              ></Route>
               <Route path="/dashboard/views" element={<Views />}></Route>
+              <Route
+                path="/dashboard/company/views"
+                element={<Views type="company" />}
+              ></Route>
               <Route path="/dashboard/upgrade" element={<Upgrade />}></Route>
               <Route path="/dashboard/admin/news" element={<AddNews />}></Route>
               <Route

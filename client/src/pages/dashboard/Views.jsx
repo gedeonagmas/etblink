@@ -12,7 +12,7 @@ import Response from "../../components/Response";
 import Popup from "../../components/Popup";
 import Pop from "../../components/Pop";
 
-const Views = () => {
+const Views = ({ type }) => {
   const user = JSON.parse(localStorage.getItem("etblink_user"));
   const [page, setPage] = useState(0);
   const [totalPage, setTotalPage] = useState(3);
@@ -27,10 +27,10 @@ const Views = () => {
     isError: viewsIsError,
   } = useReadQuery({
     url:
-      user?.role === "company"
+      type === "company"
         ? `/user/views?company[eq]=${user?.user?._id}&limit=3&page=${page}&populatingType=views&populatingValue=company,viewer`
         : `/user/views?viewer[eq]=${user?.user?._id}&limit=3&page=${page}&populatingType=views&populatingValue=company,viewer`,
-    tag: ["views", "company"],
+    tag: ["view", "companies"],
   });
 
   useEffect(() => {

@@ -47,7 +47,7 @@ export const createRate = asyncCatch(async (req, res, next) => {
       .status(200)
       .json({ status: "Created", message: "rating is added successfully" });
   }
-}); 
+});
 
 export const readRate = asyncCatch(async (req, res, next) => {
   const data = await Rate.find({ accepter: req.query.id })
@@ -143,11 +143,11 @@ export const createView = asyncCatch(async (req, res, next) => {
   res.status(200).json({
     status: "Created",
     message: "company added to your list.",
-  });
+  }); 
 });
 
 export const upgradeHandler = asyncCatch(async (req, res, next) => {
-  console.log(req.body);
+  // console.log(req.body);
   const account =
     req.body.role === "company"
       ? await Company.create({})
@@ -160,27 +160,32 @@ export const upgradeHandler = asyncCatch(async (req, res, next) => {
         $set: { user: account._id, role: req.body.role },
       }
     );
+
+    await Save.updateMany(
+      { saver: req.body.user },
+      { $set: { saver: account._id, role: req.body.role } }
+    );
+
+    await View.updateMany(
+      { viewer: req.body.user },
+      { $set: { viewer: account._id, role: req.body.role } }
+    );
+
+    await Rate.updateMany(
+      { rater: req.body.user },
+      { $set: { rater: account._id, role: req.body.role } }
+    );
+
+    return res.status(200).json({
+      status: "Created",
+      message: "Account upgraded successfully Please Login Again to Continue.",
+    });
+  } else {
+    return next(
+      new AppError("something went wrong unable to upgrade your account!")
+    );
   }
 
-  const saves = await Save.updateMany(
-    { saver: req.body.user },
-    { $set: { saver: account._id } }
-  );
-
-  const views = await View.updateMany(
-    { viewer: req.body.user },
-    { $set: { viewer: account._id } }
-  );
-
-  const rates = await Rate.updateMany(
-    { rater: req.body.user },
-    { $set: { rater: account._id } }
-  );
-
   // const user = await User.findById(req.body.user);
-  console.log(saves, views, rates, "user", req.body.user);
-  res.status(200).json({
-    status: "Created",
-    message: "Account upgraded successfully Please Login Again to Continue.",
-  });
+  // console.log(saves, views, rates, "user", req.body.user);
 });

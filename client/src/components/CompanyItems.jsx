@@ -25,7 +25,7 @@ const CompanyItems = ({ value, phoneNo, type, data }) => {
       user?.role === "company"
         ? `/user/saves?company=${value}&saver=${user?.user?._id}&populatingType=saves&populatingValue=company,saver`
         : `/user/saves?company=${value}&saver=${user?.user?._id}&populatingType=saves&populatingValue=company,saver`,
-    tag: ["saves", "company"],
+    tag: ["save", "company"],
   });
 
   const {
@@ -37,7 +37,7 @@ const CompanyItems = ({ value, phoneNo, type, data }) => {
       user?.role === "company"
         ? `/user/views?company=${value}&viewer=${user?.user?._id}&populatingType=saves&populatingValue=company,viewer`
         : `/user/views?company=${value}&viewer=${user?.user?._id}&populatingType=saves&populatingValue=company,viewer`,
-    tag: ["views", "company"],
+    tag: ["view", "company"],
   });
 
   const removeHandler = () => {

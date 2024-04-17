@@ -21,11 +21,8 @@ const Dashboard = () => {
     isFetching: savesIsFetching,
     isError: savesIsError,
   } = useReadQuery({
-    url:
-      user?.role === "company"
-        ? `/user/saves?company[eq]=${user?.user?._id}&populatingType=saves&populatingValue=company,saver`
-        : `/user/saves?saver[eq]=${user?.user?._id}&populatingType=saves&populatingValue=company,saver`,
-    tag: ["saves", "company"],
+    url:`/user/saves?saver[eq]=${user?.user?._id}&populatingType=saves&populatingValue=company,saver`,
+    tag: ["save", "companies"],
   });
 
   const {
@@ -33,11 +30,8 @@ const Dashboard = () => {
     isFetching: viewsIsFetching,
     isError: viewsIsError,
   } = useReadQuery({
-    url:
-      user?.role === "company"
-        ? `/user/views?company[eq]=${user?.user?._id}&populatingType=views&populatingValue=company,viewer`
-        : `/user/views?viewer[eq]=${user?.user?._id}&populatingType=views&populatingValue=company,viewer`,
-    tag: ["views", "company"],
+    url:`/user/views?viewer[eq]=${user?.user?._id}&populatingType=views&populatingValue=company,viewer`,
+    tag: ["view", "companies"],
   });
 
   const [logout, logoutResponse] = useUserLogoutMutation();
@@ -515,7 +509,7 @@ const Dashboard = () => {
                           class="relative inline-flex items-center p-1s text-sm font-medium text-center t"
                         >
                           <svg
-                            class="w-7 h-7"
+                            class="w-6 h-6"
                             aria-hidden="true"
                             xmlns="http://www.w3.org/2000/svg"
                             width="24"
@@ -534,6 +528,7 @@ const Dashboard = () => {
                             {views?.data?.length}
                           </div>
                         </button>
+                        <p className="text-xs">views</p>
                       </div>
                     </Link>
                   )}
@@ -846,6 +841,86 @@ const Dashboard = () => {
                   </a>
                 </li>
               </>
+            ) : user?.role === "company" ? (
+              <>
+                <li>
+                  <a
+                    href="/dashboard/saves"
+                    class="flex items-center p-2 text-gray-500 hover:text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                  >
+                    <svg
+                      className="w-5 h-5 "
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="m12.7 20.7 6.2-7.1c2.7-3 2.6-6.5.8-8.7A5 5 0 0 0 16 3c-1.3 0-2.7.4-4 1.4A6.3 6.3 0 0 0 8 3a5 5 0 0 0-3.7 1.9c-1.8 2.2-2 5.8.8 8.7l6.2 7a1 1 0 0 0 1.4 0Z" />
+                    </svg>
+                    <span class="flex-1 ms-3 whitespace-nowrap">Saves</span>
+                  </a>
+                </li>
+
+                <li>
+                  <a
+                    href="/dashboard/views"
+                    class="flex items-center p-2 text-gray-500 hover:text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                  >
+                    <svg
+                      className="w-5 h-5 "
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="m12.7 20.7 6.2-7.1c2.7-3 2.6-6.5.8-8.7A5 5 0 0 0 16 3c-1.3 0-2.7.4-4 1.4A6.3 6.3 0 0 0 8 3a5 5 0 0 0-3.7 1.9c-1.8 2.2-2 5.8.8 8.7l6.2 7a1 1 0 0 0 1.4 0Z" />
+                    </svg>
+                    <span class="flex-1 ms-3 whitespace-nowrap">Views</span>
+                  </a>
+                </li>
+
+                <li>
+                  <a
+                    href="/dashboard/company/saves"
+                    class="flex items-center p-2 text-gray-500 hover:text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                  >
+                    <svg
+                      className="w-5 h-5 "
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="m12.7 20.7 6.2-7.1c2.7-3 2.6-6.5.8-8.7A5 5 0 0 0 16 3c-1.3 0-2.7.4-4 1.4A6.3 6.3 0 0 0 8 3a5 5 0 0 0-3.7 1.9c-1.8 2.2-2 5.8.8 8.7l6.2 7a1 1 0 0 0 1.4 0Z" />
+                    </svg>
+                    <span class="flex-1 ms-3 whitespace-nowrap">
+                      Your Saves
+                    </span>
+                  </a>
+                </li>
+
+                <li>
+                  <a
+                    href="/dashboard/company/views"
+                    class="flex items-center p-2 text-gray-500 hover:text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                  >
+                    <svg
+                      className="w-5 h-5 "
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="m12.7 20.7 6.2-7.1c2.7-3 2.6-6.5.8-8.7A5 5 0 0 0 16 3c-1.3 0-2.7.4-4 1.4A6.3 6.3 0 0 0 8 3a5 5 0 0 0-3.7 1.9c-1.8 2.2-2 5.8.8 8.7l6.2 7a1 1 0 0 0 1.4 0Z" />
+                    </svg>
+                    <span class="flex-1 ms-3 whitespace-nowrap">
+                      Your Views
+                    </span>
+                  </a>
+                </li>
+              </>
+            ) : user?.role === "sales" ? (
+              <></>
             ) : (
               <></>
             )}

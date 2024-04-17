@@ -12,7 +12,7 @@ import Response from "../../components/Response";
 import Popup from "../../components/Popup";
 import Pop from "../../components/Pop";
 
-const Saves = () => {
+const Saves = ({ type }) => {
   const user = JSON.parse(localStorage.getItem("etblink_user"));
   const [page, setPage] = useState(0);
   const [totalPage, setTotalPage] = useState(3);
@@ -27,12 +27,13 @@ const Saves = () => {
     isError: savesIsError,
   } = useReadQuery({
     url:
-      user?.role === "company"
+      type === "company"
         ? `/user/saves?company[eq]=${user?.user?._id}&limit=3&page=${page}&populatingType=saves&populatingValue=company,saver`
         : `/user/saves?saver[eq]=${user?.user?._id}&limit=3&page=${page}&populatingType=saves&populatingValue=company,saver`,
-    tag: ["saves", "company"],
+    tag: ["save", "companies"],
   });
 
+  //`/user/saves?company[eq]=${user?.user?._id}&limit=3&page=${page}&populatingType=saves&populatingValue=company,saver`
   useEffect(() => {
     setTotalPage(Math.ceil(saves?.data?.length / 3));
   }, [saves]);

@@ -19,10 +19,7 @@ const Header = () => {
     isFetching: savesIsFetching,
     isError: savesIsError,
   } = useReadQuery({
-    url:
-      user?.role === "company"
-        ? `/user/saves?company[eq]=${user?.user?._id}&populatingType=saves&populatingValue=company,saver`
-        : `/user/saves?saver[eq]=${user?.user?._id}&populatingType=saves&populatingValue=company,saver`,
+    url: `/user/saves?saver[eq]=${user?.user?._id}&populatingType=saves&populatingValue=company,saver`,
     tag: ["saves", "company"],
   });
 
@@ -31,10 +28,7 @@ const Header = () => {
     isFetching: viewsIsFetching,
     isError: viewsIsError,
   } = useReadQuery({
-    url:
-      user?.role === "company"
-        ? `/user/views?company[eq]=${user?.user?._id}&populatingType=views&populatingValue=company,viewer`
-        : `/user/views?viewer[eq]=${user?.user?._id}&populatingType=views&populatingValue=company,viewer`,
+    url: `/user/views?viewer[eq]=${user?.user?._id}&populatingType=views&populatingValue=company,viewer`,
     tag: ["views", "company"],
   });
 
@@ -85,8 +79,8 @@ const Header = () => {
     logout({});
   };
 
-  // console.log(views, "views from header");
-  // console.log(saves, "saves from header");
+  console.log(views, "views from header");
+  console.log(saves, "saves from header");
   return (
     <div className="fixed w-full z-50 bg-white bg-dark">
       <Response response={loginResponse} setPending={setPending} type="login" />
@@ -131,7 +125,7 @@ const Header = () => {
                     </svg>
 
                     <div class="absolute inline-flex items-center justify-center w-6 h-6 text-xs p-1 font-bold text-white bg-main border-2 border-white rounded-full -top-2 -end-2 dark:border-gray-900">
-                      {saves ? saves?.data?.length : 0}
+                      {saves && saves?.data ? saves?.data?.length : 0}
                     </div>
                   </button>
                 </div>
@@ -160,7 +154,7 @@ const Header = () => {
                         />
                       </svg>
 
-                      <div class="absolute inline-flex items-center justify-center w-6 h-6 font-bold text-white bg-main border-2 border-white rounded-full -top-3 -end-3 dark:border-gray-900">
+                      <div class="absolute inline-flex items-center justify-center w-6 h-6 font-bold text-white bg-main border-2 border-white rounded-full -top-2 -end-2 dark:border-gray-900">
                         {views?.data?.length}
                       </div>
                     </button>
@@ -743,7 +737,7 @@ const Header = () => {
                       </svg>
 
                       <div class="absolute inline-flex items-center justify-center w-6 h-6 text-xs p-1 font-bold text-white bg-main border-2 border-white rounded-full -top-2 -end-2 dark:border-gray-900">
-                        {saves ? saves?.data?.length : 0}
+                        {saves && saves?.data ? saves?.data?.length : 0}
                       </div>
                     </button>
                   </div>
@@ -787,11 +781,11 @@ const Header = () => {
               <div className="flex gap-4">
                 <div className="relative">
                   <p
-                    onMouseOver={() => setLoginForm(true)}
+                    // onMouseOver={() => setLoginForm(true)}
                     className={`cursor-pointer ${
                       loginForm ? "bg-gray-900" : ""
                     } px-3 h-12 absolute -top-3 pt-3 -left-[70px] flex `}
-                    onClick={() => setLoginForm(false)}
+                    onClick={() => setLoginForm(!loginForm)}
                   >
                     Login
                     <svg
@@ -812,7 +806,7 @@ const Header = () => {
                   </p>
                   {loginForm && (
                     <div
-                      onMouseLeave={() => setLoginForm(false)}
+                      // onMouseLeave={() => setLoginForm(false)}
                       className="w-auto z-50 rounded-sm rounded-tr-none text-sm p-2 flex gap-1 flex-col bg-gray-900 bg-dark text-dark absolute top-[34px] -left-[211px] text-black"
                     >
                       <input
