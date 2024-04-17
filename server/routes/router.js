@@ -33,10 +33,15 @@ import crypto from "crypto";
 import asyncCatch from "express-async-catch";
 import {
   createRate,
+  createSave,
+  createView,
   deleteRate,
+  deleteSave,
   readMultipleRate,
   readRate,
+  upgradeHandler,
 } from "../controller/utilityController.js";
+import { sendEmailHandler } from "../controller/emailController.js";
 
 const router = express.Router();
 const chatRouter = express.Router();
@@ -70,13 +75,31 @@ router
   .put(authentication, files, updateProfilePicture);
 
 utilityRouter.route("/updatePassword").put(authentication, updatePassword);
-utilityRouter.route("/rate").post( authentication,createRate);
+utilityRouter.route("/rate").post(authentication, createRate);
 utilityRouter.route("/rate").get(readRate);
 utilityRouter.route("/rateMultiple").get(authentication, readMultipleRate);
 utilityRouter.route("/rate").delete(authentication, deleteRate);
-
+utilityRouter.route("/save").post(authentication, createSave);
+utilityRouter.route("/save").delete(authentication, deleteSave); 
+utilityRouter.route("/view").post(authentication, createView);
+utilityRouter.route("/upgrade").post(authentication, upgradeHandler);
+ 
 //factory route
 router.route("/:table/:id").get(authentication, _read_single);
+router.route("/sendEmail").post(async (req, res, next) => {
+  const { from, to, message, subject, fullName } = req.body;
+  console.log(req.body, "body");
+  const response = "Your email is sent successfully.";
+  sendEmailHandler(
+    res,
+    next,
+    subject,
+    message,
+    response,
+    from + " " + fullName,
+    to
+  );
+});
 
 router
   .route("/:table")

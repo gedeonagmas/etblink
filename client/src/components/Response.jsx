@@ -77,6 +77,12 @@ const Response = ({ response, setPending, redirectTo, type }) => {
         localStorage.removeItem("etblink_user");
         navigate("/", { replace: true });
         window.location.reload();
+      } else if (type === "upgrade") {
+        localStorage.removeItem("etblink_user");
+        setTimeout(() => {
+          navigate("/", { replace: true });
+          window.location.reload();
+        }, 6000);
       } else if (redirectTo && redirectTo?.length > 0) {
         navigate(redirectTo, {
           replace: true,
@@ -157,7 +163,7 @@ const Response = ({ response, setPending, redirectTo, type }) => {
       {success && successMessage && (
         <div
           id="alert-3"
-          class="flex items-center p-4 mb-4 fixed top-32 z-50 right-20 max-w-[400px] text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
+          class="flex items-start p-4 mb-4 fixed top-32 z-50 right-20 max-w-[400px] text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
           role="alert"
         >
           <svg

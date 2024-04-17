@@ -10,13 +10,16 @@ import v2 from "./../config/cloudinary.js";
 import { Private } from "../models/privateModel.js";
 import { Company } from "../models/companyModel.js";
 import { sendEmailHandler } from "./emailController.js";
+import { Visitor } from "../models/visitorModel.js";
+import { Sales } from "../models/salesModel.js";
+import { Admin } from "../models/adminModel.js";
 const api = "http://localhost:4000/";
 
 export const signupHandler = asyncCatch(async (req, res, next) => {
-  const user = await User.create(req.body);
-  if (user) {
-    if (req.body.role === "company") {
-      const account = await Company.create({});
+  const createAccount = async (model) => {
+    const user = await User.create(req.body);
+    if (user) {
+      const account = await model.create({});
       if (account._id) {
         const data = await User.findByIdAndUpdate(
           { _id: user._id },
@@ -24,20 +27,31 @@ export const signupHandler = asyncCatch(async (req, res, next) => {
             $set: { user: account._id },
           }
         );
-      }
-    }
-    const token = tokenGenerator(res, user._id);
 
-    return res
-      .status(200)
-      .json({ message: "Account Created Successfully", token, data: user });
-  } else {
-    return next(
-      new AppError(
-        "something went wrong unable to create your account try again",
-        500
-      )
-    );
+        const token = tokenGenerator(res, data._id);
+
+        return res
+          .status(200)
+          .json({ message: "Account Created Successfully", token, data });
+      }
+    } else {
+      return next(new AppError("problem with creating account try again", 500));
+    }
+  };
+
+  switch (req.body.role) {
+    case "visitor":
+      return createAccount(Visitor);
+    case "sales":
+      return createAccount(Sales);
+    case "company":
+      return createAccount(Company);
+    case "admin":
+      return createAccount(Admin);
+    default:
+      return next(
+        new AppError("problem with creating your account please try again", 500)
+      );
   }
 });
 
@@ -62,7 +76,7 @@ export const loginHandler = asyncCatch(async (req, res, next) => {
   res.status(200).json({
     status: "success",
     message: "you are logged in successfully",
-    data:data._doc,
+    data: data._doc,
     token,
   });
 });
@@ -88,10 +102,10 @@ export const forgetPassword = asyncCatch(async (req, res, next) => {
 
   //email sent logic here
   const subject = "Reset your password";
-  const message =
+  const response =
     "We have just sent a verification link via your email address please check. it's valid only for 30 minutes";
   const html = `<div>This is your verification link click <a style={{background:'yellow',padding:'5px', border-radius:'20px',color:white,padding:10px;}} href="${passwordResetUrl}">here</a> to reset your password</div>`;
-  sendEmailHandler(email, res, next, subject, message, html);
+  sendEmailHandler(email, res, next, subject, response, html);
 });
 
 export const resetPassword = asyncCatch(async (req, res, next) => {

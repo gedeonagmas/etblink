@@ -103,7 +103,7 @@ const Home = () => {
               indicators={false}
               pauseOnHover={false}
               responsive={true}
-            > 
+            >
               {slideImages.map((slideImage, index) => (
                 <div key={index}>
                   <div
@@ -566,13 +566,14 @@ const Home = () => {
           </p>
 
           <div className="grid px-main mt-7 grid-cols-1 md:grid-cols-2 lg:grid-cols-3  w-full place-items-centers gap-7">
-            {companyFetching ? (
+            {/* {companyFetching ? (
               <Loading />
             ) : companyError ? (
               <p>Something went error unable to read the data.</p>
-            ) : companies?.length > 0 ? (
+            ) :  */}
+            {companies?.length > 0 ? (
               companies?.map((e, i) => {
-                return ( 
+                return (
                   <CompanyItems
                     value={e._id}
                     phoneNo="+251 9541**"
@@ -586,15 +587,12 @@ const Home = () => {
             )}
           </div>
 
-          {youtubeFetching ? (
+          {/* {youtubeFetching ? (
             <Loading />
           ) : youtubeError ? (
             <p>Something went error unable to read the data.</p>
-          ) : youtubes?.length > 0 ? (
-            <YoutubeItems data={youtubes} />
-          ) : (
-            <p></p>
-          )}
+            ) : */}
+          {youtubes?.length > 0 ? <YoutubeItems data={youtubes} /> : <p></p>}
 
           <div className="w-full  py-8 flex flex-col items-center justify-center">
             <p className="text-4xl font-semibold text-gray-700">
@@ -604,11 +602,13 @@ const Home = () => {
               our top news
             </p>
             <div className="grid px-main grid-cols-1 mt-3 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {newsFetching ? (
+              {/* {newsFetching ? (
                 <Loading />
               ) : newsError ? (
                 <p>Something went error unable to read the data.</p>
-              ) : news?.length > 0 ? (
+                ) : */}
+
+              {news?.length > 0 ? (
                 news?.map((e, i) => {
                   if (i < 3) {
                     return (

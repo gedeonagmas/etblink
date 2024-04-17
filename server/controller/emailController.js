@@ -1,7 +1,17 @@
 import AppError from "../utils/AppError.js";
 import nodemailer from "nodemailer";
 
-export const sendEmailHandler = (email, res, next, subject, message, html) => {
+export const sendEmailHandler = (
+  email,
+  res,
+  next,
+  subject,
+  message,
+  html,
+  from,
+  response,
+  to
+) => {
   const transporter = nodemailer.createTransport({
     host: "mail.makutalawyers.com",
     port: 465,
@@ -13,16 +23,16 @@ export const sendEmailHandler = (email, res, next, subject, message, html) => {
   });
 
   const mailOptions = {
-    from: "Makuta Law Firm <donotreply@makutalawyers.com>",
-    to: email,
+    from: from ? from : "Makuta Law Firm <donotreply@makutalawyers.com>",
+    to: email ? email : to,
     text: message,
     subject: subject,
-    html: html,
+    html: html ? html : null,
   };
 
   transporter.sendMail(mailOptions, function (error, info) {
     if (error) {
-      console.log("Error in sending email  " + error);
+      console.log("Error in sending email  " + error); 
       return next(
         new AppError(
           "Connection problem unable to send the email please try again!",
@@ -30,7 +40,7 @@ export const sendEmailHandler = (email, res, next, subject, message, html) => {
         )
       );
     } else {
-      return res.status(200).json({ message: message });
+      return res.status(200).json({ message: response });
     }
   });
 };

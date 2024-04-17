@@ -77,6 +77,7 @@ const schema = new mongoose.Schema({
 
   logo: {
     type: String,
+    // default: "",
     validate: valid.required("Logo"),
     // data: Buffer,
     // contentTYpe:String,
@@ -126,6 +127,15 @@ const schema = new mongoose.Schema({
   isBoosted: {
     type: Boolean,
     default: false,
+  },
+
+  saves: {
+    total: { type: Number, default: 0 },
+    available: { type: Number, default: 0 },
+  },
+
+  views: {
+    total: { type: Number, default: 0 },
   },
 
   profileFillStatus: {

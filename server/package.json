@@ -4,12 +4,12 @@
   "main": "index.js",
   "type": "module",
   "engines": {
-    "node": "18.x"
+    "node": "20.x"
   },
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon ./index.js",
-    "pro": "set NODE_ENV=production && nodemon ./index.js",
-    "start": "set NODE_ENV=production && node ./index.js",
+    "pro": "cross-env NODE_ENV=production nodemon ./index.js",
+    "start": "cross-env NODE_ENV=production node ./index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

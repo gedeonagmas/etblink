@@ -7,6 +7,9 @@ import SmallBanner from "../../components/SmallBanner";
 import { useLazyReadQuery, useReadQuery } from "../../features/api/apiSlice";
 import Loading from "../../components/loading/Loading";
 
+import ResponsivePagination from "react-responsive-pagination";
+import "./pagination.css";
+
 const markers = [
   {
     id: 1,
@@ -36,12 +39,18 @@ const markers = [
 ];
 
 const Category = () => {
+  const totalPages = 5;
+  const [currentPage, setCurrentPage] = useState(1);
+
+  function handlePageChange(page) {
+    setCurrentPage(page);
+  }
+
+  console.log(currentPage, "ccccccccc");
   const [page, setPage] = useState(0);
   const [lastPage, setLastPage] = useState("");
-  const [totalPage, setTotalPage] = useState(0);
-  const [pagination, setPagination] = useState([1, 2, 3, 4, 5]);
-  const [index, setIndex] = useState(0);
   const [search, setSearch] = useState("");
+  const [totalPage, setTotalPage] = useState(1);
   const [category, setCategory] = useState("");
 
   const [
@@ -54,7 +63,7 @@ const Category = () => {
   }, []);
 
   useEffect(() => {
-    setTotalPage(company?.total);
+    setTotalPage(Math.ceil(company?.total / 6));
     if (company?.message) {
       setLastPage(company?.message);
     } else {
@@ -67,8 +76,6 @@ const Category = () => {
       url: `/user/companies?limit=2&page=${page}`,
       tag: ["companies"],
     });
-
-    indicatorHandler();
   }, [page]);
 
   useEffect(() => {
@@ -76,8 +83,6 @@ const Category = () => {
       url: `/user/companies?limit=2&page=${page}&searchField=name&searchValue=${search}`,
       tag: ["companies"],
     });
-
-    indicatorHandler();
   }, [search]);
 
   useEffect(() => {
@@ -86,60 +91,7 @@ const Category = () => {
       url: `/user/companies?limit=2&page=${page}${cat}`,
       tag: ["companies"],
     });
-
-    indicatorHandler();
   }, [category]);
-
-  const indicatorHandler = () => {
-    // console.log(Math.ceil(company?.total / 2), "cccccc");
-    if (page === pagination[pagination?.length - 1]) {
-      pagination.shift();
-      if (pagination.length === Math.ceil(company?.total / 2)) {
-        setPage(Math.ceil(company?.total / 2));
-        // return;
-      }
-      pagination.push(page + 1);
-    } else if (pagination[0] > 1) {
-      pagination.pop();
-      if (page <= 1) {
-        setPage(1);
-      }
-      pagination.unshift(pagination[0] - 1);
-    }
-  };
-
-  useEffect(() => {
-    pagination.map((e) => {
-      const ids = document.getElementById(e);
-      // console.log(e, "eeee", page, "page", e === page);
-      ids?.classList?.remove("bg-main", "text-white");
-      ids?.classList?.add(
-        "bg-white",
-        "text-gray-500",
-        "dark:bg-gray-800",
-        "dark:text-gray-400"
-      );
-      let a = page <= 4 ? page : page - 1;
-      if (e === a) {
-        ids?.classList?.remove(
-          "bg-white",
-          "text-gray-500",
-          "dark:bg-gray-800",
-          "dark:text-gray-400",
-          "dark:hover:bg-gray-700"
-        );
-        ids?.classList?.add(
-          "bg-main",
-          "text-white",
-          "hover:bg-red-500",
-          "hover:text-white"
-        );
-      }
-    });
-  }, [page]);
-  // console.log(pagination, "pagination");
-  // console.log(page, "page", index, "index");
-  // console.log(Math.ceil(totalPage / 2), "company");
 
   console.log(company, "company");
   return (
@@ -351,90 +303,44 @@ const Category = () => {
               </span>
             </p>
           </div>
-          <div className="grid mt-5 grid-cols-1  md:grid-cols-2 lg:grid-cols-3 w-full place-items-center gap-6">
-            {companyFetching ? (
-              <Loading />
-            ) : lastPage?.length > 0 ? (
-              <p>{lastPage}</p>
-            ) : companyError ? (
-              <p>Something went error unable to read the data.</p>
-            ) : company?.data?.length > 0 ? (
-              company?.data?.map((e, i) => {
-                return (
-                  <CompanyItems
-                    value={e._id}
-                    phoneNo={`${e?.phone?.substring(0, 5)}**`}
-                    type="small"
-                    data={e}
-                  />
-                );
-              })
-            ) : (
-              <p></p>
-            )}
-          </div>
-        </div>
-        <SmallBanner />
-      </div>
 
-      <div className="w-full flex items-center justify-center mt-10">
-        <nav aria-label="Page navigation example">
-          <ul class="inline-flex -space-x-px text-base h-10">
-            <li>
-              <button
-                onClick={() => {
-                  if (page <= 1) {
-                    setPage(1);
-                  } else {
-                    setPage(page - 1);
-                  }
-                }}
-                href="#"
-                class="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-              >
-                Previous
-              </button>
-            </li>
-            {pagination?.map((e, i) => {
-              return (
-                <li>
-                  <button
-                    onClick={() => {
-                      setIndex(i);
-                      if (e > Math.ceil(company?.total / 2)) {
-                        setPage(page);
-                        setLastPage("");
-                        return;
-                      }
-                      setPage(e);
-                      // paginationHandler(page);
-                    }}
-                    id={e}
-                    class={`flex bg-white items-center justify-center px-4 h-10 leading-tight text-gray-500 border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white`}
-                  >
-                    {e}
-                  </button>
-                </li>
-              );
-            })}
-            <li>
-              <button
-                onClick={() => {
-                  if (page === Math.ceil(company?.total / 2)) {
-                    setPage(page);
-                    return;
-                  } else {
-                    setPage(page + 1);
-                  }
-                }}
-                href="#"
-                class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-              >
-                Next
-              </button>
-            </li>
-          </ul>
-        </nav>
+          <div className="flex flex-col gap-10">
+            <div className="grid mt-5 grid-cols-1  md:grid-cols-2 lg:grid-cols-3 w-full place-items-center gap-6">
+              {companyFetching ? (
+                <Loading />
+              ) : lastPage?.length > 0 ? (
+                <p>{lastPage}</p>
+              ) : companyError ? (
+                <p>Something went error unable to read the data.</p>
+              ) : company?.data?.length > 0 ? (
+                company?.data?.map((e, i) => {
+                  return (
+                    <CompanyItems
+                      value={e._id}
+                      phoneNo={`${e?.phone?.substring(0, 5)}**`}
+                      type="small"
+                      data={e}
+                    />
+                  );
+                })
+              ) : (
+                <p></p>
+              )}
+            </div>
+            <div className="py-10">
+              <ResponsivePagination
+                total={totalPage}
+                current={page}
+                onPageChange={(currentPage) => setPage(currentPage)}
+                previousLabel="Previous"
+                previousClassName="w-24"
+                nextClassName="w-24"
+                nextLabel="Next"
+              />
+            </div>
+          </div>
+          <SmallBanner />
+        </div>
       </div>
     </div>
   );

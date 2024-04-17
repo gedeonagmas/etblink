@@ -62,4 +62,4 @@ privateSchema.pre("findOneAndUpdate", function (next) {
   next();
 });
 
-export const Private = mongoose.model("private", privateSchema);
+export const Admin = mongoose.model("admin", privateSchema);

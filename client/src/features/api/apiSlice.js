@@ -42,8 +42,10 @@ export const apiSlice = createApi({
     "chats",
     "news",
     "youtubes",
-    "rates",
+    "rate",
     "rate-multiple",
+    "view",
+    "save",
   ],
   endpoints: (builder) => ({
     //user signup
@@ -80,6 +82,16 @@ export const apiSlice = createApi({
     forgetPassword: builder.mutation({
       query: (data) => ({
         url: "/user/forgetPassword",
+        method: "POST",
+        body: data,
+        credentials: "include",
+      }),
+    }),
+
+    //user forget
+    sendEmail: builder.mutation({
+      query: (data) => ({
+        url: "/user/sendEmail",
         method: "POST",
         body: data,
         credentials: "include",
@@ -275,6 +287,50 @@ export const apiSlice = createApi({
       }),
       invalidatesTags: ["companies", "rate", "rate-multiple"],
     }),
+
+    //create rate
+    createSave: builder.mutation({
+      query: (data) => ({
+        url: `/utility/save`,
+        method: "POST",
+        body: data,
+        credentials: "include",
+      }),
+      invalidatesTags: ["companies", "save"],
+    }),
+
+    //create rate
+    deleteSave: builder.mutation({
+      query: (data) => ({
+        url: `/utility/save`,
+        method: "DELETE",
+        body: data,
+        credentials: "include",
+      }),
+      invalidatesTags: ["companies", "save"],
+    }),
+
+    //create rate
+    createView: builder.mutation({
+      query: (data) => ({
+        url: `/utility/view`,
+        method: "POST",
+        body: data,
+        credentials: "include",
+      }),
+      invalidatesTags: ["companies", "view"],
+    }),
+
+    //upgrade
+    upgrade: builder.mutation({
+      query: (data) => ({
+        url: `/utility/upgrade`,
+        method: "POST",
+        body: data,
+        credentials: "include",
+      }),
+      invalidatesTags: ["users"],
+    }),
   }),
 });
 
@@ -285,6 +341,7 @@ export const {
   useForgetPasswordMutation,
   useResetPasswordMutation,
   useUpdatePasswordMutation,
+  useSendEmailMutation,
 
   useCreateMutation,
   useReadQuery,
@@ -295,7 +352,13 @@ export const {
   useLazyReadChatQuery,
 
   useCreateRateMutation,
+  useLazyReadRateQuery,
   useReadRateQuery,
   useReadMultipleRateQuery,
   useDeleteRateMutation,
+
+  useCreateSaveMutation,
+  useDeleteSaveMutation,
+  useCreateViewMutation,
+  useUpgradeMutation,
 } = apiSlice;

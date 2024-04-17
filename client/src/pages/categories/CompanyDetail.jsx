@@ -8,6 +8,10 @@ import {
   useReadQuery,
   useCreateRateMutation,
   useReadRateQuery,
+  useLazyReadRateQuery,
+  useSendEmailMutation,
+  useCreateSaveMutation,
+  useCreateViewMutation,
 } from "../../features/api/apiSlice";
 import Loading from "../../components/loading/Loading";
 import LoadingButton from "../../components/loading/LoadingButton";
@@ -24,18 +28,20 @@ const markers = [
 
 const CompanyDetail = (props) => {
   const location = useLocation();
-
+  const currentUser = JSON.parse(localStorage.getItem("etblink_user"));
+  const [emailData, emailResponse] = useSendEmailMutation();
   const { data, isFetching, isError } = useReadQuery({
     url: `/user/users?user[eq]=${location?.state?.id}&populatingType=users&populatingValue=user`,
     tag: ["companies", "users"],
   });
 
+  console.log(data, "datas");
   const {
     data: rates,
     isFetching: ratedIsFetching,
     isError: isErr,
   } = useReadQuery({
-    url: `/user/rates?accepter[eq]=${data?.data[0]?.user?._id}&populatingType=rates&populatingValue=rater`,
+    url: `/user/rates?accepter[eq]=${location?.state?.id}&populatingType=rates&populatingValue=rater`,
     tag: ["companies", "users"],
   });
 
@@ -46,12 +52,18 @@ const CompanyDetail = (props) => {
   // } = useReadRateQuery({ id: data?.data[0]?.user?._id });
 
   const [rateData, rateResponse] = useCreateRateMutation();
+  const [saveData, saveResponse] = useCreateSaveMutation();
+  const [viewData, viewResponse] = useCreateViewMutation();
   const [company, setCompany] = useState({});
   const [pending, setPending] = useState(false);
+  const [emailPending, setEmailPending] = useState(false);
+  const [savePending, setSavePending] = useState(false);
+  const [viewPending, setViewPending] = useState(false);
   const [rating, setRating] = useState("3.5");
-  const [email, setEmail] = useState("");
+  const [from, setFrom] = useState("");
   const [fullName, setFullName] = useState("");
   const [message, setMessage] = useState("");
+  const [subject, setSubject] = useState("");
 
   useEffect(() => {
     if (data?.data) {
@@ -62,19 +74,51 @@ const CompanyDetail = (props) => {
   const rateHandler = () => {
     rateData({
       fullName,
-      rater: JSON.parse(localStorage.getItem("etblink_user"))?._id,
+      rater: currentUser?.user?._id,
       message,
       type: "company",
       accepter: data?.data[0]?.user?._id,
       value: rating,
+      role: currentUser?.role,
+      tag: ["companies,rate"],
     });
   };
 
-  console.log(company, "from detail");
-  console.log(rates, "rates");
+  const sendEmailHandler = () => {
+    emailData({ from, to: data?.data[0]?.email, subject, message, fullName });
+  };
+
+  const saveHandler = () => {
+    saveData({
+      company: location?.state?.id,
+      saver: currentUser?.user,
+      role: currentUser?.role,
+      tag: ["companies,save"],
+    });
+  };
+
+  const viewHandler = () => {
+    viewData({
+      company: location?.state?.id,
+      viewer: currentUser?.user,
+      role: currentUser?.role,
+      tag: ["companies,view"],
+    });
+  };
+
+  useEffect(() => {
+    location && viewHandler();
+  }, []);
+
+  console.log(location, "from detail");
+  console.log(rates?.data, "rates");
   return (
     <div className="relative overflow-hidden z-20">
       <Response response={rateResponse} setPending={setPending} />
+      <Response response={emailResponse} setPending={setEmailPending} />
+      <Response response={saveResponse} setPending={setSavePending} />
+      {/* <Response response={viewResponse} setPending={setViewPending} /> */}
+
       {isFetching && <Loading />}
       {isError && <p>Something went wrong unable to read the data</p>}
       {company ? (
@@ -107,27 +151,32 @@ const CompanyDetail = (props) => {
                   </p>
                 </div>
               </div>
-
-              <div className="flex gap-4 items-center justify-center">
-                <p className="py-2 hover:bg-red-500 hover:text-white shadow  px-3 cursor-pointer rounded-full border border-gray-200 text-white flex items-endjustify-end gap-2">
-                  <svg
-                    class="w-5 h-5 text-white"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke="currentColor"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M12 6C6.5 1 1 8 5.8 13l6.2 7 6.2-7C23 8 17.5 1 12 6Z"
-                    />
-                  </svg>{" "}
-                  save
-                </p>
-              </div>
+              <LoadingButton
+                pending={savePending}
+                onClick={saveHandler}
+                title={
+                  <div className="flex gap-4 text-sm items-center justify-center">
+                    <svg
+                      class="w-5 h-5 text-white"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M12 6C6.5 1 1 8 5.8 13l6.2 7 6.2-7C23 8 17.5 1 12 6Z"
+                      />
+                    </svg>{" "}
+                    Save
+                  </div>
+                }
+                color="bg-main"
+                width="w-36 sm:rounded-full sm:border sm:py-2 sm:px-5 sm:hover:bg-red-500"
+              />
             </div>
           </div>
 
@@ -310,7 +359,7 @@ const CompanyDetail = (props) => {
               {/* ratings */}
               <div className="w-full">
                 <p className="text-xl mt-10 font-bold">Add Review and Rating</p>
-                <div className="flex flex-col mt-7 gap-2">
+                {/* <div className="flex flex-col mt-7 gap-2">
                   <Rating>
                     <Rating.Star />
                     <Rating.Star />
@@ -332,7 +381,7 @@ const CompanyDetail = (props) => {
                     <Rating.Star />
                     <Rating.Star filled={false} />
                   </Rating>
-                </div>
+                </div> */}
                 <p className="text-lg mt-7 font-bold">Rate us</p>
 
                 <div>
@@ -454,86 +503,12 @@ const CompanyDetail = (props) => {
                             <Rating.Star />
                             <Rating.Star filled={false} />
                           </Rating>
-                          <p>{e?.rating?.average}</p>
+                          <p>{e?.value}</p>
                         </div>
                         <p className="mt-1 ml-14">{e?.message}</p>
                       </div>
                     );
                   })}
-
-                <div className="mt-10">
-                  <div class="flex items-center mb-4">
-                    <img
-                      class="w-10 h-10 me-4 rounded-full"
-                      src="./gedi.jpg"
-                      alt=""
-                    />
-                    <div class="font-medium dark:text-white">
-                      <p>
-                        Jese Leos{" "}
-                        <time
-                          datetime="2014-08-16 19:00"
-                          class="block text-sm text-gray-500 dark:text-gray-400"
-                        >
-                          gedeonagmas@gmail.com
-                        </time>
-                      </p>
-                    </div>
-                  </div>
-                  <div className="w-full flex ml-14 justify-start gap-3 items-center">
-                    <Rating>
-                      <Rating.Star />
-                      <Rating.Star />
-                      <Rating.Star />
-                      <Rating.Star />
-                      <Rating.Star filled={false} />
-                    </Rating>
-                    <p>4.5</p>
-                  </div>
-                  <p className="mt-1 ml-14">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                    Dicta, quisquam aliquam ratione omnis voluptate pariatur?
-                    Nostrum amet, pariatur obcaecati debitis corporis distinctio
-                    illo suscipit iusto numquam deserunt optio omnis cum!
-                  </p>
-                </div>
-
-                <div className="mt-10">
-                  <div class="flex items-center mb-4">
-                    <img
-                      class="w-10 h-10 me-4 rounded-full"
-                      src="./gedi.jpg"
-                      alt=""
-                    />
-                    <div class="font-medium dark:text-white">
-                      <p>
-                        Jese Leos{" "}
-                        <time
-                          datetime="2014-08-16 19:00"
-                          class="block text-sm text-gray-500 dark:text-gray-400"
-                        >
-                          gedeonagmas@gmail.com
-                        </time>
-                      </p>
-                    </div>
-                  </div>
-                  <div className="w-full flex ml-14 justify-start gap-3 items-center">
-                    <Rating>
-                      <Rating.Star />
-                      <Rating.Star />
-                      <Rating.Star />
-                      <Rating.Star />
-                      <Rating.Star filled={false} />
-                    </Rating>
-                    <p>4.5</p>
-                  </div>
-                  <p className="mt-1 ml-14">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                    Dicta, quisquam aliquam ratione omnis voluptate pariatur?
-                    Nostrum amet, pariatur obcaecati debitis corporis distinctio
-                    illo suscipit iusto numquam deserunt optio omnis cum!
-                  </p>
-                </div>
               </div>
             </div>
 
@@ -778,36 +753,45 @@ const CompanyDetail = (props) => {
                       clip-rule="evenodd"
                     />
                   </svg>
-                  Openning Hours
+                  Opening Hours
                 </p>
 
                 <div className="py-2 px-3 mt-2 flex items-center justify-between border-b">
                   <p className="font-semibold">Sunday</p>
-                  <p>2:00 AM - 12:00 AM</p>
+                  <p>
+                    {company?.workingDays?.sunday?.from} -{" "}
+                    {company?.workingDays?.sunday?.to}
+                  </p>
                 </div>
                 <div className="py-2 px-3 mt-2 flex items-center justify-between border-b">
                   <p className="font-semibold">Monday</p>
-                  <p>2:00 AM - 12:00 AM</p>
+                  {company?.workingDays?.monday?.from} -{" "}
+                  {company?.workingDays?.monday?.to}
                 </div>
                 <div className="py-2 px-3 mt-2 flex items-center justify-between border-b">
                   <p className="font-semibold">Tuesday</p>
-                  <p>2:00 AM - 12:00 AM</p>
+                  {company?.workingDays?.tuesday?.from} -{" "}
+                  {company?.workingDays?.tuesday?.to}
                 </div>
                 <div className="py-2 px-3 mt-2 flex items-center justify-between border-b">
-                  <p className="font-semibold">Wedensday</p>
-                  <p>2:00 AM - 12:00 AM</p>
+                  <p className="font-semibold">Wednesday</p>
+                  {company?.workingDays?.wednesday?.from} -{" "}
+                  {company?.workingDays?.wednesday?.to}
                 </div>
                 <div className="py-2 px-3 mt-2 flex items-center justify-between border-b">
                   <p className="font-semibold">Thursday</p>
-                  <p>2:00 AM - 12:00 AM</p>
+                  {company?.workingDays?.thursday?.from} -{" "}
+                  {company?.workingDays?.thursday?.to}
                 </div>
                 <div className="py-2 px-3 mt-2 flex items-center justify-between border-b">
                   <p className="font-semibold">Friday</p>
-                  <p>2:00 AM - 12:00 AM</p>
+                  {company?.workingDays?.friday?.from} -{" "}
+                  {company?.workingDays?.friday?.to}
                 </div>
                 <div className="py-2 px-3 mt-2 flex items-center justify-between border-b">
                   <p className="font-semibold">Saturday</p>
-                  <p>2:00 AM - 12:00 AM</p>
+                  {company?.workingDays?.saturday?.from} -{" "}
+                  {company?.workingDays?.saturday?.to}
                 </div>
               </div>
 
@@ -832,17 +816,18 @@ const CompanyDetail = (props) => {
                 <div class="flex items-center mt-6 mb-4">
                   <img
                     class="w-12 h-12 me-4 rounded-full"
-                    src="./gedi.jpg"
+                    src={company?.logo}
                     alt=""
                   />
                   <div class="font-medium dark:text-white">
                     <p>
-                      Jese Leos{" "}
+                      {company?.name}
+
                       <time
                         datetime="2014-08-16 19:00"
                         class="block text-sm text-gray-500 dark:text-gray-400"
                       >
-                        gedeonagmas@gmail.com
+                        {data?.data[0]?.email}
                       </time>
                     </p>
                   </div>
@@ -853,9 +838,10 @@ const CompanyDetail = (props) => {
                     for="first_name"
                     class="block mb-2 mt-4 text-sm font-medium text-gray-900 dark:text-white"
                   >
-                    First name
+                    Full name
                   </label>
                   <input
+                    onChange={(e) => setFullName(e.target.value)}
                     type="text"
                     id="first_name"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -868,10 +854,11 @@ const CompanyDetail = (props) => {
                     for="last_name"
                     class="block mb-2 text-sm mt-4 font-medium text-gray-900 dark:text-white"
                   >
-                    Last name
+                    Email
                   </label>
                   <input
-                    type="text"
+                    onChange={(e) => setFrom(e.target.value)}
+                    type="email"
                     id="last_name"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     placeholder="Doe"
@@ -879,22 +866,44 @@ const CompanyDetail = (props) => {
                   />
                 </div>
 
+                <div>
+                  <label
+                    for="last_name"
+                    class="block mb-2 text-sm mt-4 font-medium text-gray-900 dark:text-white"
+                  >
+                    Subject
+                  </label>
+                  <input
+                    onChange={(e) => setSubject(e.target.value)}
+                    type="text"
+                    id="last_name"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="Subject..."
+                    required
+                  />
+                </div>
+
                 <label
                   for="message"
-                  class="block mb-2 mt-4 text-sm font-medium text-gray-900 dark:text-white"
+                  class="block mt-4 mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >
                   Your message
                 </label>
                 <textarea
+                  onChange={(e) => setMessage(e.target.value)}
                   id="message"
                   rows="4"
-                  class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  placeholder="Write your thoughts here..."
+                  class="block p-2.5 mb-4 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder="Write your message here..."
                 ></textarea>
 
-                <button className="py-3 w-full bg-main rounded-md text-white mt-4">
-                  Submit
-                </button>
+                <LoadingButton
+                  pending={emailPending}
+                  onClick={sendEmailHandler}
+                  title="Submit"
+                  color="bg-main"
+                  width="w-full"
+                />
               </div>
 
               <div className="w-full text-sm p-5 rounded-md border shadow-lg shadow-gray-300">

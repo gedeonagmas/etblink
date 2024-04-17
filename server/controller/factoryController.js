@@ -99,7 +99,7 @@ export const _read = asyncCatch(async (req, res, next) => {
     // const total = await model.find({ _id: req.params.id });
     const total = await model.countDocuments();
     const params = { ...req.query };
-
+    console.log(req.query);
     //removing unnecessary queries for filtering
     const remove = [
       "sort",
@@ -151,10 +151,15 @@ export const _read = asyncCatch(async (req, res, next) => {
     //populating
     switch (req.query.populatingType) {
       case "users":
-        query.populate(req.query.populatingValue);
+        query.populate(req.query.populatingValue); 
         break;
+      case "saves":
+        query.populate(req.query.populatingValue.split(",").join(" "));
       case "rates":
-        query.populate(req.query.populatingValue);
+        query.populate(req.query.populatingValue.split(",").join(" "));
+        break;
+      case "views":
+        query.populate(req.query.populatingValue.split(",").join(" "));
         break;
       case "application":
         query.populate(req.query.pp_ff.split(",").join(" "));
