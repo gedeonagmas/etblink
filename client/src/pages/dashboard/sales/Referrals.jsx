@@ -102,11 +102,20 @@ const Referrals = () => {
       <p className="font-bold">Referral Link.</p>
 
       <div className="w-full flex gap-3 items-center justify-start">
-        <input disabled value={text.value} className="w-full border p-2 border-gray-400 rounded-lg max-w-lg" />
+        <input
+          disabled
+          value={text.value}
+          className="w-full border p-2 border-gray-400 rounded-lg max-w-lg"
+        />
 
         <CopyToClipboard
           text={text.value}
-          onCopy={() => setText({ copied: true })}
+          onCopy={() => {
+            setText({ copied: true });
+            setTimeout(() => {
+              setText({ copied: false });
+            }, 4000);
+          }}
         >
           <button className="ml-5 px-3 py-1 rounded-lg bg-main text-white hover:bg-red-500">
             Copy
