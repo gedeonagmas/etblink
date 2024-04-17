@@ -42,7 +42,7 @@ export const apiSlice = createApi({
     "chats",
     "news",
     "youtubes",
-    "rates",
+    "rate",
     "rate-multiple",
     "view",
     "save",
@@ -300,6 +300,17 @@ export const apiSlice = createApi({
     }),
 
     //create rate
+    deleteSave: builder.mutation({
+      query: (data) => ({
+        url: `/utility/save`,
+        method: "DELETE",
+        body: data,
+        credentials: "include",
+      }),
+      invalidatesTags: ["companies", "save"],
+    }),
+
+    //create rate
     createView: builder.mutation({
       query: (data) => ({
         url: `/utility/view`,
@@ -308,6 +319,17 @@ export const apiSlice = createApi({
         credentials: "include",
       }),
       invalidatesTags: ["companies", "view"],
+    }),
+
+    //upgrade
+    upgrade: builder.mutation({
+      query: (data) => ({
+        url: `/utility/upgrade`,
+        method: "POST",
+        body: data,
+        credentials: "include",
+      }),
+      invalidatesTags: ["users"],
     }),
   }),
 });
@@ -336,5 +358,7 @@ export const {
   useDeleteRateMutation,
 
   useCreateSaveMutation,
+  useDeleteSaveMutation,
   useCreateViewMutation,
+  useUpgradeMutation,
 } = apiSlice;

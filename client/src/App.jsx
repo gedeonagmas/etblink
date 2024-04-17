@@ -30,6 +30,8 @@ import NewsDetailAdmin from "./pages/dashboard/news/UpdateNews";
 import AddYoutube from "./pages/dashboard/youtube/AddYoutube";
 import UpdateYoutube from "./pages/dashboard/youtube/UpdateYoutube";
 import Saves from "./pages/dashboard/Saves";
+import Views from "./pages/dashboard/Views";
+import Upgrade from "./pages/dashboard/Upgrade";
 
 export const userContext = createContext();
 
@@ -78,6 +80,8 @@ function App() {
               <Route path="/dashboard/visitor" element={<Visitors />}></Route>
               <Route path="/dashboard/admin" element={<Admin />}></Route>
               <Route path="/dashboard/saves" element={<Saves />}></Route>
+              <Route path="/dashboard/views" element={<Views />}></Route>
+              <Route path="/dashboard/upgrade" element={<Upgrade />}></Route>
               <Route path="/dashboard/admin/news" element={<AddNews />}></Route>
               <Route
                 path="/dashboard/admin/news/detail"

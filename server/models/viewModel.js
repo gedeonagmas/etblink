@@ -20,8 +20,8 @@ const viewSchema = new mongoose.Schema(
           ? "visitor"
           : this.role === "company"
           ? "company"
-          : this.role === "seller"
-          ? "seller"
+          : this.role === "sales"
+          ? "sales"
           : "admin";
       },
     },

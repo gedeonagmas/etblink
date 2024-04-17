@@ -46,10 +46,11 @@ const Category = () => {
     setCurrentPage(page);
   }
 
-  console.log(currentPage, "ccccccccc"); 
+  console.log(currentPage, "ccccccccc");
   const [page, setPage] = useState(0);
   const [lastPage, setLastPage] = useState("");
   const [search, setSearch] = useState("");
+  const [totalPage, setTotalPage] = useState(1);
   const [category, setCategory] = useState("");
 
   const [
@@ -62,7 +63,7 @@ const Category = () => {
   }, []);
 
   useEffect(() => {
-    setTotalPage(company?.total);
+    setTotalPage(Math.ceil(company?.total / 6));
     if (company?.message) {
       setLastPage(company?.message);
     } else {
@@ -75,7 +76,6 @@ const Category = () => {
       url: `/user/companies?limit=2&page=${page}`,
       tag: ["companies"],
     });
-
   }, [page]);
 
   useEffect(() => {
@@ -83,8 +83,6 @@ const Category = () => {
       url: `/user/companies?limit=2&page=${page}&searchField=name&searchValue=${search}`,
       tag: ["companies"],
     });
-
-    indicatorHandler();
   }, [search]);
 
   useEffect(() => {
@@ -94,9 +92,6 @@ const Category = () => {
       tag: ["companies"],
     });
   }, [category]);
-
-
- 
 
   console.log(company, "company");
   return (
@@ -309,9 +304,9 @@ const Category = () => {
             </p>
           </div>
 
-          <div className="flex flex-col gap-10"> 
+          <div className="flex flex-col gap-10">
             <div className="grid mt-5 grid-cols-1  md:grid-cols-2 lg:grid-cols-3 w-full place-items-center gap-6">
-              {companyFetching ? ( 
+              {companyFetching ? (
                 <Loading />
               ) : lastPage?.length > 0 ? (
                 <p>{lastPage}</p>
@@ -334,9 +329,9 @@ const Category = () => {
             </div>
             <div className="py-10">
               <ResponsivePagination
-                total={totalPages}
-                current={currentPage}
-                onPageChange={(page) => handlePageChange(page)}
+                total={totalPage}
+                current={page}
+                onPageChange={(currentPage) => setPage(currentPage)}
                 previousLabel="Previous"
                 previousClassName="w-24"
                 nextClassName="w-24"
@@ -344,9 +339,9 @@ const Category = () => {
               />
             </div>
           </div>
-          <SmallBanner />  
+          <SmallBanner />
         </div>
-       </div>
+      </div>
     </div>
   );
 };

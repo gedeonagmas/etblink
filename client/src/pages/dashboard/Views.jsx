@@ -12,7 +12,7 @@ import Response from "../../components/Response";
 import Popup from "../../components/Popup";
 import Pop from "../../components/Pop";
 
-const Saves = () => {
+const Views = () => {
   const user = JSON.parse(localStorage.getItem("etblink_user"));
   const [page, setPage] = useState(0);
   const [totalPage, setTotalPage] = useState(3);
@@ -22,20 +22,20 @@ const Saves = () => {
   const [company, setCompany] = useState();
 
   const {
-    data: saves,
-    isFetching: savesIsFetching,
-    isError: savesIsError,
+    data: views,
+    isFetching: viewsIsFetching,
+    isError: viewsIsError,
   } = useReadQuery({
     url:
       user?.role === "company"
-        ? `/user/saves?company[eq]=${user?.user?._id}&limit=3&page=${page}&populatingType=saves&populatingValue=company,saver`
-        : `/user/saves?saver[eq]=${user?.user?._id}&limit=3&page=${page}&populatingType=saves&populatingValue=company,saver`,
-    tag: ["saves", "company"],
+        ? `/user/views?company[eq]=${user?.user?._id}&limit=3&page=${page}&populatingType=views&populatingValue=company,viewer`
+        : `/user/views?viewer[eq]=${user?.user?._id}&limit=3&page=${page}&populatingType=views&populatingValue=company,viewer`,
+    tag: ["views", "company"],
   });
 
   useEffect(() => {
-    setTotalPage(Math.ceil(saves?.data?.length / 3));
-  }, [saves]);
+    setTotalPage(Math.ceil(views?.data?.length / 3));
+  }, [views]);
 
   useEffect(() => {
     if (removeResponse?.status === "fulfilled") {
@@ -43,27 +43,27 @@ const Saves = () => {
     }
   }, [removeResponse]);
 
-  const removeHandler = () => {
-    company &&
-      removeData({
-        company: company?.company?._id,
-        saver: company?.saver?._id,
-        role: user?.role,
-        tag: ["save", "company"],
-      });
-    // window.location.reload();
-  };
+  //   const removeHandler = () => {
+  //     company &&
+  //       removeData({
+  //         company: company?.company?._id,
+  //         viewer: company?.saver?._id,
+  //         role: user?.role,
+  //         tag: ["save", "company"],
+  //       });
+  //     // window.location.reload();
+  //   };
 
-  console.log(saves, "saves");
+  console.log(views, "views");
   return (
     <div className="w-full relative pb-3 bg-gray-50 bg-dark h-auto">
-      <Response response={removeResponse} setPending={setRemovePending} />
+      {/* <Response response={removeResponse} setPending={setRemovePending} /> */}
 
-      {savesIsFetching && <Loading />}
-      {savesIsError && <p>Something went wrong unable to read the data</p>}
+      {viewsIsFetching && <Loading />}
+      {viewsIsError && <p>Something went wrong unable to read the data</p>}
       <div className="grid mt-5 grid-cols-1  lg:grid-cols-2 xl:grid-cols-3 w-full place-items-center gap-6">
-        {saves && saves?.data?.length > 0 ? (
-          saves?.data?.map((e) => {
+        {views && views?.data?.length > 0 ? (
+          views?.data?.map((e) => {
             return (
               <div className="relative">
                 <CompanyItems
@@ -72,7 +72,7 @@ const Saves = () => {
                   type="large"
                   data={e?.company}
                 />
-                <div
+                {/* <div
                   onClick={() => {
                     setPopup(true);
                     setCompany(e);
@@ -92,7 +92,7 @@ const Saves = () => {
                       clip-rule="evenodd"
                     ></path>
                   </svg>
-                </div>
+                </div> */}
               </div>
             );
           })
@@ -134,4 +134,4 @@ const Saves = () => {
   );
 };
 
-export default Saves;
+export default Views;

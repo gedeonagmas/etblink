@@ -35,12 +35,13 @@ const CompanyDetail = (props) => {
     tag: ["companies", "users"],
   });
 
+  console.log(data, "datas");
   const {
     data: rates,
     isFetching: ratedIsFetching,
     isError: isErr,
   } = useReadQuery({
-    url: `/user/rates?accepter[eq]=${data?.data[0]?.user?._id}&populatingType=rates&populatingValue=rater`,
+    url: `/user/rates?accepter[eq]=${location?.state?.id}&populatingType=rates&populatingValue=rater`,
     tag: ["companies", "users"],
   });
 
@@ -79,33 +80,36 @@ const CompanyDetail = (props) => {
       accepter: data?.data[0]?.user?._id,
       value: rating,
       role: currentUser?.role,
+      tag: ["companies,rate"],
     });
   };
 
   const sendEmailHandler = () => {
     emailData({ from, to: data?.data[0]?.email, subject, message, fullName });
-  }; 
+  };
 
-  const saveHandler = () => { 
+  const saveHandler = () => {
     saveData({
       company: location?.state?.id,
-      saver: currentUser?._id,
+      saver: currentUser?.user,
       role: currentUser?.role,
+      tag: ["companies,save"],
     });
   };
 
   const viewHandler = () => {
     viewData({
       company: location?.state?.id,
-      viewer: currentUser?._id,
+      viewer: currentUser?.user,
       role: currentUser?.role,
+      tag: ["companies,view"],
     });
   };
 
   useEffect(() => {
     location && viewHandler();
   }, []);
- 
+
   console.log(location, "from detail");
   console.log(rates?.data, "rates");
   return (
@@ -113,7 +117,7 @@ const CompanyDetail = (props) => {
       <Response response={rateResponse} setPending={setPending} />
       <Response response={emailResponse} setPending={setEmailPending} />
       <Response response={saveResponse} setPending={setSavePending} />
-      <Response response={viewResponse} setPending={setViewPending} />
+      {/* <Response response={viewResponse} setPending={setViewPending} /> */}
 
       {isFetching && <Loading />}
       {isError && <p>Something went wrong unable to read the data</p>}
@@ -381,7 +385,7 @@ const CompanyDetail = (props) => {
                 <p className="text-lg mt-7 font-bold">Rate us</p>
 
                 <div>
-                  <div className="flex my-4 items-center gap-2 w-full"> 
+                  <div className="flex my-4 items-center gap-2 w-full">
                     <label
                       className="w-[300px] gap-2 flex items-center"
                       for="file"
@@ -499,13 +503,13 @@ const CompanyDetail = (props) => {
                             <Rating.Star />
                             <Rating.Star filled={false} />
                           </Rating>
-                          <p>{e?.rating?.average}</p>
+                          <p>{e?.value}</p>
                         </div>
                         <p className="mt-1 ml-14">{e?.message}</p>
                       </div>
                     );
                   })}
-              </div>  
+              </div>
             </div>
 
             <div className="flex relative lg:-mt-52  mt-10 pl-4 py-4 pr-[7%] flex-col gap-10 w-full shadow-lg lg:w-[33%] bg-white bg-dark">
@@ -749,44 +753,44 @@ const CompanyDetail = (props) => {
                       clip-rule="evenodd"
                     />
                   </svg>
-                  Opening Hours 
+                  Opening Hours
                 </p>
 
                 <div className="py-2 px-3 mt-2 flex items-center justify-between border-b">
                   <p className="font-semibold">Sunday</p>
-                  <p> 
+                  <p>
                     {company?.workingDays?.sunday?.from} -{" "}
                     {company?.workingDays?.sunday?.to}
                   </p>
                 </div>
                 <div className="py-2 px-3 mt-2 flex items-center justify-between border-b">
                   <p className="font-semibold">Monday</p>
-                  {company?.workingDays?.monday?.from} -{" "} 
+                  {company?.workingDays?.monday?.from} -{" "}
                   {company?.workingDays?.monday?.to}
                 </div>
                 <div className="py-2 px-3 mt-2 flex items-center justify-between border-b">
                   <p className="font-semibold">Tuesday</p>
-                  {company?.workingDays?.tuesday?.from} -{" "} 
+                  {company?.workingDays?.tuesday?.from} -{" "}
                   {company?.workingDays?.tuesday?.to}
                 </div>
                 <div className="py-2 px-3 mt-2 flex items-center justify-between border-b">
-                  <p className="font-semibold">Wednesday</p> 
+                  <p className="font-semibold">Wednesday</p>
                   {company?.workingDays?.wednesday?.from} -{" "}
-                  {company?.workingDays?.wednesday?.to} 
+                  {company?.workingDays?.wednesday?.to}
                 </div>
                 <div className="py-2 px-3 mt-2 flex items-center justify-between border-b">
                   <p className="font-semibold">Thursday</p>
-                  {company?.workingDays?.thursday?.from} -{" "} 
+                  {company?.workingDays?.thursday?.from} -{" "}
                   {company?.workingDays?.thursday?.to}
                 </div>
                 <div className="py-2 px-3 mt-2 flex items-center justify-between border-b">
                   <p className="font-semibold">Friday</p>
-                  {company?.workingDays?.friday?.from} -{" "} 
+                  {company?.workingDays?.friday?.from} -{" "}
                   {company?.workingDays?.friday?.to}
                 </div>
                 <div className="py-2 px-3 mt-2 flex items-center justify-between border-b">
                   <p className="font-semibold">Saturday</p>
-                  {company?.workingDays?.saturday?.from} -{" "} 
+                  {company?.workingDays?.saturday?.from} -{" "}
                   {company?.workingDays?.saturday?.to}
                 </div>
               </div>
@@ -812,7 +816,7 @@ const CompanyDetail = (props) => {
                 <div class="flex items-center mt-6 mb-4">
                   <img
                     class="w-12 h-12 me-4 rounded-full"
-                    src={company?.logo} 
+                    src={company?.logo}
                     alt=""
                   />
                   <div class="font-medium dark:text-white">
@@ -823,7 +827,7 @@ const CompanyDetail = (props) => {
                         datetime="2014-08-16 19:00"
                         class="block text-sm text-gray-500 dark:text-gray-400"
                       >
-                        {data?.data[0]?.email} 
+                        {data?.data[0]?.email}
                       </time>
                     </p>
                   </div>
@@ -834,7 +838,7 @@ const CompanyDetail = (props) => {
                     for="first_name"
                     class="block mb-2 mt-4 text-sm font-medium text-gray-900 dark:text-white"
                   >
-                    First name
+                    Full name
                   </label>
                   <input
                     onChange={(e) => setFullName(e.target.value)}
@@ -850,14 +854,14 @@ const CompanyDetail = (props) => {
                     for="last_name"
                     class="block mb-2 text-sm mt-4 font-medium text-gray-900 dark:text-white"
                   >
-                    Last name
+                    Email
                   </label>
                   <input
-                    onChange={(e) => setFrom(e.target.value)} 
+                    onChange={(e) => setFrom(e.target.value)}
                     type="email"
                     id="last_name"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="Doe" 
+                    placeholder="Doe"
                     required
                   />
                 </div>
@@ -878,10 +882,10 @@ const CompanyDetail = (props) => {
                     required
                   />
                 </div>
- 
+
                 <label
                   for="message"
-                  class="block mb-2 mt-4 text-sm font-medium text-gray-900 dark:text-white"
+                  class="block mt-4 mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >
                   Your message
                 </label>
@@ -889,7 +893,7 @@ const CompanyDetail = (props) => {
                   onChange={(e) => setMessage(e.target.value)}
                   id="message"
                   rows="4"
-                  class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  class="block p-2.5 mb-4 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder="Write your message here..."
                 ></textarea>
 
