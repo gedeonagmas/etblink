@@ -73,9 +73,9 @@ rateSchema.pre("findOneAndUpdate", function (next) {
 //     // { $addFields: { date: "2024-02" } },
 //     // { $sort: { _id: 1 } },
 //   ]);
-//   // console.log(company, "company"); 
+//   // console.log(company, "company");
 //   console.log(this, "this");
 //   next();
-// }); 
+// });
 
 export const Rate = mongoose.model("rate", rateSchema);

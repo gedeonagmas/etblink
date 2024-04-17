@@ -12,6 +12,7 @@ import {
 import Loading from "../../components/loading/Loading";
 import LoadingButton from "../../components/loading/LoadingButton";
 import Response from "../../components/Response";
+import { format } from "timeago.js";
 
 const markers = [
   {
@@ -31,9 +32,18 @@ const CompanyDetail = (props) => {
 
   const {
     data: rates,
-    isFetching: rateIsFetching,
-    isError: rateIsError,
-  } = useReadRateQuery({ id: data?.data[0]?._id });
+    isFetching: ratedIsFetching,
+    isError: isErr,
+  } = useReadQuery({
+    url: `/user/rates?accepter[eq]=${data?.data[0]?.user?._id}&populatingType=rates&populatingValue=rater`,
+    tag: ["companies", "users"],
+  });
+
+  // const {
+  //   data: rates,
+  //   isFetching: rateIsFetching,
+  //   isError: rateIsError,
+  // } = useReadRateQuery({ id: data?.data[0]?.user?._id });
 
   const [rateData, rateResponse] = useCreateRateMutation();
   const [company, setCompany] = useState({});
@@ -414,42 +424,42 @@ const CompanyDetail = (props) => {
                 </div>
                 <p className="text-lg mt-10 font-bold">Peoples who rate us</p>
 
-                <div className="mt-10">
-                  <div class="flex items-center mb-4">
-                    <img
-                      class="w-10 h-10 me-4 rounded-full"
-                      src="./gedi.jpg"
-                      alt=""
-                    />
-                    <div class="font-medium dark:text-white">
-                      <p>
-                        Jese Leos{" "}
-                        <time
-                          datetime="2014-08-16 19:00"
-                          class="block text-sm text-gray-500 dark:text-gray-400"
-                        >
-                          gedeonagmas@gmail.com
-                        </time>
-                      </p>
-                    </div>
-                  </div>
-                  <div className="w-full ml-14 flex justify-start gap-3 items-center">
-                    <Rating>
-                      <Rating.Star />
-                      <Rating.Star />
-                      <Rating.Star />
-                      <Rating.Star />
-                      <Rating.Star filled={false} />
-                    </Rating>
-                    <p>4.5</p>
-                  </div>
-                  <p className="mt-1 ml-14">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                    Dicta, quisquam aliquam ratione omnis voluptate pariatur?
-                    Nostrum amet, pariatur obcaecati debitis corporis distinctio
-                    illo suscipit iusto numquam deserunt optio omnis cum!
-                  </p>
-                </div>
+                {rates?.data &&
+                  rates?.data?.map((e) => {
+                    return (
+                      <div className="mt-10">
+                        <div class="flex items-center mb-4">
+                          <img
+                            class="w-10 h-10 me-4 rounded-full"
+                            src="./gedi.jpg"
+                            alt=""
+                          />
+                          <div class="font-medium dark:text-white">
+                            <p>
+                              {e?.fullName}
+                              <time
+                                datetime="2014-08-16 19:00"
+                                class="block text-sm text-gray-500 dark:text-gray-400"
+                              >
+                                {format(e?.createdAt)}
+                              </time>
+                            </p>
+                          </div>
+                        </div>
+                        <div className="w-full ml-14 flex justify-start gap-3 items-center">
+                          <Rating>
+                            <Rating.Star />
+                            <Rating.Star />
+                            <Rating.Star />
+                            <Rating.Star />
+                            <Rating.Star filled={false} />
+                          </Rating>
+                          <p>{e?.rating?.average}</p>
+                        </div>
+                        <p className="mt-1 ml-14">{e?.message}</p>
+                      </div>
+                    );
+                  })}
 
                 <div className="mt-10">
                   <div class="flex items-center mb-4">

@@ -290,6 +290,7 @@ export const {
   useReadQuery,
   useUpdateMutation,
   useDeleteMutation,
+  useLazyReadQuery,
 
   useLazyReadChatQuery,
 
