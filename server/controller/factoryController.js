@@ -97,9 +97,10 @@ export const _read = asyncCatch(async (req, res, next) => {
   const model = selectModel(req.params.table, next);
   if (model) {
     // const total = await model.find({ _id: req.params.id });
+    console.log(req.query);
     const total = await model.countDocuments();
     const params = { ...req.query };
-    console.log(req.query);
+    // console.log(req.query);
     //removing unnecessary queries for filtering
     const remove = [
       "sort",

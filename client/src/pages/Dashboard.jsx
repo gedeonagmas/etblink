@@ -812,31 +812,6 @@ const Dashboard = () => {
                     <span class="flex-1 ms-3 whitespace-nowrap">Upgrade</span>
                   </a>
                 </li>
-
-                <li>
-                  <a
-                    href="/dashboard/messaging"
-                    class="flex items-center p-2 text-gray-500 hover:text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-                  >
-                    <svg
-                      class="w-6 h-6"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      fill="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M3 5.983C3 4.888 3.895 4 5 4h14c1.105 0 2 .888 2 1.983v8.923a1.992 1.992 0 0 1-2 1.983h-6.6l-2.867 2.7c-.955.899-2.533.228-2.533-1.08v-1.62H5c-1.105 0-2-.888-2-1.983V5.983Zm5.706 3.809a1 1 0 1 0-1.412 1.417 1 1 0 1 0 1.412-1.417Zm2.585.002a1 1 0 1 1 .003 1.414 1 1 0 0 1-.003-1.414Zm5.415-.002a1 1 0 1 0-1.412 1.417 1 1 0 1 0 1.412-1.417Z"
-                        clip-rule="evenodd"
-                      />
-                    </svg>
-
-                    <span class="flex-1 ms-3 whitespace-nowrap">Messaging</span>
-                  </a>
-                </li>
               </>
             ) : user?.role === "company" ? (
               <>
@@ -971,17 +946,112 @@ const Dashboard = () => {
                     <span class="flex-1 ms-3 whitespace-nowrap">Referrals</span>
                   </a>
                 </li>
+
+                <li>
+                  <a
+                    href="/dashboard/sales/earns"
+                    class="flex items-center p-2 text-gray-500 hover:text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                  >
+                    <svg
+                      class="w-6 h-6"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M8 17.345a4.76 4.76 0 0 0 2.558 1.618c2.274.589 4.512-.446 4.999-2.31.487-1.866-1.273-3.9-3.546-4.49-2.273-.59-4.034-2.623-3.547-4.488.486-1.865 2.724-2.899 4.998-2.31.982.236 1.87.793 2.538 1.592m-3.879 12.171V21m0-18v2.2"
+                      />
+                    </svg>
+
+                    <span class="flex-1 ms-3 whitespace-nowrap">Earns</span>
+                  </a>
+                </li>
+
+                <li>
+                  <a
+                    href="/dashboard/saves"
+                    class="flex items-center p-2 text-gray-500 hover:text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                  >
+                    <svg
+                      className="w-5 h-5 "
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="m12.7 20.7 6.2-7.1c2.7-3 2.6-6.5.8-8.7A5 5 0 0 0 16 3c-1.3 0-2.7.4-4 1.4A6.3 6.3 0 0 0 8 3a5 5 0 0 0-3.7 1.9c-1.8 2.2-2 5.8.8 8.7l6.2 7a1 1 0 0 0 1.4 0Z" />
+                    </svg>
+                    <span class="flex-1 ms-3 whitespace-nowrap">Saves</span>
+                  </a>
+                </li>
+
+                <li>
+                  <a
+                    href="/dashboard/views"
+                    class="flex items-center p-2 text-gray-500 hover:text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                  >
+                    <svg
+                      className="w-5 h-5 "
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M5 7.8C6.7 6.3 9.2 5 12 5s5.3 1.3 7 2.8a12.7 12.7 0 0 1 2.7 3.2c.2.2.3.6.3 1s-.1.8-.3 1a2 2 0 0 1-.6 1 12.7 12.7 0 0 1-9.1 5c-2.8 0-5.3-1.3-7-2.8A12.7 12.7 0 0 1 2.3 13c-.2-.2-.3-.6-.3-1s.1-.8.3-1c.1-.4.3-.7.6-1 .5-.7 1.2-1.5 2.1-2.2Zm7 7.2a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    <span class="flex-1 ms-3 whitespace-nowrap">Views</span>
+                  </a>
+                </li>
               </>
             ) : (
               <></>
             )}
 
-            <li onClick={logoutHandler}>
+            <li>
+              <a
+                href="/dashboard/messaging"
+                class="flex items-center p-2 text-gray-500 hover:text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+              >
+                <svg
+                  class="w-6 h-6"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M3 5.983C3 4.888 3.895 4 5 4h14c1.105 0 2 .888 2 1.983v8.923a1.992 1.992 0 0 1-2 1.983h-6.6l-2.867 2.7c-.955.899-2.533.228-2.533-1.08v-1.62H5c-1.105 0-2-.888-2-1.983V5.983Zm5.706 3.809a1 1 0 1 0-1.412 1.417 1 1 0 1 0 1.412-1.417Zm2.585.002a1 1 0 1 1 .003 1.414 1 1 0 0 1-.003-1.414Zm5.415-.002a1 1 0 1 0-1.412 1.417 1 1 0 1 0 1.412-1.417Z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+
+                <span class="flex-1 ms-3 whitespace-nowrap">Messaging</span>
+              </a>
+            </li>
+
+            <li
+              onClick={logoutHandler}
+              className="text-gray-500  hover:text-gray-900"
+            >
               <p
                 href="#"
-                class="flex cursor-pointer items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                class="flex cursor-pointer items-center  rounded-lg dark:text-white p-2 hover:bg-gray-100 dark:hover:bg-gray-700 group"
               >
-                <Logout className="text-gray-500 hover:text-gray-900" />
+                <Logout className="" />
                 <span class="flex-1 ms-3 whitespace-nowrap">Logout</span>
               </p>
             </li>

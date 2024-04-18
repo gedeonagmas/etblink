@@ -13,7 +13,7 @@ import Pop from "../../../components/Pop";
 
 const SalesCompany = ({ type }) => {
   const user = JSON.parse(localStorage.getItem("etblink_user"));
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState(3);
   const [removePending, setRemovePending] = useState(false);
   const [removeData, removeResponse] = useDeleteSaveMutation();
@@ -25,7 +25,7 @@ const SalesCompany = ({ type }) => {
     isFetching: savesIsFetching,
     isError: savesIsError,
   } = useReadQuery({
-    url: `/user/companies?sales[eq]=${user?.user?._id}&registeredBy[eq]=sales&limit=3&page=${page}&populatingType=saves&populatingValue=sales`,
+    url: `/user/companies?sales[eq]=${user?.user?._id}&registeredBy[eq]=sales&limit=3&page=${page}&populatingType=companies&populatingValue=sales`,
     tag: ["sales", "companies"],
   });
 

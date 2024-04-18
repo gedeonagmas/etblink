@@ -120,7 +120,7 @@ const schema = new mongoose.Schema(
 
     sales: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "user",
+      ref: "sales",
     },
 
     rating: {

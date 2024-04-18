@@ -43,6 +43,12 @@ const salesSchema = new mongoose.Schema(
       default: "",
     },
 
+    earn: {
+      total: { type: Number, default: 0 },
+      withdraw: { type: Number, default: 0 },
+      current: { type: Number, default: 0 },
+    },
+
     profileFillStatus: {
       type: Number,
       default: 20,

@@ -20,19 +20,23 @@ export const signupHandler = asyncCatch(async (req, res, next) => {
     const user = await User.create(req.body);
     if (user) {
       const account = await model.create({});
-      const sales =
-        req.body.role === "company"
-          ? {
-              sales: req.body.sales,
-              registeredBy: req.body.registeredBy,
-            }
-          : null;
+
+      if (req.body.sales) {
+        const sale = await Sales.findById(req.body.sales);
+        sale.earn.total = sale.earn.total + req.body.commission;
+        sale.earn.current = sale.earn.total - sale.earn.withdraw;
+        sale.earn.withdraw = sale.earn.total - sale.earn.current;
+        account.registeredBy = req.body.registeredBy;
+        account.sales = req.body.sales;
+        await account.save();
+        await sale.save();
+      }
 
       if (account._id) {
         const data = await User.findByIdAndUpdate(
           { _id: user._id },
           {
-            $set: { user: account._id, ...sales },
+            $set: { user: account._id },
           }
         );
 
