@@ -96,11 +96,7 @@ export const _create = asyncCatch(async (req, res, next) => {
 export const _read = asyncCatch(async (req, res, next) => {
   const model = selectModel(req.params.table, next);
   if (model) {
-    // const total = await model.find({ _id: req.params.id });
-    console.log(req.query);
-    const total = await model.countDocuments();
     const params = { ...req.query };
-    // console.log(req.query);
     //removing unnecessary queries for filtering
     const remove = [
       "sort",
@@ -133,6 +129,7 @@ export const _read = asyncCatch(async (req, res, next) => {
 
     //sorting
     const query = model.find({ ...queryObject });
+
     req.query.sort
       ? query.sort(req.query.sort.split(",").join(" "))
       : query.sort("createdAt");
@@ -169,23 +166,25 @@ export const _read = asyncCatch(async (req, res, next) => {
     }
 
     req.query.limits ? query.limit(req.query.limits) : null;
-    const data = await query;
+
+    const total = model.countDocuments({ ...queryObject });
+    const data = await Promise.all([total, query]);
 
     //last page indicator
     if (page) {
       const doc = await model.countDocuments();
-      if (skip >= doc)
+      if (skip >= data[0])
         return res.status(200).json({ message: "you are in the last page" });
     }
+
     if (data.length < 1)
-      // return next(new AppError("There is no data to display", 400));
       return res.status(201).json({ message: "There is no data to display!" });
 
     return res.status(200).json({
       status: "success",
       length: data.length,
-      total: total,
-      data: data,
+      total: data[0],
+      data: data[1],
     });
   }
   return next(new AppError("something went wrong please try again!!", 500));

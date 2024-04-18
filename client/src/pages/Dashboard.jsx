@@ -500,7 +500,7 @@ const Dashboard = () => {
                         </svg>
 
                         <div class="absolute inline-flex items-center justify-center w-6 h-6 text-xs p-1 font-bold text-white bg-main border-2 border-white rounded-full -top-2 -end-2 dark:border-gray-900">
-                          {saves ? saves?.data?.length : 0}
+                          {saves?.data ? saves?.data?.length : 0}
                         </div>
                         <p className="text-xs">saves</p>
                       </button>
@@ -531,7 +531,7 @@ const Dashboard = () => {
                           </svg>
 
                           <div class="absolute inline-flex items-center justify-center w-6 h-6 font-bold text-white bg-main border-2 border-white rounded-full -top-2 -end-2 dark:border-gray-900">
-                            {views?.data?.length}
+                            {views?.data ? views?.data?.length : 0}
                           </div>
                         </button>
                         <p className="text-xs">views</p>

@@ -14,7 +14,7 @@ import Pop from "../../../components/Pop";
 const SalesCompany = ({ type }) => {
   const user = JSON.parse(localStorage.getItem("etblink_user"));
   const [page, setPage] = useState(1);
-  const [totalPage, setTotalPage] = useState(3);
+  const [totalPage, setTotalPage] = useState(1);
   const [removePending, setRemovePending] = useState(false);
   const [removeData, removeResponse] = useDeleteSaveMutation();
   const [popup, setPopup] = useState(false);
@@ -30,7 +30,7 @@ const SalesCompany = ({ type }) => {
   });
 
   useEffect(() => {
-    setTotalPage(Math.ceil(saves?.data?.length / 3));
+    setTotalPage(Math.ceil(saves?.total / 3));
   }, [saves]);
 
   useEffect(() => {
@@ -67,7 +67,7 @@ const SalesCompany = ({ type }) => {
                   type="large"
                   data={e?.company}
                 />
-                <div
+                {/* <div
                   onClick={() => {
                     setPopup(true);
                     setCompany(e);
@@ -87,15 +87,15 @@ const SalesCompany = ({ type }) => {
                       clip-rule="evenodd"
                     ></path>
                   </svg>
-                </div>
+                </div> */}
               </div>
             );
           })
-        ) : (
+        ) : saves && saves?.message ? (
           <div className="w-full items-center justify-center flex">
             There is no saved companies yet!
           </div>
-        )}
+        ) : null}
       </div>
       {popup && (
         <Pop

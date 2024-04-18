@@ -155,7 +155,7 @@ const Header = () => {
                       </svg>
 
                       <div class="absolute inline-flex items-center justify-center w-6 h-6 font-bold text-white bg-main border-2 border-white rounded-full -top-2 -end-2 dark:border-gray-900">
-                        {views?.data?.length}
+                        {views?.data ? views?.data?.length : 0}
                       </div>
                     </button>
                   </div>
