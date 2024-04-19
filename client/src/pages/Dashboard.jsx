@@ -373,30 +373,33 @@ const Dashboard = () => {
         />
         <div class="px-3 py-3 lg:px-5 lg:pl-3">
           <div class="flex items-center justify-between">
-            <div class="flex w-full justify-between items-center">
-              <a
-                href="/"
-                className="text-sm lg:flex hidden font-bold p-2 hover:text-gray-800 absolute  items-center  gap-1 left-2 top-4 cursor-pointer text-gray-400 "
-              >
-                <svg
-                  class="w-6 h-6 "
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  fill="none"
-                  viewBox="0 0 24 24"
+            <div class="flex flex-col font-light w-full justify-between items-center">
+              <div className="text-sm  lg:flex flex-col hidden  absolute  items-center left-2 cursor-pointer text-gray-600 ">
+                <p className="text-lg ">Welcome to ETB LINK</p>
+                <a
+                  href="/"
+                  className="flex items-center gap-2 hover:text-gray-800"
                 >
-                  <path
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M5 12h14M5 12l4-4m-4 4 4 4"
-                  />
-                </svg>
-                <p className="text-xs">back to home</p>
-              </a>
+                  <svg
+                    class="w-6 h-6 "
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M5 12h14M5 12l4-4m-4 4 4 4"
+                    />
+                  </svg>
+                  <p className="">back to home</p>
+                </a>
+              </div>
               <div class="flex items-center w-full justify-end ms-3">
                 <div
                   onClick={() => sidebarHandler("auto")}
@@ -708,9 +711,9 @@ const Dashboard = () => {
             <li onClick={() => sidebarHandler("off")}>
               <a
                 href={`/dashboard/${user?.role}`}
-                class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                class="flex items-center p-2 text-gray-500 hover:text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
               >
-                <DashboardIcon className="text-gray-500 hover:text-gray-900" />
+                <DashboardIcon className="" />
                 <span class="ms-3">Overview</span>
               </a>
             </li>
@@ -926,7 +929,7 @@ const Dashboard = () => {
                         stroke-linecap="round"
                         stroke-linejoin="round"
                         stroke-width="2"
-                        d="M12.01 6.001C6.5 1 1 8 5.782 13.001L12.011 20l6.23-7C23 8 17.5 1 12.01 6.002Z"
+                        d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Zm0 0a8.949 8.949 0 0 0 4.951-1.488A3.987 3.987 0 0 0 13 16h-2a3.987 3.987 0 0 0-3.951 3.512A8.948 8.948 0 0 0 12 21Zm3-11a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
                       />
                     </svg>
 

@@ -135,6 +135,15 @@ const schema = new mongoose.Schema(
       default: false,
     },
 
+    paymentDetail: {
+      planType: { type: String },
+      startDate: { type: Date },
+      endDate: { type: Date },
+      amount: { type: Number, default: 0 },
+      paymentMethod: { type: Number },
+      status: { type: String },
+    },
+
     saves: {
       total: { type: Number, default: 0 },
       available: { type: Number, default: 0 },
