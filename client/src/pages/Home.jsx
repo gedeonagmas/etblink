@@ -27,7 +27,7 @@ const Home = () => {
   } = useReadQuery({
     url: "/user/companies?isBoosted[eq]=true&limit=6&page=1",
     tag: ["companies"],
-  }); 
+  });
 
   const {
     data: newses,

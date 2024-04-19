@@ -337,7 +337,7 @@ const CompanyItems = ({ value, phoneNo, type, data }) => {
         </div>
 
         <Link
-          to="/company-detail"
+          to="/company"
           state={{ id: value }}
           className={` ${
             type === "large" ? "py-[8px] px-10" : "px-4"

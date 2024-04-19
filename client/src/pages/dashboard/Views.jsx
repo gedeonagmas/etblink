@@ -96,7 +96,7 @@ const Views = ({ type }) => {
               </div>
             );
           })
-        ) : views && views?.message ? (
+        ) : (views && views?.message) || views?.data?.length === 0 ? (
           <div className="w-full items-center justify-center flex">
             There is no viewed companies yet!
           </div>

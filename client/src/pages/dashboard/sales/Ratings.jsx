@@ -97,7 +97,7 @@ const Ratings = ({ type }) => {
               </div>
             );
           })
-        ) : rates && rates?.message ? (
+        ) : (rates && rates?.message) || rates?.data?.length === 0 ? (
           <div className="w-full items-center justify-center flex">
             It seams no one rates you!
           </div>

@@ -20,6 +20,7 @@ import { useReadQuery, useUserLogoutMutation } from "../features/api/apiSlice";
 import Response from "../components/Response";
 import Banner from "./../components/Banner";
 import SmallBanner from "../components/SmallBanner";
+import MiniBanner from "../components/MiniBanner";
 
 const Dashboard = () => {
   const user = JSON.parse(localStorage.getItem("etblink_user"));
@@ -458,13 +459,7 @@ const Dashboard = () => {
                     />
                   </div>
                 </form> */}
-                <div className="w-[45%] hidden md:block ml-28 mr-20">
-                  <img
-                    src="./../skylightadd.jpg"
-                    alt="banner"
-                    className="rounded-sm h-[55px] w-full"
-                  />
-                </div>
+                <MiniBanner />
 
                 <div className="flex relative gap-3 text-xs lg:gap-6 lg:mr-10 self-end items-center">
                   <Link
@@ -579,10 +574,10 @@ const Dashboard = () => {
                         : id?.classList.add("hidden");
                     }}
                     type="button"
-                    class="flex text-sm rounded-full border-2 border-gray-300 border-dark focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
+                    class="flex text-sm rounded-full lg:w-[160px] border-2 border-gray-300 border-dark focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
                   >
-                    <span class="sr-only">Open user menu</span>
-                    <div className="flex gap-2 items-center">
+                    {/* <span class="sr-only">Open user menu</span> */}
+                    <div className="flex w-full gap-2 items-center">
                       {user?.role !== "company" &&
                       user?.user?.profilePicture?.length < 1 ? (
                         <div className="w-12 h-12 p-1 text-lg font-bold rounded-full flex items-center justify-center bg-main text-white text-center">
@@ -595,37 +590,41 @@ const Dashboard = () => {
                           src={user?.user?.profilePicture}
                           alt="photo"
                         />
-                      ) : (
+                      ) : user?.role === "company" &&
+                        user?.user?.logo?.length > 1 ? (
                         <img
                           class="w-10 h-10 rounded-full"
                           src={user?.role === "company" ? user?.user?.logo : ""}
                           alt="user"
                         />
+                      ) : (
+                        <div className="w-12 h-12 p-1 text-lg font-bold rounded-full flex items-center justify-center bg-main text-white text-center">
+                          {user?.email?.substring(0, 1)}
+                        </div>
                       )}
 
-                      <span className="hidden text-lg font-bold lg:block">
-                        {user?.role === "company"
-                          ? user?.email?.substring(0, 7)
-                          : ""}
-                      </span>
-                      <p className=" text-lg font-bold">{user?.role}</p>
-                      <svg
-                        class="w-6 h-6 hidden lg:block text-gray-800 dark:text-white"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          stroke="currentColor"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="m8 10 4 4 4-4"
-                        />
-                      </svg>
+                      <p className="hidden lg:block text-sm font-bold">
+                        {user?.role}
+                      </p>
+                      <div className="p-1">
+                        <svg
+                          class="w-6 h-6"
+                          aria-hidden="true"
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            stroke="currentColor"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="m8 10 4 4 4-4"
+                          />
+                        </svg>
+                      </div>
                     </div>
                   </button>
                 </div>
@@ -826,19 +825,141 @@ const Dashboard = () => {
               <>
                 <li>
                   <a
+                    href="/dashboard/company/boosting"
+                    class="flex items-center p-2 text-gray-500 hover:text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                  >
+                    <svg
+                      class="w-6 h-6"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M13.6 16.733c.234.269.548.456.895.534a1.4 1.4 0 0 0 1.75-.762c.172-.615-.446-1.287-1.242-1.481-.796-.194-1.41-.861-1.241-1.481a1.4 1.4 0 0 1 1.75-.762c.343.077.654.26.888.524m-1.358 4.017v.617m0-5.939v.725M4 15v4m3-6v6M6 8.5 10.5 5 14 7.5 18 4m0 0h-3.5M18 4v3m2 8a5 5 0 1 1-10 0 5 5 0 0 1 10 0Z"
+                      />
+                    </svg>
+
+                    <span class="flex-1 ms-3 whitespace-nowrap">Boosting</span>
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="/dashboard/company/billing"
+                    class="flex items-center p-2 text-gray-500 hover:text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                  >
+                    <svg
+                      class="w-6 h-6"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M4 5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H4Zm0 6h16v6H4v-6Z"
+                        clip-rule="evenodd"
+                      />
+                      <path
+                        fill-rule="evenodd"
+                        d="M5 14a1 1 0 0 1 1-1h2a1 1 0 1 1 0 2H6a1 1 0 0 1-1-1Zm5 0a1 1 0 0 1 1-1h5a1 1 0 1 1 0 2h-5a1 1 0 0 1-1-1Z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
+
+                    <span class="flex-1 ms-3 whitespace-nowrap">
+                      Billing & Payment
+                    </span>
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="/dashboard/company/share"
+                    class="flex items-center p-2 text-gray-500 hover:text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                  >
+                    <svg
+                      class="w-6 h-6"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M13.213 9.787a3.391 3.391 0 0 0-4.795 0l-3.425 3.426a3.39 3.39 0 0 0 4.795 4.794l.321-.304m-.321-4.49a3.39 3.39 0 0 0 4.795 0l3.424-3.426a3.39 3.39 0 0 0-4.794-4.795l-1.028.961"
+                      />
+                    </svg>
+
+                    <span class="flex-1 ms-3 whitespace-nowrap">Share</span>
+                  </a>
+                </li>
+
+                <li>
+                  <a
+                    href="/dashboard/company/sales"
+                    class="flex items-center p-2 text-gray-500 hover:text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                  >
+                    <svg
+                      class="w-6 h-6"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M12.01 6.001C6.5 1 1 8 5.782 13.001L12.011 20l6.23-7C23 8 17.5 1 12.01 6.002Z"
+                      />
+                    </svg>
+
+                    <span class="flex-1 ms-3 whitespace-nowrap">Sales</span>
+                  </a>
+                </li>
+
+                <li>
+                  <a
                     href="/dashboard/saves"
                     class="flex items-center p-2 text-gray-500 hover:text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
                   >
                     <svg
-                      className="w-5 h-5 "
+                      class="w-6 h-6"
                       aria-hidden="true"
                       xmlns="http://www.w3.org/2000/svg"
-                      fill="currentColor"
+                      width="24"
+                      height="24"
+                      fill="none"
                       viewBox="0 0 24 24"
                     >
-                      <path d="m12.7 20.7 6.2-7.1c2.7-3 2.6-6.5.8-8.7A5 5 0 0 0 16 3c-1.3 0-2.7.4-4 1.4A6.3 6.3 0 0 0 8 3a5 5 0 0 0-3.7 1.9c-1.8 2.2-2 5.8.8 8.7l6.2 7a1 1 0 0 0 1.4 0Z" />
+                      <path
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M12.01 6.001C6.5 1 1 8 5.782 13.001L12.011 20l6.23-7C23 8 17.5 1 12.01 6.002Z"
+                      />
                     </svg>
-                    <span class="flex-1 ms-3 whitespace-nowrap">Saves</span>
+
+                    <span class="flex-1 ms-3 whitespace-nowrap">
+                      Your Saves
+                    </span>
                   </a>
                 </li>
 
@@ -848,15 +969,29 @@ const Dashboard = () => {
                     class="flex items-center p-2 text-gray-500 hover:text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
                   >
                     <svg
-                      className="w-5 h-5 "
+                      class="w-6 h-6"
                       aria-hidden="true"
                       xmlns="http://www.w3.org/2000/svg"
-                      fill="currentColor"
+                      width="24"
+                      height="24"
+                      fill="none"
                       viewBox="0 0 24 24"
                     >
-                      <path d="m12.7 20.7 6.2-7.1c2.7-3 2.6-6.5.8-8.7A5 5 0 0 0 16 3c-1.3 0-2.7.4-4 1.4A6.3 6.3 0 0 0 8 3a5 5 0 0 0-3.7 1.9c-1.8 2.2-2 5.8.8 8.7l6.2 7a1 1 0 0 0 1.4 0Z" />
+                      <path
+                        stroke="currentColor"
+                        stroke-width="2"
+                        d="M21 12c0 1.2-4.03 6-9 6s-9-4.8-9-6c0-1.2 4.03-6 9-6s9 4.8 9 6Z"
+                      />
+                      <path
+                        stroke="currentColor"
+                        stroke-width="2"
+                        d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                      />
                     </svg>
-                    <span class="flex-1 ms-3 whitespace-nowrap">Views</span>
+
+                    <span class="flex-1 ms-3 whitespace-nowrap">
+                      Your Views
+                    </span>
                   </a>
                 </li>
 
@@ -875,7 +1010,7 @@ const Dashboard = () => {
                       <path d="m12.7 20.7 6.2-7.1c2.7-3 2.6-6.5.8-8.7A5 5 0 0 0 16 3c-1.3 0-2.7.4-4 1.4A6.3 6.3 0 0 0 8 3a5 5 0 0 0-3.7 1.9c-1.8 2.2-2 5.8.8 8.7l6.2 7a1 1 0 0 0 1.4 0Z" />
                     </svg>
                     <span class="flex-1 ms-3 whitespace-nowrap">
-                      Your Saves
+                      Other Saves
                     </span>
                   </a>
                 </li>
@@ -886,16 +1021,23 @@ const Dashboard = () => {
                     class="flex items-center p-2 text-gray-500 hover:text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
                   >
                     <svg
-                      className="w-5 h-5 "
+                      class="w-6 h-6"
                       aria-hidden="true"
                       xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
                       fill="currentColor"
                       viewBox="0 0 24 24"
                     >
-                      <path d="m12.7 20.7 6.2-7.1c2.7-3 2.6-6.5.8-8.7A5 5 0 0 0 16 3c-1.3 0-2.7.4-4 1.4A6.3 6.3 0 0 0 8 3a5 5 0 0 0-3.7 1.9c-1.8 2.2-2 5.8.8 8.7l6.2 7a1 1 0 0 0 1.4 0Z" />
+                      <path
+                        fill-rule="evenodd"
+                        d="M4.998 7.78C6.729 6.345 9.198 5 12 5c2.802 0 5.27 1.345 7.002 2.78a12.713 12.713 0 0 1 2.096 2.183c.253.344.465.682.618.997.14.286.284.658.284 1.04s-.145.754-.284 1.04a6.6 6.6 0 0 1-.618.997 12.712 12.712 0 0 1-2.096 2.183C17.271 17.655 14.802 19 12 19c-2.802 0-5.27-1.345-7.002-2.78a12.712 12.712 0 0 1-2.096-2.183 6.6 6.6 0 0 1-.618-.997C2.144 12.754 2 12.382 2 12s.145-.754.284-1.04c.153-.315.365-.653.618-.997A12.714 12.714 0 0 1 4.998 7.78ZM12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"
+                        clip-rule="evenodd"
+                      />
                     </svg>
+
                     <span class="flex-1 ms-3 whitespace-nowrap">
-                      Your Views
+                      Other Views
                     </span>
                   </a>
                 </li>

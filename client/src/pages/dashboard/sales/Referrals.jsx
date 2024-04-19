@@ -49,10 +49,13 @@ import {
 } from "react-share";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 
-const Referrals = () => {
+const Referrals = ({ type }) => {
   const user = JSON.parse(localStorage.getItem("etblink_user"));
   const [text, setText] = useState({
-    value: `https://etblink.com/signup?id=${user?.user?._id}`,
+    value:
+      type === "sales"
+        ? `https://etblink.com/signup?id=${user?.user?._id}`
+        : `https://etblink.com/company?id=${user?.user?._id}`,
     copied: false,
   });
 
@@ -89,23 +92,28 @@ const Referrals = () => {
     { icon: WorkplaceIcon, button: WorkplaceShareButton, title: "Work" },
   ];
 
+  const salesText =
+    "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Expedita consequuntur cumque placeat, molestias, saepe corrupti dolore distinctio. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Expedita consequuntur cumque.";
+
+  const companyText =
+    "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Expedita consequuntur cumque placeat, molestias, saepe corrupti dolore distinctio. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Expedita consequuntur cumque.";
+
   return (
     <div className="w-full h-full px-10 gap-4 flex flex-col">
-      <p className="text-xl font-bold">Share us with</p>
-      <p className="text-sm">
-        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Expedita
-        consequuntur cumque placeat, molestias, saepe corrupti dolore distinctio
-        quos perferendis rerum eaque? Hic, possimus animi. Commodi voluptatum
-        facilis vel saepe vitae.
+      <p className="text-xl font-bold">
+        {type === "sales" ? "Share us with" : "Share your Company"}
+      </p>
+      <p className="text-sm">{type === "sales" ? salesText : companyText}</p>
+
+      <p className="font-bold">
+        {type === "sales" ? "Referral" : "Share"} Link.
       </p>
 
-      <p className="font-bold">Referral Link.</p>
-
-      <div className="w-full flex gap-3 items-center justify-start">
+      <div className="w-full flex gap-1 items-center justify-start">
         <input
           disabled
           value={text.value}
-          className="w-full border p-2 border-gray-400 rounded-lg max-w-lg"
+          className="w-full border p-2 border-gray-400 rounded-lg max-w-[530px]"
         />
 
         <CopyToClipboard
@@ -138,7 +146,7 @@ const Referrals = () => {
               className="w-auto text-center hover:scale-110 h-auto flex flex-col gap-1 items-center  justify-center rounded-full"
             >
               <ref.button
-                url={`https://etblink.com/signup?id=${user?.user?._id}`} //eg. https://www.example.com
+                url={text?.value} //eg. https://www.example.com
                 quotes={"Advert your Company Service and Products with us!!"} //"Your Quotes"
                 hashtag={"#etblink"} // #hashTag
               >

@@ -96,7 +96,7 @@ const Saves = ({ type }) => {
               </div>
             );
           })
-        ) : saves && saves?.message ? (
+        ) : (saves && saves?.message) || saves?.data?.length === 0 ? (
           <div className="w-full items-center justify-center flex">
             There is no saved companies yet!
           </div>

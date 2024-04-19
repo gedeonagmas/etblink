@@ -28,20 +28,22 @@ const markers = [
 
 const CompanyDetail = (props) => {
   const location = useLocation();
+  const companyId = location?.state
+    ? location?.state.id
+    : location?.search?.split("?id=")[1];
   const currentUser = JSON.parse(localStorage.getItem("etblink_user"));
   const [emailData, emailResponse] = useSendEmailMutation();
   const { data, isFetching, isError } = useReadQuery({
-    url: `/user/users?user[eq]=${location?.state?.id}&populatingType=users&populatingValue=user`,
+    url: `/user/users?user[eq]=${companyId}&populatingType=users&populatingValue=user`,
     tag: ["companies", "users"],
   });
 
-  console.log(data, "datas");
   const {
     data: rates,
     isFetching: ratedIsFetching,
     isError: isErr,
   } = useReadQuery({
-    url: `/user/rates?accepter[eq]=${location?.state?.id}&populatingType=rates&populatingValue=rater`,
+    url: `/user/rates?accepter[eq]=${companyId}&populatingType=rates&populatingValue=rater`,
     tag: ["companies", "users"],
   });
 
@@ -80,7 +82,7 @@ const CompanyDetail = (props) => {
       accepter: data?.data[0]?.user?._id,
       value: rating,
       role: currentUser?.role,
-      for:'company',
+      for: "company",
       tag: ["companies,rate"],
     });
   };
@@ -100,7 +102,7 @@ const CompanyDetail = (props) => {
 
   const viewHandler = () => {
     viewData({
-      company: location?.state?.id,
+      company: companyId,
       viewer: currentUser?.user,
       role: currentUser?.role,
       tag: ["companies,view"],
@@ -111,8 +113,10 @@ const CompanyDetail = (props) => {
     location && viewHandler();
   }, []);
 
-  console.log(location, "from detail");
-  console.log(rates?.data, "rates");
+  // console.log(data, "data");
+  // console.log(company, "company");
+  console.log(location?.search?.split("?id=")[1], "location");
+  // console.log(rates?.data, "rates");
   return (
     <div className="relative overflow-hidden z-20">
       <Response response={rateResponse} setPending={setPending} />

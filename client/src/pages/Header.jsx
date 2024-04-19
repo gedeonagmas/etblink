@@ -79,8 +79,8 @@ const Header = () => {
     logout({});
   };
 
-  console.log(views, "views from header");
-  console.log(saves, "saves from header");
+  // console.log(views, "views from header");
+  // console.log(saves, "saves from header");
   return (
     <div className="fixed w-full z-50 bg-white bg-dark">
       <Response response={loginResponse} setPending={setPending} type="login" />

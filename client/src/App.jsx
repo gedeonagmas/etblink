@@ -36,6 +36,7 @@ import SalesCompany from "./pages/dashboard/sales/SalesCompany";
 import Referrals from "./pages/dashboard/sales/Referrals";
 import Earns from "./pages/dashboard/Earns";
 import Ratings from "./pages/dashboard/sales/Ratings";
+import Boosting from "./pages/dashboard/company/Boosting";
 
 export const userContext = createContext();
 
@@ -68,7 +69,7 @@ function App() {
                 path="/global"
                 element={<Category type="global" />}
               ></Route>
-              <Route path="/company-detail" element={<CompanyDetail />}></Route>
+              <Route path="/company" element={<CompanyDetail />}></Route>
               <Route path="/news" element={<NewsCategory />}></Route>
               <Route path="/news-detail" element={<NewsDetail />}></Route>
               <Route path="/prices" element={<Prices />}></Route>
@@ -87,7 +88,15 @@ function App() {
               ></Route>
               <Route
                 path="/dashboard/sales/referrals"
-                element={<Referrals />}
+                element={<Referrals type="sales" />}
+              ></Route>
+              <Route
+                path="/dashboard/company/share"
+                element={<Referrals type="company" />}
+              ></Route>
+              <Route
+                path="/dashboard/company/boosting"
+                element={<Boosting />}
               ></Route>
               <Route path="/dashboard/sales/earns" element={<Earns />}></Route>
               <Route

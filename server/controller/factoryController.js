@@ -173,7 +173,7 @@ export const _read = asyncCatch(async (req, res, next) => {
     //last page indicator
     if (page) {
       const doc = await model.countDocuments();
-      if (skip >= data[0])
+      if (skip >= doc)
         return res.status(200).json({ message: "you are in the last page" });
     }
 
