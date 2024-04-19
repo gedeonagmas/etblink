@@ -35,6 +35,7 @@ import Upgrade from "./pages/dashboard/Upgrade";
 import SalesCompany from "./pages/dashboard/sales/SalesCompany";
 import Referrals from "./pages/dashboard/sales/Referrals";
 import Earns from "./pages/dashboard/Earns";
+import Ratings from "./pages/dashboard/sales/Ratings";
 
 export const userContext = createContext();
 
@@ -89,6 +90,10 @@ function App() {
                 element={<Referrals />}
               ></Route>
               <Route path="/dashboard/sales/earns" element={<Earns />}></Route>
+              <Route
+                path="/dashboard/sales/ratings"
+                element={<Ratings />}
+              ></Route>
               <Route path="/dashboard/visitor" element={<Visitors />}></Route>
               <Route path="/dashboard/admin" element={<Admin />}></Route>
               <Route path="/dashboard/saves" element={<Saves />}></Route>

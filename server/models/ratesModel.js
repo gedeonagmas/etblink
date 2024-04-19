@@ -8,6 +8,14 @@ const rateSchema = new mongoose.Schema(
       type: String,
       validate: valid.required("Full name"),
     },
+    
+    role: {
+      type: String,
+    },
+
+    for: {
+      type: String,
+    },
 
     message: {
       type: String,
@@ -33,7 +41,10 @@ const rateSchema = new mongoose.Schema(
     },
 
     accepter: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: function () {
+        return this.for === "company" ? "company" : "sales";
+      },
     },
   },
   {

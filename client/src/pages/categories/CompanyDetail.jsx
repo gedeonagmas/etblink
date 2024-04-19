@@ -80,6 +80,7 @@ const CompanyDetail = (props) => {
       accepter: data?.data[0]?.user?._id,
       value: rating,
       role: currentUser?.role,
+      for:'company',
       tag: ["companies,rate"],
     });
   };

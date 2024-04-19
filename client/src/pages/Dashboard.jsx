@@ -19,6 +19,7 @@ import gedi from "../assets/gedi.jpg";
 import { useReadQuery, useUserLogoutMutation } from "../features/api/apiSlice";
 import Response from "../components/Response";
 import Banner from "./../components/Banner";
+import SmallBanner from "../components/SmallBanner";
 
 const Dashboard = () => {
   const user = JSON.parse(localStorage.getItem("etblink_user"));
@@ -457,6 +458,13 @@ const Dashboard = () => {
                     />
                   </div>
                 </form> */}
+                <div className="w-[45%] hidden md:block ml-28 mr-20">
+                  <img
+                    src="./../skylightadd.jpg"
+                    alt="banner"
+                    className="rounded-sm h-[55px] w-full"
+                  />
+                </div>
 
                 <div className="flex relative gap-3 text-xs lg:gap-6 lg:mr-10 self-end items-center">
                   <Link
@@ -571,14 +579,14 @@ const Dashboard = () => {
                         : id?.classList.add("hidden");
                     }}
                     type="button"
-                    class="flex text-sm rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
+                    class="flex text-sm rounded-full border-2 border-gray-300 border-dark focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
                   >
                     <span class="sr-only">Open user menu</span>
                     <div className="flex gap-2 items-center">
                       {user?.role !== "company" &&
                       user?.user?.profilePicture?.length < 1 ? (
-                        <div className="w-12 h-12 p-1 text-xs rounded-full flex items-center justify-center bg-main text-white text-center">
-                          {user?.role}
+                        <div className="w-12 h-12 p-1 text-lg font-bold rounded-full flex items-center justify-center bg-main text-white text-center">
+                          {user?.email?.substring(0, 1)}
                         </div>
                       ) : user?.role !== "company" &&
                         user?.user?.profilePicture?.length > 1 ? (
@@ -595,11 +603,12 @@ const Dashboard = () => {
                         />
                       )}
 
-                      <span className="hidden lg:block">
+                      <span className="hidden text-lg font-bold lg:block">
                         {user?.role === "company"
-                          ? user?.user?.name?.substring(0, 7)
+                          ? user?.email?.substring(0, 7)
                           : ""}
                       </span>
+                      <p className=" text-lg font-bold">{user?.role}</p>
                       <svg
                         class="w-6 h-6 hidden lg:block text-gray-800 dark:text-white"
                         aria-hidden="true"
@@ -1011,6 +1020,31 @@ const Dashboard = () => {
                       />
                     </svg>
                     <span class="flex-1 ms-3 whitespace-nowrap">Views</span>
+                  </a>
+                </li>
+
+                <li>
+                  <a
+                    href="/dashboard/sales/ratings"
+                    class="flex items-center p-2 text-gray-500 hover:text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                  >
+                    <svg
+                      class="w-5 h-5"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke="currentColor"
+                        stroke-width="2"
+                        d="M12 4.392v14.832M8.476 9.38l-4.553.36c-.888.07-1.248 1.165-.572 1.737l3.47 2.934a.98.98 0 0 1 .322.98l-1.06 4.388c-.206.855.736 1.531 1.497 1.073l3.898-2.351c.32-.193.723-.193 1.044 0l3.898 2.351c.76.458 1.703-.218 1.497-1.073l-1.06-4.388a.982.982 0 0 1 .322-.98l3.47-2.934c.676-.572.316-1.667-.572-1.737l-4.553-.36a1 1 0 0 1-.845-.606l-1.754-4.165c-.342-.812-1.508-.812-1.85 0L9.321 8.774a1 1 0 0 1-.845.606Z"
+                      />
+                    </svg>
+
+                    <span class="flex-1 ms-3 whitespace-nowrap">Ratings</span>
                   </a>
                 </li>
               </>
