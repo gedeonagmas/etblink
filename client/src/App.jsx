@@ -37,6 +37,7 @@ import Referrals from "./pages/dashboard/sales/Referrals";
 import Earns from "./pages/dashboard/Earns";
 import Ratings from "./pages/dashboard/sales/Ratings";
 import Boosting from "./pages/dashboard/company/Boosting";
+import AddPrices from "./pages/dashboard/admin/AddPrices";
 
 export const userContext = createContext();
 
@@ -124,6 +125,10 @@ function App() {
               <Route
                 path="/dashboard/admin/youtube"
                 element={<AddYoutube />}
+              ></Route>
+              <Route
+                path="/dashboard/admin/prices"
+                element={<AddPrices />}
               ></Route>
               <Route
                 path="/dashboard/admin/youtube/detail"
