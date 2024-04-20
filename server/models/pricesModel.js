@@ -5,7 +5,7 @@ const pricesModel = new Schema(
   {
     amount: {
       type: Number,
-      validate: valid.required("Amount"),
+      validate: valid.numberLower("Amount",0),
     },
 
     type: {

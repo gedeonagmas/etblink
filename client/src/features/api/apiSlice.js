@@ -47,6 +47,7 @@ export const apiSlice = createApi({
     "view",
     "save",
     "prices",
+    "boosts",
   ],
   endpoints: (builder) => ({
     //user signup

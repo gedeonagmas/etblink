@@ -11,7 +11,7 @@ import { Visitor } from "../models/visitorModel.js";
 export const createRate = asyncCatch(async (req, res, next) => {
   const rateHandler = async () => {
     const rate = await Rate.aggregate([
-      {
+      { 
         $group: {
           _id: req.body.accepter,
           total: {

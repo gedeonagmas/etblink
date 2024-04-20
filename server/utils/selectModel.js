@@ -1,4 +1,5 @@
 import { Application } from "../models/applicationModel.js";
+import { Boost } from "../models/boostModel.js";
 import { Company } from "../models/companyModel.js";
 import { Group } from "../models/groupModel.js";
 import { News } from "../models/newsModel.js";
@@ -62,6 +63,9 @@ export const selectModel = (name, next) => {
       break;
     case "prices":
       model = Price;
+      break;
+    case "boosts":
+      model = Boost;
       break;
     default:
       return next(new AppError("something went wrong please try again!.", 500));

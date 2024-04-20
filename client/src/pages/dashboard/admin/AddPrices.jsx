@@ -84,7 +84,7 @@ const AddPrices = () => {
   const [pending, setPending] = useState(false);
   const [service, setService] = useState("");
   const [services, setServices] = useState([]);
-  // const [title, setTitle] = useState("");
+  const [amount, setAmount] = useState(0);
   const [type, setType] = useState("");
   const [description, setDescription] = useState("");
 
@@ -99,6 +99,7 @@ const AddPrices = () => {
     createData({
       type,
       description,
+      amount,
       features: services,
       url: "/user/prices",
       tag: ["prices"],
@@ -133,12 +134,13 @@ const AddPrices = () => {
           Amount
         </label>
         <input
-          onChange={(e) => setPrice(e.target.value)}
-          // value={video}
-          class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-          id="file_input"
+          onChange={(e) => setAmount(e.target.value)}
+          // value={website}
           type="number"
-          placeholder="Price"
+          id="name"
+          class="border bg-white bg-dark border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          placeholder="5000"
+          required
           min={1}
         />
       </div>
@@ -151,7 +153,7 @@ const AddPrices = () => {
         </label>
         <textarea
           onChange={(e) => setDescription(e.target.value)}
-          value={description}
+          // value={description}
           name=""
           id=""
           cols="30"

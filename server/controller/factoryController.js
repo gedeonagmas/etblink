@@ -99,7 +99,7 @@ export const _read = asyncCatch(async (req, res, next) => {
     const params = { ...req.query };
     //removing unnecessary queries for filtering
     const remove = [
-      "sort",
+      "sort", 
       "page",
       "limit",
       "fields",
