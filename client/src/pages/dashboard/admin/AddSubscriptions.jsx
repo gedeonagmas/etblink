@@ -79,7 +79,7 @@ const List = (props) => {
   );
 };
 
-const AddPrices = () => {
+const AddSubscriptions = () => {
   const [createData, createResponse] = useCreateMutation();
   const [pending, setPending] = useState(false);
   const [service, setService] = useState("");
@@ -101,8 +101,8 @@ const AddPrices = () => {
       description,
       amount,
       features: services,
-      url: "/user/prices",
-      tag: ["prices"],
+      url: "/user/subscriptions",
+      tag: ["subscriptions"],
     });
   };
 
@@ -183,4 +183,4 @@ const AddPrices = () => {
   );
 };
 
-export default AddPrices;
+export default AddSubscriptions;

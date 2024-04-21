@@ -11,7 +11,7 @@ import { Visitor } from "../models/visitorModel.js";
 export const createRate = asyncCatch(async (req, res, next) => {
   const rateHandler = async () => {
     const rate = await Rate.aggregate([
-      { 
+      {
         $group: {
           _id: req.body.accepter,
           total: {
@@ -202,4 +202,17 @@ export const upgradeHandler = asyncCatch(async (req, res, next) => {
       new AppError("something went wrong unable to upgrade your account!")
     );
   }
+});
+
+export const boostHandler = asyncCatch(async (req, res, next) => {
+  const ISO = new Date().toISOString(); //'2024-04-21T01:57:29.465Z' ==> first get the current time in ISO format
+  const startDate = Date.parse("2024-05-21T01:57:29.465Z"); // 1716256649465 ==> this will be the start date
+  const endDate = Date.parse("2024-06-21T01:57:29.465Z"); //   1718935049465 ==> you just edit the year, month and
+  // date based on the predefined boost data from the front end
+
+  //when the company want to boost the system must check the following conditions.
+  // 1. check if the company subscription plan must be greater than boost endDate
+  // 2. check if there is less than 6 companies in boosting list. if the company is exceed to 6 allow company to
+  //  boost after 1 of the companies end data this company startDate must be > one of the nearest companies endDate.
+  // 3.
 });

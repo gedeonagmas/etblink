@@ -37,9 +37,9 @@ import Referrals from "./pages/dashboard/sales/Referrals";
 import Earns from "./pages/dashboard/Earns";
 import Ratings from "./pages/dashboard/sales/Ratings";
 import Boosting from "./pages/dashboard/company/Boosting";
-import AddPrices from "./pages/dashboard/admin/AddPrices";
 import AddBoost from "./pages/dashboard/admin/AddBoost";
 import UpdateBoost from "./pages/dashboard/admin/UpdateBoost";
+import AddSubscriptions from "./pages/dashboard/admin/AddSubscriptions";
 
 export const userContext = createContext();
 
@@ -130,7 +130,7 @@ function App() {
               ></Route>
               <Route
                 path="/dashboard/admin/prices"
-                element={<AddPrices />}
+                element={<AddSubscriptions />}
               ></Route>
               <Route
                 path="/dashboard/admin/youtube/detail"

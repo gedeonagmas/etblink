@@ -1,11 +1,11 @@
 import mongoose, { Schema } from "mongoose";
 import * as valid from "../utils/validator.js";
 
-const pricesModel = new Schema(
+const subscriptionModel = new Schema(
   {
     amount: {
       type: Number,
-      validate: valid.numberLower("Amount",0),
+      validate: valid.numberLower("Amount", 0),
     },
 
     type: {
@@ -34,9 +34,9 @@ const pricesModel = new Schema(
   }
 );
 
-pricesModel.pre("findOneAndUpdate", function (next) {
+subscriptionModel.pre("findOneAndUpdate", function (next) {
   this.options.runValidators = true;
   next();
 });
 
-export const Price = mongoose.model("price", pricesModel);
+export const Subscription = mongoose.model("subscription", subscriptionModel);

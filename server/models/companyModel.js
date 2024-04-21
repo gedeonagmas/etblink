@@ -130,11 +130,6 @@ const schema = new mongoose.Schema(
       },
     },
 
-    isBoosted: {
-      type: Boolean,
-      default: false,
-    },
-
     paymentDetail: {
       planType: { type: String },
       startDate: { type: Date },
@@ -155,6 +150,50 @@ const schema = new mongoose.Schema(
 
     profileFillStatus: {
       type: Number,
+    },
+
+    boost: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "boostHistory",
+    },
+
+    startDate: {
+      type: Number,
+    },
+
+    endDate: {
+      type: Number,
+    },
+
+    isBoosted: {
+      type: Boolean,
+      default: false,
+    },
+
+    boostStatus: {
+      type: String,
+    },
+
+    subscription: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "subscriptionHistory",
+    },
+
+    subscriptionStartDate: {
+      type: Number,
+    },
+
+    subscriptionEndDate: {
+      type: Number,
+    },
+
+    isSubscribed: {
+      type: Boolean,
+      default: false,
+    },
+
+    subscriptionStatus: {
+      type: String,
     },
   },
   {

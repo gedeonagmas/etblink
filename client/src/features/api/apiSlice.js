@@ -46,7 +46,7 @@ export const apiSlice = createApi({
     "rate-multiple",
     "view",
     "save",
-    "prices",
+    "subscriptions",
     "boosts",
   ],
   endpoints: (builder) => ({
