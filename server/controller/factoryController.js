@@ -95,11 +95,12 @@ export const _create = asyncCatch(async (req, res, next) => {
 //read
 export const _read = asyncCatch(async (req, res, next) => {
   const model = selectModel(req.params.table, next);
+
   if (model) {
     const params = { ...req.query };
     //removing unnecessary queries for filtering
     const remove = [
-      "sort", 
+      "sort",
       "page",
       "limit",
       "fields",
@@ -159,8 +160,9 @@ export const _read = asyncCatch(async (req, res, next) => {
       case "views":
         query.populate(req.query.populatingValue.split(",").join(" "));
         break;
-      case "application":
-        query.populate(req.query.pp_ff.split(",").join(" "));
+      case "boosthistories":
+        query.populate(req.query.populatingValue.split(",").join(" "));
+        break;
       default:
         query;
     }

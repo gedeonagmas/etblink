@@ -29,4 +29,4 @@ boostHistorySchema.pre("findOneAndUpdate", function (next) {
   next();
 });
 
-export const BoostHistory = mongoose.model("boostHistory", boostHistorySchema);
+export const BoostHistory = mongoose.model("boosthistory", boostHistorySchema);

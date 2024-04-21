@@ -48,6 +48,8 @@ export const apiSlice = createApi({
     "save",
     "subscriptions",
     "boosts",
+    "boosthistories",
+    "subscriptionhistories",
   ],
   endpoints: (builder) => ({
     //user signup

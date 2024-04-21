@@ -72,7 +72,7 @@ export const selectModel = (name, next) => {
     case "boosts":
       model = Boost;
       break;
-    case "boostsHistory":
+    case "boosthistories":
       model = BoostHistory;
       break;
     default:

@@ -152,17 +152,19 @@ const schema = new mongoose.Schema(
       type: Number,
     },
 
-    boost: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "boostHistory",
+    // boost: {
+    //   type: mongoose.Schema.Types.ObjectId,
+    //   ref: "boostHistory",
+    // },
+
+    boostStartDate: {
+      type: Number,
+      default: 0,
     },
 
-    startDate: {
+    boostEndDate: {
       type: Number,
-    },
-
-    endDate: {
-      type: Number,
+      default: 0,
     },
 
     isBoosted: {
@@ -172,19 +174,22 @@ const schema = new mongoose.Schema(
 
     boostStatus: {
       type: String,
+      default: "",
     },
 
-    subscription: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "subscriptionHistory",
-    },
+    // subscription: {
+    //   type: mongoose.Schema.Types.ObjectId,
+    //   ref: "subscriptionHistory",
+    // },
 
     subscriptionStartDate: {
       type: Number,
+      default: 0,
     },
 
     subscriptionEndDate: {
       type: Number,
+      default: 0,
     },
 
     isSubscribed: {
@@ -194,6 +199,7 @@ const schema = new mongoose.Schema(
 
     subscriptionStatus: {
       type: String,
+      default: "",
     },
   },
   {
