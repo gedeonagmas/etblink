@@ -13,7 +13,12 @@ const Boosting = () => {
   const user = JSON.parse(localStorage.getItem("etblink_user"));
   const [boostData, boostResponse] = useCreateBoostMutation();
   const [boostPending, setBoostPending] = useState(false);
-  const [boostPopup, setBoostPopup] = useState(false);
+  const [boostPopup, setBoostPopup] = useState(true);
+  const [boostInfo, setBoostInfo] = useState();
+  const [paymentMethod, setPaymentMethod] = useState("new-payment");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("- - -");
+  const [duration, setDuration] = useState(0);
 
   const {
     data: boosts,
@@ -59,16 +64,24 @@ const Boosting = () => {
     return new Date(e).toString().split("GMT")[0];
   };
 
-  const boostHandler = (boostId) => {
+  const boostHandler = () => {
     boostData({
       company: currentCompany?._id,
-      boostId,
+      boostId: boostInfo?._id,
       boostStartDate: startDate,
       boostEndDate: endDate,
+      paymentMethod,
     });
   };
 
-  console.log(boostedCompany, "boosts");
+  useEffect(() => {
+    if (startDate) {
+      const a = startDate.split("-");
+      setEndDate(`${a[2]}/${a[1] * 1 + duration}/${a[0]}`);
+    }
+  }, [startDate]);
+
+  console.log(startDate, endDate, paymentMethod, "boosts");
   return (
     <section class="bg-white dark:bg-gray-900 relative">
       <Response response={boostResponse} setPending={setBoostPending} />
@@ -248,22 +261,16 @@ const Boosting = () => {
                       {e?.duration}
                     </span>
                   </div>
-                  <LoadingButton
-                    pending={boostPending}
+                  <button
                     onClick={() => {
-                      boostHandler(e?._id);
+                      setBoostInfo(e);
+                      setDuration(e?.duration?.split(" ")[0] * 1);
                       setBoostPopup(true);
                     }}
-                    title="Get Started"
-                    color="bg-main"
-                    width="w-36 sm:rounded-lg sm:border sm:py-2 sm:px-5 sm:hover:bg-red-500"
-                  />
-                  {/* <a
-                    href="#"
-                    class="text-white w-32 py-2 px-2 rounded-lg hover:bg-red-500 bg-main "
+                    className="text-white w-32 py-2 px-2 rounded-lg hover:bg-red-500 bg-main"
                   >
-                    Get started
-                  </a> */}
+                    Get Started
+                  </button>
                 </div>
               );
             })
@@ -274,37 +281,116 @@ const Boosting = () => {
           ) : null}
         </div>
       </div>
-      <div className="fixed top-0 left-0 items-center justify-center flex flex-col w-full h-[100vh] bg-black/50">
-        <div className="relative rounded-lg p-5 z-30 items-center lg:ml-56 lg:mt-20 justify-center w-[350px] lg:w-[500px] h-[400px] bg-red-400">
-          {/* <div className="flex items-start justify-start w-full h-full"> */}
-          <svg
-            class="w-6 h-6 text-gray-800 hover:text-gray-700 dark:text-white"
-            aria-hidden="true"
-            onClick={() => setBoostPopup(false)}
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M6 18 17.94 6M18 18 6.06 6"
-            />
-          </svg>
+      {boostPopup && boostInfo && (
+        <div className="fixed top-0 left-0 items-center justify-center flex flex-col w-full h-[100vh] bg-black/50">
+          <div className="relative rounded-lg p-5 z-30 items-center lg:ml-56 mt-20 justify-center w-[350px] md:w-[500px] h-auto bg-white bg-dark">
+            <svg
+              class="w-6 h-6 cursor-pointer absolute top-2 right-2 text-gray-800 hover:text-gray-600 dark:text-white"
+              aria-hidden="true"
+              onClick={() => setBoostPopup(false)}
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18 17.94 6M18 18 6.06 6"
+              />
+            </svg>
 
-          <Datepicker
-            minDate={new Date(2023, 0, 1)}
-            maxDate={new Date(2024, 2, 30)}
-            labelTodayButton="Today"
-            labelClearButton="Cancel"
-          />
-          {/* </div> */}
+            <div className="flex flex-col gap-3">
+              <p className="">Select start date</p>
+              {/* <Datepicker
+                onChange={(e) => setStartDate(e.target.value)}
+                minDate={new Date(2023, 0, 1)}
+                maxDate={new Date(2024, 2, 30)}
+                labelTodayButton="Today"
+                labelClearButton="Cancel"
+              /> */}
+              <input
+                onChange={(e) => setStartDate(e.target.value)}
+                min="2024-03-28"
+                type="date"
+                name=""
+                id=""
+                className="px-3 py-2 rounded-lg  focus:ring-0 focus:outline-none border border-gray-300"
+              />
+              <div className="w-full mt-3 gap-5 flex items-center justify-center">
+                <div className="w-full items-center justify-center">
+                  <p className="">Plan Name</p>
+                  <p className="py-2 px-3 rounded-lg border border-gray-300 w-full focus:outline-black">
+                    {boostInfo?.name}
+                  </p>
+                </div>
+                <div className="w-full items-center justify-center">
+                  <p className="">Amount</p>
+                  <p className="py-2 px-3 rounded-lg border border-gray-300 w-full focus:outline-black">
+                    {boostInfo?.amount} birr
+                  </p>
+                </div>
+              </div>
+              <div className="w-full gap-5 flex items-center justify-center">
+                <div className="w-full items-center justify-center">
+                  <p className="mt-3">Duration</p>
+                  <p className="py-2 px-3 rounded-lg border border-gray-300 w-full focus:outline-black">
+                    {boostInfo?.duration}
+                  </p>
+                </div>
+                <div className="w-full items-center justify-center">
+                  <p className="mt-3">End Date</p>
+                  <p className="py-2 px-3 rounded-lg border border-gray-300 w-full focus:outline-black">
+                    {endDate}
+                  </p>
+                </div>
+              </div>
+              <div className="w-full gap-5 flex items-center justify-center">
+                <div className="w-full items-center justify-center">
+                  <p className="mt-5 pt-5 border-t">Payment method</p>
+                  <div className="w-full flex gap-4 items-center justify-center">
+                    <p className="py-2 flex items-center gap-3 px-3 rounded-lg border border-gray-300 w-full focus:outline-black">
+                      <input
+                        onChange={(e) =>
+                          setPaymentMethod(
+                            e.target.value === "on" ? "deposit" : ""
+                          )
+                        }
+                        type="radio"
+                        name="boost"
+                        id=""
+                      />
+                      From deposit
+                    </p>
+
+                    <p className="py-2 flex items-center gap-3 px-3 rounded-lg border border-gray-300 w-full focus:outline-black">
+                      <input
+                        onChange={(e) =>
+                          setPaymentMethod(e.target.value === "on" ? "new" : "")
+                        }
+                        type="radio"
+                        name="boost"
+                        id=""
+                      />
+                      New payment
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <LoadingButton
+              pending={boostPending}
+              onClick={boostHandler}
+              title="Pay and Boost"
+              color="bg-main"
+              width="w-full sm:rounded-lg sm:border sm:py-3 mt-5 sm:px-5 sm:hover:bg-red-500"
+            />
+          </div>
         </div>
-      </div>
+      )}
     </section>
   );
 };
