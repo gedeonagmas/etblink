@@ -118,8 +118,11 @@ export const _read = asyncCatch(async (req, res, next) => {
         /\b(gte|lte|lt|gt|eq|ne)\b/g,
         (match) => `$${match}`
       )
-    );
-
+    ); 
+    // queryObject.boostStartDate["$lt"] = queryObject.boostStartDate["$lt"] * 1;
+    // queryObject.subscriptionEndDate["$gt"] =
+    //   queryObject.subscriptionEndDate["$gt"] * 1;
+    // console.log(typeof queryObject.subscriptionEndDate["$gt"]);
     //searching
     if (req.query.searchField)
       queryObject[req.query.searchField] = new RegExp(
@@ -134,7 +137,7 @@ export const _read = asyncCatch(async (req, res, next) => {
     req.query.sort
       ? query.sort(req.query.sort.split(",").join(" "))
       : query.sort("createdAt");
-
+ 
     //limiting fields
     const fields = req.query.fields
       ? req.query.fields.split(",").join(" ")
@@ -182,6 +185,7 @@ export const _read = asyncCatch(async (req, res, next) => {
     if (data.length < 1)
       return res.status(201).json({ message: "There is no data to display!" });
 
+    // console.log(data[1]);
     return res.status(200).json({
       status: "success",
       length: data.length,

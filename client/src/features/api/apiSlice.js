@@ -335,6 +335,17 @@ export const apiSlice = createApi({
       }),
       invalidatesTags: ["users"],
     }),
+
+    //upgrade
+    createBoost: builder.mutation({
+      query: (data) => ({
+        url: `/utility/boost`,
+        method: "POST",
+        body: data,
+        credentials: "include",
+      }),
+      invalidatesTags: ["boosts", "boosthistories", "companies"],
+    }),
   }),
 });
 
@@ -365,4 +376,5 @@ export const {
   useDeleteSaveMutation,
   useCreateViewMutation,
   useUpgradeMutation,
+  useCreateBoostMutation,
 } = apiSlice;
