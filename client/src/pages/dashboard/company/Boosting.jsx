@@ -7,11 +7,13 @@ import {
 import Loading from "../../../components/loading/Loading";
 import Response from "../../../components/Response";
 import LoadingButton from "../../../components/loading/LoadingButton";
+import { Datepicker } from "flowbite-react";
 
 const Boosting = () => {
   const user = JSON.parse(localStorage.getItem("etblink_user"));
   const [boostData, boostResponse] = useCreateBoostMutation();
   const [boostPending, setBoostPending] = useState(false);
+  const [boostPopup, setBoostPopup] = useState(false);
 
   const {
     data: boosts,
@@ -68,7 +70,7 @@ const Boosting = () => {
 
   console.log(boostedCompany, "boosts");
   return (
-    <section class="bg-white dark:bg-gray-900">
+    <section class="bg-white dark:bg-gray-900 relative">
       <Response response={boostResponse} setPending={setBoostPending} />
       <div class="py-2 px-4 mx-auto max-w-screen-xl lg:py-6 lg:px-6">
         <div class="mx-auto mb-5 lg:mb-8">
@@ -248,7 +250,10 @@ const Boosting = () => {
                   </div>
                   <LoadingButton
                     pending={boostPending}
-                    onClick={boostHandler}
+                    onClick={() => {
+                      boostHandler(e?._id);
+                      setBoostPopup(true);
+                    }}
                     title="Get Started"
                     color="bg-main"
                     width="w-36 sm:rounded-lg sm:border sm:py-2 sm:px-5 sm:hover:bg-red-500"
@@ -264,9 +269,40 @@ const Boosting = () => {
             })
           ) : (boosts && boosts?.message) || boosts?.data?.length === 0 ? (
             <div className="w-full items-center justify-center flex">
-              There is no saved companies yet!
+              There is no boost history!
             </div>
           ) : null}
+        </div>
+      </div>
+      <div className="fixed top-0 left-0 items-center justify-center flex flex-col w-full h-[100vh] bg-black/50">
+        <div className="relative rounded-lg p-5 z-30 items-center lg:ml-56 lg:mt-20 justify-center w-[350px] lg:w-[500px] h-[400px] bg-red-400">
+          {/* <div className="flex items-start justify-start w-full h-full"> */}
+          <svg
+            class="w-6 h-6 text-gray-800 hover:text-gray-700 dark:text-white"
+            aria-hidden="true"
+            onClick={() => setBoostPopup(false)}
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18 17.94 6M18 18 6.06 6"
+            />
+          </svg>
+
+          <Datepicker
+            minDate={new Date(2023, 0, 1)}
+            maxDate={new Date(2024, 2, 30)}
+            labelTodayButton="Today"
+            labelClearButton="Cancel"
+          />
+          {/* </div> */}
         </div>
       </div>
     </section>
