@@ -7,6 +7,7 @@ import AppError from "../utils/AppError.js";
 import { User } from "../models/userModel.js";
 import { Sales } from "../models/salesModel.js";
 import { Visitor } from "../models/visitorModel.js";
+import { BoostHistory } from "../models/boostHistoryModel.js";
 
 export const createRate = asyncCatch(async (req, res, next) => {
   const rateHandler = async () => {
@@ -205,9 +206,35 @@ export const upgradeHandler = asyncCatch(async (req, res, next) => {
 });
 
 export const boostHandler = asyncCatch(async (req, res, next) => {
-  const ISO = new Date().toISOString(); //'2024-04-21T01:57:29.465Z' ==> first get the current time in ISO format
-  const startDate = Date.parse("2024-05-21T01:57:29.465Z"); // 1716256649465 ==> this will be the start date
-  const endDate = Date.parse("2024-06-21T01:57:29.465Z"); //   1718935049465 ==> you just edit the year, month and
+  const company = await Company.findById(req.body.company);
+  company.isBoosted = true;
+  company.boostEndDate = Date.parse(new Date(req.body.endDate));
+  company.boostStartDate = Date.parse(new Date(req.body.startDate));
+  company.boostStatus = "Payed";
+
+  await company.save();
+  const boost = await BoostHistory.create({
+    company: req.body.company,
+    boost: req.body.boost,
+    startDate: Date.parse(new Date(req.body.startDate)),
+    endDate: Date.parse(new Date(req.body.endDate)),
+    paymentMethod: req.body.paymentMethod,
+  });
+
+  // if (boost) {
+  return res.status(200).json({
+    status: "Payed",
+    message: "Your company is boosted Successfully. Thank you!",
+  });
+  // } else {
+  //   return next(
+  //     new AppError("something went wrong unable to upgrade your account!")
+  //   );
+  // }
+  // console.log(Date.parse(new Date(req.body.endDate)));
+  // const ISO = new Date().toISOString(); //'2024-04-21T01:57:29.465Z' ==> first get the current time in ISO format
+  // const startDate = Date.parse("2024-05-21T01:57:29.465Z"); // 1716256649465 ==> this will be the start date
+  // const endDate = Date.parse("2024-06-21T01:57:29.465Z"); //   1718935049465 ==> you just edit the year, month and
   // date based on the predefined boost data from the front end
 
   //when the company want to boost the system must check the following conditions.

@@ -67,8 +67,10 @@ const Response = ({ response, setPending, redirectTo, type }) => {
         localStorage.setItem("etblink_user", JSON.stringify(user));
         window.location.reload();
       } else if (type === "payment") {
-        localStorage.removeItem("macuta_law_firm_system");
-        navigate(redirectTo, { replace: true });
+        localStorage.removeItem("etb_link_system");
+        setTimeout(() => {
+          navigate(redirectTo, { replace: true });
+        }, 3000);
       } else if (type === "reset") {
         setTimeout(() => {
           navigate(redirectTo, { replace: true });

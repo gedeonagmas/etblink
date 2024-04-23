@@ -2,7 +2,7 @@ import React from "react";
 
 const MiniBanner = () => {
   return (
-    <div className="w-[40%] hidden lg:block ml-28 mr-20">
+    <div className="w-[40%] hidden md:block ml-28 mr-20">
       <img
         src="./../../skylightadd.jpg"
         alt="banner"

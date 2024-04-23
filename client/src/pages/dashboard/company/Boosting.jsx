@@ -8,19 +8,19 @@ import Loading from "../../../components/loading/Loading";
 import Response from "../../../components/Response";
 import LoadingButton from "../../../components/loading/LoadingButton";
 import { Datepicker } from "flowbite-react";
+import Pay from "../../Pay";
 
 const Boosting = () => {
   const user = JSON.parse(localStorage.getItem("etblink_user"));
-  const [boostData, boostResponse] = useCreateBoostMutation();
-  const [boostPending, setBoostPending] = useState(false);
   const [boostPopup, setBoostPopup] = useState(true);
   const [boostInfo, setBoostInfo] = useState();
-  const [paymentMethod, setPaymentMethod] = useState("new-payment");
+  const [paymentMethod, setPaymentMethod] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("- - -");
-  const [duration, setDuration] = useState(0);
+  const [duration, setDuration] = useState({ type: "", value: 0 });
   const [minStartDate, setMinStartDate] = useState(0);
   const [errorMessage, setErrorMessage] = useState(false);
+  const [pay, setPay] = useState(false);
 
   const {
     data: boosts,
@@ -48,7 +48,8 @@ const Boosting = () => {
 
   useEffect(() => {
     getBoostedCompany({
-      url: `/user/companies?isBoosted=true&isSubscribed=true&boostStartDate[lt]=${Date.now()}&subscriptionEndDate[gt]=${Date.now()}`,
+      // url: `/user/boosthistories?isBoosted=true&isSubscribed=true&boostStartDate[lt]=${Date.now()}&subscriptionEndDate[gt]=${Date.now()}`,
+      url: `/user/boosthistories?endDate[gt]=${Date.now()}`,
       tag: ["boosts"],
     });
   }, []);
@@ -62,66 +63,67 @@ const Boosting = () => {
     tag: ["boosthistories"],
   });
 
-  const formatDate = (e) => {
-    return new Date(e).toString().split("GMT")[0];
-  };
-
-  const boostHandler = () => {
-    if (startDate?.length > 1 && paymentMethod?.length > 1) {
-      boostData({
-        company: currentCompany?._id,
-        boostId: boostInfo?._id,
-        boostStartDate: startDate,
-        boostEndDate: endDate,
-        paymentMethod,
-      });
+  const formatDate = (e, type) => {
+    if (type === "history") {
+      return new Date(e).toISOString()?.split("T")[0];
     } else {
-      setErrorMessage(true);
+      return new Date(e).toString().split("GMT")[0];
     }
   };
 
   useEffect(() => {
     if (startDate) {
       const a = startDate.split("-");
-      console.log(a, "aaaaaaa", duration, "dddd");
-      setEndDate(`${a[1] * 1 + duration}/${a[2] * 1}/${a[0]}`);
+      setEndDate(
+        duration?.type === "month"
+          ? `${a[0] * 1}/${a[1] * 1 + duration?.value}/${a[2] * 1}`
+          : duration?.type === "year"
+          ? `${a[0] * 1 + duration?.value}/${a[1] * 1}/${a[2] * 1}`
+          : null
+      );
     } else {
       setEndDate("- - -");
     }
-
-    const dateControl = document.querySelector('input[type="date"]');
-    // dateControl.value = "2017-06-01";
-    console.log(dateControl, "value"); // prints "2017-06-01"
-    // console.log(dateControl.valueAsNumber,'value stamp');
   }, [startDate]);
 
   useEffect(() => {
-    let minDate = boostedCompany?.data[0]?.boostEndDate;
-    boostedCompany?.data?.map((e) => {
-      if (minDate > e?.boostEndDate) {
-        minDate = e?.boostEndDate;
-      } else {
-        return true;
-      }
-      // return minDate;
-    });
-    minDate && setMinStartDate(new Date(minDate)?.toISOString()?.split("T")[0]);
-    console.log(minDate, "nnnnnn");
+    if (boostedCompany?.data?.length < 6) {
+      setMinStartDate(new Date()?.toISOString()?.split("T")[0]);
+    } else {
+      let minDate = boostedCompany?.data[0]?.endDate;
+      boostedCompany?.data?.map((e) => {
+        if (minDate > e?.endDate) {
+          minDate = e?.endDate;
+        } else {
+          return true;
+        }
+      });
+      minDate &&
+        setMinStartDate(new Date(minDate)?.toISOString()?.split("T")[0]);
+    }
   }, [boostedCompany]);
 
-  // console.log(
-  //   startDate,
-  //   endDate,
-  //   paymentMethod,
-  //   "boosts",
-  //   minStartDate,
-  //   "mmmmmmmmmmmm"
-  // );
-  console.log(startDate, paymentMethod);
+  useEffect(() => {
+    if (startDate?.length > 1 && paymentMethod?.length > 1) {
+      setPay(true);
+      setErrorMessage(false);
+    } else {
+      setErrorMessage(true);
+      setPay(false);
+    }
+  }, [startDate, paymentMethod]);
 
+  useEffect(() => {
+    if (currentCompany?.data[0]?.currentBalance < boostInfo?.amount) {
+      setPaymentMethod("new-payment");
+    } else {
+      setPaymentMethod("");
+    }
+  }, [currentCompany, boostInfo]);
+
+  console.log(boostedCompany, "boosted");
   return (
     <section class="bg-white dark:bg-gray-900 relative">
-      <Response response={boostResponse} setPending={setBoostPending} />
       <div class="py-2 px-4 mx-auto max-w-screen-xl lg:py-6 lg:px-6">
         <div class="mx-auto mb-5 lg:mb-8">
           <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">
@@ -133,7 +135,7 @@ const Boosting = () => {
           </p>
         </div>
 
-        {!currentCompany?.data[0]?.isSubscribed && (
+        {/* {!currentCompany?.data[0]?.isSubscribed && (
           <div
             class="flex items-center p-4 mb-4 text-sm text-yellow-800 border border-yellow-300 rounded-lg bg-yellow-50 dark:bg-gray-800 dark:text-yellow-300 dark:border-yellow-800"
             role="alert"
@@ -153,7 +155,7 @@ const Boosting = () => {
               back again!
             </div>
           </div>
-        )}
+        )} */}
 
         {currentCompany?.data[0]?.subscriptionEndDate < Date.now() ||
         !currentCompany?.data[0]?.isSubscribed ? (
@@ -180,7 +182,7 @@ const Boosting = () => {
               >
                 Pay now
               </a>
-              then come back to boost.
+              then come back again to boost.
             </div>
           </div>
         ) : null}
@@ -199,24 +201,79 @@ const Boosting = () => {
             <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
           </svg>
           <span class="sr-only">Note</span>
-          {boostedCompany?.data?.length <= 6 ? (
+          {boostedCompany?.data?.length < 6 ? (
             <div>
               Your can start your boosting from
-              <span className="font-bold px-2">Now</span>
+              <span className="font-bold px-2">Now ({minStartDate})</span>
             </div>
           ) : (
             <div>
               Your boosting will start from
-              <span className="font-bold px-2">{formatDate(Date.now())}</span>
+              <span className="font-bold px-2">{minStartDate}</span>
               because for the movement our space are filled by other companies.
             </div>
           )}
         </div>
 
-        <p className="font-light py-2 text-lg">
+        {isFetching && <Loading />}
+        {isError && <p>Something went wrong unable to read the data</p>}
+        <div className="grid grid-cols-1 md:grid-cols-2 w-full gap-5 place-items-center lg:grid-cols-3 my-2">
+          {boosts && boosts?.data?.length > 0 ? (
+            boosts?.data?.map((e) => {
+              return (
+                <div class="flex mt-5 flex-col p-4 w-full items-center justify-center gap-2 hover:bg-gray-200 text-gray-900 bg-white rounded-lg border border-gray-100 shadow dark:border-gray-600 xl:p-8 dark:bg-gray-800 dark:text-white">
+                  <h3 class="text-xl font-semibold">{e?.name}</h3>
+                  <div class="flex justify-center items-baseline">
+                    <span class="mr-2 text-2xl font-extrabold">
+                      {e?.amount} birr
+                    </span>
+                  </div>
+                  <div class="flex justify-center items-baseline">
+                    <span class="mr-2 text-xl font-extrabold">
+                      {e?.duration}
+                    </span>
+                  </div>
+                  <button
+                    disabled={
+                      currentCompany?.data[0]?.subscriptionEndDate <
+                        Date.now() || !currentCompany?.data[0]?.isSubscribed
+                        ? true
+                        : false
+                    }
+                    onClick={() => {
+                      setBoostInfo(e);
+                      setDuration({
+                        type: e?.duration?.split(" ")[1],
+                        value: e?.duration?.split(" ")[0] * 1,
+                        // e?.duration?.split(" ")[1] === "month"
+                        //   ? e?.duration?.split(" ")[0] * 1
+                        //   : e?.duration?.split(" ")[1] === "year"
+                        //   ? e?.duration?.split(" ")[0] * 12
+                        //   : null
+                      });
+                      setBoostPopup(true);
+                    }}
+                    className={`text-white w-32 py-2 px-2 ${
+                      !currentCompany?.data[0]?.isSubscribed
+                        ? "bg-red-400 "
+                        : "bg-main hover:bg-red-500"
+                    } rounded-lg `}
+                  >
+                    Get Started
+                  </button>
+                </div>
+              );
+            })
+          ) : (boosts && boosts?.message) || boosts?.data?.length === 0 ? (
+            <div className="w-full items-center justify-center flex">
+              There is no boost history!
+            </div>
+          ) : null}
+        </div>
+        <p className="font-light py-2 mt-10 text-lg">
           Companies in our boosted list.
         </p>
-        <div class="relative overflow-x-auto overflow-y-auto h-[300px]">
+        <div class="relative overflow-x-auto mt-2 overflow-y-auto h-[300px]">
           <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
               <tr>
@@ -264,10 +321,10 @@ const Boosting = () => {
                       <td class="px-3 w-52  py-4">{e?.company?.name}</td>
                       <td class="px-3 w-28 py-4">{e?.boost?.name}</td>
                       <td class="px-3 py-4">
-                        {formatDate(e?.company?.boostStartDate)}
+                        {formatDate(e?.startDate, "history")}
                       </td>
                       <td class="px-3 py-4">
-                        {formatDate(e?.company?.boostEndDate)}
+                        {formatDate(e?.endDate, "history")}
                       </td>
                     </tr>
                   );
@@ -279,50 +336,6 @@ const Boosting = () => {
             </tbody>
           </table>
         </div>
-
-        {isFetching && <Loading />}
-        {isError && <p>Something went wrong unable to read the data</p>}
-        <div className="grid grid-cols-1 md:grid-cols-2 w-full gap-5 place-items-center lg:grid-cols-3 my-2">
-          {boosts && boosts?.data?.length > 0 ? (
-            boosts?.data?.map((e) => {
-              return (
-                <div class="flex mt-5 flex-col p-4 w-full items-center justify-center gap-2 hover:bg-gray-200 text-gray-900 bg-white rounded-lg border border-gray-100 shadow dark:border-gray-600 xl:p-8 dark:bg-gray-800 dark:text-white">
-                  <h3 class="text-xl font-semibold">{e?.name}</h3>
-                  <div class="flex justify-center items-baseline">
-                    <span class="mr-2 text-2xl font-extrabold">
-                      {e?.amount} birr
-                    </span>
-                  </div>
-                  <div class="flex justify-center items-baseline">
-                    <span class="mr-2 text-xl font-extrabold">
-                      {e?.duration}
-                    </span>
-                  </div>
-                  <button
-                    onClick={() => {
-                      setBoostInfo(e);
-                      setDuration(
-                        e?.duration?.split(" ")[1] === "month"
-                          ? e?.duration?.split(" ")[0] * 1
-                          : e?.duration?.split(" ")[1] === "year"
-                          ? e?.duration?.split(" ")[0] * 12
-                          : null
-                      );
-                      setBoostPopup(true);
-                    }}
-                    className="text-white w-32 py-2 px-2 rounded-lg hover:bg-red-500 bg-main"
-                  >
-                    Get Started
-                  </button>
-                </div>
-              );
-            })
-          ) : (boosts && boosts?.message) || boosts?.data?.length === 0 ? (
-            <div className="w-full items-center justify-center flex">
-              There is no boost history!
-            </div>
-          ) : null}
-        </div>
       </div>
       {boostPopup && boostInfo && (
         <div className="fixed top-0 left-0 items-center justify-center flex flex-col w-full h-[100vh] bg-black/50">
@@ -332,7 +345,9 @@ const Boosting = () => {
               aria-hidden="true"
               onClick={() => {
                 setBoostPopup(false);
-                // setEndDate("- - -");
+                setEndDate("- - -");
+                setStartDate("");
+                setPay(false);
               }}
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -349,7 +364,7 @@ const Boosting = () => {
               />
             </svg>
 
-            <div className="flex relative flex-col gap-3">
+            <div className="flex relative mb-5 flex-col gap-3">
               {errorMessage && (
                 <div
                   id="alert-2"
@@ -368,10 +383,12 @@ const Boosting = () => {
                   <span class="sr-only">Info</span>
                   <div class="ms-3 text-sm font-medium">
                     {startDate?.length < 1 && (
-                      <p className="text-sm">- Please select start date.</p>
+                      <p className="text-sm">- Please select a start date.</p>
                     )}
                     {paymentMethod?.length < 0 && (
-                      <p className="text-sm">- Please choose payment method.</p>
+                      <p className="text-sm">
+                        - Please choose a payment method.
+                      </p>
                     )}
                   </div>
                   <button
@@ -420,13 +437,13 @@ const Boosting = () => {
               <div className="w-full mt-3 gap-5 flex items-center justify-center">
                 <div className="w-full items-center justify-center">
                   <p className="">Plan Name</p>
-                  <p className="py-2 px-3 rounded-lg border border-gray-300 w-full focus:outline-black">
+                  <p className="py-2 px-3 mt-2 rounded-lg border border-gray-300 w-full focus:outline-black">
                     {boostInfo?.name}
                   </p>
                 </div>
                 <div className="w-full items-center justify-center">
                   <p className="">Amount</p>
-                  <p className="py-2 px-3 rounded-lg border border-gray-300 w-full focus:outline-black">
+                  <p className="py-2 mt-2 px-3 rounded-lg border border-gray-300 w-full focus:outline-black">
                     {boostInfo?.amount} birr
                   </p>
                 </div>
@@ -434,17 +451,20 @@ const Boosting = () => {
               <div className="w-full gap-5 flex items-center justify-center">
                 <div className="w-44 items-center justify-center">
                   <p className="mt-3">Duration</p>
-                  <p className="py-2 px-3 rounded-lg border border-gray-300 w-full focus:outline-black">
+                  <p className="py-2 px-3 mt-2 rounded-lg border border-gray-300 w-full focus:outline-black">
                     {boostInfo?.duration}
                   </p>
                 </div>
                 <div className="w-full items-center justify-center">
                   <p className="mt-3">End Date</p>
-                  <p className="py-2 px-3 rounded-lg border border-gray-300 w-full focus:outline-black">
-                    {endDate}{" "}
+                  <p className="py-2 px-3 mt-2 rounded-lg border border-gray-300 w-full focus:outline-black">
+                    {endDate}
                     <span className=" mx-2">
-                      {" "}
-                      ({formatDate(endDate)?.split(" ").splice(0, 4).join(" ")})
+                      (
+                      {endDate != "- - -"
+                        ? formatDate(endDate)?.split(" ").splice(0, 4).join(" ")
+                        : null}
+                      )
                     </span>
                   </p>
                 </div>
@@ -463,7 +483,7 @@ const Boosting = () => {
                       )
                     </span>
                   </p>
-                  <div className="w-full flex gap-4 items-center justify-center">
+                  <div className="w-full mt-2 flex gap-4 items-center justify-center">
                     <p
                       className={`py-2 ${
                         currentCompany?.data[0]?.currentBalance <
@@ -512,13 +532,55 @@ const Boosting = () => {
                 </div>
               </div>
             </div>
-            <LoadingButton
+            {pay ? (
+              <Pay
+                startDate={startDate}
+                endDate={endDate?.split("/")?.join("-")}
+                boost={boostInfo?._id}
+                company={currentCompany?.data[0]?._id}
+                name={currentCompany?.data[0]?.name}
+                email={user?.email}
+                amount={boostInfo?.amount}
+                paymentMethod={paymentMethod}
+              />
+            ) : (
+              <button
+                onClick={() => {
+                  if (startDate?.length > 1 && paymentMethod?.length > 1) {
+                    setPay(true);
+                  } else {
+                    setErrorMessage(true);
+                  }
+                }}
+                className="flex  cursor-default gap-2 items-center justify-center h-10 mt-2 rounded-lg w-full  text-white bg-red-400"
+                type="submit"
+              >
+                <svg
+                  class="w-6 h-6 "
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm13.707-1.293a1 1 0 0 0-1.414-1.414L11 12.586l-1.793-1.793a1 1 0 0 0-1.414 1.414l2.5 2.5a1 1 0 0 0 1.414 0l4-4Z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+                Pay and Boost
+              </button>
+            )}
+
+            {/* <LoadingButton
               pending={boostPending}
               onClick={boostHandler}
               title="Pay and Boost"
               color="bg-main"
               width="w-full sm:rounded-lg sm:border sm:py-3 mt-5 sm:px-5 sm:hover:bg-red-500"
-            />
+            /> */}
           </div>
         </div>
       )}

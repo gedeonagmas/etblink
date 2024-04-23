@@ -374,7 +374,7 @@ const Dashboard = () => {
         <div class="px-3 py-3 lg:px-5 lg:pl-3">
           <div class="flex items-center justify-between">
             <div class="flex flex-col font-light w-full justify-between items-center">
-              <div className="text-sm  lg:flex flex-col hidden  absolute  items-center left-2  text-gray-600 ">
+              <div className="text-sm hidden xl:flex flex-col   absolute  items-center left-2  text-gray-600 ">
                 <p className="text-lg ">Welcome to ETB LINK</p>
                 <a
                   href="/"
@@ -484,14 +484,14 @@ const Dashboard = () => {
                         clip-rule="evenodd"
                       />
                     </svg>
-                    home
+                    <p className="text-xs font-semibold">home</p>
                   </Link>
 
                   <Link to={`/dashboard/saves`} className="cursor-pointer">
                     <div className="items-center flex flex-col justify-center">
                       <button
                         type="button"
-                        class="relative flex flex-col items-center text-sm font-medium text-center t"
+                        class="relative flex flex-col items-center text-sm font-medium text-center"
                       >
                         <svg
                           class="w-6 h-6"
@@ -508,7 +508,7 @@ const Dashboard = () => {
                         <div class="absolute inline-flex items-center justify-center w-6 h-6 text-xs p-1 font-bold text-white bg-main border-2 border-white rounded-full -top-2 -end-2 dark:border-gray-900">
                           {saves?.data ? saves?.data?.length : 0}
                         </div>
-                        <p className="text-xs">saves</p>
+                        <p className="text-xs font-semibold">saves</p>
                       </button>
                     </div>
                   </Link>
@@ -536,11 +536,11 @@ const Dashboard = () => {
                             />
                           </svg>
 
-                          <div class="absolute inline-flex items-center justify-center w-6 h-6 font-bold text-white bg-main border-2 border-white rounded-full -top-2 -end-2 dark:border-gray-900">
+                          <div class="absolute inline-flex items-center justify-center w-6 h-6 font-bold text-white bg-main border-2 border-white rounded-full -top-2 -end-3 dark:border-gray-900">
                             {views?.data ? views?.data?.length : 0}
                           </div>
                         </button>
-                        <p className="text-xs">views</p>
+                        <p className="text-xs font-semibold">views</p>
                       </div>
                     </Link>
                   )}
@@ -561,11 +561,11 @@ const Dashboard = () => {
                         <path d="M17.133 12.632v-1.8a5.407 5.407 0 0 0-4.154-5.262.955.955 0 0 0 .021-.106V3.1a1 1 0 0 0-2 0v2.364a.933.933 0 0 0 .021.106 5.406 5.406 0 0 0-4.154 5.262v1.8C6.867 15.018 5 15.614 5 16.807 5 17.4 5 18 5.538 18h12.924C19 18 19 17.4 19 16.807c0-1.193-1.867-1.789-1.867-4.175Zm-13.267-.8a1 1 0 0 1-1-1 9.424 9.424 0 0 1 2.517-6.391A1.001 1.001 0 1 1 6.854 5.8a7.43 7.43 0 0 0-1.988 5.037 1 1 0 0 1-1 .995Zm16.268 0a1 1 0 0 1-1-1A7.431 7.431 0 0 0 17.146 5.8a1 1 0 0 1 1.471-1.354 9.424 9.424 0 0 1 2.517 6.391 1 1 0 0 1-1 .995ZM8.823 19a3.453 3.453 0 0 0 6.354 0H8.823Z" />
                       </svg>
 
-                      <div class="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full -top-3 -end-3 dark:border-gray-900">
+                      <div class="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-main border-2 border-white rounded-full -top-2 -end-3 dark:border-gray-900">
                         20
                       </div>
                     </button>
-                    notifications
+                    <p className="text-xs font-semibold">notifications</p>
                   </div>
                 </div>
                 <div className="flex ml-3 gap-2 -mt-2 lg:mt-0 items-center">
