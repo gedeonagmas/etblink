@@ -19,6 +19,7 @@ const Boosting = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("- - -");
   const [duration, setDuration] = useState(0);
+  const [minStartDate, setMinStartDate] = useState(0);
 
   const {
     data: boosts,
@@ -77,10 +78,31 @@ const Boosting = () => {
   useEffect(() => {
     if (startDate) {
       const a = startDate.split("-");
-      setEndDate(`${a[2]}/${a[1] * 1 + duration}/${a[0]}`);
+      console.log(a, "aaaaaaa", duration, "dddd");
+      setEndDate(`${a[1] * 1 + duration}/${a[2] * 1}/${a[0]}`);
+    } else {
+      setEndDate("- - -");
     }
+
+    const dateControl = document.querySelector('input[type="date"]');
+    // dateControl.value = "2017-06-01";
+    console.log(dateControl, "value"); // prints "2017-06-01"
+    // console.log(dateControl.valueAsNumber,'value stamp');
   }, [startDate]);
 
+  useEffect(() => {
+    let minDate = boostedCompany?.data[0]?.boostEndDate;
+    boostedCompany?.data?.map((e) => {
+      if (minDate > e?.boostEndDate) {
+        minDate = e?.boostEndDate;
+      } else {
+        return true;
+      }
+      return minDate;
+    });
+    setMinStartDate(minDate);
+    console.log(boostedCompany, "nnnnnn");
+  }, [boostedCompany]);
   console.log(startDate, endDate, paymentMethod, "boosts");
   return (
     <section class="bg-white dark:bg-gray-900 relative">
@@ -264,7 +286,13 @@ const Boosting = () => {
                   <button
                     onClick={() => {
                       setBoostInfo(e);
-                      setDuration(e?.duration?.split(" ")[0] * 1);
+                      setDuration(
+                        e?.duration?.split(" ")[1] === "month"
+                          ? e?.duration?.split(" ")[0] * 1
+                          : e?.duration?.split(" ")[1] === "year"
+                          ? e?.duration?.split(" ")[0] * 12
+                          : null
+                      );
                       setBoostPopup(true);
                     }}
                     className="text-white w-32 py-2 px-2 rounded-lg hover:bg-red-500 bg-main"
@@ -287,7 +315,10 @@ const Boosting = () => {
             <svg
               class="w-6 h-6 cursor-pointer absolute top-2 right-2 text-gray-800 hover:text-gray-600 dark:text-white"
               aria-hidden="true"
-              onClick={() => setBoostPopup(false)}
+              onClick={() => {
+                setBoostPopup(false);
+                // setEndDate("- - -");
+              }}
               xmlns="http://www.w3.org/2000/svg"
               width="24"
               height="24"
@@ -318,7 +349,8 @@ const Boosting = () => {
                 type="date"
                 name=""
                 id=""
-                className="px-3 py-2 rounded-lg  focus:ring-0 focus:outline-none border border-gray-300"
+                pattern="\d{4}-\d{2}-\d{2}"
+                className="px-3 py-2 rounded-lg bg-white bg-dark focus:ring-0 focus:outline-none border border-gray-300"
               />
               <div className="w-full mt-3 gap-5 flex items-center justify-center">
                 <div className="w-full items-center justify-center">
