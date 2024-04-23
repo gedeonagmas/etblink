@@ -138,6 +138,8 @@ const schema = new mongoose.Schema(
       paymentMethod: { type: Number },
       status: { type: String },
     },
+    
+    currentBalance: { type: Number, default: 0 },
 
     saves: {
       total: { type: Number, default: 0 },

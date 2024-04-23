@@ -20,6 +20,7 @@ const Boosting = () => {
   const [endDate, setEndDate] = useState("- - -");
   const [duration, setDuration] = useState(0);
   const [minStartDate, setMinStartDate] = useState(0);
+  const [errorMessage, setErrorMessage] = useState(false);
 
   const {
     data: boosts,
@@ -66,13 +67,17 @@ const Boosting = () => {
   };
 
   const boostHandler = () => {
-    boostData({
-      company: currentCompany?._id,
-      boostId: boostInfo?._id,
-      boostStartDate: startDate,
-      boostEndDate: endDate,
-      paymentMethod,
-    });
+    if (startDate?.length > 1 && paymentMethod?.length > 1) {
+      boostData({
+        company: currentCompany?._id,
+        boostId: boostInfo?._id,
+        boostStartDate: startDate,
+        boostEndDate: endDate,
+        paymentMethod,
+      });
+    } else {
+      setErrorMessage(true);
+    }
   };
 
   useEffect(() => {
@@ -100,10 +105,20 @@ const Boosting = () => {
       }
       // return minDate;
     });
-    setMinStartDate(minDate);
-    console.log(boostedCompany, "nnnnnn");
+    minDate && setMinStartDate(new Date(minDate)?.toISOString()?.split("T")[0]);
+    console.log(minDate, "nnnnnn");
   }, [boostedCompany]);
-  console.log(startDate, endDate, paymentMethod, "boosts");
+
+  // console.log(
+  //   startDate,
+  //   endDate,
+  //   paymentMethod,
+  //   "boosts",
+  //   minStartDate,
+  //   "mmmmmmmmmmmm"
+  // );
+  console.log(startDate, paymentMethod);
+
   return (
     <section class="bg-white dark:bg-gray-900 relative">
       <Response response={boostResponse} setPending={setBoostPending} />
@@ -334,7 +349,57 @@ const Boosting = () => {
               />
             </svg>
 
-            <div className="flex flex-col gap-3">
+            <div className="flex relative flex-col gap-3">
+              {errorMessage && (
+                <div
+                  id="alert-2"
+                  class="flex absolute top-0 left-20 items-center p-4 mb-4 text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+                  role="alert"
+                >
+                  <svg
+                    class="flex-shrink-0 w-4 h-4"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+                  </svg>
+                  <span class="sr-only">Info</span>
+                  <div class="ms-3 text-sm font-medium">
+                    {startDate?.length < 1 && (
+                      <p className="text-sm">- Please select start date.</p>
+                    )}
+                    {paymentMethod?.length < 0 && (
+                      <p className="text-sm">- Please choose payment method.</p>
+                    )}
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setErrorMessage(false)}
+                    class="ms-auto -mx-1.5 ml-2 -my-1.5 bg-red-50 text-red-500 rounded-lg focus:ring-2 focus:ring-red-400 p-1.5 hover:bg-red-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:text-red-400 dark:hover:bg-gray-700"
+                    data-dismiss-target="#alert-2"
+                    aria-label="Close"
+                  >
+                    <span class="sr-only">Close</span>
+                    <svg
+                      class="w-3 h-3"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 14 14"
+                    >
+                      <path
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              )}
               <p className="">Select start date</p>
               {/* <Datepicker
                 onChange={(e) => setStartDate(e.target.value)}
@@ -345,11 +410,11 @@ const Boosting = () => {
               /> */}
               <input
                 onChange={(e) => setStartDate(e.target.value)}
-                min="2024-03-28"
+                min={minStartDate}
                 type="date"
                 name=""
                 id=""
-                pattern="\d{4}-\d{2}-\d{2}"
+                // data-date-format="DD MMMM YYYY"
                 className="px-3 py-2 rounded-lg bg-white bg-dark focus:ring-0 focus:outline-none border border-gray-300"
               />
               <div className="w-full mt-3 gap-5 flex items-center justify-center">
@@ -367,7 +432,7 @@ const Boosting = () => {
                 </div>
               </div>
               <div className="w-full gap-5 flex items-center justify-center">
-                <div className="w-full items-center justify-center">
+                <div className="w-44 items-center justify-center">
                   <p className="mt-3">Duration</p>
                   <p className="py-2 px-3 rounded-lg border border-gray-300 w-full focus:outline-black">
                     {boostInfo?.duration}
@@ -376,16 +441,44 @@ const Boosting = () => {
                 <div className="w-full items-center justify-center">
                   <p className="mt-3">End Date</p>
                   <p className="py-2 px-3 rounded-lg border border-gray-300 w-full focus:outline-black">
-                    {endDate}
+                    {endDate}{" "}
+                    <span className=" mx-2">
+                      {" "}
+                      ({formatDate(endDate)?.split(" ").splice(0, 4).join(" ")})
+                    </span>
                   </p>
                 </div>
               </div>
               <div className="w-full gap-5 flex items-center justify-center">
                 <div className="w-full items-center justify-center">
-                  <p className="mt-5 pt-5 border-t">Payment method</p>
+                  <p className="mt-5 pt-5 border-t">
+                    Payment method{" "}
+                    <span className="text-xs font-light">
+                      {" "}
+                      (
+                      {currentCompany?.data[0]?.currentBalance <
+                      boostInfo?.amount
+                        ? "You don't have enough balance for direct payment"
+                        : null}
+                      )
+                    </span>
+                  </p>
                   <div className="w-full flex gap-4 items-center justify-center">
-                    <p className="py-2 flex items-center gap-3 px-3 rounded-lg border border-gray-300 w-full focus:outline-black">
+                    <p
+                      className={`py-2 ${
+                        currentCompany?.data[0]?.currentBalance <
+                        boostInfo?.amount
+                          ? "bg-red-200"
+                          : null
+                      }  flex items-center gap-3 px-3 rounded-lg border border-gray-300 w-full focus:outline-black`}
+                    >
                       <input
+                        disabled={
+                          currentCompany?.data[0]?.currentBalance <
+                          boostInfo?.amount
+                            ? true
+                            : false
+                        }
                         onChange={(e) =>
                           setPaymentMethod(
                             e.target.value === "on" ? "deposit" : ""
@@ -400,6 +493,12 @@ const Boosting = () => {
 
                     <p className="py-2 flex items-center gap-3 px-3 rounded-lg border border-gray-300 w-full focus:outline-black">
                       <input
+                        checked={
+                          currentCompany?.data[0]?.currentBalance <
+                          boostInfo?.amount
+                            ? true
+                            : false
+                        }
                         onChange={(e) =>
                           setPaymentMethod(e.target.value === "on" ? "new" : "")
                         }
