@@ -12,6 +12,8 @@ import Pay from "../../Pay";
 
 const Subscription = () => {
   const user = JSON.parse(localStorage.getItem("etblink_user"));
+  const [depositData, depositResponse] = useCreateBoostMutation();
+  const [depositPending, setDepositPending] = useState(false);
   const [subscriptionPopup, setSubscriptionPopup] = useState(true);
   const [subscriptionInfo, setSubscriptionInfo] = useState();
   const [paymentMethod, setPaymentMethod] = useState("");
@@ -106,9 +108,35 @@ const Subscription = () => {
         setMinStartDate(new Date(minDate)?.toISOString()?.split("T")[0]);
     }
   }, [subscriptionHistory]);
+
+  const depositHandler = () => {
+    subscriptionInfo &&
+      depositData({
+        startDate,
+        endDate: endDate?.split("/")?.join("-"),
+        boost: subscriptionInfo?._id,
+        company: currentCompany?.data[0]?._id,
+        name: currentCompany?.data[0]?.name,
+        email: user?.email,
+        amount: subscriptionInfo?.amount,
+        paymentMethod,
+        type: "subscription",
+      });
+  };
+
+  useEffect(() => {
+    if (depositResponse?.status === "fulfilled") {
+      setStartDate("");
+      setEndDate("- - -");
+      setSubscriptionPopup(false);
+    }
+  }, [depositResponse]);
+
   console.log(subscriptionHistory, "boosted");
   return (
     <section class="bg-white dark:bg-gray-900 relative">
+      <Response response={depositResponse} setPending={setDepositPending} />
+
       <div class="py-2 px-4 mx-auto max-w-screen-xl lg:py-6 lg:px-6">
         <div
           class="flex items-center p-4 mb-4 text-sm text-blue-800 border border-blue-300 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400 dark:border-blue-800"
@@ -326,7 +354,7 @@ const Subscription = () => {
                     {startDate?.length < 1 && (
                       <p className="text-sm">- Please select a start date.</p>
                     )}
-                    {paymentMethod?.length < 0 && (
+                    {paymentMethod?.length < 1 && (
                       <p className="text-sm">
                         - Please choose a payment method.
                       </p>
@@ -448,12 +476,15 @@ const Subscription = () => {
                       <input
                         checked={
                           currentCompany?.data[0]?.currentBalance <
-                          subscriptionInfo?.amount
+                            subscriptionInfo?.amount ||
+                          paymentMethod === "new-payment"
                             ? true
                             : false
                         }
                         onChange={(e) =>
-                          setPaymentMethod(e.target.value === "on" ? "new" : "")
+                          setPaymentMethod(
+                            e.target.value === "on" ? "new-payment" : ""
+                          )
                         }
                         type="radio"
                         name="boost"
@@ -465,7 +496,7 @@ const Subscription = () => {
                 </div>
               </div>
             </div>
-            {pay ? (
+            {/* {pay ? (
               <Pay
                 startDate={startDate}
                 endDate={endDate?.split("/")?.join("-")}
@@ -506,6 +537,76 @@ const Subscription = () => {
                   />
                 </svg>
                 Pay and Renew
+              </button>
+            )} */}
+            {pay && paymentMethod === "new-payment" ? (
+              <Pay
+                startDate={startDate}
+                endDate={endDate?.split("/")?.join("-")}
+                boost={subscriptionInfo?._id}
+                company={currentCompany?.data[0]?._id}
+                name={currentCompany?.data[0]?.name}
+                email={user?.email}
+                amount={subscriptionInfo?.amount}
+                paymentMethod={paymentMethod}
+                title="Pay and Subscribe"
+                type="subscription"
+              />
+            ) : pay && paymentMethod === "deposit" ? (
+              <LoadingButton
+                pending={depositPending}
+                onClick={depositHandler}
+                title={
+                  <p className="flex gap-2 items-center justify-center rounded-lg w-full  text-white bg-main">
+                    <svg
+                      class="w-6 h-6 "
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm13.707-1.293a1 1 0 0 0-1.414-1.414L11 12.586l-1.793-1.793a1 1 0 0 0-1.414 1.414l2.5 2.5a1 1 0 0 0 1.414 0l4-4Z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
+                    Pay and Subscribe
+                  </p>
+                }
+                color="bg-main"
+                width="w-full sm:py-2"
+              />
+            ) : (
+              <button
+                onClick={() => {
+                  if (startDate?.length > 1 && paymentMethod?.length > 1) {
+                    setPay(true);
+                  } else {
+                    setErrorMessage(true);
+                  }
+                }}
+                className="flex  cursor-default gap-2 items-center justify-center h-10 mt-2 rounded-lg w-full  text-white bg-red-400"
+                type="submit"
+              >
+                <svg
+                  class="w-6 h-6 "
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm13.707-1.293a1 1 0 0 0-1.414-1.414L11 12.586l-1.793-1.793a1 1 0 0 0-1.414 1.414l2.5 2.5a1 1 0 0 0 1.414 0l4-4Z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+                Pay and Subscribe
               </button>
             )}
           </div>

@@ -14,10 +14,11 @@ const Success = () => {
   useEffect(() => {
     // const data = JSON.parse(paymentData);
     boostData({
-      company: data?.company,
-      amount: data?.amount,
-      paymentMethod: data?.paymentMethod,
-      type: data?.type,
+      // company: data?.company,
+      // amount: data?.amount,
+      // paymentMethod: data?.paymentMethod,
+      // type: data?.type,
+      ...data,
     });
   }, []);
   console.log(data, "success");

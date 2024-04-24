@@ -12,6 +12,8 @@ import Pay from "../../Pay";
 
 const Boosting = () => {
   const user = JSON.parse(localStorage.getItem("etblink_user"));
+  const [depositData, depositResponse] = useCreateBoostMutation();
+  const [depositPending, setDepositPending] = useState(false);
   const [boostPopup, setBoostPopup] = useState(true);
   const [boostInfo, setBoostInfo] = useState();
   const [paymentMethod, setPaymentMethod] = useState("");
@@ -121,9 +123,34 @@ const Boosting = () => {
     }
   }, [currentCompany, boostInfo]);
 
+  const depositHandler = () => {
+    boostInfo &&
+      depositData({
+        startDate,
+        endDate: endDate?.split("/")?.join("-"),
+        boost: boostInfo?._id,
+        company: currentCompany?.data[0]?._id,
+        name: currentCompany?.data[0]?.name,
+        email: user?.email,
+        amount: boostInfo?.amount,
+        paymentMethod,
+        type: "boost",
+      });
+  };
+
+  useEffect(() => {
+    if (depositResponse?.status === "fulfilled") {
+      setStartDate("");
+      setEndDate("- - -");
+      setBoostPopup(false);
+    }
+  }, [depositResponse]);
+
   console.log(boostedCompany, "boosted");
   return (
     <section class="bg-white dark:bg-gray-900 relative">
+      <Response response={depositResponse} setPending={setDepositPending} />
+
       <div class="py-2 px-4 mx-auto max-w-screen-xl lg:py-6 lg:px-6">
         <div class="mx-auto mb-5 lg:mb-8">
           <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">
@@ -380,7 +407,7 @@ const Boosting = () => {
                     {startDate?.length < 1 && (
                       <p className="text-sm">- Please select a start date.</p>
                     )}
-                    {paymentMethod?.length < 0 && (
+                    {paymentMethod?.length < 1 && (
                       <p className="text-sm">
                         - Please choose a payment method.
                       </p>
@@ -510,12 +537,14 @@ const Boosting = () => {
                       <input
                         checked={
                           currentCompany?.data[0]?.currentBalance <
-                          boostInfo?.amount
+                            boostInfo?.amount || paymentMethod === "new-payment"
                             ? true
                             : false
                         }
                         onChange={(e) =>
-                          setPaymentMethod(e.target.value === "on" ? "new" : "")
+                          setPaymentMethod(
+                            e.target.value === "on" ? "new-payment" : ""
+                          )
                         }
                         type="radio"
                         name="boost"
@@ -527,7 +556,7 @@ const Boosting = () => {
                 </div>
               </div>
             </div>
-            {pay ? ( 
+            {pay && paymentMethod === "new-payment" ? (
               <Pay
                 startDate={startDate}
                 endDate={endDate?.split("/")?.join("-")}
@@ -540,7 +569,56 @@ const Boosting = () => {
                 title="Pay and Boost"
                 type="boost"
               />
+            ) : pay && paymentMethod === "deposit" ? (
+              <LoadingButton
+                pending={depositPending}
+                onClick={depositHandler}
+                title={
+                  <p className="flex gap-2 items-center justify-center rounded-lg w-full  text-white bg-main">
+                    <svg
+                      class="w-6 h-6 "
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm13.707-1.293a1 1 0 0 0-1.414-1.414L11 12.586l-1.793-1.793a1 1 0 0 0-1.414 1.414l2.5 2.5a1 1 0 0 0 1.414 0l4-4Z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
+                    Pay and Boost
+                  </p>
+                }
+                color="bg-main"
+                width="w-full sm:py-2"
+              />
             ) : (
+              // <button
+              //   onClick={depositHandler}
+              //   className="flex  cursor-default gap-2 items-center justify-center h-10 mt-2 rounded-lg w-full  text-white bg-main hover:bg-red-500"
+              //   type="submit"
+              // >
+              //   <svg
+              //     class="w-6 h-6 "
+              //     aria-hidden="true"
+              //     xmlns="http://www.w3.org/2000/svg"
+              //     width="24"
+              //     height="24"
+              //     fill="currentColor"
+              //     viewBox="0 0 24 24"
+              //   >
+              //     <path
+              //       fill-rule="evenodd"
+              //       d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm13.707-1.293a1 1 0 0 0-1.414-1.414L11 12.586l-1.793-1.793a1 1 0 0 0-1.414 1.414l2.5 2.5a1 1 0 0 0 1.414 0l4-4Z"
+              //       clip-rule="evenodd"
+              //     />
+              //   </svg>
+              //   Pay and Boost
+              // </button>
               <button
                 onClick={() => {
                   if (startDate?.length > 1 && paymentMethod?.length > 1) {

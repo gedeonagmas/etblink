@@ -211,6 +211,9 @@ export const boostHandler = asyncCatch(async (req, res, next) => {
   console.log(req.body);
   const company = await Company.findById(req.body.company);
   if (req.body.type === "boost") {
+    if (req.body.paymentMethod === "deposit") {
+      company.currentBalance = company.currentBalance * 1 - req.body.amount * 1;
+    }
     company.isBoosted = true;
     company.boostEndDate = Date.parse(new Date(req.body.endDate));
     company.boostStartDate = Date.parse(new Date(req.body.startDate));
@@ -225,6 +228,9 @@ export const boostHandler = asyncCatch(async (req, res, next) => {
       paymentMethod: req.body.paymentMethod,
     });
   } else if (req.body.type === "subscription") {
+    if (req.body.paymentMethod === "deposit") {
+      company.currentBalance = company.currentBalance * 1 - req.body.amount * 1;
+    }
     company.isSubscribed = true;
     company.subscriptionEndDate = Date.parse(new Date(req.body.endDate));
     company.subscriptionStartDate = Date.parse(new Date(req.body.startDate));
@@ -249,6 +255,18 @@ export const boostHandler = asyncCatch(async (req, res, next) => {
       paymentMethod: req.body.paymentMethod,
     });
   }
+  // else if (req.body.type === "deposit") {
+  //   company.currentBalance = company.currentBalance * 1 - req.body.amount * 1;
+  //   await company.save();
+
+  //   const boost = await BoostHistory.create({
+  //     company: req.body.company,
+  //     boost: req.body.boost,
+  //     startDate: Date.parse(new Date(req.body.startDate)),
+  //     endDate: Date.parse(new Date(req.body.endDate)),
+  //     paymentMethod: req.body.paymentMethod,
+  //   });
+  // }
 
   // await company.save();
   // const boost = await BoostHistory.create({
