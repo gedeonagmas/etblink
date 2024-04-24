@@ -10,10 +10,10 @@ import LoadingButton from "../../../components/loading/LoadingButton";
 import { Datepicker } from "flowbite-react";
 import Pay from "../../Pay";
 
-const Boosting = () => {
+const Subscription = () => {
   const user = JSON.parse(localStorage.getItem("etblink_user"));
-  const [boostPopup, setBoostPopup] = useState(true);
-  const [boostInfo, setBoostInfo] = useState();
+  const [subscriptionPopup, setSubscriptionPopup] = useState(true);
+  const [subscriptionInfo, setSubscriptionInfo] = useState();
   const [paymentMethod, setPaymentMethod] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("- - -");
@@ -23,10 +23,10 @@ const Boosting = () => {
   const [pay, setPay] = useState(false);
 
   const {
-    data: boosts,
+    data: subscriptions,
     isFetching,
     isError,
-  } = useReadQuery({ url: "/user/boosts", tag: ["boosts"] });
+  } = useReadQuery({ url: "/user/subscriptions", tag: ["subscriptions"] });
 
   const {
     data: currentCompany,
@@ -37,30 +37,13 @@ const Boosting = () => {
     tag: ["companies"],
   });
 
-  const [
-    getBoostedCompany,
-    {
-      data: boostedCompany,
-      isFetching: boostedCompanyFetching,
-      isError: boostedCompanyError,
-    },
-  ] = useLazyReadQuery();
-
-  useEffect(() => {
-    getBoostedCompany({
-      // url: `/user/boosthistories?isBoosted=true&isSubscribed=true&boostStartDate[lt]=${Date.now()}&subscriptionEndDate[gt]=${Date.now()}`,
-      url: `/user/boosthistories?endDate[gt]=${Date.now()}`,
-      tag: ["boosts"],
-    });
-  }, []);
-
   const {
-    data: boostHistory,
+    data: subscriptionHistory,
     isFetching: historyFetching,
     isError: historyError,
   } = useReadQuery({
-    url: `/user/boosthistories?populatingType=boosthistories&populatingValue=company,boost`,
-    tag: ["boosthistories"],
+    url: `/user/subscriptionhistories?company=${user?.user?._id}&populatingType=subscriptionhistories&populatingValue=company,subscription`,
+    tag: ["subscriptionhistories"],
   });
 
   const formatDate = (e, type) => {
@@ -87,23 +70,6 @@ const Boosting = () => {
   }, [startDate]);
 
   useEffect(() => {
-    if (boostedCompany?.data?.length < 6) {
-      setMinStartDate(new Date()?.toISOString()?.split("T")[0]);
-    } else {
-      let minDate = boostedCompany?.data[0]?.endDate;
-      boostedCompany?.data?.map((e) => {
-        if (minDate > e?.endDate) {
-          minDate = e?.endDate;
-        } else {
-          return true;
-        }
-      });
-      minDate &&
-        setMinStartDate(new Date(minDate)?.toISOString()?.split("T")[0]);
-    }
-  }, [boostedCompany]);
-
-  useEffect(() => {
     if (startDate?.length > 1 && paymentMethod?.length > 1) {
       setPay(true);
       setErrorMessage(false);
@@ -114,79 +80,36 @@ const Boosting = () => {
   }, [startDate, paymentMethod]);
 
   useEffect(() => {
-    if (currentCompany?.data[0]?.currentBalance < boostInfo?.amount) {
+    if (currentCompany?.data[0]?.currentBalance < subscriptionInfo?.amount) {
       setPaymentMethod("new-payment");
     } else {
       setPaymentMethod("");
     }
-  }, [currentCompany, boostInfo]);
+  }, [currentCompany, subscriptionInfo]);
 
-  console.log(boostedCompany, "boosted");
+  useEffect(() => {
+    if (
+      subscriptionHistory?.data?.length === 0 ||
+      subscriptionHistory?.message
+    ) {
+      setMinStartDate(new Date()?.toISOString()?.split("T")[0]);
+    } else if (subscriptionHistory?.data?.length > 0) {
+      let minDate = subscriptionHistory?.data[0]?.endDate;
+      subscriptionHistory?.data?.map((e) => {
+        if (minDate > e?.endDate) {
+          minDate = e?.endDate;
+        } else {
+          return true;
+        }
+      });
+      minDate &&
+        setMinStartDate(new Date(minDate)?.toISOString()?.split("T")[0]);
+    }
+  }, [subscriptionHistory]);
+  console.log(subscriptionHistory, "boosted");
   return (
     <section class="bg-white dark:bg-gray-900 relative">
       <div class="py-2 px-4 mx-auto max-w-screen-xl lg:py-6 lg:px-6">
-        <div class="mx-auto mb-5 lg:mb-8">
-          <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">
-            Boost your company.
-          </h2>
-          <p class="font-light text-gray-600 sm:text-lg dark:text-gray-400">
-            Here at ETBLINK we will put your company in the first place to
-            increase your accessability in all over across the world.
-          </p>
-        </div>
-
-        {/* {!currentCompany?.data[0]?.isSubscribed && (
-          <div
-            class="flex items-center p-4 mb-4 text-sm text-yellow-800 border border-yellow-300 rounded-lg bg-yellow-50 dark:bg-gray-800 dark:text-yellow-300 dark:border-yellow-800"
-            role="alert"
-          >
-            <svg
-              class="flex-shrink-0 inline w-4 h-4 me-3"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-            >
-              <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
-            </svg>
-            <span class="sr-only">Warning</span>
-            <div>
-              To boost your company please first pay your service fee and come
-              back again!
-            </div>
-          </div>
-        )} */}
-
-        {currentCompany?.data[0]?.subscriptionEndDate < Date.now() ||
-        !currentCompany?.data[0]?.isSubscribed ? (
-          <div
-            class="flex items-center p-4 mb-4 text-sm text-yellow-800 border border-yellow-300 rounded-lg bg-yellow-50 dark:bg-gray-800 dark:text-yellow-300 dark:border-yellow-800"
-            role="alert"
-          >
-            <svg
-              class="flex-shrink-0 inline w-4 h-4 me-3"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-            >
-              <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
-            </svg>
-            <span class="sr-only">Info</span>
-            <div>
-              <span class="font-medium">Warning! </span> Please first pay your
-              service fee here.
-              <a
-                href="/dashboard/company/subscription"
-                className="mx-2 font-bold hover:text-blue-500 underline text-blue-600"
-              >
-                Pay now
-              </a>
-              then come back again to boost.
-            </div>
-          </div>
-        ) : null}
-
         <div
           class="flex items-center p-4 mb-4 text-sm text-blue-800 border border-blue-300 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400 dark:border-blue-800"
           role="alert"
@@ -201,72 +124,96 @@ const Boosting = () => {
             <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
           </svg>
           <span class="sr-only">Note</span>
-          {boostedCompany?.data?.length < 6 ? (
+          {subscriptionHistory?.data?.length === 0 ||
+          subscriptionHistory?.message ? (
             <div>
-              Your can start your boosting from
+              Your can start your first service from
               <span className="font-bold px-2">Now ({minStartDate})</span>
             </div>
           ) : (
             <div>
-              Your boosting will start from
+              Your next service will start from
               <span className="font-bold px-2">{minStartDate}</span>
-              because for the movement our space are filled by other companies.
+              because your previous service is not expired.
             </div>
           )}
         </div>
-
         {isFetching && <Loading />}
         {isError && <p>Something went wrong unable to read the data</p>}
-        <div className="grid grid-cols-1 md:grid-cols-2 w-full gap-5 place-items-center lg:grid-cols-3 my-2">
-          {boosts && boosts?.data?.length > 0 ? (
-            boosts?.data?.map((e) => {
-              return (
-                <div class="flex mt-5 flex-col p-4 w-full items-center justify-center gap-2 hover:bg-gray-200 text-gray-900 bg-white rounded-lg border border-gray-100 shadow dark:border-gray-600 xl:p-8 dark:bg-gray-800 dark:text-white">
-                  <h3 class="text-xl font-semibold">{e?.name}</h3>
-                  <div class="flex justify-center items-baseline">
-                    <span class="mr-2 text-2xl font-extrabold">
-                      {e?.amount} birr
-                    </span>
+        <div class="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
+          <div class="mx-auto mb-5 lg:mb-8">
+            <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">
+              Boost your company.
+            </h2>
+            <p class="font-light text-gray-600 sm:text-lg dark:text-gray-400">
+              Here at ETBLINK we will put your company in the first place to
+              increase your accessability in all over across the world.
+            </p>
+          </div>
+          <div class="space-y-8 lg:grid lg:grid-cols-3 sm:gap-6 xl:gap-10 lg:space-y-0">
+            {subscriptions && subscriptions?.data?.length > 0 ? (
+              subscriptions?.data?.map((e) => {
+                return (
+                  <div class="flex flex-col p-6 mx-auto max-w-lg text-center text-gray-900 bg-white rounded-lg border border-gray-100 shadow dark:border-gray-600 xl:p-8 dark:bg-gray-800 dark:text-white">
+                    <h3 class="mb-4 text-2xl font-semibold">{e?.type}</h3>
+                    <p class="font-light text-gray-500 sm:text-lg dark:text-gray-400">
+                      {e?.description}
+                    </p>
+                    <div class="flex justify-center items-baseline my-8">
+                      <span class="mr-2 text-5xl font-extrabold">
+                        {e?.amount}
+                      </span>
+                      <span class="text-gray-500 dark:text-gray-400">
+                        / for {e?.For} {e?.duration}
+                      </span>
+                    </div>
+                    <ul role="list" class="mb-8 space-y-4 text-left">
+                      {e?.features?.map((f) => {
+                        return (
+                          <li class="flex items-center space-x-3">
+                            <svg
+                              class="flex-shrink-0 w-5 h-5 text-green-500 dark:text-green-400"
+                              fill="currentColor"
+                              viewBox="0 0 20 20"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path
+                                fill-rule="evenodd"
+                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                clip-rule="evenodd"
+                              ></path>
+                            </svg>
+                            <span>{f}</span>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                    <button
+                      onClick={() => {
+                        setSubscriptionInfo(e);
+                        setDuration({
+                          type: e?.duration,
+                          value: e?.For * 1,
+                        });
+                        setSubscriptionPopup(true);
+                      }}
+                      className={`text-white w-full rounded-lg py-2 px-2 bg-main hover:bg-red-500 `}
+                    >
+                      Get Started
+                    </button>
                   </div>
-                  <div class="flex justify-center items-baseline">
-                    <span class="mr-2 text-xl font-extrabold">
-                      {e?.duration}
-                    </span>
-                  </div>
-                  <button
-                    disabled={
-                      currentCompany?.data[0]?.subscriptionEndDate <
-                        Date.now() || !currentCompany?.data[0]?.isSubscribed
-                        ? true
-                        : false
-                    }
-                    onClick={() => {
-                      setBoostInfo(e);
-                      setDuration({
-                        type: e?.duration?.split(" ")[1],
-                        value: e?.duration?.split(" ")[0] * 1,
-                      });
-                      setBoostPopup(true);
-                    }}
-                    className={`text-white w-32 py-2 px-2 ${
-                      !currentCompany?.data[0]?.isSubscribed
-                        ? "bg-red-400 "
-                        : "bg-main hover:bg-red-500"
-                    } rounded-lg `}
-                  >
-                    Get Started
-                  </button>
-                </div>
-              );
-            })
-          ) : (boosts && boosts?.message) || boosts?.data?.length === 0 ? (
-            <div className="w-full items-center justify-center flex">
-              There is no boost history!
-            </div>
-          ) : null}
+                );
+              })
+            ) : (subscriptions && subscriptions?.message) ||
+              subscriptions?.data?.length === 0 ? (
+              <div className="w-full items-center justify-center flex">
+                There is no subscription history!
+              </div>
+            ) : null}
+          </div>
         </div>
         <p className="font-light py-2 mt-10 text-lg">
-          Companies in our boosted list.
+          Your previous renewal history.
         </p>
         <div class="relative overflow-x-auto mt-2 overflow-y-auto h-[300px]">
           <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -276,13 +223,13 @@ const Boosting = () => {
                   No
                 </th>
                 <th scope="col" class="px-3 py-3">
-                  Logo
+                  Subscription type
                 </th>
                 <th scope="col" class="px-3 py-3">
-                  Company
+                  Amount
                 </th>
                 <th scope="col" class="px-3 py-3">
-                  Boost type
+                  Duration
                 </th>
                 <th scope="col" class="px-3 py-3">
                   Started Date
@@ -290,11 +237,14 @@ const Boosting = () => {
                 <th scope="col" class="px-3 py-3">
                   End Date
                 </th>
+                <th scope="col" class="px-3 py-3">
+                  Status
+                </th>
               </tr>
             </thead>
             <tbody>
-              {boostHistory && boostHistory?.data?.length > 0 ? (
-                boostHistory?.data?.map((e, i) => {
+              {subscriptionHistory && subscriptionHistory?.data?.length > 0 ? (
+                subscriptionHistory?.data?.map((e, i) => {
                   return (
                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                       <td
@@ -303,43 +253,39 @@ const Boosting = () => {
                       >
                         {i + 1}
                       </td>
-                      <td
-                        scope="row"
-                        class="px-2 py-4 w-14  font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                      >
-                        <img
-                          src={e?.company?.logo}
-                          alt=""
-                          className="w-11 h-11 rounded-full border object-fill object-center"
-                        />
+                      <td class="px-3 w-52  py-4">{e?.subscription?.type}</td>
+                      <td class="px-3 w-52  py-4">{e?.subscription?.amount}</td>
+                      <td class="px-3 w-28 py-4">
+                        {e?.subscription?.For + " " + e?.subscription?.duration}
                       </td>
-                      <td class="px-3 w-52  py-4">{e?.company?.name}</td>
-                      <td class="px-3 w-28 py-4">{e?.boost?.name}</td>
                       <td class="px-3 py-4">
                         {formatDate(e?.startDate, "history")}
                       </td>
                       <td class="px-3 py-4">
                         {formatDate(e?.endDate, "history")}
                       </td>
+                      <td class="px-3 w-52  py-4">
+                        {e?.company?.subscriptionStatus}
+                      </td>
                     </tr>
                   );
                 })
-              ) : (boostHistory && boostHistory?.message) ||
-                boostHistory?.data?.length === 0 ? (
-                <div>Be the first one to boost your Company.</div>
+              ) : (subscriptionHistory && subscriptionHistory?.message) ||
+                subscriptionHistory?.data?.length === 0 ? (
+                <div>There is no renewal history.</div>
               ) : null}
             </tbody>
           </table>
         </div>
       </div>
-      {boostPopup && boostInfo && (
+      {subscriptionPopup && subscriptionInfo && (
         <div className="fixed top-0 left-0 items-center justify-center flex flex-col w-full h-[100vh] bg-black/50">
           <div className="relative rounded-lg p-5 z-30 items-center lg:ml-56 mt-20 justify-center w-[350px] md:w-[500px] h-auto bg-white bg-dark">
             <svg
               class="w-6 h-6 cursor-pointer absolute top-2 right-2 text-gray-800 hover:text-gray-600 dark:text-white"
               aria-hidden="true"
               onClick={() => {
-                setBoostPopup(false);
+                setSubscriptionPopup(false);
                 setEndDate("- - -");
                 setStartDate("");
                 setPay(false);
@@ -413,33 +359,25 @@ const Boosting = () => {
                 </div>
               )}
               <p className="">Select start date</p>
-              {/* <Datepicker
-                onChange={(e) => setStartDate(e.target.value)}
-                minDate={new Date(2023, 0, 1)}
-                maxDate={new Date(2024, 2, 30)}
-                labelTodayButton="Today"
-                labelClearButton="Cancel"
-              /> */}
               <input
                 onChange={(e) => setStartDate(e.target.value)}
                 min={minStartDate}
                 type="date"
                 name=""
                 id=""
-                // data-date-format="DD MMMM YYYY"
                 className="px-3 py-2 rounded-lg bg-white bg-dark focus:ring-0 focus:outline-none border border-gray-300"
               />
               <div className="w-full mt-3 gap-5 flex items-center justify-center">
                 <div className="w-full items-center justify-center">
                   <p className="">Plan Name</p>
                   <p className="py-2 px-3 mt-2 rounded-lg border border-gray-300 w-full focus:outline-black">
-                    {boostInfo?.name}
+                    {subscriptionInfo?.type}
                   </p>
                 </div>
                 <div className="w-full items-center justify-center">
                   <p className="">Amount</p>
                   <p className="py-2 mt-2 px-3 rounded-lg border border-gray-300 w-full focus:outline-black">
-                    {boostInfo?.amount} birr
+                    {subscriptionInfo?.amount} birr
                   </p>
                 </div>
               </div>
@@ -447,7 +385,7 @@ const Boosting = () => {
                 <div className="w-44 items-center justify-center">
                   <p className="mt-3">Duration</p>
                   <p className="py-2 px-3 mt-2 rounded-lg border border-gray-300 w-full focus:outline-black">
-                    {boostInfo?.duration}
+                    {subscriptionInfo?.For + " " + subscriptionInfo?.duration}
                   </p>
                 </div>
                 <div className="w-full items-center justify-center">
@@ -472,7 +410,7 @@ const Boosting = () => {
                       {" "}
                       (
                       {currentCompany?.data[0]?.currentBalance <
-                      boostInfo?.amount
+                      subscriptionInfo?.amount
                         ? "You don't have enough balance for direct payment"
                         : null}
                       )
@@ -482,7 +420,7 @@ const Boosting = () => {
                     <p
                       className={`py-2 ${
                         currentCompany?.data[0]?.currentBalance <
-                        boostInfo?.amount
+                        subscriptionInfo?.amount
                           ? "bg-red-200"
                           : null
                       }  flex items-center gap-3 px-3 rounded-lg border border-gray-300 w-full focus:outline-black`}
@@ -490,7 +428,7 @@ const Boosting = () => {
                       <input
                         disabled={
                           currentCompany?.data[0]?.currentBalance <
-                          boostInfo?.amount
+                          subscriptionInfo?.amount
                             ? true
                             : false
                         }
@@ -510,7 +448,7 @@ const Boosting = () => {
                       <input
                         checked={
                           currentCompany?.data[0]?.currentBalance <
-                          boostInfo?.amount
+                          subscriptionInfo?.amount
                             ? true
                             : false
                         }
@@ -527,18 +465,18 @@ const Boosting = () => {
                 </div>
               </div>
             </div>
-            {pay ? ( 
+            {pay ? (
               <Pay
                 startDate={startDate}
                 endDate={endDate?.split("/")?.join("-")}
-                boost={boostInfo?._id}
+                boost={subscriptionInfo?._id}
                 company={currentCompany?.data[0]?._id}
                 name={currentCompany?.data[0]?.name}
                 email={user?.email}
-                amount={boostInfo?.amount}
+                amount={subscriptionInfo?.amount}
                 paymentMethod={paymentMethod}
-                title="Pay and Boost"
-                type="boost"
+                title="Pay and Renew"
+                type="subscription"
               />
             ) : (
               <button
@@ -567,17 +505,9 @@ const Boosting = () => {
                     clip-rule="evenodd"
                   />
                 </svg>
-                Pay and Boost
+                Pay and Renew
               </button>
             )}
-
-            {/* <LoadingButton
-              pending={boostPending}
-              onClick={boostHandler}
-              title="Pay and Boost"
-              color="bg-main"
-              width="w-full sm:rounded-lg sm:border sm:py-3 mt-5 sm:px-5 sm:hover:bg-red-500"
-            /> */}
           </div>
         </div>
       )}
@@ -585,4 +515,4 @@ const Boosting = () => {
   );
 };
 
-export default Boosting;
+export default Subscription;

@@ -130,15 +130,6 @@ const schema = new mongoose.Schema(
       },
     },
 
-    paymentDetail: {
-      planType: { type: String },
-      startDate: { type: Date },
-      endDate: { type: Date },
-      amount: { type: Number, default: 0 },
-      paymentMethod: { type: Number },
-      status: { type: String },
-    },
-    
     currentBalance: { type: Number, default: 0 },
 
     saves: {

@@ -12,6 +12,20 @@ const subscriptionHistorySchema = new Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "company",
     },
+
+    startDate: {
+      type: Number,
+      default: 0,
+    },
+
+    endDate: {
+      type: Number,
+      default: 0,
+    },
+
+    paymentMethod: {
+      type: String,
+    },
   },
   {
     timestamps: true,

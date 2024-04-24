@@ -66,7 +66,7 @@ export const selectModel = (name, next) => {
     case "subscriptions":
       model = Subscription;
       break;
-    case "subscriptionsHistory":
+    case "subscriptionhistories":
       model = SubscriptionHistory;
       break;
     case "boosts":

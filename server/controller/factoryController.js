@@ -118,7 +118,7 @@ export const _read = asyncCatch(async (req, res, next) => {
         /\b(gte|lte|lt|gt|eq|ne)\b/g,
         (match) => `$${match}`
       )
-    ); 
+    );
     // queryObject.boostStartDate["$lt"] = queryObject.boostStartDate["$lt"] * 1;
     // queryObject.subscriptionEndDate["$gt"] =
     //   queryObject.subscriptionEndDate["$gt"] * 1;
@@ -137,7 +137,7 @@ export const _read = asyncCatch(async (req, res, next) => {
     req.query.sort
       ? query.sort(req.query.sort.split(",").join(" "))
       : query.sort("createdAt");
- 
+
     //limiting fields
     const fields = req.query.fields
       ? req.query.fields.split(",").join(" ")
@@ -164,6 +164,12 @@ export const _read = asyncCatch(async (req, res, next) => {
         query.populate(req.query.populatingValue.split(",").join(" "));
         break;
       case "boosthistories":
+        query.populate(req.query.populatingValue.split(",").join(" "));
+        break;
+      case "subscriptionhistories":
+        query.populate(req.query.populatingValue.split(",").join(" "));
+        break;
+      case "payments":
         query.populate(req.query.populatingValue.split(",").join(" "));
         break;
       default:

@@ -10,27 +10,34 @@ import PageNotFound from "../components/PageNotFound";
 const Success = () => {
   const [boostData, boostResponse] = useCreateBoostMutation();
   const [boostPending, setBoostPending] = useState(false);
-  const paymentData = window.localStorage.getItem("etb_link_system");
+  const data = JSON.parse(window.localStorage.getItem("etb_link_system"));
   useEffect(() => {
-    const data = JSON.parse(paymentData);
+    // const data = JSON.parse(paymentData);
     boostData({
       company: data?.company,
-      boost: data?.boost,
-      startDate: data?.startDate,
-      endDate: data?.endDate,
+      amount: data?.amount,
       paymentMethod: data?.paymentMethod,
+      type: data?.type,
     });
   }, []);
-
+  console.log(data, "success");
   return (
     <div className="text-xl font-extrabold w-full h-full  flex gap-3 flex-col items-center justify-center">
       <Response
         response={boostResponse}
         setPending={setBoostPending}
-        redirectTo="/dashboard/company/boosting"
+        redirectTo={
+          data?.type === "boost"
+            ? "/dashboard/company/boosting"
+            : data?.type === "subscription"
+            ? "/dashboard/company/subscription"
+            : data?.type === "fund"
+            ? "/dashboard/company/billing"
+            : "/dashboard/company"
+        }
         type="payment"
       />
-      {paymentData ? (
+      {data ? (
         <div className="p-5 rounded-lg border shadow-lg bg-white">
           <p className="font-bold">We are making things ready for you.</p>
           <p className="text-sm max-w-screen-sm">

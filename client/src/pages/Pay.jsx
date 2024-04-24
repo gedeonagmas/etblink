@@ -1,12 +1,12 @@
 import React, { useContext, useEffect } from "react";
-// import { userContext } from "../App";
 
 const Pay = (props) => {
   useEffect(() => {
-    window.localStorage.setItem("etb_link_system", JSON.stringify(props));
-  }, []);
+    props &&
+      window.localStorage.setItem("etb_link_system", JSON.stringify(props));
+  }, [props]);
 
-  console.log(props, "props");
+  // console.log(props.amount, "props from pay");
   return (
     <div>
       <form
@@ -20,7 +20,7 @@ const Pay = (props) => {
           value="CHAPUBK_TEST-7osxyPCBKmA3NdC9nlaZkIrHMas5Falj"
         />
         <input type="hidden" name="tx_ref" value={`etblink-tx-${Date.now()}`} />
-        <input type="hidden" name="amount" value={props.amount} />
+        <input type="hidden" name="amount" value={props.amount * 1} />
         <input type="hidden" name="currency" value="ETB" />
         <input type="hidden" name="email" value={props.email} />
         <input type="hidden" name="first_name" value={props.name} />
@@ -66,7 +66,7 @@ const Pay = (props) => {
               clip-rule="evenodd"
             />
           </svg>
-          Pay and Boost
+          {props?.title}
         </button>
       </form>
     </div>

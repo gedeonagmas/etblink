@@ -42,6 +42,7 @@ import UpdateBoost from "./pages/dashboard/admin/UpdateBoost";
 import AddSubscriptions from "./pages/dashboard/admin/AddSubscriptions";
 import Billing from "./pages/dashboard/company/Billing";
 import Success from "./pages/Success";
+import Subscription from "./pages/dashboard/company/Subscription";
 
 export const userContext = createContext();
 
@@ -93,12 +94,16 @@ function App() {
                 element={<Referrals type="company" />}
               ></Route>
               <Route
+                path="/dashboard/company/boosting"
+                element={<Boosting />}
+              ></Route>
+              <Route
                 path="/dashboard/company/billing"
                 element={<Billing />}
               ></Route>
               <Route
-                path="/dashboard/company/boosting"
-                element={<Boosting />}
+                path="/dashboard/company/subscription"
+                element={<Subscription />}
               ></Route>
               <Route
                 path="/dashboard/company/saves"

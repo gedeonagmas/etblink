@@ -12,6 +12,16 @@ const subscriptionModel = new Schema(
       type: String,
       validate: valid.required("Type"),
     },
+    
+    For: {
+      type: String,
+      validate: valid.required("For"),
+    },
+
+    duration: {
+      type: String,
+      validate: valid.required("Duration"),
+    },
 
     description: {
       type: String,

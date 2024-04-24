@@ -70,7 +70,7 @@ const Response = ({ response, setPending, redirectTo, type }) => {
         localStorage.removeItem("etb_link_system");
         setTimeout(() => {
           navigate(redirectTo, { replace: true });
-        }, 3000);
+        }, 1000);
       } else if (type === "reset") {
         setTimeout(() => {
           navigate(redirectTo, { replace: true });

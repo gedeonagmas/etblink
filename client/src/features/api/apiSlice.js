@@ -50,6 +50,7 @@ export const apiSlice = createApi({
     "boosts",
     "boosthistories",
     "subscriptionhistories",
+    "payments",
   ],
   endpoints: (builder) => ({
     //user signup
@@ -344,7 +345,13 @@ export const apiSlice = createApi({
         body: data,
         credentials: "include",
       }),
-      invalidatesTags: ["boosts", "boosthistories", "companies"],
+      invalidatesTags: [
+        "boosts",
+        "boosthistories",
+        "companies",
+        "subscriptionhistories",
+        "payments",
+      ],
     }),
   }),
 });

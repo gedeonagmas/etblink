@@ -87,6 +87,8 @@ const AddSubscriptions = () => {
   const [amount, setAmount] = useState(0);
   const [type, setType] = useState("");
   const [description, setDescription] = useState("");
+  const [For, setFor] = useState("");
+  const [duration, setDuration] = useState(0);
 
   const addServices = () => {
     if (service.length > 0 && !services.includes(service)) {
@@ -101,6 +103,8 @@ const AddSubscriptions = () => {
       description,
       amount,
       features: services,
+      For,
+      duration,
       url: "/user/subscriptions",
       tag: ["subscriptions"],
     });
@@ -126,23 +130,56 @@ const AddSubscriptions = () => {
           required
         />
       </div>
-      <div className="mb-5 w-full">
-        <label
-          class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-          for="file_input"
-        >
-          Amount
-        </label>
-        <input
-          onChange={(e) => setAmount(e.target.value)}
-          // value={website}
-          type="number"
-          id="name"
-          class="border bg-white bg-dark border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          placeholder="5000"
-          required
-          min={1}
-        />
+      <div className="mb-5 flex justify-between items-center w-full">
+        <div>
+          <label
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            for="file_input"
+          >
+            Amount
+          </label>
+          <input
+            onChange={(e) => setAmount(e.target.value)}
+            // value={website}
+            type="number"
+            id="name"
+            class="border bg-white bg-dark border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder="5000"
+            required
+            min={1}
+          />
+        </div>
+        <div>
+          <label
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            for="file_input"
+          >
+            For
+          </label>
+          <select onChange={(e) => setFor(e.target.value)} name="" id="">
+            <option selected value="month">
+              Month
+            </option>
+            <option value="year">Year</option>
+          </select>
+        </div>
+        <div>
+          <label
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            for="file_input"
+          >
+            Duration
+          </label>
+          <input
+            onChange={(e) => setDuration(e.target.value)}
+            type="number"
+            id="name"
+            class="border bg-white bg-dark border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder="5000"
+            required
+            min={1}
+          />
+        </div>
       </div>
       <div className="mb-5 w-full">
         <label
