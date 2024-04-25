@@ -4,6 +4,8 @@ import Response from "../../components/Response";
 import { useUpdateMutation } from "../../features/api/apiSlice";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import EditorToolbar, { modules, formats } from "../../components/EditorToolbar";
+import Editor from "../../components/Editor";
 
 const List = (props) => {
   return (
@@ -361,7 +363,14 @@ const Profile = () => {
       >
         Description
       </label>
-      <ReactQuill theme="snow" value={description} onChange={setDescription} />
+      {/* <ReactQuill
+        theme="snow"
+        modules={modules}
+        formats={formats}
+        value={description}
+        onChange={setDescription}
+      /> */}
+      <Editor description={description} setDescription={setDescription}/>
       {/* <textarea
         onChange={(e) => setDescription(e.target.value)}
         value={description}

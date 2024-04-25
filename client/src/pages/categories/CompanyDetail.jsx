@@ -300,7 +300,7 @@ const CompanyDetail = (props) => {
               <div className="">
                 <p className="text-xl font-bold">About us</p>
                 <div className="mt-5">{Parser(`${company?.description}`)}</div>
-              </div> 
+              </div>
 
               {/* carousel */}
               <div className="h-56 sm:h-64 xl:h-80 2xl:h-96">
