@@ -57,12 +57,12 @@ export const modules = {
     handlers: {
       undo: undoChange,
       redo: redoChange,
-      image: () => {
-        console.log("image inserted");
-      },
-      video: () => {
-        console.log("video inserted");
-      },
+      // image: () => {
+      //   console.log("image inserted");
+      // },
+      // video: () => {
+      //   console.log("video inserted");
+      // },
     },
   },
   history: {
@@ -89,7 +89,7 @@ export const formats = [
   "bullet",
   "indent",
   "link",
-  "image",
+  // "image",
   "color",
   "code-block",
   "align",
@@ -144,11 +144,11 @@ export const QuillToolbar = () => (
     </span>
     <span className="ql-formats">
       <button className="ql-link" />
-      <button className="ql-image" />
-      <button className="ql-video" />
+      {/* <button className="ql-image" />
+      <button className="ql-video" /> */}
     </span>
     <span className="ql-formats">
-      <button className="ql-formula" />
+      {/* <button className="ql-formula" /> */}
       <button className="ql-code-block" />
       <button className="ql-clean" />
     </span>

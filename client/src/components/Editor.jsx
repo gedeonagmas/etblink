@@ -4,7 +4,7 @@ import EditorToolbar, { modules, formats } from "./EditorToolbar";
 import "react-quill/dist/quill.snow.css";
 import "./styles.css";
 
-export const Editor = ({ description, setDescription }) => {
+export const Editor = ({ description, setDescription, theme }) => {
   //   const [state, setState] = React.useState({ value: null });
   //   const handleChange = (value) => {
   //     setState({ value });
@@ -14,7 +14,7 @@ export const Editor = ({ description, setDescription }) => {
     <div className="text-editor">
       <EditorToolbar />
       <ReactQuill
-        theme="snow"
+        theme={theme}
         value={description}
         onChange={setDescription}
         placeholder={"Write something awesome..."}

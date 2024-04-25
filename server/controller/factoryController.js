@@ -45,6 +45,7 @@ const fileHandler = (value, req) => {
 //create
 export const _create = asyncCatch(async (req, res, next) => {
   const model = selectModel(req.params.table, next);
+  console.log(req.body, "body");
   const value = { ...req.body };
   const files = fileHandler(value, req);
   if (model) {
