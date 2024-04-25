@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useReadQuery } from "../../../features/api/apiSlice";
 import Loading from "../../../components/loading/Loading";
 import Pay from "../../Pay";
@@ -9,6 +9,7 @@ const Billing = () => {
   const [amount, setAmount] = useState(0);
   const [fundPopup, setFundPopup] = useState(false);
   const [errorMessage, setErrorMessage] = useState(false);
+  const [showError, setShowError] = useState(false);
 
   const {
     data: currentCompany,
@@ -28,7 +29,13 @@ const Billing = () => {
     tag: ["payments"],
   });
 
-  console.log(amount * 1, "amount");
+  useEffect(() => {
+    if (amount?.toString()[0] === "0") {
+      setAmount("");
+    }
+  }, [amount]);
+  console.log(amount, "amount");
+
   return (
     <div className="w-full  h-auto flex flex-col items-start justify-start">
       <div className="flex gap-10 items-center mt-2">
@@ -109,6 +116,7 @@ const Billing = () => {
               aria-hidden="true"
               onClick={() => {
                 setFundPopup(false);
+                setShowError(false);
               }}
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -126,7 +134,7 @@ const Billing = () => {
             </svg>
 
             <div className="flex relative mb-5 flex-col gap-3">
-              {errorMessage && (
+              {errorMessage && showError && (
                 <div
                   id="alert-2"
                   class="flex absolute top-0 left-20 items-center p-4 mb-4 text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
@@ -143,7 +151,7 @@ const Billing = () => {
                   </svg>
                   <span class="sr-only">Info</span>
                   <div class="ms-3 text-sm font-medium">
-                    {amount < 1 && (
+                    {amount * 1 < 1 && (
                       <p className="text-sm">
                         - Amount must be greater than 0.
                       </p>
@@ -151,7 +159,10 @@ const Billing = () => {
                   </div>
                   <button
                     type="button"
-                    onClick={() => setErrorMessage(false)}
+                    onClick={() => {
+                      setErrorMessage(false);
+                      setShowError(false);
+                    }}
                     class="ms-auto -mx-1.5 ml-2 -my-1.5 bg-red-50 text-red-500 rounded-lg focus:ring-2 focus:ring-red-400 p-1.5 hover:bg-red-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:text-red-400 dark:hover:bg-gray-700"
                     data-dismiss-target="#alert-2"
                     aria-label="Close"
@@ -178,9 +189,10 @@ const Billing = () => {
               <p className="">Enter Amount(Birr)</p>
               <input
                 onChange={(e) => setAmount(e.target.value)}
-                value={amount * 1}
+                value={amount}
                 min={1}
                 type="number"
+                placeholder="Amount in birr"
                 className="px-3 py-2 rounded-lg bg-white bg-dark focus:ring-0 focus:outline-none border border-gray-300"
               />
             </div>
@@ -197,6 +209,7 @@ const Billing = () => {
             ) : (
               <button
                 onClick={() => {
+                  setShowError(true);
                   if (amount > 1) {
                     setPay(true);
                   } else {

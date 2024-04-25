@@ -208,7 +208,7 @@ export const _update = asyncCatch(async (req, res, next) => {
   // console.log(req.body, "body");
   const value = { ...req.body };
   const files = fileHandler(value, req);
-  console.log(files, "files");
+  // console.log(files, "files");
   //image:{
   // data: req.file.buffer,
   //   contentType:req.file.mimetype

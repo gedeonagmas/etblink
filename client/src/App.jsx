@@ -43,6 +43,7 @@ import AddSubscriptions from "./pages/dashboard/admin/AddSubscriptions";
 import Billing from "./pages/dashboard/company/Billing";
 import Success from "./pages/Success";
 import Subscription from "./pages/dashboard/company/Subscription";
+import Sales from "./pages/dashboard/Sales";
 
 export const userContext = createContext();
 
@@ -108,6 +109,10 @@ function App() {
               <Route
                 path="/dashboard/company/saves"
                 element={<Saves type="company" />}
+              ></Route>
+              <Route
+                path="/dashboard/company/sales"
+                element={<Sales type="company" />}
               ></Route>
               <Route
                 path="/dashboard/company/views"

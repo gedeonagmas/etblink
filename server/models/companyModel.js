@@ -52,7 +52,7 @@ const schema = new mongoose.Schema(
 
     description: {
       type: String,
-      validate: valid.paragraph("description", 100, 1000),
+      validate: valid.paragraph("description", 100, 5000),
     },
 
     latitude: {

@@ -23,6 +23,7 @@ const Boosting = () => {
   const [minStartDate, setMinStartDate] = useState(0);
   const [errorMessage, setErrorMessage] = useState(false);
   const [pay, setPay] = useState(false);
+  const [showError, setShowError] = useState(false);
 
   const {
     data: boosts,
@@ -367,6 +368,7 @@ const Boosting = () => {
               aria-hidden="true"
               onClick={() => {
                 setBoostPopup(false);
+                setShowError(false);
                 setEndDate("- - -");
                 setStartDate("");
                 setPay(false);
@@ -387,7 +389,7 @@ const Boosting = () => {
             </svg>
 
             <div className="flex relative mb-5 flex-col gap-3">
-              {errorMessage && (
+              {errorMessage && showError && (
                 <div
                   id="alert-2"
                   class="flex absolute top-0 left-20 items-center p-4 mb-4 text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
@@ -621,6 +623,7 @@ const Boosting = () => {
               // </button>
               <button
                 onClick={() => {
+                  setShowError(true);
                   if (startDate?.length > 1 && paymentMethod?.length > 1) {
                     setPay(true);
                   } else {

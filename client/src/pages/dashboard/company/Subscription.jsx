@@ -7,7 +7,6 @@ import {
 import Loading from "../../../components/loading/Loading";
 import Response from "../../../components/Response";
 import LoadingButton from "../../../components/loading/LoadingButton";
-import { Datepicker } from "flowbite-react";
 import Pay from "../../Pay";
 
 const Subscription = () => {
@@ -23,6 +22,7 @@ const Subscription = () => {
   const [minStartDate, setMinStartDate] = useState(0);
   const [errorMessage, setErrorMessage] = useState(false);
   const [pay, setPay] = useState(false);
+  const [showError, setShowError] = useState(false);
 
   const {
     data: subscriptions,
@@ -314,9 +314,11 @@ const Subscription = () => {
               aria-hidden="true"
               onClick={() => {
                 setSubscriptionPopup(false);
+                setShowError(false);
                 setEndDate("- - -");
                 setStartDate("");
                 setPay(false);
+                setPaymentMethod("");
               }}
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -334,7 +336,7 @@ const Subscription = () => {
             </svg>
 
             <div className="flex relative mb-5 flex-col gap-3">
-              {errorMessage && (
+              {errorMessage && showError && (
                 <div
                   id="alert-2"
                   class="flex absolute top-0 left-20 items-center p-4 mb-4 text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
@@ -496,49 +498,6 @@ const Subscription = () => {
                 </div>
               </div>
             </div>
-            {/* {pay ? (
-              <Pay
-                startDate={startDate}
-                endDate={endDate?.split("/")?.join("-")}
-                boost={subscriptionInfo?._id}
-                company={currentCompany?.data[0]?._id}
-                name={currentCompany?.data[0]?.name}
-                email={user?.email}
-                amount={subscriptionInfo?.amount}
-                paymentMethod={paymentMethod}
-                title="Pay and Renew"
-                type="subscription"
-              />
-            ) : (
-              <button
-                onClick={() => {
-                  if (startDate?.length > 1 && paymentMethod?.length > 1) {
-                    setPay(true);
-                  } else {
-                    setErrorMessage(true);
-                  }
-                }}
-                className="flex  cursor-default gap-2 items-center justify-center h-10 mt-2 rounded-lg w-full  text-white bg-red-400"
-                type="submit"
-              >
-                <svg
-                  class="w-6 h-6 "
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm13.707-1.293a1 1 0 0 0-1.414-1.414L11 12.586l-1.793-1.793a1 1 0 0 0-1.414 1.414l2.5 2.5a1 1 0 0 0 1.414 0l4-4Z"
-                    clip-rule="evenodd"
-                  />
-                </svg>
-                Pay and Renew
-              </button>
-            )} */}
             {pay && paymentMethod === "new-payment" ? (
               <Pay
                 startDate={startDate}
@@ -582,6 +541,7 @@ const Subscription = () => {
             ) : (
               <button
                 onClick={() => {
+                  setShowError(true);
                   if (startDate?.length > 1 && paymentMethod?.length > 1) {
                     setPay(true);
                   } else {

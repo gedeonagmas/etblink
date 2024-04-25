@@ -208,7 +208,7 @@ export const upgradeHandler = asyncCatch(async (req, res, next) => {
 });
 
 export const boostHandler = asyncCatch(async (req, res, next) => {
-  console.log(req.body);
+  // console.log(req.body);
   const company = await Company.findById(req.body.company);
   if (req.body.type === "boost") {
     if (req.body.paymentMethod === "deposit") {
@@ -281,7 +281,7 @@ export const boostHandler = asyncCatch(async (req, res, next) => {
   return res.status(200).json({
     status: "Payed",
     message: `Your company is ${req.body.type + "ed"} Successfully. Thank you!`,
-  });
+  }); 
   // } else {
   //   return next(
   //     new AppError("something went wrong unable to upgrade your account!")

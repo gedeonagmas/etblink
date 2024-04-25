@@ -17,6 +17,7 @@ import Loading from "../../components/loading/Loading";
 import LoadingButton from "../../components/loading/LoadingButton";
 import Response from "../../components/Response";
 import { format } from "timeago.js";
+import Parser from "html-react-parser";
 
 const markers = [
   {
@@ -115,8 +116,8 @@ const CompanyDetail = (props) => {
 
   // console.log(data, "data");
   // console.log(company, "company");
-  console.log(location?.search?.split("?id=")[1], "location");
-  // console.log(rates?.data, "rates");
+  // console.log(location?.search?.split("?id=")[1], "location",location);
+  console.log(companyId, "rates");
   return (
     <div className="relative overflow-hidden z-20">
       <Response response={rateResponse} setPending={setPending} />
@@ -298,8 +299,8 @@ const CompanyDetail = (props) => {
 
               <div className="">
                 <p className="text-xl font-bold">About us</p>
-                <p className="mt-5">{company?.description}</p>
-              </div>
+                <div className="mt-5">{Parser(`${company?.description}`)}</div>
+              </div> 
 
               {/* carousel */}
               <div className="h-56 sm:h-64 xl:h-80 2xl:h-96">
