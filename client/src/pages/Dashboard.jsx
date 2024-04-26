@@ -1262,7 +1262,7 @@ const Dashboard = () => {
 
             <li>
               <a
-                href="/dashboard/messaging"
+                href="/dashboard/message"
                 class="flex items-center p-2 text-gray-500 hover:text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
               >
                 <svg
@@ -1335,7 +1335,7 @@ const Dashboard = () => {
 
       <div
         onClick={() => sidebarHandler("off")}
-        class="p-4 mt-20 bg-dark bg-white lg:ml-64"
+        class="pl-4 pt-4 mt-20 h-[86.5vh] overflow-y-auto overflow-x-hidden bg-dark bg-whites lg:ml-64"
       >
         {/* <Routes>
           <Route path="/company" element={<Company />} />

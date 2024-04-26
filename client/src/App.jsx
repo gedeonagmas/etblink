@@ -44,6 +44,7 @@ import Billing from "./pages/dashboard/company/Billing";
 import Success from "./pages/Success";
 import Subscription from "./pages/dashboard/company/Subscription";
 import Sales from "./pages/dashboard/Sales";
+import Message from "./pages/Message";
 
 export const userContext = createContext();
 
@@ -192,6 +193,7 @@ function App() {
               <Route path="/dashboard/saves" element={<Saves />}></Route>
               <Route path="/dashboard/views" element={<Views />}></Route>
               <Route path="/dashboard/upgrade" element={<Upgrade />}></Route>
+              <Route path="/dashboard/message" element={<Message />}></Route>
               {/* ################################################################### */}
 
               <Route path="*" element={<PageNotFound />}></Route>

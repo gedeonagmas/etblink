@@ -55,6 +55,7 @@ const files = upload.fields([
   { name: "galleries", maxCount: 10 },
   { name: "newsPhoto", maxCount: 1 },
   { name: "video", maxCount: 1 },
+  { name: "chatFile", maxCount: 10 },
 ]);
 
 //user account route
