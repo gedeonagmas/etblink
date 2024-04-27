@@ -17,5 +17,6 @@
   "editor.formatOnSave": true,
   "editor.formatOnPaste": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "terminal.integrated.shellArgs.linux": ["-l"]
+  "terminal.integrated.shellArgs.linux": ["-l"],
+  "editor.linkedEditing": true
 }

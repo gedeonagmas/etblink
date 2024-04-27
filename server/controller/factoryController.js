@@ -173,6 +173,9 @@ export const _read = asyncCatch(async (req, res, next) => {
       case "payments":
         query.populate(req.query.populatingValue.split(",").join(" "));
         break;
+      case "chats":
+        query.populate(req.query.populatingValue.split(",").join(" "));
+        break;
       default:
         query;
     }

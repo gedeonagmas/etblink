@@ -86,7 +86,7 @@ const Message = () => {
   useEffect(() => {
     if (receiver && sender) {
       trigger({
-        url: `/chat/${sender}.${receiver}`,
+        url: `/chat/${sender}.${receiver}?populatingType=chats&populatingValue=sender,receiver`,
         tag: ["chats"],
       });
     }
@@ -392,7 +392,9 @@ const Message = () => {
               sender={sender}
               texts={texts}
               currentUser={currentUser}
+              typing={typing}
             />
+            <div ref={refer} />
             <MessageInput
               popup={popup}
               typingHandler={typingHandler}
@@ -438,7 +440,6 @@ const Message = () => {
               setRejectedMessage={setRejectedMessage}
               callAcceptHandler={callAcceptHandler}
             />
-
             <Messages
               isLoading={isLoading}
               isError={isError}
@@ -446,7 +447,9 @@ const Message = () => {
               sender={sender}
               texts={texts}
               currentUser={currentUser}
-            />
+              typing={typing}
+            />{" "}
+            <div ref={refer} />
             {/* <div className="mt-4"> */}
             <MessageInput
               popup={popup}

@@ -1,6 +1,7 @@
 import React from "react";
 // import customerImage from "../../assets/images/customers/customer-i.jpg";
 import { useNavigate } from "react-router-dom";
+import ProfilePicture from "../ProfilePicture";
 
 const ChatHeader = ({
   sender,
@@ -45,31 +46,7 @@ const ChatHeader = ({
             />
           </svg>
         </a>
-        <div className="relative ml-4 py-1">
-          {user?.role !== "company" &&
-          user?.user?.profilePicture?.length < 1 ? (
-            <div className="w-12 h-12 p-1  font-bold rounded-full flex items-center justify-center bg-main text-white text-center">
-              {user?.email?.substring(0, 1)}
-            </div>
-          ) : user?.role !== "company" &&
-            user?.user?.profilePicture?.length > 1 ? (
-            <img
-              class="w-10 h-10 rounded-full"
-              src={user?.user?.profilePicture}
-              alt="photo"
-            />
-          ) : user?.role === "company" && user?.user?.logo?.length > 1 ? (
-            <img
-              class="w-10 h-10 rounded-full"
-              src={user?.role === "company" ? user?.user?.logo : ""}
-              alt="user"
-            />
-          ) : (
-            <div className="w-12 h-12 p-1  font-bold rounded-full flex items-center justify-center bg-main text-white text-center">
-              {user?.email?.substring(0, 1)}
-            </div>
-          )}
-        </div>
+        <ProfilePicture user={user} />
         <div className="flex-1 min-w-0">
           <p className=" font-medium text-gray-900 truncate dark:text-white">
             {user?.role === "company"

@@ -59,8 +59,8 @@ const UserList = ({
           </div>
         </div>
 
-        <div className="flex w-full mt-[6px] bg-gray-300 items-center justify-start">
-          <div className="flex w-full p-[2px] gap-1 bg-main text-white cursor-pointer border-r justify-center flex-cols items-center">
+        <div className="flex w-full mt-[6px] bg-gray-300 border-b-2 items-center justify-start">
+          <div className="flex w-full p-[2px] gap-1 bg-gray-200 border-b-[1.5px] border-b-red-500 text-whiteg font-semibold cursor-pointer border-r justify-center flex-cols items-center">
             <svg
               class="w-6 h-6 "
               aria-hidden="true"

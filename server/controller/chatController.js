@@ -2,13 +2,13 @@ import asyncCatch from "express-async-catch";
 import AppError from "../utils/AppError.js";
 import { Chat } from "../models/chatModel.js";
 import { size } from "../utils/size.js";
-const api = "http://localhost:4000/";
+const api = "http://localhost:3001/uploads/";
 
 //create
 export const chatCreate = asyncCatch(async (req, res, next) => {
   let data;
 
-  console.log(req.files, req.body);
+  // console.log(req.files, "rrrrrr sssssss");
   let files = [];
   if (req.files && req.files?.chatFile) {
     req.files?.chatFile?.map((e) => files.push(api + e.filename));
@@ -24,6 +24,7 @@ export const chatCreate = asyncCatch(async (req, res, next) => {
               path: api + e.filename,
               mimetype: e.mimetype,
               size: size(e.size),
+              originalname: e.originalname,
             };
           }),
           description: req.body.description,
@@ -33,14 +34,12 @@ export const chatCreate = asyncCatch(async (req, res, next) => {
   if (chat) {
     data = await Chat.create({
       ...req.body,
-      // message: { content: req.body.message },
       message,
       chatId: chat?.chatId,
     });
   } else {
     data = await Chat.create({
       ...req.body,
-      // message: { content: req.body.message },
       message,
       chatId: `${receiver}.${sender}`,
     });
@@ -61,7 +60,7 @@ export const chatCreate = asyncCatch(async (req, res, next) => {
 //read
 export const chatRead = asyncCatch(async (req, res, next) => {
   const { id } = req.params;
-  const { pp_ff, limits } = req.query;
+  const { limits } = req.query;
   const total = await Chat.countDocuments();
   const data = await Chat.find({
     $or: [
@@ -71,7 +70,12 @@ export const chatRead = asyncCatch(async (req, res, next) => {
       },
     ],
   })
-    .populate(pp_ff ? pp_ff.split(",").join(" ") : null)
+    .populate({
+      path: "sender receiver",
+      populate: {
+        path: "user",
+      },
+    })
     .limit(limits ? limits : null);
 
   if (!data)
