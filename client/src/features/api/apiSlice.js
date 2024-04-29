@@ -46,6 +46,11 @@ export const apiSlice = createApi({
     "rate-multiple",
     "view",
     "save",
+    "subscriptions",
+    "boosts",
+    "boosthistories",
+    "subscriptionhistories",
+    "payments",
   ],
   endpoints: (builder) => ({
     //user signup
@@ -331,6 +336,23 @@ export const apiSlice = createApi({
       }),
       invalidatesTags: ["users"],
     }),
+
+    //upgrade
+    createBoost: builder.mutation({
+      query: (data) => ({
+        url: `/utility/boost`,
+        method: "POST",
+        body: data,
+        credentials: "include",
+      }),
+      invalidatesTags: [
+        "boosts",
+        "boosthistories",
+        "companies",
+        "subscriptionhistories",
+        "payments",
+      ],
+    }),
   }),
 });
 
@@ -361,4 +383,5 @@ export const {
   useDeleteSaveMutation,
   useCreateViewMutation,
   useUpgradeMutation,
+  useCreateBoostMutation,
 } = apiSlice;

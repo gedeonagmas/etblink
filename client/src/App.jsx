@@ -32,6 +32,19 @@ import UpdateYoutube from "./pages/dashboard/youtube/UpdateYoutube";
 import Saves from "./pages/dashboard/Saves";
 import Views from "./pages/dashboard/Views";
 import Upgrade from "./pages/dashboard/Upgrade";
+import SalesCompany from "./pages/dashboard/sales/SalesCompany";
+import Referrals from "./pages/dashboard/sales/Referrals";
+import Earns from "./pages/dashboard/Earns";
+import Ratings from "./pages/dashboard/sales/Ratings";
+import Boosting from "./pages/dashboard/company/Boosting";
+import AddBoost from "./pages/dashboard/admin/AddBoost";
+import UpdateBoost from "./pages/dashboard/admin/UpdateBoost";
+import AddSubscriptions from "./pages/dashboard/admin/AddSubscriptions";
+import Billing from "./pages/dashboard/company/Billing";
+import Success from "./pages/Success";
+import Subscription from "./pages/dashboard/company/Subscription";
+import Sales from "./pages/dashboard/Sales";
+import Message from "./pages/Message";
 
 export const userContext = createContext();
 
@@ -64,7 +77,7 @@ function App() {
                 path="/global"
                 element={<Category type="global" />}
               ></Route>
-              <Route path="/company-detail" element={<CompanyDetail />}></Route>
+              <Route path="/company" element={<CompanyDetail />}></Route>
               <Route path="/news" element={<NewsCategory />}></Route>
               <Route path="/news-detail" element={<NewsDetail />}></Route>
               <Route path="/prices" element={<Prices />}></Route>
@@ -74,14 +87,71 @@ function App() {
               <Route path="*" element={<PageNotFound />}></Route>
             </Route>
 
+            {/* ############################## DASHBOARD ################################# */}
             <Route path="/dashboard" element={<Dashboard />}>
+              {/* ############################## COMPANY ################################# */}
               <Route path="/dashboard/company" element={<Company />}></Route>
+              <Route
+                path="/dashboard/company/share"
+                element={<Referrals type="company" />}
+              ></Route>
+              <Route
+                path="/dashboard/company/boosting"
+                element={<Boosting />}
+              ></Route>
+              <Route
+                path="/dashboard/company/billing"
+                element={<Billing />}
+              ></Route>
+              <Route
+                path="/dashboard/company/subscription"
+                element={<Subscription />}
+              ></Route>
+              <Route
+                path="/dashboard/company/saves"
+                element={<Saves type="company" />}
+              ></Route>
+              <Route
+                path="/dashboard/company/sales"
+                element={<Sales type="company" />}
+              ></Route>
+              <Route
+                path="/dashboard/company/views"
+                element={<Views type="company" />}
+              ></Route>
+              <Route
+                path="/dashboard/company/profile"
+                element={<Profile />}
+              ></Route>
+              <Route
+                path="/dashboard/company/change-password"
+                element={<ChangePassword />}
+              ></Route>
+              {/* ################################################################### */}
+
+              {/* ############################## SALES ############################## */}
               <Route path="/dashboard/sales" element={<Sellers />}></Route>
-              <Route path="/dashboard/visitor" element={<Visitors />}></Route>
-              <Route path="/dashboard/admin" element={<Admin />}></Route>
-              <Route path="/dashboard/saves" element={<Saves />}></Route>
-              <Route path="/dashboard/views" element={<Views />}></Route>
-              <Route path="/dashboard/upgrade" element={<Upgrade />}></Route>
+              <Route
+                path="/dashboard/sales/company"
+                element={<SalesCompany />}
+              ></Route>
+              <Route
+                path="/dashboard/sales/profile"
+                element={<Profile />}
+              ></Route>
+              <Route
+                path="/dashboard/sales/referrals"
+                element={<Referrals type="sales" />}
+              ></Route>
+
+              <Route path="/dashboard/sales/earns" element={<Earns />}></Route>
+              <Route
+                path="/dashboard/sales/ratings"
+                element={<Ratings />}
+              ></Route>
+              {/* ################################################################### */}
+
+              {/* ############################## ADMIN ############################## */}
               <Route path="/dashboard/admin/news" element={<AddNews />}></Route>
               <Route
                 path="/dashboard/admin/news/detail"
@@ -92,25 +162,39 @@ function App() {
                 element={<AddYoutube />}
               ></Route>
               <Route
+                path="/dashboard/admin/prices"
+                element={<AddSubscriptions />}
+              ></Route>
+              <Route
                 path="/dashboard/admin/youtube/detail"
                 element={<UpdateYoutube />}
               ></Route>
               <Route
-                path="/dashboard/company/profile"
-                element={<Profile />}
+                path="/dashboard/admin/boost"
+                element={<AddBoost />}
               ></Route>
               <Route
-                path="/dashboard/sales/profile"
-                element={<Profile />}
+                path="/dashboard/admin/boost/detail"
+                element={<UpdateBoost />}
               ></Route>
+              {/* ################################################################### */}
+
+              {/* ############################## VISITOR ############################## */}
               <Route
                 path="/dashboard/visitor/profile"
                 element={<Profile />}
               ></Route>
-              <Route
-                path="/dashboard/company/change-password"
-                element={<ChangePassword />}
-              ></Route>
+              {/* ################################################################### */}
+
+              {/* ############################## COMMON ############################## */}
+              <Route path="/dashboard/visitor" element={<Visitors />}></Route>
+              <Route path="/dashboard/success" element={<Success />}></Route>
+              <Route path="/dashboard/admin" element={<Admin />}></Route>
+              <Route path="/dashboard/saves" element={<Saves />}></Route>
+              <Route path="/dashboard/views" element={<Views />}></Route>
+              <Route path="/dashboard/upgrade" element={<Upgrade />}></Route>
+              <Route path="/dashboard/message" element={<Message />}></Route>
+              {/* ################################################################### */}
 
               <Route path="*" element={<PageNotFound />}></Route>
             </Route>

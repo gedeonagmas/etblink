@@ -2,19 +2,22 @@ import mongoose, { Schema } from "mongoose";
 
 const paymentSchema = new Schema(
   {
-    application: {
+    company: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "application",
-      required: [true, "please select case"],
+      ref: "company",
     },
 
-    rounds: {
-      type: [Object],
+    amount: {
+      type: Number,
+      default: 0,
     },
 
-    customerApprovalStatus: {
+    paymentMethod: {
       type: String,
-      default: "pending",
+    },
+
+    status: {
+      type: String,
     },
   },
   {

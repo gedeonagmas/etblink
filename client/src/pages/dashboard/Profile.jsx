@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import LoadingButton from "../../components/loading/LoadingButton";
 import Response from "../../components/Response";
 import { useUpdateMutation } from "../../features/api/apiSlice";
+import "react-quill/dist/quill.snow.css";
+
+import Editor from "../../components/Editor";
 
 const List = (props) => {
   return (
@@ -359,7 +362,12 @@ const Profile = () => {
       >
         Description
       </label>
-      <textarea
+      <Editor
+        description={description}
+        setDescription={setDescription}
+        theme="snow"
+      />
+      {/* <textarea
         onChange={(e) => setDescription(e.target.value)}
         value={description}
         name=""
@@ -368,7 +376,7 @@ const Profile = () => {
         rows="10"
         placeholder="Little description about your company"
         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-      ></textarea>
+      ></textarea> */}
       <p className="text-lg font-semibold mt-6">Lists</p>
       <List
         list={service}

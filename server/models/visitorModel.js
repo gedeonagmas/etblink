@@ -29,7 +29,7 @@ const visitorSchema = new mongoose.Schema(
     },
 
     phone: {
-      type: String, 
+      type: String,
       validate: valid.phone("Phone"),
     },
 

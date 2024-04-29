@@ -4,7 +4,13 @@ import "react-circular-progressbar/dist/styles.css";
 import Charts from "../components/Charts";
 import ReactApexChart from "react-apexcharts";
 import SmallChart from "../components/SmallChart";
-import { More, MoreVert } from "@mui/icons-material";
+import {
+  DashboardCustomize,
+  Logout,
+  More,
+  MoreVert,
+} from "@mui/icons-material";
+import DashboardIcon from "@mui/icons-material/Dashboard";
 import { Link, Outlet } from "react-router-dom";
 import Company from "./dashboard/Company";
 import logo from "./../assets/logo.png";
@@ -13,6 +19,8 @@ import gedi from "../assets/gedi.jpg";
 import { useReadQuery, useUserLogoutMutation } from "../features/api/apiSlice";
 import Response from "../components/Response";
 import Banner from "./../components/Banner";
+import SmallBanner from "../components/SmallBanner";
+import MiniBanner from "../components/MiniBanner";
 
 const Dashboard = () => {
   const user = JSON.parse(localStorage.getItem("etblink_user"));
@@ -21,11 +29,8 @@ const Dashboard = () => {
     isFetching: savesIsFetching,
     isError: savesIsError,
   } = useReadQuery({
-    url:
-      user?.role === "company"
-        ? `/user/saves?company[eq]=${user?.user?._id}&populatingType=saves&populatingValue=company,saver`
-        : `/user/saves?saver[eq]=${user?.user?._id}&populatingType=saves&populatingValue=company,saver`,
-    tag: ["saves", "company"],
+    url: `/user/saves?saver[eq]=${user?.user?._id}&populatingType=saves&populatingValue=company,saver`,
+    tag: ["save", "companies"],
   });
 
   const {
@@ -33,11 +38,8 @@ const Dashboard = () => {
     isFetching: viewsIsFetching,
     isError: viewsIsError,
   } = useReadQuery({
-    url:
-      user?.role === "company"
-        ? `/user/views?company[eq]=${user?.user?._id}&populatingType=views&populatingValue=company,viewer`
-        : `/user/views?viewer[eq]=${user?.user?._id}&populatingType=views&populatingValue=company,viewer`,
-    tag: ["views", "company"],
+    url: `/user/views?viewer[eq]=${user?.user?._id}&populatingType=views&populatingValue=company,viewer`,
+    tag: ["view", "companies"],
   });
 
   const [logout, logoutResponse] = useUserLogoutMutation();
@@ -371,30 +373,33 @@ const Dashboard = () => {
         />
         <div class="px-3 py-3 lg:px-5 lg:pl-3">
           <div class="flex items-center justify-between">
-            <div class="flex w-full justify-between items-center">
-              <a
-                href="/"
-                className="text-sm lg:flex hidden font-bold p-2 hover:text-gray-800 absolute  items-center  gap-1 left-2 top-4 cursor-pointer text-gray-400 "
-              >
-                <svg
-                  class="w-6 h-6 "
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  fill="none"
-                  viewBox="0 0 24 24"
+            <div class="flex flex-col font-light w-full justify-between items-center">
+              <div className="text-sm hidden xl:flex flex-col   absolute  items-center left-2  text-gray-600 ">
+                <p className="text-lg ">Welcome to ETB LINK</p>
+                <a
+                  href="/"
+                  className="flex items-center cursor-pointer gap-2 hover:text-gray-800"
                 >
-                  <path
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M5 12h14M5 12l4-4m-4 4 4 4"
-                  />
-                </svg>
-                <p className="text-xs">back to home</p>
-              </a>
+                  <svg
+                    class="w-6 h-6 "
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M5 12h14M5 12l4-4m-4 4 4 4"
+                    />
+                  </svg>
+                  <p className="">back to home</p>
+                </a>
+              </div>
               <div class="flex items-center w-full justify-end ms-3">
                 <div
                   onClick={() => sidebarHandler("auto")}
@@ -457,6 +462,7 @@ const Dashboard = () => {
                     />
                   </div>
                 </form> */}
+                <MiniBanner />
 
                 <div className="flex relative gap-3 text-xs lg:gap-6 lg:mr-10 self-end items-center">
                   <Link
@@ -478,14 +484,14 @@ const Dashboard = () => {
                         clip-rule="evenodd"
                       />
                     </svg>
-                    home
+                    <p className="text-xs font-semibold">home</p>
                   </Link>
 
                   <Link to={`/dashboard/saves`} className="cursor-pointer">
                     <div className="items-center flex flex-col justify-center">
                       <button
                         type="button"
-                        class="relative flex flex-col items-center text-sm font-medium text-center t"
+                        class="relative flex flex-col items-center text-sm font-medium text-center"
                       >
                         <svg
                           class="w-6 h-6"
@@ -500,9 +506,9 @@ const Dashboard = () => {
                         </svg>
 
                         <div class="absolute inline-flex items-center justify-center w-6 h-6 text-xs p-1 font-bold text-white bg-main border-2 border-white rounded-full -top-2 -end-2 dark:border-gray-900">
-                          {saves ? saves?.data?.length : 0}
+                          {saves?.data ? saves?.data?.length : 0}
                         </div>
-                        <p className="text-xs">saves</p>
+                        <p className="text-xs font-semibold">saves</p>
                       </button>
                     </div>
                   </Link>
@@ -515,7 +521,7 @@ const Dashboard = () => {
                           class="relative inline-flex items-center p-1s text-sm font-medium text-center t"
                         >
                           <svg
-                            class="w-7 h-7"
+                            class="w-6 h-6"
                             aria-hidden="true"
                             xmlns="http://www.w3.org/2000/svg"
                             width="24"
@@ -530,10 +536,11 @@ const Dashboard = () => {
                             />
                           </svg>
 
-                          <div class="absolute inline-flex items-center justify-center w-6 h-6 font-bold text-white bg-main border-2 border-white rounded-full -top-2 -end-2 dark:border-gray-900">
-                            {views?.data?.length}
+                          <div class="absolute inline-flex items-center justify-center w-6 h-6 font-bold text-white bg-main border-2 border-white rounded-full -top-2 -end-3 dark:border-gray-900">
+                            {views?.data ? views?.data?.length : 0}
                           </div>
                         </button>
+                        <p className="text-xs font-semibold">views</p>
                       </div>
                     </Link>
                   )}
@@ -554,11 +561,11 @@ const Dashboard = () => {
                         <path d="M17.133 12.632v-1.8a5.407 5.407 0 0 0-4.154-5.262.955.955 0 0 0 .021-.106V3.1a1 1 0 0 0-2 0v2.364a.933.933 0 0 0 .021.106 5.406 5.406 0 0 0-4.154 5.262v1.8C6.867 15.018 5 15.614 5 16.807 5 17.4 5 18 5.538 18h12.924C19 18 19 17.4 19 16.807c0-1.193-1.867-1.789-1.867-4.175Zm-13.267-.8a1 1 0 0 1-1-1 9.424 9.424 0 0 1 2.517-6.391A1.001 1.001 0 1 1 6.854 5.8a7.43 7.43 0 0 0-1.988 5.037 1 1 0 0 1-1 .995Zm16.268 0a1 1 0 0 1-1-1A7.431 7.431 0 0 0 17.146 5.8a1 1 0 0 1 1.471-1.354 9.424 9.424 0 0 1 2.517 6.391 1 1 0 0 1-1 .995ZM8.823 19a3.453 3.453 0 0 0 6.354 0H8.823Z" />
                       </svg>
 
-                      <div class="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full -top-3 -end-3 dark:border-gray-900">
+                      <div class="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-main border-2 border-white rounded-full -top-2 -end-3 dark:border-gray-900">
                         20
                       </div>
                     </button>
-                    notifications
+                    <p className="text-xs font-semibold">notifications</p>
                   </div>
                 </div>
                 <div className="flex ml-3 gap-2 -mt-2 lg:mt-0 items-center">
@@ -570,14 +577,14 @@ const Dashboard = () => {
                         : id?.classList.add("hidden");
                     }}
                     type="button"
-                    class="flex text-sm rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
+                    class="flex text-sm rounded-full lg:w-[160px] border-2 border-gray-300 border-dark focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
                   >
-                    <span class="sr-only">Open user menu</span>
-                    <div className="flex gap-2 items-center">
+                    {/* <span class="sr-only">Open user menu</span> */}
+                    <div className="flex w-full gap-2 items-center">
                       {user?.role !== "company" &&
                       user?.user?.profilePicture?.length < 1 ? (
-                        <div className="w-12 h-12 p-1 text-xs rounded-full flex items-center justify-center bg-main text-white text-center">
-                          {user?.role}
+                        <div className="w-12 h-12 p-1 text-lg font-bold rounded-full flex items-center justify-center bg-main text-white text-center">
+                          {user?.email?.substring(0, 1)}
                         </div>
                       ) : user?.role !== "company" &&
                         user?.user?.profilePicture?.length > 1 ? (
@@ -586,36 +593,41 @@ const Dashboard = () => {
                           src={user?.user?.profilePicture}
                           alt="photo"
                         />
-                      ) : (
+                      ) : user?.role === "company" &&
+                        user?.user?.logo?.length > 1 ? (
                         <img
                           class="w-10 h-10 rounded-full"
                           src={user?.role === "company" ? user?.user?.logo : ""}
                           alt="user"
                         />
+                      ) : (
+                        <div className="w-12 h-12 p-1 text-lg font-bold rounded-full flex items-center justify-center bg-main text-white text-center">
+                          {user?.email?.substring(0, 1)}
+                        </div>
                       )}
 
-                      <span className="hidden lg:block">
-                        {user?.role === "company"
-                          ? user?.user?.name?.substring(0, 7)
-                          : ""}
-                      </span>
-                      <svg
-                        class="w-6 h-6 hidden lg:block text-gray-800 dark:text-white"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          stroke="currentColor"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="m8 10 4 4 4-4"
-                        />
-                      </svg>
+                      <p className="hidden lg:block text-sm font-bold">
+                        {user?.role}
+                      </p>
+                      <div className="p-1">
+                        <svg
+                          class="w-6 h-6"
+                          aria-hidden="true"
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            stroke="currentColor"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="m8 10 4 4 4-4"
+                          />
+                        </svg>
+                      </div>
                     </div>
                   </button>
                 </div>
@@ -699,18 +711,9 @@ const Dashboard = () => {
             <li onClick={() => sidebarHandler("off")}>
               <a
                 href={`/dashboard/${user?.role}`}
-                class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                class="flex items-center p-2 text-gray-500 hover:text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
               >
-                <svg
-                  class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="currentColor"
-                  viewBox="0 0 22 21"
-                >
-                  <path d="M16.975 11H10V4.025a1 1 0 0 0-1.066-.998 8.5 8.5 0 1 0 9.039 9.039.999.999 0 0 0-1-1.066h.002Z" />
-                  <path d="M12.5 0c-.157 0-.311.01-.565.027A1 1 0 0 0 11 1.02V10h8.975a1 1 0 0 0 1-.935c.013-.188.028-.374.028-.565A8.51 8.51 0 0 0 12.5 0Z" />
-                </svg>
+                <DashboardIcon className="" />
                 <span class="ms-3">Overview</span>
               </a>
             </li>
@@ -720,7 +723,7 @@ const Dashboard = () => {
                 <li>
                   <Link
                     to="/dashboard/admin/news"
-                    class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                    class="flex items-center p-2 text-gray-500 hover:text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
                   >
                     <svg
                       class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
@@ -731,13 +734,13 @@ const Dashboard = () => {
                     >
                       <path d="m17.418 3.623-.018-.008a6.713 6.713 0 0 0-2.4-.569V2h1a1 1 0 1 0 0-2h-2a1 1 0 0 0-1 1v2H9.89A6.977 6.977 0 0 1 12 8v5h-2V8A5 5 0 1 0 0 8v6a1 1 0 0 0 1 1h8v4a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-4h6a1 1 0 0 0 1-1V8a5 5 0 0 0-2.582-4.377ZM6 12H4a1 1 0 0 1 0-2h2a1 1 0 0 1 0 2Z" />
                     </svg>
-                    <span class="flex-1 ms-3 whitespace-nowrap">Add News</span>
+                    <span class="flex-1 ms-3 whitespace-nowrap">News</span>
                   </Link>
                 </li>
                 <li>
                   <Link
                     to="/dashboard/admin/youtube"
-                    class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                    class="flex items-center p-2 text-gray-500 hover:text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
                   >
                     <svg
                       class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
@@ -748,9 +751,43 @@ const Dashboard = () => {
                     >
                       <path d="m17.418 3.623-.018-.008a6.713 6.713 0 0 0-2.4-.569V2h1a1 1 0 1 0 0-2h-2a1 1 0 0 0-1 1v2H9.89A6.977 6.977 0 0 1 12 8v5h-2V8A5 5 0 1 0 0 8v6a1 1 0 0 0 1 1h8v4a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-4h6a1 1 0 0 0 1-1V8a5 5 0 0 0-2.582-4.377ZM6 12H4a1 1 0 0 1 0-2h2a1 1 0 0 1 0 2Z" />
                     </svg>
-                    <span class="flex-1 ms-3 whitespace-nowrap">
-                      Add You tubes
-                    </span>
+                    <span class="flex-1 ms-3 whitespace-nowrap">You tubes</span>
+                  </Link>
+                </li>
+
+                <li>
+                  <Link
+                    to="/dashboard/admin/boost"
+                    class="flex items-center p-2 text-gray-500 hover:text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                  >
+                    <svg
+                      class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path d="m17.418 3.623-.018-.008a6.713 6.713 0 0 0-2.4-.569V2h1a1 1 0 1 0 0-2h-2a1 1 0 0 0-1 1v2H9.89A6.977 6.977 0 0 1 12 8v5h-2V8A5 5 0 1 0 0 8v6a1 1 0 0 0 1 1h8v4a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-4h6a1 1 0 0 0 1-1V8a5 5 0 0 0-2.582-4.377ZM6 12H4a1 1 0 0 1 0-2h2a1 1 0 0 1 0 2Z" />
+                    </svg>
+                    <span class="flex-1 ms-3 whitespace-nowrap">Boosts</span>
+                  </Link>
+                </li>
+
+                <li>
+                  <Link
+                    to="/dashboard/admin/prices"
+                    class="flex items-center p-2 text-gray-500 hover:text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                  >
+                    <svg
+                      class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path d="m17.418 3.623-.018-.008a6.713 6.713 0 0 0-2.4-.569V2h1a1 1 0 1 0 0-2h-2a1 1 0 0 0-1 1v2H9.89A6.977 6.977 0 0 1 12 8v5h-2V8A5 5 0 1 0 0 8v6a1 1 0 0 0 1 1h8v4a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-4h6a1 1 0 0 0 1-1V8a5 5 0 0 0-2.582-4.377ZM6 12H4a1 1 0 0 1 0-2h2a1 1 0 0 1 0 2Z" />
+                    </svg>
+                    <span class="flex-1 ms-3 whitespace-nowrap">Prices</span>
                   </Link>
                 </li>
               </>
@@ -820,10 +857,38 @@ const Dashboard = () => {
                     <span class="flex-1 ms-3 whitespace-nowrap">Upgrade</span>
                   </a>
                 </li>
-
+              </>
+            ) : user?.role === "company" ? (
+              <>
                 <li>
                   <a
-                    href="/dashboard/messaging"
+                    href="/dashboard/company/boosting"
+                    class="flex items-center p-2 text-gray-500 hover:text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                  >
+                    <svg
+                      class="w-6 h-6"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M13.6 16.733c.234.269.548.456.895.534a1.4 1.4 0 0 0 1.75-.762c.172-.615-.446-1.287-1.242-1.481-.796-.194-1.41-.861-1.241-1.481a1.4 1.4 0 0 1 1.75-.762c.343.077.654.26.888.524m-1.358 4.017v.617m0-5.939v.725M4 15v4m3-6v6M6 8.5 10.5 5 14 7.5 18 4m0 0h-3.5M18 4v3m2 8a5 5 0 1 1-10 0 5 5 0 0 1 10 0Z"
+                      />
+                    </svg>
+
+                    <span class="flex-1 ms-3 whitespace-nowrap">Boosting</span>
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="/dashboard/company/billing"
                     class="flex items-center p-2 text-gray-500 hover:text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
                   >
                     <svg
@@ -837,12 +902,357 @@ const Dashboard = () => {
                     >
                       <path
                         fill-rule="evenodd"
-                        d="M3 5.983C3 4.888 3.895 4 5 4h14c1.105 0 2 .888 2 1.983v8.923a1.992 1.992 0 0 1-2 1.983h-6.6l-2.867 2.7c-.955.899-2.533.228-2.533-1.08v-1.62H5c-1.105 0-2-.888-2-1.983V5.983Zm5.706 3.809a1 1 0 1 0-1.412 1.417 1 1 0 1 0 1.412-1.417Zm2.585.002a1 1 0 1 1 .003 1.414 1 1 0 0 1-.003-1.414Zm5.415-.002a1 1 0 1 0-1.412 1.417 1 1 0 1 0 1.412-1.417Z"
+                        d="M4 5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H4Zm0 6h16v6H4v-6Z"
+                        clip-rule="evenodd"
+                      />
+                      <path
+                        fill-rule="evenodd"
+                        d="M5 14a1 1 0 0 1 1-1h2a1 1 0 1 1 0 2H6a1 1 0 0 1-1-1Zm5 0a1 1 0 0 1 1-1h5a1 1 0 1 1 0 2h-5a1 1 0 0 1-1-1Z"
                         clip-rule="evenodd"
                       />
                     </svg>
 
-                    <span class="flex-1 ms-3 whitespace-nowrap">Messaging</span>
+                    <span class="flex-1 ms-3 whitespace-nowrap">
+                      Billing & Payment
+                    </span>
+                  </a>
+                </li>
+
+                <li>
+                  <a
+                    href="/dashboard/company/subscription"
+                    class="flex items-center p-2 text-gray-500 hover:text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                  >
+                    <svg
+                      class="w-6 h-6"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        fill="currentColor"
+                        fill-rule="evenodd"
+                        d="M4 4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2H4Zm5.178 12.137a4.137 4.137 0 1 1 1.036-8.144A6.113 6.113 0 0 0 8.726 12c0 1.531.56 2.931 1.488 4.006a4.114 4.114 0 0 1-1.036.131ZM10.726 12c0-1.183.496-2.252 1.294-3.006A4.125 4.125 0 0 1 13.315 12a4.126 4.126 0 0 1-1.294 3.006A4.126 4.126 0 0 1 10.726 12Zm4.59 0a6.11 6.11 0 0 1-1.489 4.006 4.137 4.137 0 1 0 0-8.013A6.113 6.113 0 0 1 15.315 12Z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
+
+                    <span class="flex-1 ms-3 whitespace-nowrap">
+                      Renewal Services
+                    </span>
+                  </a>
+                </li>
+
+                <li>
+                  <a
+                    href="/dashboard/company/share"
+                    class="flex items-center p-2 text-gray-500 hover:text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                  >
+                    <svg
+                      class="w-6 h-6"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M13.213 9.787a3.391 3.391 0 0 0-4.795 0l-3.425 3.426a3.39 3.39 0 0 0 4.795 4.794l.321-.304m-.321-4.49a3.39 3.39 0 0 0 4.795 0l3.424-3.426a3.39 3.39 0 0 0-4.794-4.795l-1.028.961"
+                      />
+                    </svg>
+
+                    <span class="flex-1 ms-3 whitespace-nowrap">Share</span>
+                  </a>
+                </li>
+
+                <li>
+                  <a
+                    href="/dashboard/company/sales"
+                    class="flex items-center p-2 text-gray-500 hover:text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                  >
+                    <svg
+                      class="w-6 h-6"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Zm0 0a8.949 8.949 0 0 0 4.951-1.488A3.987 3.987 0 0 0 13 16h-2a3.987 3.987 0 0 0-3.951 3.512A8.948 8.948 0 0 0 12 21Zm3-11a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                      />
+                    </svg>
+
+                    <span class="flex-1 ms-3 whitespace-nowrap">Sales</span>
+                  </a>
+                </li>
+
+                <li>
+                  <a
+                    href="/dashboard/saves"
+                    class="flex items-center p-2 text-gray-500 hover:text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                  >
+                    <svg
+                      class="w-6 h-6"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M12.01 6.001C6.5 1 1 8 5.782 13.001L12.011 20l6.23-7C23 8 17.5 1 12.01 6.002Z"
+                      />
+                    </svg>
+
+                    <span class="flex-1 ms-3 whitespace-nowrap">
+                      Your Saves
+                    </span>
+                  </a>
+                </li>
+
+                <li>
+                  <a
+                    href="/dashboard/views"
+                    class="flex items-center p-2 text-gray-500 hover:text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                  >
+                    <svg
+                      class="w-6 h-6"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke="currentColor"
+                        stroke-width="2"
+                        d="M21 12c0 1.2-4.03 6-9 6s-9-4.8-9-6c0-1.2 4.03-6 9-6s9 4.8 9 6Z"
+                      />
+                      <path
+                        stroke="currentColor"
+                        stroke-width="2"
+                        d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                      />
+                    </svg>
+
+                    <span class="flex-1 ms-3 whitespace-nowrap">
+                      Your Views
+                    </span>
+                  </a>
+                </li>
+
+                <li>
+                  <a
+                    href="/dashboard/company/saves"
+                    class="flex items-center p-2 text-gray-500 hover:text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                  >
+                    <svg
+                      className="w-5 h-5 "
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="m12.7 20.7 6.2-7.1c2.7-3 2.6-6.5.8-8.7A5 5 0 0 0 16 3c-1.3 0-2.7.4-4 1.4A6.3 6.3 0 0 0 8 3a5 5 0 0 0-3.7 1.9c-1.8 2.2-2 5.8.8 8.7l6.2 7a1 1 0 0 0 1.4 0Z" />
+                    </svg>
+                    <span class="flex-1 ms-3 whitespace-nowrap">
+                      Other Saves
+                    </span>
+                  </a>
+                </li>
+
+                <li>
+                  <a
+                    href="/dashboard/company/views"
+                    class="flex items-center p-2 text-gray-500 hover:text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                  >
+                    <svg
+                      class="w-6 h-6"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M4.998 7.78C6.729 6.345 9.198 5 12 5c2.802 0 5.27 1.345 7.002 2.78a12.713 12.713 0 0 1 2.096 2.183c.253.344.465.682.618.997.14.286.284.658.284 1.04s-.145.754-.284 1.04a6.6 6.6 0 0 1-.618.997 12.712 12.712 0 0 1-2.096 2.183C17.271 17.655 14.802 19 12 19c-2.802 0-5.27-1.345-7.002-2.78a12.712 12.712 0 0 1-2.096-2.183 6.6 6.6 0 0 1-.618-.997C2.144 12.754 2 12.382 2 12s.145-.754.284-1.04c.153-.315.365-.653.618-.997A12.714 12.714 0 0 1 4.998 7.78ZM12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
+
+                    <span class="flex-1 ms-3 whitespace-nowrap">
+                      Other Views
+                    </span>
+                  </a>
+                </li>
+              </>
+            ) : user?.role === "sales" ? (
+              <>
+                <li>
+                  <a
+                    href="/dashboard/sales/company"
+                    class="flex items-center p-2 text-gray-500 hover:text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                  >
+                    <svg
+                      class="w-6 h-6"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M6 4h12M6 4v16M6 4H5m13 0v16m0-16h1m-1 16H6m12 0h1M6 20H5M9 7h1v1H9V7Zm5 0h1v1h-1V7Zm-5 4h1v1H9v-1Zm5 0h1v1h-1v-1Zm-3 4h2a1 1 0 0 1 1 1v4h-4v-4a1 1 0 0 1 1-1Z"
+                      />
+                    </svg>
+
+                    <span class="flex-1 ms-3 whitespace-nowrap">Companies</span>
+                  </a>
+                </li>
+
+                <li>
+                  <a
+                    href="/dashboard/sales/referrals"
+                    class="flex items-center p-2 text-gray-500 hover:text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                  >
+                    <svg
+                      class="w-6 h-6"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M13.213 9.787a3.391 3.391 0 0 0-4.795 0l-3.425 3.426a3.39 3.39 0 0 0 4.795 4.794l.321-.304m-.321-4.49a3.39 3.39 0 0 0 4.795 0l3.424-3.426a3.39 3.39 0 0 0-4.794-4.795l-1.028.961"
+                      />
+                    </svg>
+
+                    <span class="flex-1 ms-3 whitespace-nowrap">Referrals</span>
+                  </a>
+                </li>
+
+                <li>
+                  <a
+                    href="/dashboard/sales/earns"
+                    class="flex items-center p-2 text-gray-500 hover:text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                  >
+                    <svg
+                      class="w-6 h-6"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M8 17.345a4.76 4.76 0 0 0 2.558 1.618c2.274.589 4.512-.446 4.999-2.31.487-1.866-1.273-3.9-3.546-4.49-2.273-.59-4.034-2.623-3.547-4.488.486-1.865 2.724-2.899 4.998-2.31.982.236 1.87.793 2.538 1.592m-3.879 12.171V21m0-18v2.2"
+                      />
+                    </svg>
+
+                    <span class="flex-1 ms-3 whitespace-nowrap">Earns</span>
+                  </a>
+                </li>
+
+                <li>
+                  <a
+                    href="/dashboard/saves"
+                    class="flex items-center p-2 text-gray-500 hover:text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                  >
+                    <svg
+                      className="w-5 h-5 "
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="m12.7 20.7 6.2-7.1c2.7-3 2.6-6.5.8-8.7A5 5 0 0 0 16 3c-1.3 0-2.7.4-4 1.4A6.3 6.3 0 0 0 8 3a5 5 0 0 0-3.7 1.9c-1.8 2.2-2 5.8.8 8.7l6.2 7a1 1 0 0 0 1.4 0Z" />
+                    </svg>
+                    <span class="flex-1 ms-3 whitespace-nowrap">Saves</span>
+                  </a>
+                </li>
+
+                <li>
+                  <a
+                    href="/dashboard/views"
+                    class="flex items-center p-2 text-gray-500 hover:text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                  >
+                    <svg
+                      className="w-5 h-5 "
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M5 7.8C6.7 6.3 9.2 5 12 5s5.3 1.3 7 2.8a12.7 12.7 0 0 1 2.7 3.2c.2.2.3.6.3 1s-.1.8-.3 1a2 2 0 0 1-.6 1 12.7 12.7 0 0 1-9.1 5c-2.8 0-5.3-1.3-7-2.8A12.7 12.7 0 0 1 2.3 13c-.2-.2-.3-.6-.3-1s.1-.8.3-1c.1-.4.3-.7.6-1 .5-.7 1.2-1.5 2.1-2.2Zm7 7.2a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    <span class="flex-1 ms-3 whitespace-nowrap">Views</span>
+                  </a>
+                </li>
+
+                <li>
+                  <a
+                    href="/dashboard/sales/ratings"
+                    class="flex items-center p-2 text-gray-500 hover:text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                  >
+                    <svg
+                      class="w-5 h-5"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke="currentColor"
+                        stroke-width="2"
+                        d="M12 4.392v14.832M8.476 9.38l-4.553.36c-.888.07-1.248 1.165-.572 1.737l3.47 2.934a.98.98 0 0 1 .322.98l-1.06 4.388c-.206.855.736 1.531 1.497 1.073l3.898-2.351c.32-.193.723-.193 1.044 0l3.898 2.351c.76.458 1.703-.218 1.497-1.073l-1.06-4.388a.982.982 0 0 1 .322-.98l3.47-2.934c.676-.572.316-1.667-.572-1.737l-4.553-.36a1 1 0 0 1-.845-.606l-1.754-4.165c-.342-.812-1.508-.812-1.85 0L9.321 8.774a1 1 0 0 1-.845.606Z"
+                      />
+                    </svg>
+
+                    <span class="flex-1 ms-3 whitespace-nowrap">Ratings</span>
                   </a>
                 </li>
               </>
@@ -850,22 +1260,40 @@ const Dashboard = () => {
               <></>
             )}
 
-            <li onClick={logoutHandler}>
-              <p
-                href="#"
-                class="flex cursor-pointer items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+            <li>
+              <a
+                href="/dashboard/message"
+                class="flex items-center p-2 text-gray-500 hover:text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
               >
                 <svg
-                  class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                  class="w-6 h-6"
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
                   fill="currentColor"
-                  viewBox="0 0 20 20"
+                  viewBox="0 0 24 24"
                 >
-                  <path d="M5 5V.13a2.96 2.96 0 0 0-1.293.749L.879 3.707A2.96 2.96 0 0 0 .13 5H5Z" />
-                  <path d="M6.737 11.061a2.961 2.961 0 0 1 .81-1.515l6.117-6.116A4.839 4.839 0 0 1 16 2.141V2a1.97 1.97 0 0 0-1.933-2H7v5a2 2 0 0 1-2 2H0v11a1.969 1.969 0 0 0 1.933 2h12.134A1.97 1.97 0 0 0 16 18v-3.093l-1.546 1.546c-.413.413-.94.695-1.513.81l-3.4.679a2.947 2.947 0 0 1-1.85-.227 2.96 2.96 0 0 1-1.635-3.257l.681-3.397Z" />
-                  <path d="M8.961 16a.93.93 0 0 0 .189-.019l3.4-.679a.961.961 0 0 0 .49-.263l6.118-6.117a2.884 2.884 0 0 0-4.079-4.078l-6.117 6.117a.96.96 0 0 0-.263.491l-.679 3.4A.961.961 0 0 0 8.961 16Zm7.477-9.8a.958.958 0 0 1 .68-.281.961.961 0 0 1 .682 1.644l-.315.315-1.36-1.36.313-.318Zm-5.911 5.911 4.236-4.236 1.359 1.359-4.236 4.237-1.7.339.341-1.699Z" />
+                  <path
+                    fill-rule="evenodd"
+                    d="M3 5.983C3 4.888 3.895 4 5 4h14c1.105 0 2 .888 2 1.983v8.923a1.992 1.992 0 0 1-2 1.983h-6.6l-2.867 2.7c-.955.899-2.533.228-2.533-1.08v-1.62H5c-1.105 0-2-.888-2-1.983V5.983Zm5.706 3.809a1 1 0 1 0-1.412 1.417 1 1 0 1 0 1.412-1.417Zm2.585.002a1 1 0 1 1 .003 1.414 1 1 0 0 1-.003-1.414Zm5.415-.002a1 1 0 1 0-1.412 1.417 1 1 0 1 0 1.412-1.417Z"
+                    clip-rule="evenodd"
+                  />
                 </svg>
+
+                <span class="flex-1 ms-3 whitespace-nowrap">Messaging</span>
+              </a>
+            </li>
+
+            <li
+              onClick={logoutHandler}
+              className="text-gray-500  hover:text-gray-900"
+            >
+              <p
+                href="#"
+                class="flex cursor-pointer items-center  rounded-lg dark:text-white p-2 hover:bg-gray-100 dark:hover:bg-gray-700 group"
+              >
+                <Logout className="" />
                 <span class="flex-1 ms-3 whitespace-nowrap">Logout</span>
               </p>
             </li>
@@ -907,7 +1335,7 @@ const Dashboard = () => {
 
       <div
         onClick={() => sidebarHandler("off")}
-        class="p-4 mt-20 bg-dark bg-white lg:ml-64"
+        class="pl-4 pt-4 mt-20 h-[86.5vh] overflow-y-auto overflow-x-hidden bg-dark bg-whites lg:ml-64"
       >
         {/* <Routes>
           <Route path="/company" element={<Company />} />

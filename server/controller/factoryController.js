@@ -45,6 +45,7 @@ const fileHandler = (value, req) => {
 //create
 export const _create = asyncCatch(async (req, res, next) => {
   const model = selectModel(req.params.table, next);
+  console.log(req.body, "body");
   const value = { ...req.body };
   const files = fileHandler(value, req);
   if (model) {
@@ -95,11 +96,9 @@ export const _create = asyncCatch(async (req, res, next) => {
 //read
 export const _read = asyncCatch(async (req, res, next) => {
   const model = selectModel(req.params.table, next);
+
   if (model) {
-    // const total = await model.find({ _id: req.params.id });
-    const total = await model.countDocuments();
     const params = { ...req.query };
-    console.log(req.query);
     //removing unnecessary queries for filtering
     const remove = [
       "sort",
@@ -117,11 +116,14 @@ export const _read = asyncCatch(async (req, res, next) => {
     //filtering
     let queryObject = JSON.parse(
       JSON.stringify(params).replace(
-        /\b(gte|lte|lt|gt|eq|neq)\b/g,
+        /\b(gte|lte|lt|gt|eq|ne)\b/g,
         (match) => `$${match}`
       )
     );
-
+    // queryObject.boostStartDate["$lt"] = queryObject.boostStartDate["$lt"] * 1;
+    // queryObject.subscriptionEndDate["$gt"] =
+    //   queryObject.subscriptionEndDate["$gt"] * 1;
+    // console.log(typeof queryObject.subscriptionEndDate["$gt"]);
     //searching
     if (req.query.searchField)
       queryObject[req.query.searchField] = new RegExp(
@@ -132,6 +134,7 @@ export const _read = asyncCatch(async (req, res, next) => {
 
     //sorting
     const query = model.find({ ...queryObject });
+
     req.query.sort
       ? query.sort(req.query.sort.split(",").join(" "))
       : query.sort("createdAt");
@@ -161,14 +164,26 @@ export const _read = asyncCatch(async (req, res, next) => {
       case "views":
         query.populate(req.query.populatingValue.split(",").join(" "));
         break;
-      case "application":
-        query.populate(req.query.pp_ff.split(",").join(" "));
+      case "boosthistories":
+        query.populate(req.query.populatingValue.split(",").join(" "));
+        break;
+      case "subscriptionhistories":
+        query.populate(req.query.populatingValue.split(",").join(" "));
+        break;
+      case "payments":
+        query.populate(req.query.populatingValue.split(",").join(" "));
+        break;
+      case "chats":
+        query.populate(req.query.populatingValue.split(",").join(" "));
+        break;
       default:
         query;
     }
 
     req.query.limits ? query.limit(req.query.limits) : null;
-    const data = await query;
+
+    const total = model.countDocuments({ ...queryObject });
+    const data = await Promise.all([total, query]);
 
     //last page indicator
     if (page) {
@@ -176,15 +191,16 @@ export const _read = asyncCatch(async (req, res, next) => {
       if (skip >= doc)
         return res.status(200).json({ message: "you are in the last page" });
     }
+
     if (data.length < 1)
-      // return next(new AppError("There is no data to display", 400));
       return res.status(201).json({ message: "There is no data to display!" });
 
+    // console.log(data[1]);
     return res.status(200).json({
       status: "success",
       length: data.length,
-      total: total,
-      data: data,
+      total: data[0],
+      data: data[1],
     });
   }
   return next(new AppError("something went wrong please try again!!", 500));
@@ -196,7 +212,7 @@ export const _update = asyncCatch(async (req, res, next) => {
   // console.log(req.body, "body");
   const value = { ...req.body };
   const files = fileHandler(value, req);
-  console.log(files, "files");
+  // console.log(files, "files");
   //image:{
   // data: req.file.buffer,
   //   contentType:req.file.mimetype

@@ -38,14 +38,15 @@ const salesSchema = new mongoose.Schema(
       validate: valid.paragraph("Address", 4, 200),
     },
 
-    isPro: {
-      type: Boolean,
-      default: false,
-    },
-
     profilePicture: {
       type: String,
       default: "",
+    },
+
+    earn: {
+      total: { type: Number, default: 0 },
+      withdraw: { type: Number, default: 0 },
+      current: { type: Number, default: 0 },
     },
 
     profileFillStatus: {

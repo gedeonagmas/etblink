@@ -6,6 +6,7 @@ import LoadingButton from "../components/loading/LoadingButton";
 
 const Signup = () => {
   window.scrollTo({ top: 0 });
+  const location = useLocation()?.search?.split("?id=")[1];
   const [signupData, signupResponse] = useUserRegisterMutation();
   const [pending, setPending] = useState(false);
   const [email, setEmail] = useState("");
@@ -15,8 +16,11 @@ const Signup = () => {
 
   const signupHandler = () => {
     signupData({
-      role,
+      role: location ? "company" : role,
       email,
+      registeredBy: location ? "sales" : "Self",
+      sales: location ? location : undefined,
+      commission: location ? 100 : undefined,
       password,
       confirmPassword,
     });
@@ -35,19 +39,21 @@ const Signup = () => {
             for="email"
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
           >
-            Register as
+            Register {location ? "as a Company" : "as"}
           </label>
-          <select
-            name=""
-            id=""
-            className="w-full border-gray-300 border rounded-lg p-3"
-            onChange={(e) => setRole(e.target.value)}
-          >
-            <option value="visitor">Visitor</option>
-            <option value="company">Company</option>
-            <option value="sales">Sales</option>
-            <option value="admin">Admin</option>
-          </select>
+          {!location && (
+            <select
+              name=""
+              id=""
+              className="w-full border-gray-300 border rounded-lg p-3"
+              onChange={(e) => setRole(e.target.value)}
+            >
+              <option value="visitor">Visitor</option>
+              <option value="company">Company</option>
+              <option value="sales">Sales</option>
+              <option value="admin">Admin</option>
+            </select>
+          )}
         </div>
         <div class="mb-5">
           <label
@@ -95,7 +101,7 @@ const Signup = () => {
             required
           />
         </div>
-        
+
         <LoadingButton
           pending={pending}
           onClick={signupHandler}

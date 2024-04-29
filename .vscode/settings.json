@@ -1,5 +1,12 @@
 {
-  "cSpell.words": ["etblink", "Flowbite", "signup", "youtubes"],
+  "cSpell.words": [
+    "boosthistories",
+    "etblink",
+    "Flowbite",
+    "signup",
+    "subscriptionhistories",
+    "youtubes"
+  ],
   "eslint.rules.customizations": [
     {
       "rule": "*",
@@ -10,5 +17,6 @@
   "editor.formatOnSave": true,
   "editor.formatOnPaste": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "terminal.integrated.shellArgs.linux": ["-l"]
+  "terminal.integrated.shellArgs.linux": ["-l"],
+  "editor.linkedEditing": true
 }

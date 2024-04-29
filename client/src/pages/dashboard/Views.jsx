@@ -12,10 +12,10 @@ import Response from "../../components/Response";
 import Popup from "../../components/Popup";
 import Pop from "../../components/Pop";
 
-const Views = () => {
+const Views = ({ type }) => {
   const user = JSON.parse(localStorage.getItem("etblink_user"));
-  const [page, setPage] = useState(0);
-  const [totalPage, setTotalPage] = useState(3);
+  const [page, setPage] = useState(1);
+  const [totalPage, setTotalPage] = useState(1);
   const [removePending, setRemovePending] = useState(false);
   const [removeData, removeResponse] = useDeleteSaveMutation();
   const [popup, setPopup] = useState(false);
@@ -27,14 +27,14 @@ const Views = () => {
     isError: viewsIsError,
   } = useReadQuery({
     url:
-      user?.role === "company"
+      type === "company"
         ? `/user/views?company[eq]=${user?.user?._id}&limit=3&page=${page}&populatingType=views&populatingValue=company,viewer`
         : `/user/views?viewer[eq]=${user?.user?._id}&limit=3&page=${page}&populatingType=views&populatingValue=company,viewer`,
-    tag: ["views", "company"],
+    tag: ["view", "companies"],
   });
 
   useEffect(() => {
-    setTotalPage(Math.ceil(views?.data?.length / 3));
+    setTotalPage(Math.ceil(views?.total / 3));
   }, [views]);
 
   useEffect(() => {
@@ -96,11 +96,11 @@ const Views = () => {
               </div>
             );
           })
-        ) : (
+        ) : (views && views?.message) || views?.data?.length === 0 ? (
           <div className="w-full items-center justify-center flex">
-            There is no saved companies yet!
+            There is no viewed companies yet!
           </div>
-        )}
+        ) : null}
       </div>
       {popup && (
         <Pop

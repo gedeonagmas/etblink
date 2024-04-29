@@ -32,6 +32,7 @@ import CryptoJS from "crypto-js";
 import crypto from "crypto";
 import asyncCatch from "express-async-catch";
 import {
+  boostHandler,
   createRate,
   createSave,
   createView,
@@ -54,6 +55,7 @@ const files = upload.fields([
   { name: "galleries", maxCount: 10 },
   { name: "newsPhoto", maxCount: 1 },
   { name: "video", maxCount: 1 },
+  { name: "chatFile", maxCount: 10 },
 ]);
 
 //user account route
@@ -80,10 +82,11 @@ utilityRouter.route("/rate").get(readRate);
 utilityRouter.route("/rateMultiple").get(authentication, readMultipleRate);
 utilityRouter.route("/rate").delete(authentication, deleteRate);
 utilityRouter.route("/save").post(authentication, createSave);
-utilityRouter.route("/save").delete(authentication, deleteSave); 
+utilityRouter.route("/save").delete(authentication, deleteSave);
 utilityRouter.route("/view").post(authentication, createView);
 utilityRouter.route("/upgrade").post(authentication, upgradeHandler);
- 
+utilityRouter.route("/boost").post(authentication, boostHandler);
+
 //factory route
 router.route("/:table/:id").get(authentication, _read_single);
 router.route("/sendEmail").post(async (req, res, next) => {

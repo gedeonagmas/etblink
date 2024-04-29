@@ -39,15 +39,7 @@ const markers = [
 ];
 
 const Category = () => {
-  const totalPages = 5;
-  const [currentPage, setCurrentPage] = useState(1);
-
-  function handlePageChange(page) {
-    setCurrentPage(page);
-  }
-
-  console.log(currentPage, "ccccccccc");
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
   const [lastPage, setLastPage] = useState("");
   const [search, setSearch] = useState("");
   const [totalPage, setTotalPage] = useState(1);
@@ -73,14 +65,14 @@ const Category = () => {
 
   useEffect(() => {
     trigger({
-      url: `/user/companies?limit=2&page=${page}`,
+      url: `/user/companies?limit=6&page=${page}`,
       tag: ["companies"],
     });
   }, [page]);
 
   useEffect(() => {
     trigger({
-      url: `/user/companies?limit=2&page=${page}&searchField=name&searchValue=${search}`,
+      url: `/user/companies?limit=6&page=${page}&searchField=name&searchValue=${search}`,
       tag: ["companies"],
     });
   }, [search]);
@@ -88,7 +80,7 @@ const Category = () => {
   useEffect(() => {
     const cat = category ? `&category=${category}` : null;
     trigger({
-      url: `/user/companies?limit=2&page=${page}${cat}`,
+      url: `/user/companies?limit=6&page=${page}${cat}`,
       tag: ["companies"],
     });
   }, [category]);

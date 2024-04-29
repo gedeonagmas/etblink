@@ -21,4 +21,4 @@ const size = (bytes) => {
   return data.toFixed(2) + " " + arr[counter];
 };
 
-export { size}
+export { size };

@@ -1,17 +1,48 @@
 import asyncCatch from "express-async-catch";
 import AppError from "../utils/AppError.js";
 import { Chat } from "../models/chatModel.js";
+import { size } from "../utils/size.js";
+const api = "http://localhost:3001/uploads/";
 
 //create
 export const chatCreate = asyncCatch(async (req, res, next) => {
   let data;
 
-  const { sender, receiver, chatId } = req.body;
+  // console.log(req.files, "rrrrrr sssssss");
+  let files = [];
+  if (req.files && req.files?.chatFile) {
+    req.files?.chatFile?.map((e) => files.push(api + e.filename));
+  }
+  const { sender, receiver } = req.body;
+  const message =
+    req.body.messageType === "text"
+      ? { content: req.body.message }
+      : req.body.messageType === "file"
+      ? {
+          content: req.files?.chatFile?.map((e) => {
+            return {
+              path: api + e.filename,
+              mimetype: e.mimetype,
+              size: size(e.size),
+              originalname: e.originalname,
+            };
+          }),
+          description: req.body.description,
+        }
+      : "";
   const chat = await Chat.findOne({ chatId: `${sender}.${receiver}` });
   if (chat) {
-    data = await Chat.create({ ...req.body, chatId: chat?.chatId });
+    data = await Chat.create({
+      ...req.body,
+      message,
+      chatId: chat?.chatId,
+    });
   } else {
-    data = await Chat.create({ ...req.body, chatId: `${receiver}.${sender}` });
+    data = await Chat.create({
+      ...req.body,
+      message,
+      chatId: `${receiver}.${sender}`,
+    });
   }
 
   if (!data)
@@ -20,8 +51,8 @@ export const chatCreate = asyncCatch(async (req, res, next) => {
     );
 
   return res.status(201).json({
-    status: "Success",
-    message: "data created successfully",
+    // status: "Success",
+    // message: "data created successfully",
     data,
   });
 });
@@ -29,7 +60,7 @@ export const chatCreate = asyncCatch(async (req, res, next) => {
 //read
 export const chatRead = asyncCatch(async (req, res, next) => {
   const { id } = req.params;
-  const { pp_ff, limits } = req.query;
+  const { limits } = req.query;
   const total = await Chat.countDocuments();
   const data = await Chat.find({
     $or: [
@@ -39,7 +70,12 @@ export const chatRead = asyncCatch(async (req, res, next) => {
       },
     ],
   })
-    .populate(pp_ff ? pp_ff.split(",").join(" ") : null)
+    .populate({
+      path: "sender receiver",
+      populate: {
+        path: "user",
+      },
+    })
     .limit(limits ? limits : null);
 
   if (!data)
