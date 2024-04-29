@@ -2,7 +2,7 @@ on:
  push:
     branches:
       - main
-name: 🚀 Deploy ETBLINK
+name: 🚀 Deploy etblink
 defaults:
  run:
   working-directory: ./client
