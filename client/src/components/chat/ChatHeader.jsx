@@ -51,7 +51,7 @@ const ChatHeader = ({
           <p className=" font-medium text-gray-900 truncate dark:text-white">
             {user?.role === "company"
               ? user?.user?.name
-              : user?.user?.firstName + user?.user?.middleName}
+              : ` ${user?.user?.firstName} ${user?.user?.middleName} `}
           </p>
 
           <p className=" mt-[2px] text-gray-500 truncate dark:text-gray-400">
