@@ -32,6 +32,7 @@ jobs:
           password: ${{ secrets.GIT_CPANEL_REACT_PWD }}
           local-dir: ./client/dist/
           # server-dir: /public_html/
+          # exclude files
           exclude: |
             **/.git**
             **/.git*/**
