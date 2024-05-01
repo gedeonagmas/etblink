@@ -1,15 +1,15 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "app.js",
   "type": "module",
   "engines": {
     "node": "20.x"
   },
   "scripts": {
-    "dev": "cross-env NODE_ENV=development nodemon ./index.js",
-    "pro": "cross-env NODE_ENV=production nodemon ./index.js",
-    "start": "cross-env NODE_ENV=production node ./index.js",
+    "dev": "cross-env NODE_ENV=development nodemon ./app.js",
+    "pro": "cross-env NODE_ENV=production nodemon ./app.js",
+    "start": "cross-env NODE_ENV=production node ./app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

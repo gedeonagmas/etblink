@@ -178,7 +178,7 @@ const Home = () => {
                   <input
                     type="text"
                     className="h-full border-0 bg-dark focus:outline-none focus:ring-0 outline-none w-32"
-                    placeholder="Filter by category"
+                    placeholder="Category"
                   />
                 </div>
                 <div className="flex p-2 items-center justify-start border-r">

@@ -998,7 +998,7 @@ const Header = () => {
                 </div>
               </div>
             </li>
-            <li className="me-2 ml-7" role="presentation">
+            <li className="me-2 ml-[20%] xl:ml-12" role="presentation">
               <Link
                 to="/"
                 className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
@@ -1195,8 +1195,8 @@ const Header = () => {
                 </div>
               </div>
             </li>
-            <li className="me-2">
-              <div className="flex w-full relative pr-main justify-center gap-5 items-center">
+            <li className="me-2 ">
+              <div className=" hidden xl:flex w-full relative pr-main justify-center gap-5 items-center">
                 {/* <div className="flex flex-col lg:flex-row w-auto h-auto absolute -right-20 lg:-right-24 z-20 items-center justify-center gap-2"> */}
                 <a
                   href="#"

@@ -270,7 +270,7 @@ mongodb()
   })
   .catch((err) => {
     console.log(err);
-    process.exit(1); 
+    process.exit(1);
   });
 
 // process.on("unhandledRejection", (err) => {
@@ -279,4 +279,38 @@ mongodb()
 //   server.close(() => {
 //     process.exit(1);
 //   });
+// })
+
+// ##################################################
+// const http = require("http");
+// const express = require('express');
+// const hostname = "etblink.com";
+// const port = 3000;
+
+// const app = express();
+// const server = http.createServer(app);
+
+// app.get("/", (req, res) => {
+//   res.statusCode = 200;
+//   res.setHeader("Content-Type", "text/plain");
+//   res.end("Hello from ETBLINK NEW \n");
+// });
+
+// server.listen(port, hostname, () => {
+//   console.log(`Server running at http://${hostname}:${port}/`);
+// });
+
+//############################ this is working app.js file from c-panel #####################
+// const http = require("http");
+// const hostname = "etblink.com";
+// const port = 3000;
+
+// const server = http.createServer((req, res) => {
+//   res.statusCode = 200;
+//   res.setHeader("Content-Type", "text/plain");
+//   res.end("Hello from ETBLINK \n");
+// });
+
+// server.listen(port, hostname, () => {
+//   console.log(`Server running at http://${hostname}:${port}/`);
 // });

@@ -2,7 +2,8 @@ on:
   push:
     branches:
       - main
-name: 🚀 Deploy website on push
+
+name: 🚀 Deploy ETBLINK on push
 
 jobs:
   web-deploy:
