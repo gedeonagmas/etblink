@@ -45,6 +45,8 @@ import Success from "./pages/Success";
 import Subscription from "./pages/dashboard/company/Subscription";
 import Sales from "./pages/dashboard/Sales";
 import Message from "./pages/Message";
+import UpdateBlog from "./pages/dashboard/admin/UpdateBlog";
+import AddBlog from "./pages/dashboard/admin/AddBlog";
 
 export const userContext = createContext();
 
@@ -176,6 +178,11 @@ function App() {
               <Route
                 path="/dashboard/admin/boost/detail"
                 element={<UpdateBoost />}
+              ></Route>
+              <Route path="/dashboard/admin/blog" element={<AddBlog />}></Route>
+              <Route
+                path="/dashboard/admin/blog/detail"
+                element={<UpdateBlog />}
               ></Route>
               {/* ################################################################### */}
 

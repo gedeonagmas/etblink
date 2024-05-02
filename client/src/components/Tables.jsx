@@ -7,14 +7,14 @@ function Tables({ data, columns, title }) {
   const customStyles = {
     headRow: {
       style: {
-        backgroundColor: "#00aeff",
+        backgroundColor: "rgb(252,45,45)",
         color: "white",
       },
     },
   };
 
   return (
-    <div className="mt-6 w-[100%] justify-center items-center h-auto bg-white flex flex-col gap-y-4 ">
+    <div className="w-[100%] justify-center items-center h-auto bg-white flex flex-col gap-y-4 ">
       <p className="text-gray-500 text-lg self-start font-bold px-2 -mb-2 mt-2">
         {title} ({data?.length})
       </p>

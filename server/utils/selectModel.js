@@ -1,4 +1,5 @@
 import { Application } from "../models/applicationModel.js";
+import { Blog } from "../models/blogModel.js";
 import { BoostHistory } from "../models/boostHistoryModel.js";
 import { Boost } from "../models/boostModel.js";
 import { Company } from "../models/companyModel.js";
@@ -74,6 +75,9 @@ export const selectModel = (name, next) => {
       break;
     case "boosthistories":
       model = BoostHistory;
+      break;
+    case "blogs":
+      model = Blog;
       break;
     default:
       return next(new AppError("something went wrong please try again!.", 500));

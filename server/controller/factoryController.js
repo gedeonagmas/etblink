@@ -32,6 +32,9 @@ const fileHandler = (value, req) => {
     if (req.files.banner) {
       value.banner = api + req.files.banner[0].filename;
     }
+    if (req.files.blogImage) {
+      value.blogImage = api + req.files.blogImage[0].filename;
+    }
     if (req.files.video) {
       value.video = api + req.files.video[0].filename;
     }
