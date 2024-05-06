@@ -1,21 +1,47 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import LoadingButton from "../../../components/loading/LoadingButton";
 import {
   useCreateMutation,
   useDeleteMutation,
+  useLazyReadQuery,
   useReadQuery,
   useUpdateMutation,
 } from "../../../features/api/apiSlice";
 import Response from "../../../components/Response";
 import { format } from "timeago.js";
 import Loading from "../../../components/loading/Loading";
+import ResponsivePagination from "react-responsive-pagination";
+import "./../../categories/pagination.css";
+import Pop from "../../../components/Pop";
 
 const AddNews = () => {
-  const {
-    data: news,
-    isFetching,
-    isError,
-  } = useReadQuery({ url: "/user/news", tag: ["news"] });
+  const [page, setPage] = useState(1);
+  const [search, setSearch] = useState("");
+  const [totalPage, setTotalPage] = useState(1);
+
+  const [trigger, { data: news, isFetching, isError }] = useLazyReadQuery();
+
+  useEffect(() => {
+    setPage(1);
+  }, []);
+
+  useEffect(() => {
+    setTotalPage(Math.ceil(news?.total / 6));
+  }, [news]);
+
+  useEffect(() => {
+    trigger({
+      url: `/user/news?limit=6&page=${page}`,
+      tag: ["news"],
+    });
+  }, [page]);
+
+  useEffect(() => {
+    trigger({
+      url: `/user/news?limit=6&page=${page}&searchField=title&searchValue=${search}`,
+      tag: ["news"],
+    });
+  }, [search]);
 
   const [addData, addResponse] = useCreateMutation();
   const [deleteData, deleteResponse] = useDeleteMutation();
@@ -36,8 +62,16 @@ const AddNews = () => {
     addData(formData);
   };
 
-  const deleteHandler = (id) => {
-    deleteData({ url: `/user/news?id=${id}`, tag: ["news"] });
+  const [popup, setPopup] = useState(false);
+  const [id, setId] = useState("");
+  useEffect(() => {
+    if (deleteResponse?.status === "fulfilled") {
+      setPopup(false);
+    }
+  }, [deleteResponse]);
+
+  const deleteHandler = () => {
+    id && deleteData({ url: `/user/news?id=${id}`, tag: ["news"] });
   };
 
   console.log(news, "news");
@@ -46,12 +80,23 @@ const AddNews = () => {
       <Response response={addResponse} setPending={setPending} />
       <Response response={deleteResponse} setPending={setDeletePending} />
 
-      <button
-        onClick={() => setAdd(true)}
-        className="px-5 self-end rounded-lg py-2 text-white bg-main"
-      >
-        Add New
-      </button>
+      <div className="flex px-5 items-center justify-between">
+        <input
+          onChange={(e) => setSearch(e.target.value)}
+          type="search"
+          id="default-search"
+          class="block w-full max-w-md px-4 h-12 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          placeholder="Search..."
+          required
+        />
+
+        <button
+          onClick={() => setAdd(true)}
+          className="px-5 self-end rounded-lg py-2 text-white bg-main"
+        >
+          Add New
+        </button>
+      </div>
       <div className="grid w-full grid-cols-1 md:grid-cols-2 gap-5 lg:grid-cols-3">
         {isFetching && <Loading />}
         {isError && <p>Something went wrong for reading news data</p>}
@@ -108,14 +153,16 @@ const AddNews = () => {
                 <p className="font-bold">{e?.title}</p>
                 <p className="text-sm">{e?.description}</p>
                 <p className="text-sm self-end font-light">{format(e?.date)}</p>
-                <div className="flex w-full items-center justify-between">
-                  <LoadingButton
-                    pending={deletePending}
-                    onClick={() => deleteHandler(e._id)}
-                    title="Delete"
-                    color="bg-main"
-                    width="w-32"
-                  />
+                <div className="flex w-full gap-3 items-center justify-between">
+                  <button
+                    onClick={() => {
+                      setPopup(true);
+                      setId(e._id);
+                    }}
+                    className="py-2 w-32 rounded-lg bg-main text-white"
+                  >
+                    Delete
+                  </button>
                   <a
                     href={`/dashboard/admin/news/detail?${e._id}`}
                     className="py-2 w-36 rounded-lg bg-emerald-500 text-center text-white"
@@ -130,6 +177,32 @@ const AddNews = () => {
           <div>There is no data to display.</div>
         )}
       </div>
+      <div className="py-10">
+        <ResponsivePagination
+          total={totalPage}
+          current={page}
+          onPageChange={(currentPage) => setPage(currentPage)}
+          previousLabel="Previous"
+          previousClassName="w-24"
+          nextClassName="w-24"
+          nextLabel="Next"
+        />
+      </div>
+      {popup && (
+        <Pop
+          content="Are you sure you want to remove this price?"
+          cancel={setPopup}
+          trigger={
+            <LoadingButton
+              pending={deletePending}
+              onClick={deleteHandler}
+              title="Yes, I'm Sure"
+              color="bg-main"
+              width="w-36 sm:rounded-lg sm:border sm:py-2 sm:px-5 sm:hover:bg-red-500"
+            />
+          }
+        />
+      )}
       {add && (
         <div className="absolute  z-30 top-2 bg-white bg-dark right-0 w-[300px] rounded-lg p-4 border border-gray-300">
           <div className="relative">

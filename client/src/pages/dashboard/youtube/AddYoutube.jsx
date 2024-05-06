@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import LoadingButton from "../../../components/loading/LoadingButton";
 import {
   useCreateMutation,
   useDeleteMutation,
+  useLazyReadQuery,
   useReadQuery,
   useUpdateMutation,
 } from "../../../features/api/apiSlice";
@@ -10,22 +11,51 @@ import Response from "../../../components/Response";
 import { format } from "timeago.js";
 import Loading from "../../../components/loading/Loading";
 import YouTube from "react-youtube";
+import ResponsivePagination from "react-responsive-pagination";
+import "./../../categories/pagination.css";
+import Pop from "../../../components/Pop";
 
 const AddYoutube = () => {
-  const {
-    data: youtubes,
-    isFetching,
-    isError,
-  } = useReadQuery({ url: "/user/youtubes", tag: ["youtubes"] });
+  const [page, setPage] = useState(1);
+  const [search, setSearch] = useState("");
+  const [totalPage, setTotalPage] = useState(1);
+
+  const [trigger, { data: youtubes, isFetching, isError }] = useLazyReadQuery();
+
+  useEffect(() => {
+    setPage(1);
+  }, []);
+
+  useEffect(() => {
+    setTotalPage(Math.ceil(youtubes?.total / 6));
+  }, [youtubes]);
+
+  useEffect(() => {
+    trigger({
+      url: `/user/youtubes?limit=6&page=${page}`,
+      tag: ["youtubes"],
+    });
+  }, [page]);
+
+  useEffect(() => {
+    trigger({
+      url: `/user/youtubes?limit=6&page=${page}&searchField=title&searchValue=${search}`,
+      tag: ["youtubes"],
+    });
+  }, [search]);
 
   const [addData, addResponse] = useCreateMutation();
   const [deleteData, deleteResponse] = useDeleteMutation();
   const [pending, setPending] = useState(false);
+
   const [deletePending, setDeletePending] = useState(false);
   const [add, setAdd] = useState(false);
   const [videoId, setVideoId] = useState("");
   const [title, setTitle] = useState("");
   const [subtitle, setSubtitle] = useState("");
+
+  const [popup, setPopup] = useState(false);
+  const [id, setId] = useState("");
 
   const addHandler = () => {
     addData({
@@ -37,9 +67,15 @@ const AddYoutube = () => {
     });
   };
 
-  const deleteHandler = (id) => {
-    deleteData({ url: `/user/youtubes?id=${id}`, tag: ["youtubes"] });
+  const deleteHandler = () => {
+    id && deleteData({ url: `/user/youtubes?id=${id}`, tag: ["youtubes"] });
   };
+
+  useEffect(() => {
+    if (deleteResponse?.status === "fulfilled") {
+      setPopup(false);
+    }
+  }, [deleteResponse]);
 
   const opts = {
     width: "97%",
@@ -58,12 +94,23 @@ const AddYoutube = () => {
       <Response response={addResponse} setPending={setPending} />
       <Response response={deleteResponse} setPending={setDeletePending} />
 
-      <button
-        onClick={() => setAdd(true)}
-        className="px-5 self-end rounded-lg py-2 text-white bg-main"
-      >
-        Add New
-      </button>
+      <div className="flex px-5 items-center justify-between">
+        <input
+          onChange={(e) => setSearch(e.target.value)}
+          type="search"
+          id="default-search"
+          class="block w-full max-w-md px-4 h-12 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          placeholder="Search..."
+          required
+        />
+
+        <button
+          onClick={() => setAdd(true)}
+          className="px-5 self-end rounded-lg py-2 text-white bg-main"
+        >
+          Add New
+        </button>
+      </div>
       <div className="grid w-full grid-cols-1 md:grid-cols-2 gap-5 lg:grid-cols-3">
         {isFetching && <Loading />}
         {isError && <p>Something went wrong for reading video data</p>}
@@ -77,7 +124,7 @@ const AddYoutube = () => {
                 <YouTube videoId={e.videoId} opts={opts} onReady={videoReady} />
                 <div className="flex flex-col gap-1">
                   <p className=" py-1 border-b font-bold">Title</p>
-                  <p className="font-bold flex items-center justify-start gap-2 text-sm">
+                  <p className="flex items-center justify-start gap-1">
                     {e.title}
                   </p>
                 </div>
@@ -86,14 +133,16 @@ const AddYoutube = () => {
                   <p className="">{e.subtitle}</p>
                 </div>
                 <p className="text-sm self-end font-light">{format(e?.date)}</p>
-                <div className="flex w-full items-center justify-between">
-                  <LoadingButton
-                    pending={deletePending}
-                    onClick={() => deleteHandler(e._id)}
-                    title="Delete"
-                    color="bg-main"
-                    width="w-32"
-                  />
+                <div className="flex w-full gap-3 items-center justify-between">
+                  <button
+                    onClick={() => {
+                      setPopup(true);
+                      setId(e._id);
+                    }}
+                    className="py-2 w-32 rounded-lg bg-main text-white"
+                  >
+                    Delete
+                  </button>
                   <a
                     href={`/dashboard/admin/youtube/detail?${e._id}`}
                     className="py-2 w-36 rounded-lg bg-emerald-500 text-center text-white"
@@ -108,11 +157,37 @@ const AddYoutube = () => {
           <div>There is no data to display.</div>
         )}
       </div>
+      <div className="py-10">
+        <ResponsivePagination
+          total={totalPage}
+          current={page}
+          onPageChange={(currentPage) => setPage(currentPage)}
+          previousLabel="Previous"
+          previousClassName="w-24"
+          nextClassName="w-24"
+          nextLabel="Next"
+        />
+      </div>
+      {popup && (
+        <Pop
+          content="Are you sure you want to remove this price?"
+          cancel={setPopup}
+          trigger={
+            <LoadingButton
+              pending={deletePending}
+              onClick={deleteHandler}
+              title="Yes, I'm Sure"
+              color="bg-main"
+              width="w-36 sm:rounded-lg sm:border sm:py-2 sm:px-5 sm:hover:bg-red-500"
+            />
+          }
+        />
+      )}
       {add && (
         <div className="absolute  z-30 top-2 bg-white bg-dark right-0 w-[300px] rounded-lg p-4 border border-gray-300">
           <div className="relative">
             <svg
-              class="w-6 absolute top-1 right-1 hover:text-gray-600 h-6 text-gray-800 dark:text-white"
+              class="w-6 absolute cursor-pointer top-1 right-1 hover:text-gray-600 h-6 text-gray-800 dark:text-white"
               aria-hidden="true"
               onClick={() => setAdd(false)}
               xmlns="http://www.w3.org/2000/svg"

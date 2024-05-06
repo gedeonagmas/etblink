@@ -3,6 +3,7 @@ import LoadingButton from "../../../components/loading/LoadingButton";
 import {
   useCreateMutation,
   useDeleteMutation,
+  useLazyReadQuery,
   useReadQuery,
   useUpdateMutation,
 } from "../../../features/api/apiSlice";
@@ -13,13 +14,37 @@ import Pop from "../../../components/Pop";
 import Editor from "../../../components/Editor";
 import Tables from "../../../components/Tables";
 import { Delete, Edit } from "@mui/icons-material";
+import ResponsivePagination from "react-responsive-pagination";
+import "./../../categories/pagination.css";
 
 const AddBlog = () => {
-  const {
-    data: blogs,
-    isFetching,
-    isError,
-  } = useReadQuery({ url: "/user/blogs", tag: ["blogs"] });
+  const [page, setPage] = useState(1);
+  const [search, setSearch] = useState("");
+  const [totalPage, setTotalPage] = useState(1);
+
+  const [trigger, { data: blogs, isFetching, isError }] = useLazyReadQuery();
+
+  useEffect(() => {
+    setPage(1);
+  }, []);
+
+  useEffect(() => {
+    setTotalPage(Math.ceil(blogs?.total / 30));
+  }, [blogs]);
+
+  useEffect(() => {
+    trigger({
+      url: `/user/blogs?limit=30&page=${page}`,
+      tag: ["blogs"],
+    });
+  }, [page]);
+
+  useEffect(() => {
+    trigger({
+      url: `/user/blogs?limit=30&page=${page}&searchField=title&searchValue=${search}`,
+      tag: ["blogs"],
+    });
+  }, [search]);
 
   const [addData, addResponse] = useCreateMutation();
   const [deleteData, deleteResponse] = useDeleteMutation();
@@ -136,17 +161,41 @@ const AddBlog = () => {
       <Response response={addResponse} setPending={setPending} />
       <Response response={deleteResponse} setPending={setDeletePending} />
 
-      <button
-        onClick={() => setAdd(true)}
-        className="px-5 self-end rounded-lg py-2 text-white bg-main"
-      >
-        Add New
-      </button>
+      <div className="flex px-5 items-center justify-between">
+        <input
+          onChange={(e) => setSearch(e.target.value)}
+          type="search"
+          id="default-search"
+          class="block w-full max-w-md px-4 h-12 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          placeholder="Search..."
+          required
+        />
+
+        <button
+          onClick={() => setAdd(true)}
+          className="px-5 self-end rounded-lg py-2 text-white bg-main"
+        >
+          Add New
+        </button>
+      </div>
       <div className="w-full">
         {isFetching && <Loading />}
         {isError && <p>Something went wrong unable to read boost data</p>}
         {blogs && blogs?.data?.length > 0 ? (
-          <Tables data={blogs?.data} columns={columns} title="Blogs" />
+          <div>
+            <Tables data={blogs?.data} columns={columns} title="Blogs" />
+            <div className="py-10">
+              <ResponsivePagination
+                total={totalPage}
+                current={page}
+                onPageChange={(currentPage) => setPage(currentPage)}
+                previousLabel="Previous"
+                previousClassName="w-24"
+                nextClassName="w-24"
+                nextLabel="Next"
+              />
+            </div>
+          </div>
         ) : (blogs && blogs?.message) || blogs?.data?.length === 0 ? (
           <div>There is no data to display.</div>
         ) : null}

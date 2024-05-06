@@ -39,7 +39,7 @@ import Ratings from "./pages/dashboard/sales/Ratings";
 import Boosting from "./pages/dashboard/company/Boosting";
 import AddBoost from "./pages/dashboard/admin/AddBoost";
 import UpdateBoost from "./pages/dashboard/admin/UpdateBoost";
-import AddSubscriptions from "./pages/dashboard/admin/AddSubscriptions";
+// import AddSubscriptions from "./pages/dashboard/admin/AddSubscriptions";
 import Billing from "./pages/dashboard/company/Billing";
 import Success from "./pages/Success";
 import Subscription from "./pages/dashboard/company/Subscription";
@@ -47,6 +47,10 @@ import Sales from "./pages/dashboard/Sales";
 import Message from "./pages/Message";
 import UpdateBlog from "./pages/dashboard/admin/UpdateBlog";
 import AddBlog from "./pages/dashboard/admin/AddBlog";
+import UpdatePrices from "./pages/dashboard/admin/UpdatePrices";
+import AddPrices from "./pages/dashboard/admin/AddPrices";
+import UserSales from "./pages/dashboard/admin/UserSales";
+import SalesDetail from "./pages/dashboard/admin/SalesDetail";
 
 export const userContext = createContext();
 
@@ -165,7 +169,11 @@ function App() {
               ></Route>
               <Route
                 path="/dashboard/admin/prices"
-                element={<AddSubscriptions />}
+                element={<AddPrices />}
+              ></Route>
+              <Route
+                path="/dashboard/admin/prices/detail"
+                element={<UpdatePrices />}
               ></Route>
               <Route
                 path="/dashboard/admin/youtube/detail"
@@ -183,6 +191,14 @@ function App() {
               <Route
                 path="/dashboard/admin/blog/detail"
                 element={<UpdateBlog />}
+              ></Route>
+              <Route
+                path="/dashboard/admin/sales"
+                element={<UserSales />}
+              ></Route>
+              <Route
+                path="/dashboard/admin/sales/detail"
+                element={<SalesDetail />}
               ></Route>
               {/* ################################################################### */}
 

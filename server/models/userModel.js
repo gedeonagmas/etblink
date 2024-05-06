@@ -36,6 +36,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       validate: valid.confirmPassword("Confirm password"),
     },
+    isActive: { type: Boolean, default: true },
     modifiedDate: Number,
     passwordChangedAt: Number,
     resetToken: String,
