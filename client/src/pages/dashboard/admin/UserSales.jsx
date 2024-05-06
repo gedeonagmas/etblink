@@ -12,8 +12,9 @@ import Tables from "../../../components/Tables";
 import ResponsivePagination from "react-responsive-pagination";
 import "./../../categories/pagination.css";
 import ProfilePicture from "../../../components/ProfilePicture";
+import CompanyItems from "../../../components/CompanyItems";
 
-const UserSales = () => {
+const UserSales = ({ type }) => {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
   const [totalPage, setTotalPage] = useState(1);
@@ -30,14 +31,14 @@ const UserSales = () => {
 
   useEffect(() => {
     trigger({
-      url: `/user/users?role=sales&limit=10&page=${page}&populatingType=users&populatingValue=user`,
+      url: `/user/users?role=${type}&limit=10&page=${page}&populatingType=users&populatingValue=user`,
       tag: ["users"],
     });
   }, [page]);
 
   useEffect(() => {
     trigger({
-      url: `/user/users?role=sales&limit=10&page=${page}&searchField=email&searchValue=${search}&populatingType=users&populatingValue=user`,
+      url: `/user/users?role=${type}&limit=10&page=${page}&searchField=email&searchValue=${search}&populatingType=users&populatingValue=user`,
       tag: ["users"],
     });
   }, [search]);
@@ -185,7 +186,7 @@ const UserSales = () => {
         />
       )}
       {add && user && (
-        <div className="absolute flex flex-col divide-y-2 shadow-xl z-30 top-2 bg-white bg-dark right-0 w-full rounded-lg p-4 border border-gray-300">
+        <div className="absolute flex flex-col shadow-xl z-30 top-2 bg-white bg-dark right-0 w-full rounded-lg p-4 border border-gray-300">
           <div className="relative cursor-pointer">
             <svg
               class="w-6 absolute top-1 right-1 hover:text-gray-600 h-6 text-gray-800 dark:text-white"
@@ -206,116 +207,127 @@ const UserSales = () => {
               />
             </svg>
           </div>
-          <div className="py-2 mt-7">
-            <label
-              for="name"
-              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >
-              Profile
-            </label>
-            <ProfilePicture user={user} />
-          </div>
-          <div className="py-2 mt-2">
-            <label
-              for="name"
-              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >
-              Full Name
-            </label>
-            <p className="font-normal">
-              {user?.user?.firstName +
-                " " +
-                user?.user?.middleName +
-                " " +
-                user?.user?.lastName}
-            </p>
-          </div>
-
-          <div className="py-2 mt-2">
-            <label
-              for="name"
-              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >
-              Email
-            </label>
-            <p className="font-normal">{user?.email}</p>
-          </div>
-
-          <div className="py-2 mt-2">
-            <label
-              for="name"
-              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >
-              Gender
-            </label>
-            <p className="font-normal">{user?.gender}</p>
-          </div>
-
-          <div className="py-2 mt-2">
-            <label
-              for="name"
-              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >
-              Phone
-            </label>
-            <p className="font-normal">{user?.phone}</p>
-          </div>
-          <div className="py-2 mt-2">
-            <label
-              for="name"
-              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >
-              Address
-            </label>
-            <p className="font-normal">{user?.address}</p>
-          </div>
-          <div className="py-2 mt-2">
-            <label
-              for="name"
-              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >
-              Earn
-            </label>
-            <p className="font-normal">{user?.earn?.total}</p>
-          </div>
-
-          <div className="py-2 mt-2">
-            <label
-              for="name"
-              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >
-              Profile Fill Status
-            </label>
-            <p className="font-normal">{user?.profileFillStatus}</p>
-          </div>
-          <div className="py-2 mt-2">
-            <label
-              for="name"
-              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >
-              Bio
-            </label>
-            <p className="font-normal">{user?.bio}</p>
-          </div>
-
-          <div className="py-2 mt-2">
-            <label
-              for="name"
-              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >
-              Account Created At
-            </label>
-            <p className="font-normal">{format(user?.createdAt)}</p>
-          </div>
-          <div className="py-2 mt-2">
-            <label
-              for="name"
-              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >
-              Account Updated At
-            </label>
-            <p className="font-normal">{format(user?.updatedAt)}</p>
-          </div>
+          {type !== "company" && (
+            <div className="w-full flex flex-col gap-2 divide-y-2">
+              <div className="py-2 mt-7">
+                <label
+                  for="name"
+                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Profile
+                </label>
+                <ProfilePicture user={user} />
+              </div>
+              <div className="py-2 mt-2">
+                <label
+                  for="name"
+                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Full Name
+                </label>
+                <p className="font-normal">
+                  {user?.user?.firstName +
+                    " " +
+                    user?.user?.middleName +
+                    " " +
+                    user?.user?.lastName}
+                </p>
+              </div>
+              <div className="py-2 mt-2">
+                <label
+                  for="name"
+                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Email
+                </label>
+                <p className="font-normal">{user?.email}</p>
+              </div>
+              <div className="py-2 mt-2">
+                <label
+                  for="name"
+                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Gender
+                </label>
+                <p className="font-normal">{user?.gender}</p>
+              </div>
+              <div className="py-2 mt-2">
+                <label
+                  for="name"
+                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Phone
+                </label>
+                <p className="font-normal">{user?.phone}</p>
+              </div>
+              <div className="py-2 mt-2">
+                <label
+                  for="name"
+                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Address
+                </label>
+                <p className="font-normal">{user?.address}</p>
+              </div>
+              {type === "sales" && (
+                <div className="py-2 mt-2">
+                  <label
+                    for="name"
+                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  >
+                    Earn
+                  </label>
+                  <p className="font-normal">{user?.earn?.total}</p>
+                </div>
+              )}
+              <div className="py-2 mt-2">
+                <label
+                  for="name"
+                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Profile Fill Status
+                </label>
+                <p className="font-normal">{user?.profileFillStatus}</p>
+              </div>
+              <div className="py-2 mt-2">
+                <label
+                  for="name"
+                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Bio
+                </label>
+                <p className="font-normal">{user?.bio}</p>
+              </div>
+              <div className="py-2 mt-2">
+                <label
+                  for="name"
+                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Account Created At
+                </label>
+                <p className="font-normal">{format(user?.createdAt)}</p>
+              </div>
+              <div className="py-2 mt-2">
+                <label
+                  for="name"
+                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Account Updated At
+                </label>
+                <p className="font-normal">{format(user?.updatedAt)}</p>
+              </div>
+            </div>
+          )}
+          {type === "company" && (
+            <div className="py-10">
+              <CompanyItems
+                value={user?.user?._id}
+                phoneNo={`${user?.user?.phone?.substring(0, 5)}**`}
+                type="small"
+                data={user?.user}
+              />
+            </div>
+          )}
         </div>
       )}
     </div>

@@ -50,7 +50,6 @@ import AddBlog from "./pages/dashboard/admin/AddBlog";
 import UpdatePrices from "./pages/dashboard/admin/UpdatePrices";
 import AddPrices from "./pages/dashboard/admin/AddPrices";
 import UserSales from "./pages/dashboard/admin/UserSales";
-import SalesDetail from "./pages/dashboard/admin/SalesDetail";
 
 export const userContext = createContext();
 
@@ -194,12 +193,17 @@ function App() {
               ></Route>
               <Route
                 path="/dashboard/admin/sales"
-                element={<UserSales />}
+                element={<UserSales type="sales" />}
               ></Route>
               <Route
-                path="/dashboard/admin/sales/detail"
-                element={<SalesDetail />}
+                path="/dashboard/admin/visitor"
+                element={<UserSales type="visitor" />}
               ></Route>
+              <Route
+                path="/dashboard/admin/companies"
+                element={<UserSales type="company" />}
+              ></Route>
+
               {/* ################################################################### */}
 
               {/* ############################## VISITOR ############################## */}

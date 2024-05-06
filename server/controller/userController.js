@@ -72,7 +72,7 @@ export const loginHandler = asyncCatch(async (req, res, next) => {
   if (!email || !password)
     return next(new AppError("provide email and password", 404));
   const user = await User.findOne({ email })
-    // const user = await User.findOne({ email, status: true })
+    // const user = await User.findOne({ email, isActive: true })
     .select("+password")
     .populate("user");
   if (!user) return next(new AppError("Invalid email or password", 404));
