@@ -1,3 +1,5 @@
+
+import { Admin } from "../models/adminModel.js";
 import { Application } from "../models/applicationModel.js";
 import { Blog } from "../models/blogModel.js";
 import { BoostHistory } from "../models/boostHistoryModel.js";
@@ -8,11 +10,13 @@ import { News } from "../models/newsModel.js";
 import { Institution } from "../models/organizationModel.js";
 import { Payment } from "../models/paymentModel.js";
 import { Rate } from "../models/ratesModel.js";
+import { Sales } from "../models/salesModel.js";
 import { Save } from "../models/saveModel.js";
 import { SubscriptionHistory } from "../models/subscriptionHistoryModel.js";
 import { Subscription } from "../models/subscriptionModel.js";
 import { User } from "../models/userModel.js";
 import { View } from "../models/viewModel.js";
+import { Visitor } from "../models/visitorModel.js";
 import { Youtube } from "../models/youtubeModel.js";
 import AppError from "./AppError.js";
 
@@ -78,6 +82,15 @@ export const selectModel = (name, next) => {
       break;
     case "blogs":
       model = Blog;
+      break;
+    case "sales":
+      model = Sales;
+      break;
+    case "visitors":
+      model = Visitor;
+      break;
+    case "admins":
+      model = Admin;
       break;
     default:
       return next(new AppError("something went wrong please try again!.", 500));

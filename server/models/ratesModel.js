@@ -8,12 +8,16 @@ const rateSchema = new mongoose.Schema(
       type: String,
       validate: valid.required("Full name"),
     },
-    
+
     role: {
       type: String,
     },
 
     for: {
+      type: String,
+    },
+
+    type: {
       type: String,
     },
 

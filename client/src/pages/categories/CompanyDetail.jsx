@@ -83,7 +83,7 @@ const CompanyDetail = (props) => {
       value: rating,
       role: currentUser?.role,
       for: "company",
-      tag: ["companies,rate"],
+      tag: ["companies", "rates"],
     });
   };
 
@@ -366,29 +366,6 @@ const CompanyDetail = (props) => {
               {/* ratings */}
               <div className="w-full">
                 <p className="text-xl mt-10 font-bold">Add Review and Rating</p>
-                {/* <div className="flex flex-col mt-7 gap-2">
-                  <Rating>
-                    <Rating.Star />
-                    <Rating.Star />
-                    <Rating.Star />
-                    <Rating.Star />
-                    <Rating.Star filled={false} />
-                  </Rating>
-                  <Rating size="md">
-                    <Rating.Star />
-                    <Rating.Star />
-                    <Rating.Star />
-                    <Rating.Star />
-                    <Rating.Star filled={false} />
-                  </Rating>
-                  <Rating size="lg">
-                    <Rating.Star />
-                    <Rating.Star />
-                    <Rating.Star />
-                    <Rating.Star />
-                    <Rating.Star filled={false} />
-                  </Rating>
-                </div> */}
                 <p className="text-lg mt-7 font-bold">Rate us</p>
 
                 <div>

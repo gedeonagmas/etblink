@@ -49,6 +49,13 @@ const salesSchema = new mongoose.Schema(
       current: { type: Number, default: 0 },
     },
 
+    rating: {
+      type: {
+        total: { type: Number, default: 0 },
+        average: { type: Number, default: 0 },
+      },
+    },
+
     profileFillStatus: {
       type: Number,
       default: 20,
@@ -87,7 +94,7 @@ salesSchema.pre("save", function (next) {
     }
   });
 
-  console.log(this, percent, "percent");
+  // console.log(this, percent, "percent");
   this.profileFillStatus = percent;
   next();
 });

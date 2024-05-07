@@ -11,6 +11,7 @@ const UserList = ({
   setSenderId,
   onlineUsers,
 }) => {
+  console.log(onlineUsers);
   return (
     <div
       id="user_lists"
@@ -176,7 +177,7 @@ const UserList = ({
                         )}
                         <span
                           className={`top-0 left-6 absolute  w-3 h-3 ${
-                            onlineUsers?.includes(user?.userName)
+                            onlineUsers?.includes(user?.email)
                               ? "bg-green-400"
                               : "bg-gray-200"
                           }  border-2 border-white dark:border-gray-800 rounded-full`}

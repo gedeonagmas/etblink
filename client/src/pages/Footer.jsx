@@ -31,7 +31,7 @@ const Footer = () => {
   });
 
   const [id, setId] = useState("");
-
+  console.log(sales, "sales");
   return (
     <div className="">
       {/* sellers */}
@@ -82,9 +82,10 @@ const Footer = () => {
             {sales &&
               sales?.data?.length > 0 &&
               sales?.data?.map((user, i) => (
-                <div
+                <a
                   key={user?._id}
-                  className="flex w-[266px] relative flex-col items-start rounded-lg hover:bg-red-100 dark:hover:bg-gray-600  bg-dark border-dark border shadow-xl justify-start"
+                  href={`/sales?id=${user?.user?._id}`}
+                  className="flex cursor-pointer w-[266px] relative flex-col items-start rounded-lg hover:bg-red-100 dark:hover:bg-gray-600  bg-dark border-dark border shadow-xl justify-start"
                 >
                   <div className="flex pt-4 px-4 w-[266px] items-center justify-between">
                     <ProfilePicture user={user} />
@@ -203,7 +204,7 @@ const Footer = () => {
                       </CopyToClipboard>
                     </div>
                   </div>
-                </div>
+                </a>
               ))}
           </div>
 

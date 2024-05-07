@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import VerifiedOutlinedIcon from "@mui/icons-material/VerifiedOutlined";
 import VerifiedOutlined from "@mui/icons-material/VerifiedOutlined";
 import "./bubble.css";
@@ -9,12 +9,18 @@ import {
   useReadQuery,
 } from "../features/api/apiSlice";
 import { SavedSearch } from "@mui/icons-material";
+import { io } from "socket.io-client";
 
-const CompanyItems = ({ value, phoneNo, type, data }) => {
+const CompanyItems = ({ value, phoneNo, type, data, email }) => {
   const [phone, setPhone] = useState(phoneNo);
   const user = JSON.parse(localStorage.getItem("etblink_user"));
   const [removeData, removeResponse] = useDeleteSaveMutation();
   const [saveData, saveResponse] = useCreateSaveMutation();
+
+  const { data: companies } = useReadQuery({
+    url: `/user/users?user=${value}`,
+    tag: ["users"],
+  });
 
   const {
     data: saves,
@@ -58,9 +64,24 @@ const CompanyItems = ({ value, phoneNo, type, data }) => {
     });
   };
 
-  console.log(views, "views");
-  console.log(user?.user?._id, "current user");
-  console.log(value, "company");
+  const [socket, setSocket] = useState(null);
+  const [onlineUsers, setOnlineUsers] = useState();
+
+  useEffect(() => {
+    setSocket(io("http://localhost:3001"));
+  }, []);
+
+  useEffect(() => {
+    socket?.emit("connect-user", user?.email);
+    socket?.on("aaa", (val) => {
+      setOnlineUsers(val);
+    });
+  }, [socket]);
+
+  // console.log(onlineUsers, companies?.data[0]?.email, "users");
+  // console.log(views, "views");
+  // console.log(user?.user?._id, "current user");
+  // console.log(value, "company");
   return (
     <div
       key={value}
@@ -310,31 +331,19 @@ const CompanyItems = ({ value, phoneNo, type, data }) => {
         </div>
       </div>
       <div className="flex my-3 w-full items-center justify-between px-3 ">
-        <div
+        <a
+          href="/dashboard/message"
           className={`flex items-center ${
             type === "large" ? "px-2" : "px-1"
           } rounded-full hover:bg-orange-500 hover:text-white border border-gray-300 cursor-pointer text-[14px]  justify-center`}
         >
-          {/* <div className="p-2  bg-[rgb(252,45,45)] rounded-full text-white">
-            <svg
-              class="w-6 h-6"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M9 17h6l3 3v-3h2V9h-2M4 4h11v8H9l-3 3v-3H4V4Z"
-              />
-            </svg>{" "}
-          </div> */}
-          <span class="status online"></span>
+          {onlineUsers?.includes(companies?.data[0]?.email) ? (
+            <span class="status online"></span>
+          ) : (
+            <span class="w-5 my-2 mx-2 h-5 bg-main rounded-full border"></span>
+          )}
           <p className="mr-3">chat</p>
-        </div>
+        </a>
 
         <Link
           to="/company"

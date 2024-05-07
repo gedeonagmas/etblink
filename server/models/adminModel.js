@@ -1,49 +1,57 @@
 import mongoose from "mongoose";
 import * as valid from "../utils/validator.js";
 
-const privateSchema = new mongoose.Schema(
+const adminSchema = new mongoose.Schema(
   {
     firstName: {
       type: String,
-      validate: function () {
-        return this.userType === "business" ? null : valid.name("First name");
-      },
+      validate: valid.name("First name"),
     },
 
     middleName: {
       type: String,
-      validate: function () {
-        return this.userType === "business" ? null : valid.name("Middle name");
-      },
+      validate: valid.name("Middle name"),
     },
 
     lastName: {
       type: String,
-      validate: function () {
-        return this.userType === "business" ? null : valid.name("Last name");
-      },
+      validate: valid.name("Last name"),
+    },
+
+    bio: {
+      type: String,
+      validate: valid.textMax("Bio", 100),
     },
 
     gender: {
       type: String,
-      validate: function () {
-        return this.userType === "business" ? null : valid.gender("Gender");
-      },
+      validate: valid.gender("Gender"),
+    },
 
-      phone: {
-        type: String,
-        validate: valid.phone("Phone"),
-      },
+    phone: {
+      type: String,
+      validate: valid.phone("Phone"),
+    },
 
-      address: {
-        type: String,
-        validate: valid.paragraph("Address", 4, 200),
-      },
+    address: {
+      type: String,
+      validate: valid.paragraph("Address", 4, 200),
+    },
 
-      nationality: {
-        type: String,
-        validate: valid.paragraph("Nationality", 4, 100),
-      },
+    profilePicture: {
+      type: String,
+      default: "",
+    },
+
+    earn: {
+      total: { type: Number, default: 0 },
+      withdraw: { type: Number, default: 0 },
+      current: { type: Number, default: 0 },
+    },
+
+    profileFillStatus: {
+      type: Number,
+      default: 20,
     },
   },
   {
@@ -57,9 +65,31 @@ const privateSchema = new mongoose.Schema(
   }
 );
 
-privateSchema.pre("findOneAndUpdate", function (next) {
+adminSchema.pre("findOneAndUpdate", function (next) {
   this.options.runValidators = true;
   next();
 });
 
-export const Admin = mongoose.model("admin", privateSchema);
+adminSchema.pre("save", function (next) {
+  let percent = 20;
+  const fields = [
+    "firstName",
+    "middleName",
+    "lastName",
+    "gender",
+    "phone",
+    "address",
+    "profilePicture",
+  ];
+  fields.map((field) => {
+    if (this[field]?.length > 0) {
+      percent += 10;
+    }
+  });
+
+  console.log(this, percent, "percent");
+  this.profileFillStatus = percent;
+  next();
+});
+
+export const Admin = mongoose.model("admin", adminSchema);

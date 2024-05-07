@@ -81,7 +81,7 @@ visitorSchema.pre("save", function (next) {
     }
   });
 
-  console.log(this, percent, "percent");
+  // console.log(this, percent, "percent");
   this.profileFillStatus = percent;
   next();
 });

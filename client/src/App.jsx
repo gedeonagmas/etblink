@@ -50,6 +50,8 @@ import AddBlog from "./pages/dashboard/admin/AddBlog";
 import UpdatePrices from "./pages/dashboard/admin/UpdatePrices";
 import AddPrices from "./pages/dashboard/admin/AddPrices";
 import UserSales from "./pages/dashboard/admin/UserSales";
+import UsersProfile from "./pages/dashboard/UsersProfile";
+import SalesDetail from "./pages/SalesDetail";
 
 export const userContext = createContext();
 
@@ -89,6 +91,8 @@ function App() {
               <Route path="/about" element={<About />}></Route>
               <Route path="/ethiopia" element={<Ethiopia />}></Route>
               <Route path="/contact" element={<Contact />}></Route>
+              <Route path="/sales" element={<SalesDetail />}></Route>
+              <Route path="/sales" element={<SalesDetail />}></Route>
               <Route path="*" element={<PageNotFound />}></Route>
             </Route>
 
@@ -137,6 +141,10 @@ function App() {
               {/* ############################## SALES ############################## */}
               <Route path="/dashboard/sales" element={<Sellers />}></Route>
               <Route
+                path="/dashboard/sales/profile"
+                element={<UsersProfile type="sales" />}
+              ></Route>
+              <Route
                 path="/dashboard/sales/company"
                 element={<SalesCompany />}
               ></Route>
@@ -161,6 +169,10 @@ function App() {
               <Route
                 path="/dashboard/admin/news/detail"
                 element={<NewsDetailAdmin />}
+              ></Route>
+              <Route
+                path="/dashboard/admin/profile"
+                element={<UsersProfile type="admins" />}
               ></Route>
               <Route
                 path="/dashboard/admin/youtube"
@@ -209,7 +221,7 @@ function App() {
               {/* ############################## VISITOR ############################## */}
               <Route
                 path="/dashboard/visitor/profile"
-                element={<Profile />}
+                element={<UsersProfile type="visitors" />}
               ></Route>
               {/* ################################################################### */}
 

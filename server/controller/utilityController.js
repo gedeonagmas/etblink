@@ -16,7 +16,11 @@ export const createRate = asyncCatch(async (req, res, next) => {
     const rate = await Rate.aggregate([
       {
         $group: {
-          _id: req.body.accepter,
+          _id: {
+            accepter: "$accepter",
+            type: "$type",
+          },
+
           total: {
             $sum: 1,
           },
@@ -25,10 +29,17 @@ export const createRate = asyncCatch(async (req, res, next) => {
       },
     ]);
 
-    const company = await Company.findById(req.body.accepter);
+    const company =
+      req.body.type === "company"
+        ? await Company.findById(req.body.accepter)
+        : await Sales.findById(req.body.accepter);
 
-    company.rating.total = rate[0]?.total;
-    company.rating.average = rate[0]?.average.toFixed(1);
+    const result = rate?.filter(
+      (e) => e?._id?.accepter?.toString() === req.body.accepter
+    );
+
+    company.rating.total = result[0]?.total;
+    company.rating.average = result[0]?.average?.toFixed(1);
 
     await company.save();
   };
@@ -281,7 +292,7 @@ export const boostHandler = asyncCatch(async (req, res, next) => {
   return res.status(200).json({
     status: "Payed",
     message: `Your company is ${req.body.type + "ed"} Successfully. Thank you!`,
-  }); 
+  });
   // } else {
   //   return next(
   //     new AppError("something went wrong unable to upgrade your account!")
