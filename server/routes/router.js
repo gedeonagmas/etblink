@@ -73,8 +73,8 @@ router.route("/readProfileInfo").get(authentication, readProfileInfo);
 
 router.route("/updateProfileInfo").put(authentication, updateProfileInfo);
 
-router
-  .route("/updateProfilePicture")
+router 
+  .route("/updateProfilePicture") 
   .put(authentication, files, updateProfilePicture);
 
 utilityRouter.route("/updatePassword").put(authentication, updatePassword);
@@ -82,7 +82,7 @@ utilityRouter.route("/rate").post(authentication, createRate);
 utilityRouter.route("/rate").get(readRate);
 utilityRouter.route("/rateMultiple").get(authentication, readMultipleRate);
 utilityRouter.route("/rate").delete(authentication, deleteRate);
-utilityRouter.route("/save").post(authentication, createSave);
+utilityRouter.route("/save").post(createSave);
 utilityRouter.route("/save").delete(authentication, deleteSave);
 utilityRouter.route("/view").post(authentication, createView);
 utilityRouter.route("/upgrade").post(authentication, upgradeHandler);

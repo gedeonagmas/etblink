@@ -52,6 +52,7 @@ import AddPrices from "./pages/dashboard/admin/AddPrices";
 import UserSales from "./pages/dashboard/admin/UserSales";
 import UsersProfile from "./pages/dashboard/UsersProfile";
 import SalesDetail from "./pages/SalesDetail";
+import BlogsCategory from "./pages/blogs/BlogsCategory";
 
 export const userContext = createContext();
 
@@ -66,6 +67,7 @@ function App() {
       localStorage.setItem("etblink_user", JSON.stringify(user));
     }
   }, []);
+
   // useEffect(() => {});
   // const user = { data: { email: "gedi@gmail.com" } };
   // console.log(user?.data, "from app js");
@@ -87,12 +89,16 @@ function App() {
               <Route path="/company" element={<CompanyDetail />}></Route>
               <Route path="/news" element={<NewsCategory />}></Route>
               <Route path="/news-detail" element={<NewsDetail />}></Route>
+              <Route path="/blogs" element={<BlogsCategory />}></Route>
+              <Route path="/blogs-detail" element={<BlogsCategory />}></Route>
               <Route path="/prices" element={<Prices />}></Route>
               <Route path="/about" element={<About />}></Route>
               <Route path="/ethiopia" element={<Ethiopia />}></Route>
               <Route path="/contact" element={<Contact />}></Route>
-              <Route path="/sales" element={<SalesDetail />}></Route>
-              <Route path="/sales" element={<SalesDetail />}></Route>
+              <Route
+                path="/sales"
+                element={<SalesDetail type="global" />}
+              ></Route>
               <Route path="*" element={<PageNotFound />}></Route>
             </Route>
 
@@ -122,8 +128,9 @@ function App() {
               ></Route>
               <Route
                 path="/dashboard/company/sales"
-                element={<Sales type="company" />}
+                element={<SalesDetail type="company" />}
               ></Route>
+
               <Route
                 path="/dashboard/company/views"
                 element={<Views type="company" />}

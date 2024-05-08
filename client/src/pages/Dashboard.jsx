@@ -368,7 +368,7 @@ const Dashboard = () => {
         <Response
           response={logoutResponse}
           setPending={setPending}
-          redirecthref="/"
+          redirects="/"
           type="logout"
         />
         <div class="px-3 py-3 lg:px-5 lg:pl-3">
@@ -1138,7 +1138,7 @@ const Dashboard = () => {
 
                 <li>
                   <a
-                    href="/dashboard/company/sales"
+                    href={`/dashboard/company/sales?id=${user?.user?.sales}`}
                     class="flex items-center p-2 text-gray-500 hover:text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
                   >
                     <svg
@@ -1238,9 +1238,7 @@ const Dashboard = () => {
                     >
                       <path d="m12.7 20.7 6.2-7.1c2.7-3 2.6-6.5.8-8.7A5 5 0 0 0 16 3c-1.3 0-2.7.4-4 1.4A6.3 6.3 0 0 0 8 3a5 5 0 0 0-3.7 1.9c-1.8 2.2-2 5.8.8 8.7l6.2 7a1 1 0 0 0 1.4 0Z" />
                     </svg>
-                    <span class="flex-1 ms-3 whitespace-nowrap">
-                      Other Saves
-                    </span>
+                    <span class="flex-1 ms-3 whitespace-nowrap">Who Save me</span>
                   </a>
                 </li>
 
@@ -1265,9 +1263,7 @@ const Dashboard = () => {
                       />
                     </svg>
 
-                    <span class="flex-1 ms-3 whitespace-nowrap">
-                      Other Views
-                    </span>
+                    <span class="flex-1 ms-3 whitespace-nowrap">Who View me</span>
                   </a>
                 </li>
               </>

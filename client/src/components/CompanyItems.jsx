@@ -11,7 +11,7 @@ import {
 import { SavedSearch } from "@mui/icons-material";
 import { io } from "socket.io-client";
 
-const CompanyItems = ({ value, phoneNo, type, data, email }) => {
+const CompanyItems = ({ value, phoneNo, type, data, disabled }) => {
   const [phone, setPhone] = useState(phoneNo);
   const user = JSON.parse(localStorage.getItem("etblink_user"));
   const [removeData, removeResponse] = useDeleteSaveMutation();
@@ -143,13 +143,17 @@ const CompanyItems = ({ value, phoneNo, type, data, email }) => {
           </Link>
           <p
             onClick={() => {
-              saves?.data?.length > 0 ? removeHandler() : saveHandler();
+              if (!disabled) {
+                saves?.data?.length > 0 ? removeHandler() : saveHandler();
+              }
             }}
-            className="absolute border cursor-pointer hover:bg-gray-300/20 rounded-lg px-1 py-1 mr-1 gap-1 shadow-lg bottom-1 text-white flex items-center justify-center right-2"
+            className={`absolute border ${
+              !disabled && "cursor-pointer"
+            } hover:bg-gray-300/20 rounded-lg px-1 py-1 mr-1 gap-1 shadow-lg bottom-1 text-white flex items-center justify-center right-2`}
           >
             {saves?.data?.length > 0 ? (
               <svg
-                className="w-5 h-5 "
+                className="w-5 h-5"
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="currentColor"
@@ -159,7 +163,7 @@ const CompanyItems = ({ value, phoneNo, type, data, email }) => {
               </svg>
             ) : (
               <svg
-                class="w-5 h-5 "
+                class="w-5 h-5"
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -192,7 +196,11 @@ const CompanyItems = ({ value, phoneNo, type, data, email }) => {
               type === "large"
                 ? "w-5 h-5 top-1 right-2"
                 : "w-4 h-4 top-2 -right-1"
-            } absolute bg-emerald-400 p-1 border-2 border-white rounded-full`}
+            } absolute ${
+              onlineUsers?.includes(companies?.data[0]?.email)
+                ? "bg-emerald-400"
+                : "bg-gray-300"
+            } p-1 border-2 border-white rounded-full`}
           ></div>
         </div>
       </div>

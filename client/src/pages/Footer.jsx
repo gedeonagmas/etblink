@@ -82,10 +82,9 @@ const Footer = () => {
             {sales &&
               sales?.data?.length > 0 &&
               sales?.data?.map((user, i) => (
-                <a
+                <div
                   key={user?._id}
-                  href={`/sales?id=${user?.user?._id}`}
-                  className="flex cursor-pointer w-[266px] relative flex-col items-start rounded-lg hover:bg-red-100 dark:hover:bg-gray-600  bg-dark border-dark border shadow-xl justify-start"
+                  className="flex w-[266px] relative flex-col items-start rounded-lg hover:bg-red-100 dark:hover:bg-gray-600  bg-dark border-dark border shadow-xl justify-start"
                 >
                   <div className="flex pt-4 px-4 w-[266px] items-center justify-between">
                     <ProfilePicture user={user} />
@@ -161,6 +160,25 @@ const Footer = () => {
                       >
                         Call on {user?.user?.phone}
                       </label>
+                      <a href={`/sales?id=${user?.user?._id}`}>
+                        <svg
+                          class="w-6 h-6 hover:text-gray-500"
+                          aria-hidden="true"
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            stroke="currentColor"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M19 12H5m14 0-4 4m4-4-4-4"
+                          />
+                        </svg>
+                      </a>
                     </div>
 
                     <div className="w-full flex gap-1 items-center justify-start">
@@ -190,7 +208,7 @@ const Footer = () => {
                           </span>
                         ) : (
                           <button className="px-2 py-2 rounded-lg bg-main text-white hover:bg-red-500">
-                            <svg
+                            {/* <svg
                               class="w-6 h-6"
                               aria-hidden="true"
                               xmlns="http://www.w3.org/2000/svg"
@@ -198,13 +216,14 @@ const Footer = () => {
                               viewBox="0 0 18 20"
                             >
                               <path d="M16 1h-3.278A1.992 1.992 0 0 0 11 0H7a1.993 1.993 0 0 0-1.722 1H2a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2Zm-3 14H5a1 1 0 0 1 0-2h8a1 1 0 0 1 0 2Zm0-4H5a1 1 0 0 1 0-2h8a1 1 0 1 1 0 2Zm0-5H5a1 1 0 0 1 0-2h2V2h4v2h2a1 1 0 1 1 0 2Z" />
-                            </svg>
+                            </svg> */}
+                              Copy
                           </button>
                         )}
                       </CopyToClipboard>
                     </div>
                   </div>
-                </a>
+                </div>
               ))}
           </div>
 

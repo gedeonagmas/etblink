@@ -111,7 +111,7 @@ mongodb()
       });
       // console.log(users, "filterdd");
       return users;
-    };
+    }; 
 
     io.on("connection", (socket) => {
       //user connected

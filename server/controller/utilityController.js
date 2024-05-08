@@ -102,6 +102,7 @@ export const createSave = asyncCatch(async (req, res, next) => {
       .status(200)
       .json({ message: "Company is already in your list." });
   }
+  console.log(req.body);
   await Save.create(req.body);
 
   const company = await Company.findById(req.body.company);
