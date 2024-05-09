@@ -102,11 +102,11 @@ const Header = () => {
               <p className="px-2 py-1 text-white rounded-xl bg-main">
                 {user.email.split("@")[0]}
               </p>
-              <Link to={`/dashboard/${user.role}`} className="cursor-pointer">
+              <a href={`/dashboard/${user.role}`} className="cursor-pointer">
                 Dashboard
-              </Link>
+              </a>
 
-              <Link to={`/dashboard/saves`} className="cursor-pointer">
+              <a href={`/dashboard/saves`} className="cursor-pointer">
                 <div className="items-center flex flex-col justify-center">
                   <button
                     type="button"
@@ -129,10 +129,10 @@ const Header = () => {
                     </div>
                   </button>
                 </div>
-              </Link>
+              </a>
 
               {user?.role === "company" && (
-                <Link to={`/dashboard/views`} className="cursor-pointer">
+                <a href={`/dashboard/views`} className="cursor-pointer">
                   <div className="items-center flex flex-col justify-center">
                     <button
                       type="button"
@@ -159,7 +159,7 @@ const Header = () => {
                       </div>
                     </button>
                   </div>
-                </Link>
+                </a>
               )}
             </div>
           ) : (
@@ -207,12 +207,12 @@ const Header = () => {
                       placeholder="password"
                     />
                     <div className="flex py-1 items-center justify-between w-full">
-                      <Link
-                        to="/forget"
+                      <a
+                        href="/forget"
                         className="text-xs cursor-pointer hover:text-gray-100 text-white"
                       >
                         Forget password?
-                      </Link>
+                      </a>
                       <LoadingButton
                         pending={pending}
                         onClick={loginHandler}
@@ -226,9 +226,9 @@ const Header = () => {
               </div>
               <p className="text-gray-600">|</p>
               <div className="relative">
-                <Link to="/signup" className="cursor-pointer">
+                <a href="/signup" className="cursor-pointer">
                   Register
-                </Link>
+                </a>
               </div>
             </div>
           )}
@@ -285,61 +285,61 @@ const Header = () => {
 
           <ul className="py-5 h-[100vh] overflow-y-scroll w-full">
             <li className="mt-10" role="presentation">
-              <Link
-                to="/"
+              <a
+                href="/"
                 className="inline-block hover:text-[rgb(252,45,45)]  w-full p-5 font-medium rtl:text-right text-gray-500 border border-b-0 border-gray-300  focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 gap-3"
               >
                 Home
-              </Link>
+              </a>
             </li>
             <li className="" role="presentation">
-              <Link
-                to="/local"
+              <a
+                href="/local"
                 className="inline-block hover:text-[rgb(252,45,45)]  w-full p-5 font-medium rtl:text-right text-gray-500 border border-b-0 border-gray-300  focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 gap-3"
               >
                 Local
-              </Link>
+              </a>
             </li>
             <li className="" role="presentation">
-              <Link
-                to="/global"
+              <a
+                href="/global"
                 className="inline-block hover:text-[rgb(252,45,45)]  w-full p-5 font-medium rtl:text-right text-gray-500 border border-b-0 border-gray-300  focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 gap-3"
               >
                 Global
-              </Link>
+              </a>
             </li>
             <li className="" role="presentation">
-              <Link
-                to="/news"
+              <a
+                href="/blogs"
                 className="inline-block hover:text-[rgb(252,45,45)]  w-full p-5 font-medium rtl:text-right text-gray-500 border border-b-0 border-gray-300  focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 gap-3"
               >
                 Event
-              </Link>
+              </a>
             </li>
             <li className="" role="presentation">
-              <Link
-                to="/news"
+              <a
+                href="/news"
                 className="inline-block hover:text-[rgb(252,45,45)]  w-full p-5 font-medium rtl:text-right text-gray-500 border border-b-0 border-gray-300  focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 gap-3"
               >
                 News
-              </Link>
+              </a>
             </li>
             <li className="" role="presentation">
-              <Link
-                to="/job"
+              <a
+                href="/job"
                 className="inline-block hover:text-[rgb(252,45,45)]  w-full p-5 font-medium rtl:text-right text-gray-500 border border-b-0 border-gray-300  focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 gap-3"
               >
                 Jobs
-              </Link>
+              </a>
             </li>
 
             <li className="" role="presentation">
-              <Link
-                to="/investment"
+              <a
+                href="/investment"
                 className="inline-block hover:text-[rgb(252,45,45)]  w-full p-5 font-medium rtl:text-right text-gray-500 border border-b-0 border-gray-300  focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 gap-3"
               >
                 Investment
-              </Link>
+              </a>
             </li>
 
             <div id="accordion-collapse" data-accordion="collapse">
@@ -377,36 +377,36 @@ const Header = () => {
               >
                 <div class="p-5 border border-b-0 border-gray-300 dark:border-gray-700">
                   <li className="me-2 ml-2" role="presentation">
-                    <Link
-                      to="/news"
+                    <a
+                      href="/news"
                       className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
                     >
                       English
-                    </Link>
+                    </a>
                   </li>{" "}
                   <li className="me-2 ml-2" role="presentation">
-                    <Link
-                      to="/news"
+                    <a
+                      href="/news"
                       className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
                     >
                       Amharic
-                    </Link>
+                    </a>
                   </li>{" "}
                   <li className="me-2 ml-2" role="presentation">
-                    <Link
-                      to="/news"
+                    <a
+                      href="/news"
                       className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
                     >
                       Affan oromo
-                    </Link>
+                    </a>
                   </li>{" "}
                   <li className="me-2 ml-2" role="presentation">
-                    <Link
-                      to="/news"
+                    <a
+                      href="/news"
                       className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
                     >
                       Tigirigna
-                    </Link>
+                    </a>
                   </li>{" "}
                 </div>
               </div>
@@ -444,28 +444,28 @@ const Header = () => {
               >
                 <div class="p-5 border border-b-0 border-gray-300 dark:border-gray-700">
                   <li className="me-2 ml-2" role="presentation">
-                    <Link
-                      to="/opportunity"
+                    <a
+                      href="/opportunity"
                       className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
                     >
                       Business Opportunity
-                    </Link>
+                    </a>
                   </li>{" "}
                   <li className="me-2 ml-2" role="presentation">
-                    <Link
-                      to="/proclamation"
+                    <a
+                      href="/proclamation"
                       className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
                     >
                       Proclamation
-                    </Link>
+                    </a>
                   </li>{" "}
                   <li className="me-2 ml-2" role="presentation">
-                    <Link
-                      to="/visa"
+                    <a
+                      href="/visa"
                       className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
                     >
                       VISA information
-                    </Link>
+                    </a>
                   </li>{" "}
                 </div>
               </div>
@@ -715,10 +715,10 @@ const Header = () => {
                 <p className="px-2 py-1 rounded-xl bg-main">
                   {user.email.split("@")[0]}
                 </p>
-                <Link to={`/dashboard/${user.role}`} className="cursor-pointer">
+                <a href={`/dashboard/${user.role}`} className="cursor-pointer">
                   Dashboard
-                </Link>
-                <Link to={`/dashboard/saves`} className="cursor-pointer">
+                </a>
+                <a href={`/dashboard/saves`} className="cursor-pointer">
                   <div className="items-center flex flex-col justify-center">
                     <button
                       type="button"
@@ -741,10 +741,10 @@ const Header = () => {
                       </div>
                     </button>
                   </div>
-                </Link>
+                </a>
 
                 {user?.role === "company" && (
-                  <Link to={`/dashboard/views`} className="cursor-pointer">
+                  <a href={`/dashboard/views`} className="cursor-pointer">
                     <div className="items-center flex flex-col justify-center">
                       <button
                         type="button"
@@ -771,7 +771,7 @@ const Header = () => {
                         </div>
                       </button>
                     </div>
-                  </Link>
+                  </a>
                 )}
                 <p onClick={logoutHandler} className="cursor-pointer">
                   Logout
@@ -822,12 +822,12 @@ const Header = () => {
                         placeholder="password"
                       />
                       <div className="flex items-center py-1 justify-between w-full">
-                        <Link
-                          to="/forget"
+                        <a
+                          href="/forget"
                           className="text-xs cursor-pointer hover:text-gray-100 text-white"
                         >
                           Forget password?
-                        </Link>
+                        </a>
                         <LoadingButton
                           pending={pending}
                           onClick={loginHandler}
@@ -841,9 +841,9 @@ const Header = () => {
                 </div>
                 <p className="text-gray-600">|</p>
                 <div className="relative">
-                  <Link to="/signup" className="cursor-pointer">
+                  <a href="/signup" className="cursor-pointer">
                     Register
-                  </Link>
+                  </a>
                 </div>
               </div>
             )}
@@ -999,60 +999,60 @@ const Header = () => {
               </div>
             </li>
             <li className="me-2 ml-[20%] xl:ml-12" role="presentation">
-              <Link
-                to="/"
+              <a
+                href="/"
                 className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
               >
                 Home
-              </Link>
+              </a>
             </li>
             <li className="me-2 ml-2" role="presentation">
-              <Link
-                to="/local"
+              <a
+                href="/local"
                 className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
               >
                 Local
-              </Link>
+              </a>
             </li>
             <li className="me-2 ml-2" role="presentation">
-              <Link
-                to="/global"
+              <a
+                href="/global"
                 className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
               >
                 Global
-              </Link>
+              </a>
             </li>
             <li className="me-2 ml-2" role="presentation">
-              <Link
-                to="/event"
+              <a
+                href="/blogs"
                 className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
               >
                 Event
-              </Link>
+              </a>
             </li>{" "}
             <li className="me-2 ml-2" role="presentation">
-              <Link
-                to="/news"
+              <a
+                href="/news"
                 className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
               >
                 News
-              </Link>
+              </a>
             </li>
             <li className="me-2 ml-2" role="presentation">
-              <Link
-                to="/job"
+              <a
+                href="/job"
                 className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
               >
                 Jobs
-              </Link>
+              </a>
             </li>
             <li className="me-2 ml-2" role="presentation">
-              <Link
-                to="/investment"
+              <a
+                href="/investment"
                 className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
               >
                 Investment
-              </Link>
+              </a>
             </li>
             <li className="me-2 relative" role="presentation">
               <button
@@ -1101,12 +1101,12 @@ const Header = () => {
                     // aria-labelledby="dropdownDelayButton"
                   >
                     <li className="w-full ">
-                      <Link
-                        to="/investment"
+                      <a
+                        href="/investment"
                         className="block w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                       >
                         Business Opportunities
-                      </Link>
+                      </a>
                     </li>
                     {/* <li
                       onMouseOver={() => {
@@ -1138,20 +1138,20 @@ const Header = () => {
                       </a>
                     </li> */}
                     <li className="w-full">
-                      <Link
-                        to="/legal"
+                      <a
+                        href="/legal"
                         className="block w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                       >
                         Proclamation
-                      </Link>
+                      </a>
                     </li>
                     <li className="w-full">
-                      <Link
-                        to="/immigration"
+                      <a
+                        href="/immigration"
                         className="block w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                       >
                         VISA Information
-                      </Link>
+                      </a>
                     </li>
                   </ul>
                 </div>
@@ -1167,28 +1167,28 @@ const Header = () => {
                   <div className=" bg-white  rounded-lg shadow w-40 dark:bg-gray-700">
                     <ul className="py-2 text-start w-full h-auto text-sm text-gray-700 dark:text-gray-200">
                       <li className="w-full ">
-                        <Link
-                          to="/license-register"
+                        <a
+                          href="/license-register"
                           className="block w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                         >
                           New registration
-                        </Link>
+                        </a>
                       </li>
                       <li className="w-full ">
-                        <Link
-                          to="/license-renew"
+                        <a
+                          href="/license-renew"
                           className="block w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                         >
                           Renew
-                        </Link>
+                        </a>
                       </li>
                       <li className="w-full ">
-                        <Link
-                          to="/upgrade"
+                        <a
+                          href="/upgrade"
                           className="block w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                         >
                           Upgrade
-                        </Link>
+                        </a>
                       </li>
                     </ul>
                   </div>

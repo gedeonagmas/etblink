@@ -102,3 +102,6 @@
 .border-main {
   @apply border-[rgb(252,45,45)];
 }
+.slick-slider .slick-slide {
+  padding: 0 15px;
+}

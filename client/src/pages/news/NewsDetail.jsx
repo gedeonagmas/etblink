@@ -2,6 +2,11 @@ import Ticker, { FinancialTicker, NewsTicker } from "nice-react-ticker";
 import { useLocation } from "react-router-dom";
 import { useReadQuery } from "../../features/api/apiSlice";
 import Loading from "../../components/loading/Loading";
+import { useEffect, useRef, useState } from "react";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import Slider from "react-slick";
+
 const NewsDetail = () => {
   const location = useLocation();
   const newsId = location?.state
@@ -11,25 +16,101 @@ const NewsDetail = () => {
     url: `/user/news?_id=${newsId}`,
     tag: ["news"],
   });
-  console.log(data?.data, "news");
+  const [news, setNews] = useState();
+  const {
+    data: local,
+    isFetching: localIsFetching,
+    isError: localIsError,
+  } = useReadQuery({
+    url: `/user/news?_id[ne]=${newsId}&category=local&limits=5`,
+    tag: ["news"],
+  });
+
+  const {
+    data: global,
+    isFetching: globalIsFetching,
+    isError: globalIsError,
+  } = useReadQuery({
+    url: `/user/news?_id[ne]=${newsId}&category=global&limits=5`,
+    tag: ["news"],
+  });
+
+  const {
+    data: slides,
+    isFetching: slidesIsFetching,
+    isError: slidesIsError,
+  } = useReadQuery({
+    url: `/user/news?_id[ne]=${newsId}&limits=20`,
+    tag: ["news"],
+  });
+
+  useEffect(() => {
+    if (data) {
+      setNews(data?.data[0]);
+    }
+  }, [data]);
+  console.log(news, "news");
+
+  let sliderRef = useRef(null);
+  const next = () => {
+    sliderRef.slickNext();
+  };
+  const previous = () => {
+    sliderRef.slickPrev();
+  };
+
+  const settings = {
+    dots: true,
+    infinite: false,
+    speed: 500,
+    slidesToShow: 4,
+    slidesToScroll: 4,
+    initialSlide: 0,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 3,
+          infinite: true,
+          dots: true,
+        },
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2,
+          initialSlide: 2,
+        },
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+    ],
+  };
   return (
     <div className="w-full relative bg-gray-50 bg-dark h-auto">
       {isFetching && <Loading />}
       {isError && <p>Something went wrong unable to read the data</p>}
-      {data && data?.data?.length > 0 ? (
+      {news ? (
         <div className="w-full">
           <div
             style={{
-              backgroundImage: `url('./${data?.data[0]?.newsPhoto}')`,
+              backgroundImage: `url(${news?.newsPhoto})`,
               backgroundRepeat: false,
             }}
             className="h-[70vh] bg-cover bg-center relative z-20 w-full"
           >
             <div className="absolute bottom-0 text-2xl h-auto px-4 w-full bg-black text-white">
               <Ticker show={true} isNewsTicker={true} slideSpeed={30}>
-                <NewsTicker id="1" title={data?.data[0]?.description} />
-                <NewsTicker id="2" title={data?.data[0]?.description} />
-                <NewsTicker id="3" title={data?.data[0]?.description} />
+                <NewsTicker id="1" title={news?.description} />
+                <NewsTicker id="2" title={news?.description} />
+                <NewsTicker id="3" title={news?.description} />
               </Ticker>
             </div>
           </div>
@@ -51,10 +132,17 @@ const NewsDetail = () => {
                       clip-rule="evenodd"
                     />
                   </svg>
-                  jan 22 2024
+                  <div className="flex gap-2">
+                    <p>{news?.createdAt?.split("-")[1]}</p>
+                    <p>
+                      {new Date(news?.createdAt).toLocaleString("default", {
+                        month: "long",
+                      })}
+                    </p>
+                  </div>
                 </p>
 
-                <div className="flex items-center pr-3 justify-between w-auto gap-10">
+                {/* <div className="flex items-center pr-3 justify-between w-auto gap-10">
                   <a href="#" className="">
                     <svg
                       className="w-5 h-5"
@@ -120,75 +208,97 @@ const NewsDetail = () => {
                       <path d="M7.2 8.8H4v10.7h3.2V8.8Z" />
                     </svg>
                   </a>
-                </div>
+                </div> */}
               </div>
 
-              <p className="font-bold mt-2 text-lg">
-                Ethiopian business link is made a deal with global companies.
-              </p>
-              <p className="mt-2">
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                Perspiciatis ratione aspernatur dolorem accusantium quos
-                asperiores facere.
-              </p>
+              <p className="font-bold mt-2 text-lg">{news?.title}</p>
 
               <img
-                src="./image-1.jpg"
+                src={news?.newsPhoto}
                 alt=""
                 className="h-[500px] w-full mt-2 rounded-sm"
               />
-              <p className="text-sm">
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                Perspiciatis ratione aspernatur dolorem accusantium quos
-                asperiores facere.
-              </p>
-              <p className="">
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                Perspiciatis ratione aspernatur dolorem accusantium quos
-                asperiores facere.
-              </p>
-
-              <p>
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-                Temporibus officia assumenda similique sit libero. Officia
-                architecto quisquam doloremque, consequatur voluptate quae,
-                itaque animi in sapiente dicta assumenda? Consequatur, quae
-                architecto?
-              </p>
-              <p className="">
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                Perspiciatis ratione aspernatur dolorem accusantium quos
-                asperiores facere. Lorem ipsum dolor sit amet consectetur,
-                adipisicing elit. Quidem veniam adipisci repellat rerum ab sit
-                recusandae distinctio quae expedita dolore quas labore,
-                consequuntur magni velit consectetur itaque? Ipsum, soluta
-                adipisci.
-              </p>
+              <p className="mt-2">{news?.description}</p>
 
               <p className="font-bold mt-10 text-lg">Read More</p>
-              <div className="w-full grid grid-cols-1 mt-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-10">
-                {[0, 1, 2, 3].map((e, i) => {
-                  return (
-                    <div
-                      key={i}
-                      className="flex flex-col gap-3 items-center justify-between w-full h-auto"
+              <div className="w-full slider-container relative">
+                <Slider
+                  ref={(slider) => {
+                    sliderRef = slider;
+                  }}
+                  {...settings}
+                >
+                  {slides &&
+                    slides?.data?.length > 0 &&
+                    slides?.data?.map((e) => {
+                      return (
+                        <a
+                          href={`/news-detail?id=${e?._id}`}
+                          key={e?._id}
+                          className="flex flex-col gap-3 items-center justify-between w-full h-auto"
+                        >
+                          <img
+                            src={e?.newsPhoto}
+                            alt=""
+                            className="h-32 w-full rounded-sm"
+                          />
+                          <div className="flex text-xs self-end gap-2">
+                            <p>{e?.createdAt?.split("-")[1]}</p>
+                            <p>
+                              {new Date(e?.createdAt).toLocaleString(
+                                "default",
+                                {
+                                  month: "long",
+                                }
+                              )}
+                            </p>
+                          </div>
+                          <p className="">{e?.title}</p>
+                        </a>
+                      );
+                    })}
+                </Slider>
+                <div className="absolute -top-8 right-2 flex gap-2 items-center justify-center">
+                  <button className="button" onClick={previous}>
+                    <svg
+                      class="w-4 h-4 text-gray-800 dark:text-white"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      fill="none"
+                      viewBox="0 0 24 24"
                     >
-                      <img
-                        src="./image-2.jpg"
-                        alt=""
-                        className="h-32 w-full rounded-sm"
+                      <path
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="m15 19-7-7 7-7"
                       />
-                      <p className="">
-                        Ethiopoan business link is made a deal.
-                      </p>
-                    </div>
-                  );
-                })}
+                    </svg>
+                  </button>
+                  <button className="button" onClick={next}>
+                    <svg
+                      class="w-4 h-4 text-gray-800 dark:text-white"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="m9 5 7 7-7 7"
+                      />
+                    </svg>
+                  </button>
+                </div>
               </div>
-
-              <button className="bg-main px-4 w-44 mt-2 text-white py-2 rounded-md">
-                Load more
-              </button>
             </div>
 
             <div className="flex flex-col gap-4 pr-[7%] w-full lg:w-[35%]">
@@ -196,46 +306,74 @@ const NewsDetail = () => {
                 Local news
               </p>
               <div className="flex flex-col gap-6">
-                {[0, 1, 2, 3].map((e, i) => {
-                  return (
-                    <div
-                      key={i}
-                      className="flex border-b-2 py-3 items-center justify-between w-full h-auto"
-                    >
-                      <p className="">
-                        Ethiopian business link is made a deal.
-                      </p>
-                      <img
-                        src="./image-2.jpg"
-                        alt=""
-                        className="h-12 w-32 rounded-sm"
-                      />
-                    </div>
-                  );
-                })}
+                {local &&
+                  local?.data?.length > 0 &&
+                  local?.data?.map((e) => {
+                    return (
+                      <a
+                        href={`/news-detail?id=${e?._id}`}
+                        key={e?._id}
+                        className="flex border-b-2 py-3 items-center justify-between w-full h-auto"
+                      >
+                        <p className="">{e?.title}</p>
+                        <div className="flex flex-col gap-1 text-xs">
+                          <img
+                            src={e?.newsPhoto}
+                            alt=""
+                            className="h-12 w-32 rounded-sm"
+                          />
+                          <div className="flex text-xs self-end gap-2">
+                            <p>{news?.createdAt?.split("-")[1]}</p>
+                            <p>
+                              {new Date(news?.createdAt).toLocaleString(
+                                "default",
+                                {
+                                  month: "long",
+                                }
+                              )}
+                            </p>
+                          </div>
+                        </div>
+                      </a>
+                    );
+                  })}
               </div>
 
               <p className="text-lg mt-6 font-bold py-2 border-b-2">
                 International news
               </p>
               <div className="flex flex-col gap-6">
-                {[0, 1, 2, 3].map((e, i) => {
-                  return (
-                    <div
-                      key={i}
-                      className="flex border-b-2 py-3 items-center justify-between w-full h-auto"
-                    >
-                      <p className="">
-                        Ethiopian business link is made a deal.
-                      </p>
-                      <img
-                        src="./image-2.jpg"
-                        alt=""
-                        className="h-12 w-32 rounded-sm"
-                      />
-                    </div>
-                  );
-                })}
+                {global &&
+                  global?.data?.length > 0 &&
+                  global?.data?.map((e) => {
+                    return (
+                      <a
+                        href={`/news-detail?id=${e?._id}`}
+                        key={e?._id}
+                        className="flex border-b-2 py-3 items-center justify-between w-full h-auto"
+                      >
+                        <p className="">{e?.title}</p>
+                        <div className="flex flex-col gap-1 text-xs">
+                          <img
+                            src={e?.newsPhoto}
+                            alt=""
+                            className="h-12 w-32 rounded-sm"
+                          />
+                          <div className="flex text-xs self-end gap-2">
+                            <p>{news?.createdAt?.split("-")[1]}</p>
+                            <p>
+                              {new Date(news?.createdAt).toLocaleString(
+                                "default",
+                                {
+                                  month: "long",
+                                }
+                              )}
+                            </p>
+                          </div>
+                        </div>
+                      </a>
+                    );
+                  })}
               </div>
             </div>
           </div>

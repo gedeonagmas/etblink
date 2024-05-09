@@ -3,7 +3,10 @@ import { MdChevronLeft, MdChevronRight } from "react-icons/md";
 import { useReadQuery } from "../features/api/apiSlice";
 import ProfilePicture from "../components/ProfilePicture";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import Slider from "react-slick";
 
 const Footer = () => {
   const {
@@ -15,22 +18,72 @@ const Footer = () => {
     tag: ["users"],
   });
 
-  const slideLeft = () => {
-    var slider = document.getElementById("slider");
-    slider.scrollLeft = slider.scrollLeft - 290;
-  };
-
-  const slideRight = () => {
-    var slider = document.getElementById("slider");
-    slider.scrollLeft = slider.scrollLeft + 290;
-  };
-
   const [text, setText] = useState({
     value: "",
     copied: false,
   });
 
   const [id, setId] = useState("");
+  let sliderRef = useRef(null);
+  const next = () => {
+    sliderRef.slickNext();
+  };
+  const previous = () => {
+    sliderRef.slickPrev();
+  };
+
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 4,
+    slidesToScroll: 4,
+    initialSlide: 0,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 3,
+          infinite: true,
+          dots: true,
+        },
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+          initialSlide: 1,
+        },
+      },
+      {
+        breakpoint: 900,
+        settings: {
+          slidesToShow: 2,
+        },
+      },
+      {
+        breakpoint: 1150,
+        settings: {
+          slidesToShow: 3,
+        },
+      },
+      {
+        breakpoint: 1300,
+        settings: {
+          slidesToShow: 4,
+        },
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+    ],
+  };
   console.log(sales, "sales");
   return (
     <div className="">
@@ -50,11 +103,10 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="relative my-5 flex items-center">
-          <div
-            onClick={slideLeft}
-            size={40}
-            className="absolute shadow-2xl rounded-full  z-20 top-[120px] -left-6"
+        <div className="relative my-5 w-full flex items-center">
+          <button
+            onClick={previous}
+            className="absolute button shadow-2xl rounded-full  z-20 top-[90px] -left-6"
           >
             <svg
               class="w-14 text-gray-400 cursor-pointer hover:bg-gray-300 hover:text-red-500 border border-gray-300 rounded-full h-14 bg-gray-300/50"
@@ -73,142 +125,144 @@ const Footer = () => {
                 d="m15 19-7-7 7-7"
               />
             </svg>
-          </div>
-
-          <div
-            id="slider"
-            className="w-[286px] gap-6 md:w-[582px] lg:w-[870px] xl:w-[1140px] 2xl:[1330px] relative bg-red-500d flex h-full overflow-x-scrolls overflow-x-hidden scroll whitespace-nowrap scroll-smooth scrollbar-hide"
-          >
-            {sales &&
-              sales?.data?.length > 0 &&
-              sales?.data?.map((user, i) => (
-                <div
-                  key={user?._id}
-                  className="flex w-[266px] relative flex-col items-start rounded-lg hover:bg-red-100 dark:hover:bg-gray-600  bg-dark border-dark border shadow-xl justify-start"
-                >
-                  <div className="flex pt-4 px-4 w-[266px] items-center justify-between">
-                    <ProfilePicture user={user} />
-                    <div className="flex items-center gap-2 justify-center flex-col">
-                      <img
-                        src={`${
-                          i % 2 === 0 ? "./etbetio.png" : "./etbengland.png"
-                        }`}
-                        alt=""
-                        className="w-12 h-12 rounded-full object-cover border border-dark border-gray-200"
-                      />
-                      <p className="px-4 py-1 text-sm rounded-full text-white bg-emerald-500">
-                        Active
-                      </p>
-                      <div class="flex items-center">
-                        <svg
-                          class="w-4 h-4 text-yellow-300 ms-1"
-                          aria-hidden="true"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="currentColor"
-                          viewBox="0 0 22 20"
-                        >
-                          <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                        </svg>
-                        <svg
-                          class="w-4 h-4 text-yellow-300 ms-1"
-                          aria-hidden="true"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="currentColor"
-                          viewBox="0 0 22 20"
-                        >
-                          <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                        </svg>
-                        <svg
-                          class="w-4 h-4 text-yellow-300 ms-1"
-                          aria-hidden="true"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="currentColor"
-                          viewBox="0 0 22 20"
-                        >
-                          <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                        </svg>
-                        <svg
-                          class="w-4 h-4 text-yellow-300 ms-1"
-                          aria-hidden="true"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="currentColor"
-                          viewBox="0 0 22 20"
-                        >
-                          <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                        </svg>
-                        <svg
-                          class="w-4 h-4 ms-1 text-gray-300 dark:text-gray-500"
-                          aria-hidden="true"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="currentColor"
-                          viewBox="0 0 22 20"
-                        >
-                          <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                        </svg>
+          </button>
+          <div className="w-full slider-container relative">
+            <Slider
+              ref={(slider) => {
+                sliderRef = slider;
+              }}
+              {...settings}
+            >
+              {sales &&
+                sales?.data?.length > 0 &&
+                sales?.data?.map((user, i) => (
+                  <div
+                    key={user?._id}
+                    className="flex w-[200px] relative flex-col items-start rounded-lg hover:bg-red-100 dark:hover:bg-gray-600  bg-dark border-dark border shadow-xl justify-start"
+                  >
+                    <div className="flex w-full pt-4 px-4  items-center justify-between">
+                      <ProfilePicture user={user} />
+                      <div className="flex items-center gap-2 justify-center flex-col">
+                        <img
+                          src={`${
+                            i % 2 === 0 ? "./etbetio.png" : "./etbengland.png"
+                          }`}
+                          alt=""
+                          className="w-12 h-12 rounded-full object-cover border border-dark border-gray-200"
+                        />
+                        <p className="px-4 py-1 text-sm rounded-full text-white bg-emerald-500">
+                          Active
+                        </p>
+                        <div class="flex items-center">
+                          <svg
+                            class="w-4 h-4 text-yellow-300 ms-1"
+                            aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="currentColor"
+                            viewBox="0 0 22 20"
+                          >
+                            <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+                          </svg>
+                          <svg
+                            class="w-4 h-4 text-yellow-300 ms-1"
+                            aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="currentColor"
+                            viewBox="0 0 22 20"
+                          >
+                            <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+                          </svg>
+                          <svg
+                            class="w-4 h-4 text-yellow-300 ms-1"
+                            aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="currentColor"
+                            viewBox="0 0 22 20"
+                          >
+                            <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+                          </svg>
+                          <svg
+                            class="w-4 h-4 text-yellow-300 ms-1"
+                            aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="currentColor"
+                            viewBox="0 0 22 20"
+                          >
+                            <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+                          </svg>
+                          <svg
+                            class="w-4 h-4 ms-1 text-gray-300 dark:text-gray-500"
+                            aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="currentColor"
+                            viewBox="0 0 22 20"
+                          >
+                            <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+                          </svg>
+                        </div>
                       </div>
                     </div>
-                  </div>
 
-                  <p className="text-xl px-4 mt-4 font-bold">
-                    {`${user?.user?.firstName} ${user?.user?.lastName}`}
-                  </p>
-                  <div class="w-[266px] pb-4 px-4">
-                    <div class="mb-2 flex justify-between items-center">
-                      <label
-                        for="website-url"
-                        class="text-sm font-medium text-gray-900 dark:text-white"
-                      >
-                        Call on {user?.user?.phone}
-                      </label>
-                      <a href={`/sales?id=${user?.user?._id}`}>
-                        <svg
-                          class="w-6 h-6 hover:text-gray-500"
-                          aria-hidden="true"
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          fill="none"
-                          viewBox="0 0 24 24"
+                    <p className="text-xl px-4 mt-4 font-bold">
+                      {`${user?.user?.firstName} ${user?.user?.lastName}`}
+                    </p>
+                    <div class="w-[266px]s pb-4 px-4">
+                      <div class="mb-2 flex justify-between items-center">
+                        <label
+                          for="website-url"
+                          class="text-sm font-medium text-gray-900 dark:text-white"
                         >
-                          <path
-                            stroke="currentColor"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M19 12H5m14 0-4 4m4-4-4-4"
-                          />
-                        </svg>
-                      </a>
-                    </div>
+                          Call on {user?.user?.phone}
+                        </label>
+                        <a href={`/sales?id=${user?.user?._id}`}>
+                          <svg
+                            class="w-6 h-6 hover:text-gray-500"
+                            aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              stroke="currentColor"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              d="M19 12H5m14 0-4 4m4-4-4-4"
+                            />
+                          </svg>
+                        </a>
+                      </div>
 
-                    <div className="w-full flex gap-1 items-center justify-start">
-                      <span class="flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-900 bg-gray-100 border border-gray-300 rounded-s-lg dark:bg-gray-600 dark:text-white dark:border-gray-600">
-                        Link
-                      </span>
-                      <input
-                        disabled
-                        placeholder={`https://etblink.com/signup?id=${user?.user?._id}`}
-                        value={`https://etblink.com/signup?id=${user?.user?._id}`}
-                        className="w-full border p-2 border-gray-400 rounded-lg max-w-[530px]"
-                      />
+                      <div className="w-full flex gap-1 items-center justify-start">
+                        <span class="flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-900 bg-gray-100 border border-gray-300 rounded-s-lg dark:bg-gray-600 dark:text-white dark:border-gray-600">
+                          Link
+                        </span>
+                        <input
+                          disabled
+                          placeholder={`https://etblink.com/signup?id=${user?.user?._id}`}
+                          value={`https://etblink.com/signup?id=${user?.user?._id}`}
+                          className="w-full border p-2 border-gray-400 rounded-lg max-w-[530px]"
+                        />
 
-                      <CopyToClipboard
-                        text={`https://etblink.com/signup?id=${user?.user?._id}`}
-                        onCopy={() => {
-                          setId(user?.user?.id);
-                          setText({ copied: true });
-                          setTimeout(() => {
-                            setText({ copied: false });
-                          }, 4000);
-                        }}
-                      >
-                        {text.copied && id === user?.user?._id ? (
-                          <span className="bg-emerald-200 text-sm text-emerald-500 font-bold p-1 rounded-lg border border-emerald-500">
-                            Copied.
-                          </span>
-                        ) : (
-                          <button className="px-2 py-2 rounded-lg bg-main text-white hover:bg-red-500">
-                            {/* <svg
+                        <CopyToClipboard
+                          text={`https://etblink.com/signup?id=${user?.user?._id}`}
+                          onCopy={() => {
+                            setId(user?.user?.id);
+                            setText({ copied: true });
+                            setTimeout(() => {
+                              setText({ copied: false });
+                            }, 4000);
+                          }}
+                        >
+                          {text.copied && id === user?.user?._id ? (
+                            <span className="bg-emerald-200 text-sm text-emerald-500 font-bold p-1 rounded-lg border border-emerald-500">
+                              Copied.
+                            </span>
+                          ) : (
+                            <button className="px-2 py-2 rounded-lg bg-main text-white hover:bg-red-500">
+                              {/* <svg
                               class="w-6 h-6"
                               aria-hidden="true"
                               xmlns="http://www.w3.org/2000/svg"
@@ -218,19 +272,59 @@ const Footer = () => {
                               <path d="M16 1h-3.278A1.992 1.992 0 0 0 11 0H7a1.993 1.993 0 0 0-1.722 1H2a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2Zm-3 14H5a1 1 0 0 1 0-2h8a1 1 0 0 1 0 2Zm0-4H5a1 1 0 0 1 0-2h8a1 1 0 1 1 0 2Zm0-5H5a1 1 0 0 1 0-2h2V2h4v2h2a1 1 0 1 1 0 2Z" />
                             </svg> */}
                               Copy
-                          </button>
-                        )}
-                      </CopyToClipboard>
+                            </button>
+                          )}
+                        </CopyToClipboard>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
+            </Slider>
+            {/* <div className="absolute -top-8 right-2 flex gap-2 items-center justify-center">
+              <button className="button" onClick={previous}>
+                <svg
+                  class="w-4 h-4 text-gray-800 dark:text-white"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="m15 19-7-7 7-7"
+                  />
+                </svg>
+              </button>
+              <button className="button" onClick={next}>
+                <svg
+                  class="w-4 h-4 text-gray-800 dark:text-white"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="m9 5 7 7-7 7"
+                  />
+                </svg>
+              </button>
+            </div> */}
           </div>
 
-          <div
-            onClick={slideRight}
-            size={40}
-            className="absolute shadow-2xl rounded-full  z-20 top-[120px] -right-6"
+          <button
+            onClick={next}
+            className="absolute button shadow-2xl rounded-full  z-20 top-[90px] -right-6"
           >
             <svg
               class="w-14 text-gray-400 cursor-pointer hover:bg-gray-300 hover:text-red-500 border border-gray-300 rounded-full h-14 bg-gray-300/50"
@@ -249,7 +343,7 @@ const Footer = () => {
                 d="m9 5 7 7-7 7"
               />
             </svg>
-          </div>
+          </button>
         </div>
       </div>
 

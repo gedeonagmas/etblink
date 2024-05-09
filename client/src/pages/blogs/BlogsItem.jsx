@@ -1,26 +1,31 @@
 import { useNavigate } from "react-router-dom";
+import { format } from "timeago.js";
 
-const BlogsItem = ({ value }) => {
-  const navigate = useNavigate();
+const BlogsItem = ({ data }) => {
+  console.log(data, "dataaaaaaaaa");
   return (
     <div
-      key={value}
+      key={data?._id}
       className="w-full relative h-auto bg-white dark:bg-gray-700 rounded-md shadow-md shadow-gray-400 flex flex-col items-start justify-start"
     >
       <div className="w-full relative  flex items-center justify-center">
         <div className="relative max-w-xs overflow-hidden rounded-md bg-cover bg-no-repeat w-full">
           <img
-            src="./image-1.jpg"
+            src={data?.blogImage}
             alt=""
             className="w-[300px] h-52 transition duration-300 ease-in-out hover:scale-125 rounded-md rounded-b-none"
           />
         </div>
       </div>
 
-      <div className="flex w-auto self-center bg-white rounded-sm text-gray-600 items-center justify-center -mt-16 z-20 relative">
+      <div className="flex w-full self-center bg-gray-200 rounded-sm text-gray-600 items-center justify-between px-10 -mt-12 z-20 relative">
         <div className="flex px-3 py-1 rounded-sm rounded-r-none text-sm text-white bg-main flex-col items-center justify-center">
-          <p>30</p>
-          <p>May</p>
+          <p>{data?.createdAt?.split("-")[1]}</p>
+          <p>
+            {new Date(data?.createdAt).toLocaleString("default", {
+              month: "long",
+            })}
+          </p>
         </div>
         <div className="flex py-1 rounded-lg text-sm  gap-1 items-center justify-center">
           <svg
@@ -42,7 +47,7 @@ const BlogsItem = ({ value }) => {
           <p>Admin</p>
         </div>
 
-        <div className="flex py-1 ml-5 pr-2 rounded-lg text-sm gap-1 items-center justify-center">
+        {/* <div className="flex py-1 ml-5 pr-2 rounded-lg text-sm gap-1 items-center justify-center">
           <svg
             class="w-6 h-6"
             aria-hidden="true"
@@ -65,20 +70,23 @@ const BlogsItem = ({ value }) => {
           </svg>
 
           <p> Views(3.2k)</p>
-        </div>
+        </div> */}
       </div>
-      <div className="mt-3 bg-white bg-dark px-5 relative flex flex-col gap-3 items-start rounded-t-none rounded-md">
+      <div className="mt-3 w-full bg-white bg-dark px-5 relative flex flex-col gap-3 items-start rounded-t-none rounded-md">
         <div className="w-full border-b  py-5 border-gray-300">
-          <p className="font-bold  border-gray-300">
-            Ethiopian business link is launch a new portal check
-          </p>
-          <p className="text-sm mt-2">
-            Lorem ipsum dolor sit amet consect adipisicing elit. Lorem ipsum
-            dolor sit amet consectetur adipisi.
-          </p>
+          <p className="font-bold  border-gray-300">{data?.title}</p>
+          <div
+            className="ql-editor"
+            dangerouslySetInnerHTML={{
+              __html:
+                data?.description?.length > 200
+                  ? data?.description?.splice(0, 200) + "..."
+                  : data?.description,
+            }}
+          ></div>
         </div>
-        <div
-          onClick={() => navigate("/blogs-detail")}
+        <a
+          href={`/blogs-detail?id=${data?._id}`}
           className="flex gap-2 cursor-pointer w-full shadow-sm rounded-full px-5 items-center justify-between pb-4 pt-1"
         >
           Read more
@@ -97,7 +105,7 @@ const BlogsItem = ({ value }) => {
               d="M19 12H5m14 0-4 4m4-4-4-4"
             />
           </svg>
-        </div>
+        </a>
       </div>
     </div>
   );

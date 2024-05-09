@@ -11,6 +11,12 @@ const newsSchema = new mongoose.Schema(
       type: String,
       validate: valid.required("Title"),
     },
+    category: {
+      type: String,
+      enum: ["local", "global"],
+      default: "local",
+      validate: valid.required("Category"),
+    },
     description: {
       type: String,
       validate: valid.required("Description"),

@@ -1,10 +1,12 @@
 import Banner from "../../components/Banner";
+import CompanyItemsCompany from "../../components/CompanyItemCategory";
 import SmallBanner from "../../components/SmallBanner";
-import BlogsItem from "./BlogsItem";
+import blogsItem from "./blogsItem";
 import ResponsivePagination from "react-responsive-pagination";
 import "./../categories/pagination.css";
 import { useEffect, useState } from "react";
 import { useLazyReadQuery } from "../../features/api/apiSlice";
+import BlogsItem from "./blogsItem";
 
 const BlogsCategory = () => {
   const [page, setPage] = useState(1);
@@ -37,6 +39,7 @@ const BlogsCategory = () => {
     });
   }, [search]);
 
+  console.log(blogs, "blogs");
   return (
     <div className="w-full relative bg-gray-50 bg-dark h-auto">
       <div
@@ -89,8 +92,8 @@ const BlogsCategory = () => {
           </div>
           <div className="grid mt-5 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full place-items-centers gap-6">
             {blogs && blogs?.data?.length > 0 ? (
-              blogs?.data?.map((e, i) => {
-                return <BlogsItem value={i} type="category" />;
+              blogs?.data?.map((e) => {
+                return <BlogsItem data={e} type="category" />;
               })
             ) : (blogs && blogs?.message) || blogs?.data?.length === 0 ? (
               <div className="w-full items-center justify-center flex">
@@ -98,6 +101,7 @@ const BlogsCategory = () => {
               </div>
             ) : null}
           </div>
+
           <div className="py-10">
             <ResponsivePagination
               total={totalPage}

@@ -53,6 +53,7 @@ import UserSales from "./pages/dashboard/admin/UserSales";
 import UsersProfile from "./pages/dashboard/UsersProfile";
 import SalesDetail from "./pages/SalesDetail";
 import BlogsCategory from "./pages/blogs/BlogsCategory";
+import BlogsDetail from "./pages/blogs/BlogsDetail";
 
 export const userContext = createContext();
 
@@ -90,7 +91,7 @@ function App() {
               <Route path="/news" element={<NewsCategory />}></Route>
               <Route path="/news-detail" element={<NewsDetail />}></Route>
               <Route path="/blogs" element={<BlogsCategory />}></Route>
-              <Route path="/blogs-detail" element={<BlogsCategory />}></Route>
+              <Route path="/blogs-detail" element={<BlogsDetail />}></Route>
               <Route path="/prices" element={<Prices />}></Route>
               <Route path="/about" element={<About />}></Route>
               <Route path="/ethiopia" element={<Ethiopia />}></Route>
