@@ -8,6 +8,8 @@ import { utilityRouter, chatRouter, router } from "./routes/router.js";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import cookieParser from "cookie-parser";
+import cron from "node-cron";
+import { backgroundJobController } from "./controller/backgroundJobController.js";
 // import apicache from "apicache";
 
 const app = express();
@@ -39,6 +41,10 @@ app.use(cookieParser());
 app.use("/etblink/app/v1/user", router);
 app.use("/etblink/app/v1/chat", chatRouter);
 app.use("/etblink/app/v1/utility", utilityRouter);
+
+//################################ background job ###########################
+cron.schedule(" * * * * *", backgroundJobController(cron));
+//################################ background job ###########################
 
 app.get("/", (req, res) => {
   res.json("Hello from etb link server");
@@ -111,7 +117,7 @@ mongodb()
       });
       // console.log(users, "filterdd");
       return users;
-    }; 
+    };
 
     io.on("connection", (socket) => {
       //user connected
