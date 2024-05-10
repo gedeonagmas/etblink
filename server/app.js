@@ -43,7 +43,7 @@ app.use("/etblink/app/v1/chat", chatRouter);
 app.use("/etblink/app/v1/utility", utilityRouter);
 
 //################################ background job ###########################
-cron.schedule(" * * * * *", backgroundJobController(cron));
+cron.schedule("10,20,30,40,50 * * * * *", backgroundJobController(cron));
 //################################ background job ###########################
 
 app.get("/", (req, res) => {

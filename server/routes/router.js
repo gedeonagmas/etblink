@@ -73,8 +73,8 @@ router.route("/readProfileInfo").get(authentication, readProfileInfo);
 
 router.route("/updateProfileInfo").put(authentication, updateProfileInfo);
 
-router 
-  .route("/updateProfilePicture") 
+router
+  .route("/updateProfilePicture")
   .put(authentication, files, updateProfilePicture);
 
 utilityRouter.route("/updatePassword").put(authentication, updatePassword);
@@ -92,16 +92,16 @@ utilityRouter.route("/boost").post(authentication, boostHandler);
 router.route("/:table/:id").get(authentication, _read_single);
 router.route("/sendEmail").post(async (req, res, next) => {
   const { from, to, message, subject, fullName } = req.body;
-  console.log(req.body, "body");
+  console.log(req.body, "body", next);
   const response = "Your email is sent successfully.";
   sendEmailHandler(
-    res,
-    next,
     subject,
     message,
-    response,
+    to,
     from + " " + fullName,
-    to
+    response,
+    res,
+    next
   );
 });
 
