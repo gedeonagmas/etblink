@@ -9,7 +9,7 @@ import { createServer } from "http";
 import { Server } from "socket.io";
 import cookieParser from "cookie-parser";
 import cron from "node-cron";
-import { backgroundJobController } from "./controller/backgroundJobController.js";
+import { boost } from "./controller/backgroundJobController.js";
 // import apicache from "apicache";
 
 const app = express();
@@ -43,7 +43,7 @@ app.use("/etblink/app/v1/chat", chatRouter);
 app.use("/etblink/app/v1/utility", utilityRouter);
 
 //################################ background job ###########################
-cron.schedule("10,20,30,40,50 * * * * *", backgroundJobController(cron));
+cron.schedule("1,10,20,30,40,50,59 * * * * *", boost);
 //################################ background job ###########################
 
 app.get("/", (req, res) => {
