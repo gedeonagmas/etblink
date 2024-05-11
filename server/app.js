@@ -41,7 +41,7 @@ app.use(cookieParser());
 app.use("/etblink/app/v1/user", router);
 app.use("/etblink/app/v1/chat", chatRouter);
 app.use("/etblink/app/v1/utility", utilityRouter);
-
+  
 //################################ background job ###########################
 cron.schedule("1,10,20,30,40,50,59 * * * * *", boost);
 //################################ background job ###########################

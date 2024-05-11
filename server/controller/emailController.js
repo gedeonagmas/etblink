@@ -30,8 +30,8 @@ export const sendEmailHandler = (
     html: html ? html : null,
   };
 
-  transporter.sendMail(mailOptions, function (error, info) {
-    console.log(info, "info");
+  return transporter.sendMail(mailOptions, function (error, info) {
+    // console.log(info, "info");
     if (error && next) {
       console.log("Error in sending email  " + error);
       return next(
@@ -44,6 +44,7 @@ export const sendEmailHandler = (
       return res.status(200).json({ message: response });
     } else {
       console.log("email sent successfully");
+      return;
     }
   });
 };
