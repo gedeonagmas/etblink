@@ -49,7 +49,6 @@ export const sendEmailHandler = ({
   });
 };
 
-
 // import AppError from "../utils/AppError.js";
 // import nodemailer from "nodemailer";
 // import path from "path";
