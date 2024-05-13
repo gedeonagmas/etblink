@@ -10,6 +10,8 @@ import { Visitor } from "../models/visitorModel.js";
 import { BoostHistory } from "../models/boostHistoryModel.js";
 import { SubscriptionHistory } from "../models/subscriptionHistoryModel.js";
 import { Payment } from "../models/paymentModel.js";
+import { sendEmailHandler } from "./emailController.js";
+const from = "billing@etblink.com";
 
 export const createRate = asyncCatch(async (req, res, next) => {
   const rateHandler = async () => {
@@ -42,6 +44,11 @@ export const createRate = asyncCatch(async (req, res, next) => {
     company.rating.average = result[0]?.average?.toFixed(1);
 
     await company.save();
+
+    const user = await User.find({ user: req.body.accepter });
+    const subject = `Your Rate is Updated.`;
+    const message = `Your Rate is Updated.`;
+    return sendEmailHandler({ subject, message, to: user[0]?.email, from });
   };
 
   const data = await Rate.find({
@@ -51,13 +58,13 @@ export const createRate = asyncCatch(async (req, res, next) => {
 
   if (data.length > 0) {
     await Rate.findOneAndUpdate({ _id: data[0]._id }, { ...req.body });
-    rateHandler();
+    rateHandler("update");
     return res
       .status(200)
       .json({ status: "Created", message: "rating is just updated" });
   } else {
     await Rate.create(req.body);
-    rateHandler();
+    rateHandler("create");
     return res
       .status(200)
       .json({ status: "Created", message: "rating is added successfully" });
@@ -102,7 +109,7 @@ export const createSave = asyncCatch(async (req, res, next) => {
       .status(200)
       .json({ message: "Company is already in your list." });
   }
-  console.log(req.body);
+
   await Save.create(req.body);
 
   const company = await Company.findById(req.body.company);
@@ -110,7 +117,12 @@ export const createSave = asyncCatch(async (req, res, next) => {
   company.saves.available = company.saves.available + 1;
   await company.save();
 
-  res.status(200).json({
+  const user = await User.find({ user: req.body.company });
+  const subject = `Your company is added to save list.`;
+  const message = `Your company is added to save list.`;
+  sendEmailHandler({ subject, message, to: user[0]?.email, from });
+
+  return res.status(200).json({
     status: "Created",
     message: "company added to your list.",
   });
@@ -156,7 +168,15 @@ export const createView = asyncCatch(async (req, res, next) => {
   company.views.available = company.views.available + 1;
   await company.save();
 
-  res.status(200).json({
+  const user = await User.find({ user: req.body.company });
+  const subject = `Your company is viewed.`;
+  const message = `Your company is viewed by a new client.`;
+  const html = `<div>Your company is viewed by a new client. click here <a style={{background:'yellow',padding:'5px', border-radius:'20px',color:white,padding:10px;}} href=${
+    "https://etblink.com/dashboard/" + user[0]?.role + "/views"
+  }>here</a> for more detail.</div>`;
+  sendEmailHandler({ subject, to: user[0]?.email, from, html });
+
+  return res.status(200).json({
     status: "Created",
     message: "company added to your list.",
   });
@@ -220,7 +240,6 @@ export const upgradeHandler = asyncCatch(async (req, res, next) => {
 });
 
 export const boostHandler = asyncCatch(async (req, res, next) => {
-  // console.log(req.body);
   const company = await Company.findById(req.body.company);
   if (req.body.type === "boost") {
     if (req.body.paymentMethod === "deposit") {
@@ -232,13 +251,17 @@ export const boostHandler = asyncCatch(async (req, res, next) => {
     company.boostStatus = "Payed";
     await company.save();
 
-    const boost = await BoostHistory.create({
+    await BoostHistory.create({
       company: req.body.company,
       boost: req.body.boost,
       startDate: Date.parse(new Date(req.body.startDate)),
       endDate: Date.parse(new Date(req.body.endDate)),
       paymentMethod: req.body.paymentMethod,
     });
+
+    // const subject = "Your Transaction is Successful thank you.";
+    // const message = `Your Transaction is Successful thank you.`;
+    // return sendEmailHandler(subject, message, company?.email, from);
   } else if (req.body.type === "subscription") {
     if (req.body.paymentMethod === "deposit") {
       company.currentBalance = company.currentBalance * 1 - req.body.amount * 1;
@@ -249,23 +272,31 @@ export const boostHandler = asyncCatch(async (req, res, next) => {
     company.subscriptionStatus = "Payed";
     await company.save();
 
-    const subscription = await SubscriptionHistory.create({
+    await SubscriptionHistory.create({
       company: req.body.company,
       subscription: req.body.boost,
       startDate: Date.parse(new Date(req.body.startDate)),
       endDate: Date.parse(new Date(req.body.endDate)),
       paymentMethod: req.body.paymentMethod,
     });
+
+    // const subject = "Your Transaction is Successful thank you.";
+    // const message = `Your Transaction is Successful thank you.`;
+    // return sendEmailHandler(subject, message, company?.email, from);
   } else if (req.body.type === "fund") {
     company.currentBalance = company.currentBalance * 1 + req.body.amount * 1;
     await company.save();
 
-    const fund = await Payment.create({
+    await Payment.create({
       company: req.body.company,
       amount: req.body.amount,
       status: "Payed",
       paymentMethod: req.body.paymentMethod,
     });
+
+    // const subject = "Your Transaction is Successful thank you.";
+    // const message = `Your Transaction is Successful thank you.`;
+    // return sendEmailHandler(subject, message, company?.email, from);
   }
   // else if (req.body.type === "deposit") {
   //   company.currentBalance = company.currentBalance * 1 - req.body.amount * 1;

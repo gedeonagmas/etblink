@@ -1,73 +1,104 @@
-import asyncCatch from "express-async-catch";
 import { User } from "../models/userModel.js";
 import { Notification } from "../models/notificationModel.js";
 import { sendEmailHandler } from "./emailController.js";
 import cron from "node-cron";
 
 export const boost = async () => {
-  let counter = 15;
   const date = new Date().toISOString().split("T")[0];
-  // date.setHours(0);
-  // date.setMinutes(0);
-  // date.setSeconds(0);
+  let remainingDate = 0;
 
-  // const time = date.setDate(date.getDate() + counter).toLocaleString();
-  const time = date.split("T")[0];
-  // let c = date.split("T")[0];
-  const day = date.split("-")[2] * 1 + counter;
-  const fullDate = Date.parse(
-    `${date.split("-")[0]}-${date.split("-")[1]}-${day}`
-  );
-  console.log(fullDate, "time");
+  const parser = (counter) => {
+    const expiredDate = date.split("-")[2] * 1 + counter;
+    remainingDate = counter;
+    return Date.parse(
+      `${date.split("-")[0]}-${date.split("-")[1]}-${expiredDate}`
+    );
+  };
+
+  const emailSender = async (subject, message, e) => {
+    const from = "billing@etblink.com";
+
+    // send local notification
+    await Notification.create({
+      message,
+      role: e?.role,
+      sender: "etblink",
+      receiver: e?._id,
+    });
+
+    // send email
+    return sendEmailHandler({ subject, message, to: e?.email, from });
+  };
+
   const users = await User.find({ role: "company" }).populate("user");
-  cron.schedule("1,10,20,30,40,50,59 * * * * *", () => {
+  cron.schedule("12 12 7,14 * *", () => {
     users?.map(async (e) => {
+      //for not yet boosted companies
       if (e?.user?.boostEndDate === 0 || e?.user?.boostStartDate === 0) {
-        //send email for companies which are not start boosting
         const subject = "Boost your company.";
         const message =
           "Boost your company to increase your visibility across the world.";
-        const from = "billing@etblink.com";
-        const to = "gedeonagmas2580@gmail.com";
 
-        //send local notification
-        // await Notification.create({
-        //   message,
-        //   role: e?.role,
-        //   sender: "etblink",
-        //   receiver: e?._id,
-        // });
-        // console.log("company 1");
+        emailSender(subject, message, e);
+      }
 
-        //send email
-        // return sendEmailHandler(subject, message, to, from);
-      } else {
-        for (let i = 1; i <= counter; i++) {
-          if (time + i >= e?.user?.boostEndDate) {
-            const subject = "Boost your company.";
-            const message =
-              "Boost your company to increase your visibility across the world.";
-            const from = "billing@etblink.com";
-            const to = "gedeonagmas2580@gmail.com";
+      //for not yet subscribed company
+      if (
+        e?.user?.subscriptionEndDate === 0 ||
+        e?.user?.subscriptionStartDate === 0
+      ) {
+        const subject = "Add Subscription to your company.";
+        const message =
+          "Subscribe your company to increase your visibility across the world.";
 
-            //send local notification
-            // await Notification.create({
-            //   message,
-            //   role: e?.role,
-            //   sender: "etblink",
-            //   receiver: e?._id,
-            // });
+        emailSender(subject, message, e);
+      }
 
-            //send email
-            // return console.log("company 2");
-            // return sendEmailHandler(subject, message, to, from);
-          }
-        }
+      //boosted expired warning notification
+      if (
+        parser(7) * 1 === e?.user?.boostEndDate * 1 ||
+        parser(14) * 1 === e?.user?.boostEndDate * 1
+      ) {
+        const subject = "Boost your company.";
+        const message = `Your boost plan remains ${remainingDate} date.`;
+
+        emailSender(subject, message, e);
+      }
+
+      //subscription expired warning notification
+      if (
+        parser(7) * 1 === e?.user?.subscriptionEndDate * 1 ||
+        parser(14) * 1 === e?.user?.subscriptionEndDate * 1
+      ) {
+        const subject = "Subscription Expired.";
+        const message = `Your Subscription plan remains ${remainingDate} date.`;
+
+        emailSender(subject, message, e);
+      }
+
+      //subscription expired notification
+      if (
+        Date.parse(date) * 1 > e?.user?.subscriptionEndDate * 1 &&
+        e?.user?.subscriptionEndDate !== 0
+      ) {
+        const subject = "Subscription Expired.";
+        const message = `Your Subscription plan is Expired.`;
+        e.user.isSubscribed = false;
+        await e.user.save();
+        emailSender(subject, message, e);
+      }
+
+      //boosting expired notification
+      if (
+        Date.parse(date) * 1 > e?.user?.boostEndDate * 1 &&
+        e?.user?.boostEndDate !== 0
+      ) {
+        const subject = "Boost Expired.";
+        const message = `Your Boost plan is Expired.`;
+        e.user.isBoosted = false;
+        await e.user.save();
+        emailSender(subject, message, e);
       }
     });
   });
-};
-
-export const subscribe = async () => {
-  //
 };
