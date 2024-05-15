@@ -1,7 +1,6 @@
 import Banner from "../../components/Banner";
 import CompanyItemsCompany from "../../components/CompanyItemCategory";
 import SmallBanner from "../../components/SmallBanner";
-import blogsItem from "./blogsItem";
 import ResponsivePagination from "react-responsive-pagination";
 import "./../categories/pagination.css";
 import { useEffect, useState } from "react";
