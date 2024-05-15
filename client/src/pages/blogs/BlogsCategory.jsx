@@ -5,7 +5,7 @@ import ResponsivePagination from "react-responsive-pagination";
 import "./../categories/pagination.css";
 import { useEffect, useState } from "react";
 import { useLazyReadQuery } from "../../features/api/apiSlice";
-import BlogsItem from "./blogsItem";
+import BlogsItem from "./BlogsItem";
 
 const BlogsCategory = () => {
   const [page, setPage] = useState(1);
