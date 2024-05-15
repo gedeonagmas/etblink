@@ -405,8 +405,8 @@ const Header = () => {
                       href="/news"
                       className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
                     >
-                      Tigirignas
-                    </Link>
+                      Tigirigna
+                    </a>
                   </li>{" "}
                 </div>
               </div>
