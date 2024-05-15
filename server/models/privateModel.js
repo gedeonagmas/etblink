@@ -1,5 +1,5 @@
-import mongoose from "mongoose";
-import * as valid from "../utils/validator.js";
+const mongoose = require("mongoose");
+const valid = require("../utils/validator");
 
 const privateSchema = new mongoose.Schema(
   {
@@ -116,4 +116,5 @@ privateSchema.pre("findOneAndUpdate", function (next) {
   next();
 });
 
-export const Private = mongoose.model("private", privateSchema);
+const Private = mongoose.model("private", privateSchema);
+module.exports = { Private };

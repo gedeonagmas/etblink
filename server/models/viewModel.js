@@ -1,6 +1,6 @@
-import mongoose from "mongoose";
-import * as valid from "../utils/validator.js";
-import { Company } from "./companyModel.js";
+const mongoose = require("mongoose");
+const valid = require("../utils/validator");
+const { Company } = require("./companyModel");
 
 const viewSchema = new mongoose.Schema(
   {
@@ -42,4 +42,5 @@ viewSchema.pre("findOneAndUpdate", function (next) {
   next();
 });
 
-export const View = mongoose.model("view", viewSchema);
+const View = mongoose.model("view", viewSchema);
+module.exports = { View };

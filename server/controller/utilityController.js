@@ -1,19 +1,19 @@
-import asyncCatch from "express-async-catch";
-import { Company } from "../models/companyModel.js";
-import { Rate } from "../models/ratesModel.js";
-import { Save } from "../models/saveModel.js";
-import { View } from "../models/viewModel.js";
-import AppError from "../utils/AppError.js";
-import { User } from "../models/userModel.js";
-import { Sales } from "../models/salesModel.js";
-import { Visitor } from "../models/visitorModel.js";
-import { BoostHistory } from "../models/boostHistoryModel.js";
-import { SubscriptionHistory } from "../models/subscriptionHistoryModel.js";
-import { Payment } from "../models/paymentModel.js";
-import { sendEmailHandler } from "./emailController.js";
+const asyncCatch = require("express-async-catch");
+const { Company } = require("../models/companyModel");
+const { Rate } = require("../models/ratesModel");
+const { Save } = require("../models/saveModel");
+const { View } = require("../models/viewModel");
+const AppError = require("../utils/AppError");
+const { User } = require("../models/userModel");
+const { Sales } = require("../models/salesModel");
+const { Visitor } = require("../models/visitorModel");
+const { BoostHistory } = require("../models/boostHistoryModel");
+const { SubscriptionHistory } = require("../models/subscriptionHistoryModel");
+const { Payment } = require("../models/paymentModel");
+const { sendEmailHandler } = require("./emailController");
 const from = "billing@etblink.com";
 
-export const createRate = asyncCatch(async (req, res, next) => {
+const createRate = asyncCatch(async (req, res, next) => {
   const rateHandler = async () => {
     const rate = await Rate.aggregate([
       {
@@ -71,7 +71,7 @@ export const createRate = asyncCatch(async (req, res, next) => {
   }
 });
 
-export const readRate = asyncCatch(async (req, res, next) => {
+const readRate = asyncCatch(async (req, res, next) => {
   const data = await Rate.find({ accepter: req.query.id })
     .populate("rater accepter")
     .limit(20)
@@ -82,7 +82,7 @@ export const readRate = asyncCatch(async (req, res, next) => {
   });
 });
 
-export const readMultipleRate = asyncCatch(async (req, res, next) => {
+const readMultipleRate = asyncCatch(async (req, res, next) => {
   const data = await Rate.find().sort("-createdAt");
   res.status(200).json({
     status: "Read",
@@ -90,7 +90,7 @@ export const readMultipleRate = asyncCatch(async (req, res, next) => {
   });
 });
 
-export const deleteRate = asyncCatch(async (req, res, next) => {
+const deleteRate = asyncCatch(async (req, res, next) => {
   const data = await Rate.findByIdAndDelete(req.query.id);
   res.status(200).json({
     status: "Deleted",
@@ -99,7 +99,7 @@ export const deleteRate = asyncCatch(async (req, res, next) => {
   });
 });
 
-export const createSave = asyncCatch(async (req, res, next) => {
+const createSave = asyncCatch(async (req, res, next) => {
   const saves = await Save.find({
     company: req.body.company,
     saver: req.body.saver,
@@ -128,7 +128,7 @@ export const createSave = asyncCatch(async (req, res, next) => {
   });
 });
 
-export const deleteSave = asyncCatch(async (req, res, next) => {
+const deleteSave = asyncCatch(async (req, res, next) => {
   // console.log(req.body);
   const remove = await Save.findOneAndDelete({
     company: req.body.company,
@@ -151,7 +151,7 @@ export const deleteSave = asyncCatch(async (req, res, next) => {
   }
 });
 
-export const createView = asyncCatch(async (req, res, next) => {
+const createView = asyncCatch(async (req, res, next) => {
   const views = await View.find({
     company: req.body.company,
     viewer: req.body.viewer,
@@ -182,7 +182,7 @@ export const createView = asyncCatch(async (req, res, next) => {
   });
 });
 
-export const upgradeHandler = asyncCatch(async (req, res, next) => {
+const upgradeHandler = asyncCatch(async (req, res, next) => {
   const sales =
     req.body.role === "sales" && (await Visitor.findById(req.body.user));
 
@@ -239,7 +239,7 @@ export const upgradeHandler = asyncCatch(async (req, res, next) => {
   }
 });
 
-export const boostHandler = asyncCatch(async (req, res, next) => {
+const boostHandler = asyncCatch(async (req, res, next) => {
   const company = await Company.findById(req.body.company);
   if (req.body.type === "boost") {
     if (req.body.paymentMethod === "deposit") {
@@ -342,3 +342,15 @@ export const boostHandler = asyncCatch(async (req, res, next) => {
   //  boost after 1 of the companies end data this company startDate must be > one of the nearest companies endDate.
   // 3.
 });
+
+module.exports = {
+  createRate,
+  readRate,
+  readMultipleRate,
+  deleteRate,
+  createSave,
+  deleteSave,
+  createView,
+  upgradeHandler,
+  boostHandler,
+};

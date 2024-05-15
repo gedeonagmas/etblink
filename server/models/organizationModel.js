@@ -1,6 +1,6 @@
-import mongoose from "mongoose";
-import uniqueValidator from "mongoose-unique-validator";
-import * as valid from "../utils/validator.js";
+const mongoose = require("mongoose");
+const valid = require("../utils/validator");
+const uniqueValidator = require("mongoose-unique-validator");
 
 const institutionSchema = new mongoose.Schema(
   {
@@ -52,4 +52,5 @@ institutionSchema.pre("findOneAndUpdate", function (next) {
 uniqueValidator.defaults.message = "{PATH} '{VALUE}' is taken";
 institutionSchema.plugin(uniqueValidator);
 
-export const Institution = mongoose.model("Institution", institutionSchema);
+const Institution = mongoose.model("Institution", institutionSchema);
+module.exports = { Institution };

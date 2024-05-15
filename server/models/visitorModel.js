@@ -1,5 +1,5 @@
-import mongoose from "mongoose";
-import * as valid from "../utils/validator.js";
+const mongoose = require("mongoose");
+const valid = require("../utils/validator");
 
 const visitorSchema = new mongoose.Schema(
   {
@@ -86,4 +86,5 @@ visitorSchema.pre("save", function (next) {
   next();
 });
 
-export const Visitor = mongoose.model("visitor", visitorSchema);
+const Visitor = mongoose.model("visitor", visitorSchema);
+module.exports = { Visitor };

@@ -1,8 +1,8 @@
-import mongoose from "mongoose";
-import bcrypt from "bcrypt";
-import crypto from "crypto";
-import uniqueValidator from "mongoose-unique-validator";
-import * as valid from "../utils/validator.js";
+const bcrypt = require("bcrypt");
+const crypto = require("crypto");
+const mongoose = require("mongoose");
+const valid = require("../utils/validator");
+const uniqueValidator = require("mongoose-unique-validator");
 
 const userSchema = new mongoose.Schema(
   {
@@ -98,4 +98,5 @@ userSchema.pre("save", function (next) {
 
 uniqueValidator.defaults.message = "{PATH} '{VALUE}' is taken";
 userSchema.plugin(uniqueValidator);
-export const User = mongoose.model("user", userSchema);
+const User = mongoose.model("user", userSchema);
+module.exports = { User };

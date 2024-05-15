@@ -1,5 +1,5 @@
-import mongoose from "mongoose";
-import * as valid from "../utils/validator.js";
+const mongoose = require("mongoose");
+const valid = require("../utils/validator");
 
 const salesSchema = new mongoose.Schema(
   {
@@ -106,4 +106,5 @@ salesSchema.pre("save", function (next) {
   next();
 });
 
-export const Sales = mongoose.model("sales", salesSchema);
+const Sales = mongoose.model("sales", salesSchema);
+module.exports = { Sales };

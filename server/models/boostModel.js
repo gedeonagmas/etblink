@@ -1,7 +1,7 @@
-import mongoose, { Schema } from "mongoose";
-import * as valid from "../utils/validator.js";
+const mongoose = require("mongoose");
+const valid = require("../utils/validator");
 
-const boostModel = new Schema(
+const boostModel = new mongoose.Schema(
   {
     name: {
       type: String,
@@ -34,4 +34,5 @@ boostModel.pre("findOneAndUpdate", function (next) {
   next();
 });
 
-export const Boost = mongoose.model("boost", boostModel);
+const Boost = mongoose.model("boost", boostModel);
+module.exports = { Boost };

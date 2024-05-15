@@ -1,16 +1,16 @@
-import express from "express";
-import { upload } from "../utils/upload.js";
-// import { authorization } from "../middleware/authorization.js";
-import { authentication } from "../middleware/authentication.js";
-import {
+const express = require("express");
+const { upload } = require("../utils/upload.js");
+// const { authorization } =require("../middleware/authorization.js";
+const { authentication } = require("../middleware/authentication.js");
+const {
   _create,
   _delete,
   _read,
   _read_single,
   _update,
-} from "../controller/factoryController.js";
+} = require("../controller/factoryController.js");
 
-import {
+const {
   signupHandler,
   loginHandler,
   forgetPassword,
@@ -20,18 +20,18 @@ import {
   readProfileInfo,
   updatePassword,
   logoutHandler,
-} from "../controller/userController.js";
-import { aggregate } from "../controller/aggregationController.js";
-import {
+} = require("../controller/userController.js");
+const { aggregate } = require("../controller/aggregationController.js");
+const {
   chatCreate,
   chatDelete,
   chatRead,
   chatUpdate,
-} from "../controller/chatController.js";
-import CryptoJS from "crypto-js";
-import crypto from "crypto";
-import asyncCatch from "express-async-catch";
-import {
+} = require("../controller/chatController.js");
+const CryptoJS = require("crypto-js");
+const crypto = require("crypto");
+const asyncCatch = require("express-async-catch");
+const {
   boostHandler,
   createRate,
   createSave,
@@ -41,8 +41,8 @@ import {
   readMultipleRate,
   readRate,
   upgradeHandler,
-} from "../controller/utilityController.js";
-import { sendEmailHandler } from "../controller/emailController.js";
+} = require("../controller/utilityController.js");
+const { sendEmailHandler } = require("../controller/emailController.js");
 
 const router = express.Router();
 const chatRouter = express.Router();
@@ -124,4 +124,4 @@ chatRouter
 
 //aggregation
 // router.route("/stats/:table").patch(authentication, authorization, firstPhase);
-export { router, chatRouter, utilityRouter };
+module.exports = { router, chatRouter, utilityRouter };

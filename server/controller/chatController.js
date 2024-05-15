@@ -1,11 +1,11 @@
-import asyncCatch from "express-async-catch";
-import AppError from "../utils/AppError.js";
-import { Chat } from "../models/chatModel.js";
-import { size } from "../utils/size.js";
+const asyncCatch = require("express-async-catch");
+const AppError = require("../utils/AppError.js");
+const { Chat } = require("../models/chatModel.js");
+const { size } = require("../utils/size.js");
 const api = "http://localhost:3001/uploads/";
 
 //create
-export const chatCreate = asyncCatch(async (req, res, next) => {
+const chatCreate = asyncCatch(async (req, res, next) => {
   let data;
 
   // console.log(req.files, "rrrrrr sssssss");
@@ -58,7 +58,7 @@ export const chatCreate = asyncCatch(async (req, res, next) => {
 });
 
 //read
-export const chatRead = asyncCatch(async (req, res, next) => {
+const chatRead = asyncCatch(async (req, res, next) => {
   const { id } = req.params;
   const { limits } = req.query;
   const total = await Chat.countDocuments();
@@ -90,7 +90,7 @@ export const chatRead = asyncCatch(async (req, res, next) => {
 });
 
 //update
-export const chatUpdate = asyncCatch(async (req, res, next) => {
+const chatUpdate = asyncCatch(async (req, res, next) => {
   const data = await Chat.findOneAndUpdate(
     { _id: req.query.id },
     { ...req.body },
@@ -106,7 +106,7 @@ export const chatUpdate = asyncCatch(async (req, res, next) => {
 });
 
 //delete
-export const chatDelete = asyncCatch(async (req, res, next) => {
+const chatDelete = asyncCatch(async (req, res, next) => {
   const data = await Chat.findByIdAndUpdate(
     { _id: req.query.id },
     { deleted: req.body.type === "delete" ? true : false }
@@ -119,3 +119,5 @@ export const chatDelete = asyncCatch(async (req, res, next) => {
     .status(201)
     .json({ status: "Success", message: "data deleted successfully" });
 });
+
+module.exports = { chatCreate, chatRead, chatDelete, chatUpdate };

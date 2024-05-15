@@ -1,5 +1,5 @@
-import mongoose from "mongoose";
-import * as valid from "../utils/validator.js";
+const mongoose =require("mongoose");
+const  valid =require("../utils/validator");
 
 const adminSchema = new mongoose.Schema(
   {
@@ -92,4 +92,5 @@ adminSchema.pre("save", function (next) {
   next();
 });
 
-export const Admin = mongoose.model("admin", adminSchema);
+const Admin = mongoose.model("admin", adminSchema);
+module.exports = { Admin };

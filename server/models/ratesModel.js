@@ -1,6 +1,6 @@
-import mongoose from "mongoose";
-import * as valid from "../utils/validator.js";
-import { Company } from "./companyModel.js";
+const mongoose = require("mongoose");
+const valid = require("../utils/validator");
+const { Company } = require("./companyModel");
 
 const rateSchema = new mongoose.Schema(
   {
@@ -93,4 +93,5 @@ rateSchema.pre("findOneAndUpdate", function (next) {
 //   next();
 // });
 
-export const Rate = mongoose.model("rate", rateSchema);
+const Rate = mongoose.model("rate", rateSchema);
+module.exports = { Rate };

@@ -1,5 +1,5 @@
-import mongoose from "mongoose";
-import * as valid from "../utils/validator.js";
+const mongoose = require("mongoose");
+const valid = require("../utils/validator");
 
 const notificationSchema = new mongoose.Schema(
   {
@@ -48,4 +48,5 @@ notificationSchema.pre("findOneAndUpdate", function (next) {
   next();
 });
 
-export const Notification = mongoose.model("notification", notificationSchema);
+const Notification = mongoose.model("notification", notificationSchema);
+module.exports = { Notification };

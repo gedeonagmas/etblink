@@ -1,6 +1,6 @@
-import mongoose, { Schema } from "mongoose";
+const mongoose = require("mongoose");
 
-const paymentSchema = new Schema(
+const paymentSchema = new mongoose.Schema(
   {
     company: {
       type: mongoose.Schema.Types.ObjectId,
@@ -36,4 +36,5 @@ paymentSchema.pre("findOneAndUpdate", function (next) {
   next();
 });
 
-export const Payment = mongoose.model("payment", paymentSchema);
+const Payment = mongoose.model("payment", paymentSchema);
+module.exports = { Payment };

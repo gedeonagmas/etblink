@@ -1,6 +1,5 @@
-import mongoose from "mongoose";
-// import uniqueValidator from "mongoose-unique-validator";
-import * as valid from "../utils/validator.js";
+const mongoose = require("mongoose");
+const valid = require("../utils/validator");
 
 const schema = new mongoose.Schema(
   {
@@ -245,4 +244,5 @@ schema.pre("save", function (next) {
 
 // uniqueValidator.defaults.message = "{PATH} '{VALUE}' is taken";
 // schema.plugin(uniqueValidator);
-export const Company = mongoose.model("company", schema);
+const Company = mongoose.model("company", schema);
+module.exports = { Company };

@@ -1,9 +1,9 @@
-import { User } from "../models/userModel.js";
-import { promisify } from "util";
-import jwt from "jsonwebtoken";
-import AppError from "../utils/AppError.js";
+const { User } = require("../models/userModel");
+const { promisify } = require("util");
+const jwt = require("jsonwebtoken");
+const AppError = require("../utils/AppError");
 
-export const authentication = async (req, res, next) => {
+const authentication = async (req, res, next) => {
   // console.log(req.cookies, "cookies");
   // console.log(req.headers,'headers');
   let token, user;
@@ -32,3 +32,5 @@ export const authentication = async (req, res, next) => {
   req.user = user;
   next();
 };
+
+module.exports = { authentication };

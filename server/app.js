@@ -1,21 +1,21 @@
-import express from "express";
-import "dotenv/config";
-import path from "path";
-import cors from "cors";
-import { errorController } from "./controller/errorController.js";
-import mongodb from "./config/db.js";
-import { utilityRouter, chatRouter, router } from "./routes/router.js";
-import { createServer } from "http";
-import { Server } from "socket.io";
-import cookieParser from "cookie-parser";
-import cron from "node-cron";
-import { boost } from "./controller/backgroundJobController.js";
-// import apicache from "apicache";
+const express = require("express");
+require("dotenv/config");
+const path = require("path");
+const cors = require("cors");
+const { errorController } = require("./controller/errorController.js");
+const { mongodb } = require("./config/db.js");
+const { utilityRouter, chatRouter, router } = require("./routes/router.js");
+const { createServer } = require("http");
+const { Server } = require("socket.io");
+const cookieParser = require("cookie-parser");
+const cron = require("node-cron");
+const { boost } = require("./controller/backgroundJobController.js");
+// import apicache =require("apicache";
 
 const app = express();
 // let cache = apicache.middleware;
 // app.use(cache("5 minutes"));
-const __dirname = path.resolve();
+// const __dirname = path.resolve();
 
 // process.on("uncaughtException", (err) => {
 //   console.log("SHUTTING DOWN ");

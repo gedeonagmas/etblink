@@ -1,8 +1,7 @@
-import asyncCatch from "express-async-catch";
-import AppError from "../utils/AppError.js";
-import { selectModel } from "../utils/selectModel.js";
-import v2 from "./../config/cloudinary.js";
-import { Query } from "mongoose";
+const asyncCatch = require("express-async-catch");
+const AppError = require("../utils/AppError");
+const { selectModel } = require("../utils/selectModel");
+const { Query } = require("mongoose");
 const api = "http://localhost:3001/uploads/";
 const encrypt = (query) => {
   return btoa(query);
@@ -49,7 +48,7 @@ const fileHandler = (value, req) => {
 };
 
 //create
-export const _create = asyncCatch(async (req, res, next) => {
+const _create = asyncCatch(async (req, res, next) => {
   const model = selectModel(req.params.table, next);
   console.log(req.body, "body");
   const value = { ...req.body };
@@ -100,7 +99,7 @@ export const _create = asyncCatch(async (req, res, next) => {
 });
 
 //read
-export const _read = asyncCatch(async (req, res, next) => {
+const _read = asyncCatch(async (req, res, next) => {
   const model = selectModel(req.params.table, next);
 
   if (model) {
@@ -213,7 +212,7 @@ export const _read = asyncCatch(async (req, res, next) => {
 });
 
 //update
-export const _update = asyncCatch(async (req, res, next) => {
+const _update = asyncCatch(async (req, res, next) => {
   const model = selectModel(req.params.table, next);
   // console.log(req.body, "body");
   const value = { ...req.body };
@@ -251,7 +250,7 @@ export const _update = asyncCatch(async (req, res, next) => {
 });
 
 //delete
-export const _delete = asyncCatch(async (req, res, next) => {
+const _delete = asyncCatch(async (req, res, next) => {
   const model = selectModel(req.params.table, next);
 
   if (model) {
@@ -270,7 +269,7 @@ export const _delete = asyncCatch(async (req, res, next) => {
 });
 
 //read single data
-export const _read_single = asyncCatch(async (req, res, next) => {
+const _read_single = asyncCatch(async (req, res, next) => {
   const model = selectModel(req.params.table, next);
 
   const query = model.find({ _id: req.params.id });
@@ -296,3 +295,5 @@ export const _read_single = asyncCatch(async (req, res, next) => {
     .status(201)
     .json({ status: "Success", message: "data fetched successfully", data });
 });
+
+module.exports = { _read_single, _read, _create, _update, _delete };

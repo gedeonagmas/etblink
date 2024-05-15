@@ -1,5 +1,5 @@
-import mongoose from "mongoose";
-import * as valid from "../utils/validator.js";
+const mongoose = require("mongoose");
+const valid = require("../utils/validator");
 
 const newsSchema = new mongoose.Schema(
   {
@@ -42,4 +42,5 @@ newsSchema.pre("findOneAndUpdate", function (next) {
   next();
 });
 
-export const News = mongoose.model("news", newsSchema);
+const News = mongoose.model("news", newsSchema);
+module.exports = { News };

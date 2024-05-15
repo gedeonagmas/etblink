@@ -1,8 +1,8 @@
-import asyncCatch from "express-async-catch";
-import AppError from "../utils/AppError.js";
-import { selectModel } from "../utils/selectModel.js";
+const asyncCatch = require("express-async-catch");
+const AppError = require("../utils/AppError");
+const { selectModel } = require("../utils/selectModel");
 
-export const aggregate = asyncCatch(async (req, res, next) => {
+const aggregate = asyncCatch(async (req, res, next) => {
   const model = selectModel(req.params.table, next);
 
   switch (req.query.phase) {
@@ -110,3 +110,5 @@ export const aggregate = asyncCatch(async (req, res, next) => {
       );
   }
 });
+
+module.exports = { aggregate };

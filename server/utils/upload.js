@@ -1,4 +1,4 @@
-import multer from "multer";
+const multer = require("multer");
 
 const filter = (req, file, cb) => {
   if (
@@ -28,4 +28,5 @@ const diskStorage = multer.diskStorage({
   },
 });
 
-export const upload = multer({ storage: diskStorage });
+const upload = multer({ storage: diskStorage });
+module.exports = { upload };

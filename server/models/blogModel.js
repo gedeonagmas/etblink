@@ -1,7 +1,7 @@
-import mongoose, { Schema } from "mongoose";
-import * as valid from "../utils/validator.js";
+const mongoose = require("mongoose");
+const valid = require("../utils/validator");
 
-const blogModel = new Schema(
+const blogModel = new mongoose.Schema(
   {
     title: {
       type: String,
@@ -39,4 +39,5 @@ blogModel.pre("findOneAndUpdate", function (next) {
   next();
 });
 
-export const Blog = mongoose.model("blog", blogModel);
+const Blog = mongoose.model("blog", blogModel);
+module.exports = { Blog };

@@ -1,7 +1,7 @@
-import mongoose, { Schema } from "mongoose";
-import * as valid from "../utils/validator.js";
+const mongoose = require("mongoose");
+const valid = require("../utils/validator");
 
-const subscriptionModel = new Schema(
+const subscriptionModel = new mongoose.Schema(
   {
     amount: {
       type: Number,
@@ -49,4 +49,5 @@ subscriptionModel.pre("findOneAndUpdate", function (next) {
   next();
 });
 
-export const Subscription = mongoose.model("subscription", subscriptionModel);
+const Subscription = mongoose.model("subscription", subscriptionModel);
+module.exports = { Subscription };

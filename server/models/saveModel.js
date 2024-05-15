@@ -1,6 +1,6 @@
-import mongoose from "mongoose";
-import * as valid from "../utils/validator.js";
-import { Company } from "./companyModel.js";
+const mongoose = require("mongoose");
+const valid = require("../utils/validator");
+const { Company } = require("./companyModel");
 
 const saveSchema = new mongoose.Schema(
   {
@@ -42,4 +42,5 @@ saveSchema.pre("findOneAndUpdate", function (next) {
   next();
 });
 
-export const Save = mongoose.model("save", saveSchema);
+const Save = mongoose.model("save", saveSchema);
+module.exports = { Save };

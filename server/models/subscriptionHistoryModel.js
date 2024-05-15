@@ -1,7 +1,7 @@
-import mongoose, { Schema } from "mongoose";
-import * as valid from "../utils/validator.js";
+const mongoose = require("mongoose");
+const valid = require("../utils/validator");
 
-const subscriptionHistorySchema = new Schema(
+const subscriptionHistorySchema = new mongoose.Schema(
   {
     subscription: {
       type: mongoose.Schema.Types.ObjectId,
@@ -43,7 +43,8 @@ subscriptionHistorySchema.pre("findOneAndUpdate", function (next) {
   next();
 });
 
-export const SubscriptionHistory = mongoose.model(
+const SubscriptionHistory = mongoose.model(
   "subscriptionHistory",
   subscriptionHistorySchema
 );
+module.exports = { SubscriptionHistory };

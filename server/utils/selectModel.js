@@ -1,26 +1,25 @@
+const { Admin } = require("../models/adminModel");
+const { Application } = require("../models/applicationModel");
+const { Blog } = require("../models/blogModel");
+const { BoostHistory } = require("../models/boostHistoryModel");
+const { Boost } = require("../models/boostModel");
+const { Company } = require("../models/companyModel");
+const { Group } = require("../models/groupModel");
+const { News } = require("../models/newsModel");
+const { Institution } = require("../models/organizationModel");
+const { Payment } = require("../models/paymentModel");
+const { Rate } = require("../models/ratesModel");
+const { Sales } = require("../models/salesModel");
+const { Save } = require("../models/saveModel");
+const { SubscriptionHistory } = require("../models/subscriptionHistoryModel");
+const { Subscription } = require("../models/subscriptionModel");
+const { User } = require("../models/userModel");
+const { View } = require("../models/viewModel");
+const { Visitor } = require("../models/visitorModel");
+const { Youtube } = require("../models/youtubeModel");
+const AppError = require("./AppError");
 
-import { Admin } from "../models/adminModel.js";
-import { Application } from "../models/applicationModel.js";
-import { Blog } from "../models/blogModel.js";
-import { BoostHistory } from "../models/boostHistoryModel.js";
-import { Boost } from "../models/boostModel.js";
-import { Company } from "../models/companyModel.js";
-import { Group } from "../models/groupModel.js";
-import { News } from "../models/newsModel.js";
-import { Institution } from "../models/organizationModel.js";
-import { Payment } from "../models/paymentModel.js";
-import { Rate } from "../models/ratesModel.js";
-import { Sales } from "../models/salesModel.js";
-import { Save } from "../models/saveModel.js";
-import { SubscriptionHistory } from "../models/subscriptionHistoryModel.js";
-import { Subscription } from "../models/subscriptionModel.js";
-import { User } from "../models/userModel.js";
-import { View } from "../models/viewModel.js";
-import { Visitor } from "../models/visitorModel.js";
-import { Youtube } from "../models/youtubeModel.js";
-import AppError from "./AppError.js";
-
-export const selectModel = (name, next) => {
+const selectModel = (name, next) => {
   let model;
   switch (name) {
     case "users":
@@ -97,3 +96,5 @@ export const selectModel = (name, next) => {
   }
   return model;
 };
+
+module.exports = { selectModel };

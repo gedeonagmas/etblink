@@ -1,4 +1,4 @@
-export const name = (field) => {
+const name = (field) => {
   return {
     validator: function (v) {
       return /^(?=.{3,50}$)[a-z]+(?:['_.\s][a-z]+)*$/i.test(v);
@@ -7,7 +7,7 @@ export const name = (field) => {
   };
 };
 
-export const gender = (field) => {
+const gender = (field) => {
   return {
     validator: function (v) {
       return /^(?:male|female)$/gim.test(v);
@@ -16,7 +16,7 @@ export const gender = (field) => {
   };
 };
 
-export const userName = (field) => {
+const userName = (field) => {
   return {
     validator: function (v) {
       return /^[a-z0-9_.]+$/.test(v);
@@ -25,7 +25,7 @@ export const userName = (field) => {
   };
 };
 
-export const email = (field) => {
+const email = (field) => {
   return {
     validator: function (v) {
       return /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(v);
@@ -34,7 +34,7 @@ export const email = (field) => {
   };
 };
 
-export const password = (field) => {
+const password = (field) => {
   return {
     validator: function (v) {
       return /^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[a-zA-Z!#$@^%&? "])[a-zA-Z0-9!#$@^%&.?]{8,20}$/.test(
@@ -50,7 +50,7 @@ export const password = (field) => {
   };
 };
 
-export const confirmPassword = (field) => {
+const confirmPassword = (field) => {
   return {
     validator: function (v) {
       return v === this.password;
@@ -59,7 +59,7 @@ export const confirmPassword = (field) => {
   };
 };
 
-export const date = (field) => {
+const date = (field) => {
   return {
     validator: function (v) {
       return /^((?=\d{4})\d{4}|(?=[a-zA-Z]{3})[a-zA-Z]{3}|\d{2})((?=\/)\/|\-)((?=[0-9]{2})[0-9]{2}|(?=[0-9]{1,2})[0-9]{1,2}|[a-zA-Z]{3})((?=\/)\/|\-)((?=[0-9]{4})[0-9]{4}|(?=[0-9]{2})[0-9]{2}|[a-zA-Z]{3})$/g.test(
@@ -70,7 +70,7 @@ export const date = (field) => {
   };
 };
 
-export const paragraph = (field, min, max) => {
+const paragraph = (field, min, max) => {
   return {
     validator: function (v) {
       return v.toString().length < max && v.toString().length > min;
@@ -79,7 +79,7 @@ export const paragraph = (field, min, max) => {
   };
 };
 
-export const textMax = (field, max) => {
+const textMax = (field, max) => {
   return {
     validator: function (v) {
       return v.toString().length < max;
@@ -88,7 +88,7 @@ export const textMax = (field, max) => {
   };
 };
 
-export const numberLower = (field, min) => {
+const numberLower = (field, min) => {
   return {
     validator: function (v) {
       return v > min;
@@ -97,7 +97,7 @@ export const numberLower = (field, min) => {
   };
 };
 
-export const numberUpper = (field, max) => {
+const numberUpper = (field, max) => {
   return {
     validator: function (v) {
       return v < max;
@@ -106,7 +106,7 @@ export const numberUpper = (field, max) => {
   };
 };
 
-export const numberBetween = (field, min, max) => {
+const numberBetween = (field, min, max) => {
   return {
     validator: function (v) {
       return v > min && v <= max;
@@ -115,7 +115,7 @@ export const numberBetween = (field, min, max) => {
   };
 };
 
-export const phone = (field) => {
+const phone = (field) => {
   return {
     validator: function (v) {
       return /^(\+{0,})(\d{0,})([(]{1}\d{1,3}[)]{0,}){0,}(\s?\d+|\+\d{2,3}\s{1}\d+|\d+){1}[\s|-]?\d+([\s|-]?\d+){1,2}(\s){0,}$/gm.test(
@@ -126,11 +126,28 @@ export const phone = (field) => {
   };
 };
 
-export const required = (field) => {
+const required = (field) => {
   return {
     validator: function (v) {
       return v.toString().length > 0;
     },
     message: `${field} is required`,
   };
+};
+
+module.exports = {
+  name,
+  gender,
+  userName,
+  email,
+  password,
+  confirmPassword,
+  date,
+  paragraph,
+  textMax,
+  numberLower,
+  numberUpper,
+  numberBetween,
+  phone,
+  required,
 };

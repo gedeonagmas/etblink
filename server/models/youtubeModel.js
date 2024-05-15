@@ -1,5 +1,5 @@
-import mongoose from "mongoose";
-import * as valid from "../utils/validator.js";
+const mongoose = require("mongoose");
+const valid = require("../utils/validator");
 
 const youtubeSchema = new mongoose.Schema(
   {
@@ -36,4 +36,5 @@ youtubeSchema.pre("findOneAndUpdate", function (next) {
   next();
 });
 
-export const Youtube = mongoose.model("youtube", youtubeSchema);
+const Youtube = mongoose.model("youtube", youtubeSchema);
+module.exports = { Youtube };

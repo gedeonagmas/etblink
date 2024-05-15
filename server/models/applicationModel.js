@@ -1,8 +1,8 @@
-import mongoose, { Schema } from "mongoose";
-import * as valid from "../utils/validator.js";
-import uniqueValidator from "mongoose-unique-validator";
+const mongoose = require("mongoose");
+const valid = require("../utils/validator");
+const uniqueValidator = require("mongoose-unique-validator");
 
-const applicationSchema = new Schema(
+const applicationSchema = new mongoose.Schema(
   {
     category: {
       type: mongoose.Schema.Types.ObjectId,
@@ -77,4 +77,6 @@ applicationSchema.pre("findOneAndUpdate", function (next) {
 
 uniqueValidator.defaults.message = "{PATH} '{VALUE}' is taken";
 applicationSchema.plugin(uniqueValidator);
-export const Application = mongoose.model("application", applicationSchema);
+
+const Application = mongoose.model("application", applicationSchema);
+module.exports = { Application };

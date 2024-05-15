@@ -1,9 +1,9 @@
-import { User } from "../models/userModel.js";
-import { Notification } from "../models/notificationModel.js";
-import { sendEmailHandler } from "./emailController.js";
-import cron from "node-cron";
+const { User } = require("../models/userModel");
+const { Notification } = require("../models/notificationModel");
+const { sendEmailHandler } = require("./emailController");
+const cron = require("node-cron");
 
-export const boost = async () => {
+const boost = async () => {
   const date = new Date().toISOString().split("T")[0];
   let remainingDate = 0;
 
@@ -102,3 +102,5 @@ export const boost = async () => {
     });
   });
 };
+
+module.exports = { boost };
