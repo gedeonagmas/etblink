@@ -1,10 +1,11 @@
 on:
-  push:
+ push:
     branches:
       - main
-
-name: 🚀 Deploy ETBLINK on push
-
+name: 🚀 Deploy etblink
+defaults:
+ run:
+  working-directory: ./client
 jobs:
   web-deploy:
     name: 🎉 Deploy
@@ -29,5 +30,11 @@ jobs:
           server: ${{ secrets.GIT_CPANEL_REACT_SERVER }}
           username: ${{ secrets.GIT_CPANEL_REACT_USER }}
           password: ${{ secrets.GIT_CPANEL_REACT_PWD }}
-          protocol: ${{ secrets.GIT_CPANEL_REACT_PROTOCOL }}
-          local-dir: ./build/
+          local-dir: ./client/dist/
+          # server-dir: /public_html/
+          exclude: |
+            **/.git**
+            **/.git*/**
+            **/node_modules/**
+            **/.**
+          
