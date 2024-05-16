@@ -223,6 +223,10 @@ function App() {
                 path="/dashboard/admin/companies"
                 element={<UserSales type="company" />}
               ></Route>
+              <Route
+                path="/dashboard/admin/admins"
+                element={<UserSales type="company" />}
+              ></Route>
 
               {/* ################################################################### */}
 
