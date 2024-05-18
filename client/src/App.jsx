@@ -216,8 +216,16 @@ function App() {
                 element={<UserSales type="sales" />}
               ></Route>
               <Route
+                path="/dashboard/admin/sales/manage"
+                element={<UsersProfile type="sales" />}
+              ></Route>
+              <Route
                 path="/dashboard/admin/visitor"
                 element={<UserSales type="visitor" />}
+              ></Route>
+              <Route
+                path="/dashboard/admin/visitors/manage"
+                element={<UsersProfile type="visitor" />}
               ></Route>
               <Route
                 path="/dashboard/admin/companies"

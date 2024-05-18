@@ -20,6 +20,7 @@ const {
   readProfileInfo,
   updatePassword,
   logoutHandler,
+  updateUsersCredentials,
 } = require("../controller/userController.js");
 const { aggregate } = require("../controller/aggregationController.js");
 const {
@@ -78,6 +79,9 @@ router
   .put(authentication, files, updateProfilePicture);
 
 utilityRouter.route("/updatePassword").put(authentication, updatePassword);
+utilityRouter
+  .route("/updateUsersCredentials")
+  .put(authentication, updateUsersCredentials);
 utilityRouter.route("/rate").post(authentication, createRate);
 utilityRouter.route("/rate").get(readRate);
 utilityRouter.route("/rateMultiple").get(authentication, readMultipleRate);

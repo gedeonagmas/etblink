@@ -257,6 +257,50 @@ const updatePassword = asyncCatch(async (req, res, next) => {
     .json({ status: "Changed", message: "Password changed successfully" });
 });
 
+const updateUsersCredentials = asyncCatch(async (req, res, next) => {
+  const { password, email, confirmPassword } = req.body;
+
+  // if (!email || !newPassword || !confirmPassword)
+  //   return next(new AppError("All fields are required", 404));
+  // console.log(req.params);
+  const user = await User.findOne({ _id: req.body.id });
+
+  if (
+    password !== confirmPassword &&
+    password?.length > 0 &&
+    confirmPassword?.length > 0
+  )
+    return next(new AppError("Password not much", 404));
+
+  if (req.user.role !== "admin")
+    return next(
+      new AppError("You are not authorized to perform this action", 404)
+    );
+
+  if (!user) return next(new AppError("Users not found", 404));
+
+  //save new password to the database
+  if (user.password.length > 0) {
+    user.password = password;
+  }
+
+  if (user.email.length > 0) {
+    user.email = email;
+  }
+
+  // user?.password ? (user.password = password) : undefined;
+  // user?.email ? (user.email = email) : undefined;
+
+  const data = await user.save({ validateBeforeSave: true });
+
+  if (!data)
+    return next(new AppError("Error unable to update the credentials", 404));
+
+  res
+    .status(200)
+    .json({ status: "Changed", message: "Password changed successfully" });
+});
+
 module.exports = {
   signupHandler,
   loginHandler,
@@ -267,4 +311,5 @@ module.exports = {
   updateProfileInfo,
   updateProfilePicture,
   updatePassword,
+  updateUsersCredentials,
 };

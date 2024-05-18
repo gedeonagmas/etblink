@@ -1,19 +1,31 @@
 import React, { useEffect, useState } from "react";
-import { userContext } from "../../../../App";
 import { useUpdateMutation } from "../../../../features/api/apiSlice";
 import Response from "../../../../components/Response";
 import LoadingButton from "../../../../components/loading/LoadingButton";
 import { FaCamera } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import customerImage from "../../../../assets/images/customers/customer-i.jpg";
+import { useLocation } from "react-router-dom";
 
 const UserProfile = () => {
   const [updateData, updateResponse] = useUpdateMutation();
   const [pending, setPending] = useState(false);
   const [user, setUser] = useState();
+  const location = useLocation();
+
   useEffect(() => {
     setUser(JSON.parse(localStorage.getItem("etblink_user")));
   }, []);
+
+  // const [trigger, { data: users, isFetching, isError }] = useLazyReadQuery();
+
+  // useEffect(() => {
+  //    id&& trigger({
+  //       url: `/user/users?_id=${id}`,
+  //       tag: ["users"],
+  //     });
+  // }, [type,id]);
+
   const [firstName, setFirstName] = useState("");
   const [middleName, setMiddleName] = useState("");
   const [lastName, setLastName] = useState("");

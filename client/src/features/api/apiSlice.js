@@ -122,6 +122,15 @@ export const apiSlice = createApi({
         credentials: "include",
       }),
     }),
+    //user forget
+    updateUsersCredentials: builder.mutation({
+      query: (data) => ({
+        url: `/utility/updateUsersCredentials`,
+        method: "PUT",
+        body: data,
+        credentials: "include",
+      }),
+    }),
 
     //create
     create: builder.mutation({
@@ -361,6 +370,7 @@ export const {
   useUserLoginMutation,
   useUserLogoutMutation,
   useForgetPasswordMutation,
+  useUpdateUsersCredentialsMutation,
   useResetPasswordMutation,
   useUpdatePasswordMutation,
   useSendEmailMutation,

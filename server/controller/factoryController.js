@@ -214,7 +214,7 @@ const _read = asyncCatch(async (req, res, next) => {
 //update
 const _update = asyncCatch(async (req, res, next) => {
   const model = selectModel(req.params.table, next);
-  // console.log(req.body, "body");
+  console.log(req.query, req.params, "body");
   const value = { ...req.body };
   const files = fileHandler(value, req);
   // console.log(files, "files");
