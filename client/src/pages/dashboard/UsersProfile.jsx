@@ -274,10 +274,11 @@ const UsersProfile = ({ type }) => {
   const id = location?.search?.split("?id=")[1];
   const user = JSON.parse(localStorage.getItem("etblink_user"));
   const [updateData, updateResponse] = useUpdateMutation();
-  const [credentialData, credentialResponse] =
-    useUpdateUsersCredentialsMutation();
+  const [emailData, emailResponse] = useUpdateUsersCredentialsMutation();
+  const [passwordData, passwordResponse] = useUpdateUsersCredentialsMutation();
   const [pending, setPending] = useState(false);
-  const [resetPending, setResetPending] = useState(false);
+  const [emailPending, setEmailPending] = useState(false);
+  const [passwordPending, setPasswordPending] = useState(false);
   const [firstName, setFirstName] = useState("");
   const [middleName, setMiddleName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -341,12 +342,23 @@ const UsersProfile = ({ type }) => {
     updateData(formData);
   };
 
-  const resetHandler = () => {
+  const emailHandler = () => {
     id &&
-      credentialData({
+      emailData({
         email,
+        type: "email",
+        url: `/user/users`,
+        id: id,
+        tag: ["users"],
+      });
+  };
+
+  const passwordHandler = () => {
+    id &&
+      passwordData({
         password,
         confirmPassword,
+        type: "password",
         url: `/user/users`,
         id: id,
         tag: ["users"],
@@ -360,7 +372,8 @@ const UsersProfile = ({ type }) => {
         setPending={setPending}
         type={id ? null : "update"}
       />
-      <Response response={credentialResponse} setPending={setResetPending} />
+      <Response response={emailResponse} setPending={setEmailPending} />
+      <Response response={passwordResponse} setPending={setPasswordPending} />
       <p className="text-lg font-semibold">Your profile information</p>
       <p className="text-sm max-w-[700px]">
         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Labore
@@ -601,7 +614,14 @@ const UsersProfile = ({ type }) => {
               required
             />
           </div>
-          <div className="mb-5">
+          <LoadingButton
+            pending={emailPending}
+            onClick={emailHandler}
+            title="Change"
+            color="bg-main"
+            width="w-full"
+          />
+          <div className="mb-5 mt-5">
             <label
               for="name"
               class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -634,8 +654,8 @@ const UsersProfile = ({ type }) => {
             />
           </div>
           <LoadingButton
-            pending={resetPending}
-            onClick={resetHandler}
+            pending={passwordPending}
+            onClick={passwordHandler}
             title="Reset"
             color="bg-main"
             width="w-full"

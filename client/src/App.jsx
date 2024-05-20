@@ -49,7 +49,7 @@ import UpdateBlog from "./pages/dashboard/admin/UpdateBlog";
 import AddBlog from "./pages/dashboard/admin/AddBlog";
 import UpdatePrices from "./pages/dashboard/admin/UpdatePrices";
 import AddPrices from "./pages/dashboard/admin/AddPrices";
-import UserSales from "./pages/dashboard/admin/UserSales";
+import UserSales from "./pages/dashboard/admin/Users";
 import UsersProfile from "./pages/dashboard/UsersProfile";
 import SalesDetail from "./pages/SalesDetail";
 import BlogsCategory from "./pages/blogs/BlogsCategory";
@@ -230,6 +230,10 @@ function App() {
               <Route
                 path="/dashboard/admin/companies"
                 element={<UserSales type="company" />}
+              ></Route>
+              <Route
+                path="/dashboard/admin/companies/manage"
+                element={<Profile />}
               ></Route>
               <Route
                 path="/dashboard/admin/admins"

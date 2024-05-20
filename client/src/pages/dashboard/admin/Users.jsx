@@ -405,14 +405,15 @@ const UserSales = ({ type }) => {
   }, [deleteResponse]);
 
   const typeHandler = (role) => {
-    console.log(role==='visitor','rrrrrrrrr');
     if (role === "visitor") {
       return "visitors";
     } else if (role === "sales") {
       return "sales";
+    } else if (role === "company") {
+      return "companies";
     }
   };
-  
+
   const columns = [
     {
       name: "FULL NAME",

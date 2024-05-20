@@ -19,6 +19,21 @@ const schema = new mongoose.Schema(
       validate: valid.required("Category"),
     },
 
+    subCategory: {
+      type: String,
+      validate: valid.required("Sub Category"),
+    },
+
+    cities: {
+      type: String,
+      validate: valid.required("Cities"),
+    },
+
+    country: {
+      type: String,
+      validate: valid.required("Country"),
+    },
+
     type: {
       type: String,
       enum: ["local", "global"],

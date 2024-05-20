@@ -1,10 +1,16 @@
 import React, { useEffect, useState } from "react";
 import LoadingButton from "../../components/loading/LoadingButton";
 import Response from "../../components/Response";
-import { useUpdateMutation } from "../../features/api/apiSlice";
+import {
+  useLazyReadQuery,
+  useUpdateMutation,
+  useUpdateUsersCredentialsMutation,
+} from "../../features/api/apiSlice";
 import "react-quill/dist/quill.snow.css";
 
 import Editor from "../../components/Editor";
+import { useLocation } from "react-router-dom";
+import { categoryData, cityData, countryData } from "./../categoryData";
 
 const List = (props) => {
   return (
@@ -83,12 +89,19 @@ const List = (props) => {
 };
 
 const Profile = () => {
+  const location = useLocation();
+  const id = location?.search?.split("?id=")[1];
+  const user = JSON.parse(localStorage.getItem("etblink_user"));
   const [updateData, updateResponse] = useUpdateMutation();
   const [pending, setPending] = useState(false);
-  const [user, setUser] = useState({});
+  // const [user, setUser] = useState({});
   const [name, setName] = useState("");
   const [type, setType] = useState("Local");
   const [title, setTitle] = useState("");
+  const [category, setCategory] = useState("");
+  const [subCategory, setSubCategory] = useState("");
+  const [city, setCity] = useState("");
+  const [country, setCountry] = useState("");
   const [address, setAddress] = useState("");
   const [phone, setPhone] = useState("");
   const [video, setVideo] = useState("");
@@ -103,6 +116,17 @@ const Profile = () => {
   const [logo, setLogo] = useState("");
   const [banner, setBanner] = useState("");
   const [galleries, setGalleries] = useState("");
+
+  const [dropdown, setDropdown] = useState(false);
+
+  const [emailData, emailResponse] = useUpdateUsersCredentialsMutation();
+  const [passwordData, passwordResponse] = useUpdateUsersCredentialsMutation();
+  const [emailPending, setEmailPending] = useState(false);
+  const [passwordPending, setPasswordPending] = useState(false);
+  const [popup, setPopup] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const [socialMedias, setSocialMedias] = useState({
     facebook: "",
@@ -151,15 +175,29 @@ const Profile = () => {
     console.log("Geolocation is not supported by this browser.");
   }
 
+  // useEffect(() => {
+  //   setUser(JSON.parse(localStorage.getItem("etblink_user")));
+  // }, []);
+
+  const [trigger, { data: users, isFetching, isError }] = useLazyReadQuery();
   useEffect(() => {
-    setUser(JSON.parse(localStorage.getItem("etblink_user")));
-  }, []);
+    trigger({
+      url: `/user/users?_id=${
+        id ? id : user?._id
+      }&populatingType=users&populatingValue=user`,
+      tag: ["users"],
+    });
+  }, [id]);
 
   useEffect(() => {
-    if (user) {
-      const data = user?.user;
+    if (users) {
+      const data = users?.data[0]?.user;
       setTitle(data?.title ? data.title : title);
       setType(data?.type ? data.type : type);
+      setCategory(data?.category ? data.category : category);
+      setSubCategory(data?.subCategory ? data.subCategory : subCategory);
+      setCity(data?.city ? data.city : city);
+      setCountry(data?.country ? data.country : country);
       setName(data?.name ? data.name : name);
       setPhone(data?.phone ? data.phone : phone);
       setVideo(data?.video ? data.video : video);
@@ -173,8 +211,9 @@ const Profile = () => {
       setGalleries(data?.galleries ? data?.galleries : "");
       setSocialMedias(data?.socialMedias ? data.socialMedias : socialMedias);
       setWorkingDays(data?.workingDays ? data.workingDays : workingDays);
+      setEmail(users?.data[0]?.email ? users?.data[0].email : email);
     }
-  }, [user]);
+  }, [users]);
 
   function meridian(value) {
     var [h, m] = value.split(":");
@@ -186,6 +225,10 @@ const Profile = () => {
     formData.append("name", name);
     formData.append("type", type);
     formData.append("title", title);
+    formData.append("category", category);
+    formData.append("subCategory", subCategory);
+    formData.append("city", city);
+    formData.append("country", country);
     formData.append("phone", phone);
     formData.append("video", video);
     formData.append("website", website);
@@ -199,7 +242,7 @@ const Profile = () => {
     formData.append("longitude", longitude);
     formData.append("socialMedias", JSON.stringify(socialMedias));
     formData.append("workingDays", JSON.stringify(workingDays));
-    formData.append("url", `/user/companies?id=${user?.user?._id}`);
+    formData.append("url", `/user/companies?id=${users?.data[0]?.user?._id}`);
     formData.append("tag", ["users", "companies"]);
     galleries?.length > 0
       ? [...galleries].forEach((image) => {
@@ -215,15 +258,47 @@ const Profile = () => {
     updateData(formData);
   };
 
-  // console.log(user, "user");
+  const emailHandler = () => {
+    id &&
+      emailData({
+        email,
+        type: "email",
+        url: `/user/users`,
+        id: id,
+        tag: ["users"],
+      });
+  };
+
+  const passwordHandler = () => {
+    id &&
+      passwordData({
+        password,
+        confirmPassword,
+        type: "password",
+        url: `/user/users`,
+        id: id,
+        tag: ["users"],
+      });
+  };
+  console.log(category, city, country, subCategory, "user");
   return (
     <div className="w-full p-5 flex pb-10 flex-col rounded-lg border gap-2 items-start justify-center">
       <Response
         response={updateResponse}
         setPending={setPending}
-        type="update"
+        type={id ? null : "update"}
       />
-      <p className="text-lg font-semibold">Your company information</p>
+      <Response response={emailResponse} setPending={setEmailPending} />
+      <Response response={passwordResponse} setPending={setPasswordPending} />
+      <div className="w-full flex justify-between items-center">
+        <p className="text-lg font-semibold">Your company information</p>
+        <button
+          onClick={() => setPopup(true)}
+          className="px-5 self-end rounded-lg py-2 text-white bg-main"
+        >
+          Sensitive Data
+        </button>
+      </div>
       <p className="text-sm max-w-[700px]">
         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Labore
         blanditiis velit doloremque ducimus adipisci eaque quis temporibus,
@@ -289,6 +364,125 @@ const Profile = () => {
             required
           />
         </div>
+        <div className="mb-5 relative">
+          <label
+            for="name"
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+          >
+            Category
+          </label>
+          {dropdown && (
+            <div className="absolute z-20 top-[74px] w-full border rounded-lg  bg-gray-100 p-3 bg-dark shadow-lg">
+              <svg
+                class="w-6 absolute cursor-pointer right-2 top-2 h-6"
+                onClick={() => setDropdown(false)}
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M6 18 17.94 6M18 18 6.06 6"
+                />
+              </svg>
+              <div className="h-[60vh] overflow-y-scroll w-full mt-6">
+                {categoryData?.map((c) => {
+                  return (
+                    <div className="mt-5">
+                      <p className="font-bold">{c?.category}</p>
+                      {c?.subCategory?.map((sc) => {
+                        return (
+                          <div className="flex gap-3 mt-3 items-center ml-4">
+                            <input
+                              onChange={(e) => {
+                                setCategory(c?.category);
+                                e.target.checked
+                                  ? (setSubCategory(sc), setDropdown(false))
+                                  : "";
+                              }}
+                              checked={subCategory === sc ? true : false}
+                              type="radio"
+                              name="subCategory"
+                              id=""
+                            />
+                            <p className="">{sc}</p>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+          <div
+            // onChange={(e) => setCategory(e.target.value)}
+            // value={category}
+            onClick={() => setDropdown(!dropdown)}
+            type="text"
+            id="name"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder="Skylight Technologies"
+            required
+          >
+            <div className="w-full focus:border-blue-400 focus:ring-4 flex items-center justify-between">
+              <p className="">Select Category({category})</p>{" "}
+              <svg
+                class="w-4 h-4 "
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="m19 9-7 7-7-7"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>{" "}
+        <div className="mb-5">
+          <label
+            for="name"
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+          >
+            {type === "local" ? "Cities" : "Country"}
+          </label>
+
+          <select
+            onChange={(e) =>
+              type === "local"
+                ? setCity(e.target.value)
+                : setCountry(e.target.value)
+            }
+            value={type === "local" ? city : country}
+            type="text"
+            id="name"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder="Skylight Technologies"
+            required
+          >
+            {type === "local"
+              ? cityData?.map((c) => {
+                  return <option value={c}>{c}</option>;
+                })
+              : countryData?.map((co) => {
+                  return <option value={co}>{co}</option>;
+                })}
+          </select>
+        </div>{" "}
         <div className="mb-5">
           <label
             for="name"
@@ -487,7 +681,11 @@ const Profile = () => {
           </label>
           <div
             style={{
-              backgroundImage: `url(${user?.user?.galleries[0]})`,
+              backgroundImage: `url(${
+                user?.user?.galleries?.length > 0
+                  ? user?.user?.galleries[0]
+                  : null
+              })`,
             }}
             class="mt-4 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md"
           >
@@ -1032,6 +1230,93 @@ const Profile = () => {
           width="w-52"
         />
       </div>
+      {popup && (
+        <div className="absolute  z-30 top-24 bg-white bg-dark right-8 w-[300px] rounded-lg p-4 border border-gray-300">
+          <div className="relative">
+            <svg
+              class="w-6 absolute cursor-pointer top-1 right-1 hover:text-gray-600 h-6 text-gray-800 dark:text-white"
+              aria-hidden="true"
+              onClick={() => setPopup(false)}
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18 17.94 6M18 18 6.06 6"
+              />
+            </svg>
+          </div>
+          <div className="mb-5 mt-5">
+            <label
+              for="name"
+              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            >
+              Email
+            </label>
+            <input
+              onChange={(e) => setEmail(e.target.value)}
+              value={email}
+              type="text"
+              id="name"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              placeholder="Email"
+              required
+            />
+          </div>
+          <LoadingButton
+            pending={emailPending}
+            onClick={emailHandler}
+            title="Change"
+            color="bg-main"
+            width="w-full"
+          />
+          <div className="mb-5 mt-5">
+            <label
+              for="name"
+              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            >
+              New Password
+            </label>
+            <input
+              onChange={(e) => setPassword(e.target.value)}
+              type="text"
+              id="name"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              placeholder="New Password"
+              required
+            />
+          </div>{" "}
+          <div className="mb-5">
+            <label
+              for="name"
+              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            >
+              Confirm Password
+            </label>
+            <input
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              type="text"
+              id="name"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              placeholder="Confirm Password"
+              required
+            />
+          </div>
+          <LoadingButton
+            pending={passwordPending}
+            onClick={passwordHandler}
+            title="Reset"
+            color="bg-main"
+            width="w-full"
+          />
+        </div>
+      )}
     </div>
   );
 };
