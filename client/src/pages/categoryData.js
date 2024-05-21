@@ -41,4 +41,4 @@ export const cityData = [
   "Arba Minch",
 ];
 
-export const countryData = ["china", "saudi arabia"];
+export const countryData = [];

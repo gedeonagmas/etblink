@@ -343,6 +343,24 @@ const boostHandler = asyncCatch(async (req, res, next) => {
   // 3.
 });
 
+const companyAggregation = asyncCatch(async (req, res, next) => {
+  const categories = await Company.aggregate([
+    {
+      $group: {
+        _id: "$category",
+        total: {
+          $sum: 1,
+        },
+      },
+    },
+  ]);
+
+  console.log(categories);
+  return res.status(200).json({
+    status: "Read",
+    data: categories,
+  });
+});
 module.exports = {
   createRate,
   readRate,
@@ -353,4 +371,5 @@ module.exports = {
   createView,
   upgradeHandler,
   boostHandler,
+  companyAggregation,
 };

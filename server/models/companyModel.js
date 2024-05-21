@@ -21,17 +21,6 @@ const schema = new mongoose.Schema(
 
     subCategory: {
       type: String,
-      validate: valid.required("Sub Category"),
-    },
-
-    cities: {
-      type: String,
-      validate: valid.required("Cities"),
-    },
-
-    country: {
-      type: String,
-      validate: valid.required("Country"),
     },
 
     type: {
@@ -39,6 +28,14 @@ const schema = new mongoose.Schema(
       enum: ["local", "global"],
       default: "local",
       validate: valid.required("Type"),
+    },
+
+    city: {
+      type: String,
+    },
+
+    country: {
+      type: String,
     },
 
     title: {

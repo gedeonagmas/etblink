@@ -100,8 +100,8 @@ const Profile = () => {
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("");
   const [subCategory, setSubCategory] = useState("");
-  const [city, setCity] = useState("");
-  const [country, setCountry] = useState("");
+  const [city, setCity] = useState(cityData[0]);
+  const [country, setCountry] = useState(countryData[0]);
   const [address, setAddress] = useState("");
   const [phone, setPhone] = useState("");
   const [video, setVideo] = useState("");
@@ -145,11 +145,6 @@ const Profile = () => {
     sunday: { from: "", to: "" },
   });
 
-  const [pricingRange, setPricingRange] = useState({
-    from: "",
-    to: "",
-    currencies: "Birr",
-  });
 
   const addServices = () => {
     if (service.length > 0 && !services.includes(service)) {
@@ -187,7 +182,7 @@ const Profile = () => {
       }&populatingType=users&populatingValue=user`,
       tag: ["users"],
     });
-  }, [id]);
+  }, []);
 
   useEffect(() => {
     if (users) {
@@ -259,14 +254,13 @@ const Profile = () => {
   };
 
   const emailHandler = () => {
-    id &&
-      emailData({
-        email,
-        type: "email",
-        url: `/user/users`,
-        id: id,
-        tag: ["users"],
-      });
+    emailData({
+      email,
+      type: "email",
+      url: `/user/users`,
+      id: id ? id : user?._id,
+      tag: ["users"],
+    });
   };
 
   const passwordHandler = () => {
@@ -475,12 +469,28 @@ const Profile = () => {
             required
           >
             {type === "local"
-              ? cityData?.map((c) => {
-                  return <option value={c}>{c}</option>;
+              ? cityData?.map((c, i) => {
+                  return (
+                    <option
+                      selected={i === 0 ? true : false}
+                      value={c.toString()}
+                    >
+                      {c}
+                    </option>
+                  );
                 })
-              : countryData?.map((co) => {
-                  return <option value={co}>{co}</option>;
-                })}
+              : type === "global"
+              ? countryData?.map((co, j) => {
+                  return (
+                    <option
+                      selected={j === 0 ? true : false}
+                      value={co.toString()}
+                    >
+                      {co}
+                    </option>
+                  );
+                })
+              : null}
           </select>
         </div>{" "}
         <div className="mb-5">
@@ -1161,66 +1171,6 @@ const Profile = () => {
           </div>
         </div>
       </div>
-      {/* <p className="text-lg font-semibold mt-6">Pricing Range</p>
-      <div className="flex  flex-col md:flex-row w-full justify-between border rounded-lg p-2.5 items-start md:items-center gap-6">
-        <div className="flex flex-col w-full gap-2">
-          <p className="w-12">From</p>
-          <input
-            onChange={(e) =>
-              setPricingRange({
-                ...pricingRange,
-                from: e.target.value,
-                to: pricingRange.to,
-                currencies: pricingRange.currencies,
-              })
-            }
-            type="number"
-            name=""
-            id=""
-            placeholder="1000"
-            className="bg-gray-50 border w-full border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-fulls p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          />
-        </div>
-        <div className="flex flex-col w-full gap-2">
-          <p className="w-12">To</p>
-          <input
-            onChange={(e) =>
-              setPricingRange({
-                ...pricingRange,
-                from: pricingRange.from,
-                to: e.target.value,
-                currencies: pricingRange.currencies,
-              })
-            }
-            type="number"
-            name=""
-            id=""
-            placeholder="10000"
-            className="bg-gray-50 border w-full border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-fulls p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          />
-        </div>
-        <div className="flex flex-col w-full gap-2">
-          <p className="w-12">Currencies</p>
-          <select
-            onChange={(e) =>
-              setPricingRange({
-                ...pricingRange,
-                from: pricingRange.from,
-                to: pricingRange.to,
-                currencies: e.target.value,
-              })
-            }
-            name=""
-            id=""
-            className="bg-gray-50 border w-full border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-fulls p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          >
-            <option value="USD">USD</option>
-            <option selected value="Birr">
-              Birr
-            </option>
-          </select>
-        </div>
-      </div> */}
       <div className="mt-6">
         <LoadingButton
           pending={pending}
@@ -1276,45 +1226,49 @@ const Profile = () => {
             color="bg-main"
             width="w-full"
           />
-          <div className="mb-5 mt-5">
-            <label
-              for="name"
-              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >
-              New Password
-            </label>
-            <input
-              onChange={(e) => setPassword(e.target.value)}
-              type="text"
-              id="name"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              placeholder="New Password"
-              required
-            />
-          </div>{" "}
-          <div className="mb-5">
-            <label
-              for="name"
-              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >
-              Confirm Password
-            </label>
-            <input
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              type="text"
-              id="name"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              placeholder="Confirm Password"
-              required
-            />
-          </div>
-          <LoadingButton
-            pending={passwordPending}
-            onClick={passwordHandler}
-            title="Reset"
-            color="bg-main"
-            width="w-full"
-          />
+          {id && (
+            <>
+              <div className="mb-5 mt-5">
+                <label
+                  for="name"
+                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  New Password
+                </label>
+                <input
+                  onChange={(e) => setPassword(e.target.value)}
+                  type="text"
+                  id="name"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder="New Password"
+                  required
+                />
+              </div>{" "}
+              <div className="mb-5">
+                <label
+                  for="name"
+                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Confirm Password
+                </label>
+                <input
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  type="text"
+                  id="name"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder="Confirm Password"
+                  required
+                />
+              </div>
+              <LoadingButton
+                pending={passwordPending}
+                onClick={passwordHandler}
+                title="Reset"
+                color="bg-main"
+                width="w-full"
+              />
+            </>
+          )}
         </div>
       )}
     </div>

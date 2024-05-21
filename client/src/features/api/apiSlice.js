@@ -362,6 +362,15 @@ export const apiSlice = createApi({
         "payments",
       ],
     }),
+
+    companyAggregate: builder.query({
+      query: () => ({
+        url: `/utility/companyAggregate`,
+        method: "GET",
+        credentials: "include",
+      }),
+      providesTags: ["companies", "aggregate"],
+    }),
   }),
 });
 
@@ -394,4 +403,5 @@ export const {
   useCreateViewMutation,
   useUpgradeMutation,
   useCreateBoostMutation,
+  useCompanyAggregateQuery,
 } = apiSlice;

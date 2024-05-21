@@ -258,21 +258,31 @@ const updatePassword = asyncCatch(async (req, res, next) => {
 });
 
 const updateUsersCredentials = asyncCatch(async (req, res, next) => {
-  const { password, email } = req.body;
+  const { password, email, type, id, confirmPassword } = req.body;
 
-  const user = await User.findOne({ _id: req.body.id });
+  const user = await User.findOne({ _id: id });
   if (!user) return next(new AppError("Users not found please try again", 404));
-  if (req.user.role !== "admin")
+  // if (
+  //   (type === "password" && req.user.role !== "admin") ||
+  //   (type === "email" && id !== req.user._id.toString())
+  // )
+  //   return next(
+  //     new AppError("You are not authorized to perform this action", 404)
+  //   );
+
+  if (type === "password" && req.user.role === "admin") {
+    if (password !== confirmPassword)
+      return next(new AppError("Password not much", 404));
+    user.password = password;
+  } else if (
+    (type === "email" && req.user.role === "admin") ||
+    id === req.user._id.toString()
+  ) {
+    user.email = email; 
+  } else {
     return next(
       new AppError("You are not authorized to perform this action", 404)
     );
-
-  if (req.body.type === "password") {
-    if (req.body.password !== req.body.confirmPassword)
-      return next(new AppError("Password not much", 404));
-    user.password = password;
-  } else if (req.body.type === "email") {
-    user.email = email;
   }
 
   const data = await user.save({ validateBeforeSave: true });

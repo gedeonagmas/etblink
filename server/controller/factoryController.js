@@ -101,7 +101,7 @@ const _create = asyncCatch(async (req, res, next) => {
 //read
 const _read = asyncCatch(async (req, res, next) => {
   const model = selectModel(req.params.table, next);
-
+console.log(req.query);  
   if (model) {
     const params = { ...req.query };
     //removing unnecessary queries for filtering
@@ -214,7 +214,7 @@ const _read = asyncCatch(async (req, res, next) => {
 //update
 const _update = asyncCatch(async (req, res, next) => {
   const model = selectModel(req.params.table, next);
-  console.log(req.query, req.params, "body");
+  // console.log(req.body.city, req.body.country, "body");
   const value = { ...req.body };
   const files = fileHandler(value, req);
   // console.log(files, "files");

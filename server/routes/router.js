@@ -42,6 +42,7 @@ const {
   readMultipleRate,
   readRate,
   upgradeHandler,
+  companyAggregation,
 } = require("../controller/utilityController.js");
 const { sendEmailHandler } = require("../controller/emailController.js");
 
@@ -91,6 +92,7 @@ utilityRouter.route("/save").delete(authentication, deleteSave);
 utilityRouter.route("/view").post(authentication, createView);
 utilityRouter.route("/upgrade").post(authentication, upgradeHandler);
 utilityRouter.route("/boost").post(authentication, boostHandler);
+utilityRouter.route("/companyAggregate").get(companyAggregation);
 
 //factory route
 router.route("/:table/:id").get(authentication, _read_single);

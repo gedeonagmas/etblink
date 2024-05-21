@@ -301,7 +301,7 @@ const UsersProfile = ({ type }) => {
       }&populatingType=users&populatingValue=user`,
       tag: ["users"],
     });
-  }, [id]);
+  }, []);
   console.log(users?.data[0], "lllllllll");
   useEffect(() => {
     if (users) {
@@ -343,14 +343,13 @@ const UsersProfile = ({ type }) => {
   };
 
   const emailHandler = () => {
-    id &&
-      emailData({
-        email,
-        type: "email",
-        url: `/user/users`,
-        id: id,
-        tag: ["users"],
-      });
+    emailData({
+      email,
+      type: "email",
+      url: `/user/users`,
+      id: id ? id : user._id,
+      tag: ["users"],
+    });
   };
 
   const passwordHandler = () => {
@@ -576,7 +575,7 @@ const UsersProfile = ({ type }) => {
         />
       </div>
       {popup && (
-        <div className="absolute  z-30 top-2 bg-white bg-dark right-0 w-[300px] rounded-lg p-4 border border-gray-300">
+        <div className="absolute  z-30 top-10 bg-white bg-dark right-0 w-[300px] rounded-lg p-4 border border-gray-300">
           <div className="relative">
             <svg
               class="w-6 absolute cursor-pointer top-1 right-1 hover:text-gray-600 h-6 text-gray-800 dark:text-white"
@@ -621,45 +620,49 @@ const UsersProfile = ({ type }) => {
             color="bg-main"
             width="w-full"
           />
-          <div className="mb-5 mt-5">
-            <label
-              for="name"
-              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >
-              New Password
-            </label>
-            <input
-              onChange={(e) => setPassword(e.target.value)}
-              type="text"
-              id="name"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              placeholder="New Password"
-              required
-            />
-          </div>{" "}
-          <div className="mb-5">
-            <label
-              for="name"
-              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >
-              Confirm Password
-            </label>
-            <input
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              type="text"
-              id="name"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              placeholder="Confirm Password"
-              required
-            />
-          </div>
-          <LoadingButton
-            pending={passwordPending}
-            onClick={passwordHandler}
-            title="Reset"
-            color="bg-main"
-            width="w-full"
-          />
+          {id && (
+            <>
+              <div className="mb-5 mt-5">
+                <label
+                  for="name"
+                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  New Password
+                </label>
+                <input
+                  onChange={(e) => setPassword(e.target.value)}
+                  type="text"
+                  id="name"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder="New Password"
+                  required
+                />
+              </div>{" "}
+              <div className="mb-5">
+                <label
+                  for="name"
+                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Confirm Password
+                </label>
+                <input
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  type="text"
+                  id="name"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder="Confirm Password"
+                  required
+                />
+              </div>
+              <LoadingButton
+                pending={passwordPending}
+                onClick={passwordHandler}
+                title="Reset"
+                color="bg-main"
+                width="w-full"
+              />
+            </>
+          )}
         </div>
       )}
     </div>
