@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Banner from "../../components/Banner";
 import CompanyItemsCompany from "../../components/CompanyItemCategory";
 import CompanyItems from "../../components/CompanyItems";
@@ -14,6 +14,9 @@ import ResponsivePagination from "react-responsive-pagination";
 import "./pagination.css";
 import { categoryData, cityData, countryData } from "../categoryData";
 import Marquee from "react-fast-marquee";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import Slider from "react-slick";
 
 const markers = [
   {
@@ -60,7 +63,7 @@ const Category = ({ type }) => {
     isError: aggregateIsError,
   } = useCompanyAggregateQuery();
 
-  console.log(aggregateData?.data[0]?._id, "aggregate");
+  console.log(aggregateData?.data, "aggregate");
   const [
     trigger,
     { data: company, isFetching: companyFetching, isError: companyError },
@@ -84,12 +87,22 @@ const Category = ({ type }) => {
     setSubCategoryData(cats[0]?.subCategory);
     category?.length < 1 && setSubCategory("");
 
-    const cityKeyword = city ? `&city=${city}` : "";
-    const countryKeyword = country ? `&country=${country}` : "";
-    const categoryKeyword = category ? `&category=${category}` : "";
-    const subCategoryKeyword = subCategory ? `&subCategory=${subCategory}` : "";
+    const cityKeyword = city
+      ? `&city=${city.toString().replaceAll("&", "and")}`
+      : "";
+    const countryKeyword = country
+      ? `&country=${country.toString().replaceAll("&", "and")}`
+      : "";
+    const categoryKeyword = category
+      ? `&category=${category.toString().replaceAll("&", "and")}`
+      : "";
+    const subCategoryKeyword = subCategory
+      ? `&subCategory=${subCategory.toString().replaceAll("&", "and")}`
+      : "";
     const searchKeyword = search
-      ? `&searchField=name&searchValue=${search}`
+      ? `&searchField=name&searchValue=${search
+          .toString()
+          .replaceAll("&", "and")}`
       : "";
 
     trigger({
@@ -98,6 +111,67 @@ const Category = ({ type }) => {
     });
   }, [city, country, category, subCategory, search, page]);
 
+  //################## slider ##########################
+  let sliderRef = useRef(null);
+  const next = () => {
+    sliderRef.slickNext();
+  };
+  const previous = () => {
+    sliderRef.slickPrev();
+  };
+
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 3,
+    slidesToScroll: 3,
+    initialSlide: 0,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 3,
+          infinite: true,
+          dots: true,
+        },
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+          initialSlide: 1,
+        },
+      },
+      {
+        breakpoint: 900,
+        settings: {
+          slidesToShow: 2,
+        },
+      },
+      {
+        breakpoint: 1150,
+        settings: {
+          slidesToShow: 3,
+        },
+      },
+      {
+        breakpoint: 1300,
+        settings: {
+          slidesToShow: 4,
+        },
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+    ],
+  };
   // console.log(subCategoryData, "company");
   return (
     <div className="w-full relative pb-6 pt-24 bg-gray-50 bg-dark h-auto">
@@ -222,28 +296,153 @@ const Category = ({ type }) => {
             })}
           </select>
         </div>
-        <div className="w-full bg-blue-300">
-          <Marquee>
-            <div>hello there</div>
-          </Marquee>
+
+        <div className="relative my-7 w-full flex items-center">
+          <button
+            onClick={previous}
+            className="absolute button shadow-2xl rounded-full  z-20 top-[10px] -left-2"
+          >
+            <svg
+              class="w-7 text-gray-400 cursor-pointer hover:bg-gray-300 hover:text-gray-500 border border-gray-300 rounded-full h-7 bg-gray-300/50"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="m15 19-7-7 7-7"
+              />
+            </svg>
+          </button>
+          <div className="w-full slider-container relative">
+            <Slider
+              ref={(slider) => {
+                sliderRef = slider;
+              }}
+              {...settings}
+            >
+              {aggregateData?.data?.map((e) => {
+                if (e?._id !== null)
+                  return (
+                    <li
+                      onClick={() => {
+                        setCategory(e?._id);
+                        setSubCategory("");
+                      }}
+                      class=" hover:bg-gray-100  cursor-pointer px-3 border-r border-dark border-gray-300 focus:ring-0"
+                    >
+                      <div class="flex items-center ps-3">
+                        <p className="font-bold">{e?.total}</p>
+                        <p
+                          for="vue-checkbox-list"
+                          class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                        >
+                          {e?._id}
+                        </p>
+                      </div>
+                    </li>
+                  );
+              })}
+              {aggregateData?.data?.map((e) => {
+                if (e?._id !== null)
+                  return (
+                    <li
+                      onClick={() => {
+                        setCategory(e?._id);
+                        setSubCategory("");
+                      }}
+                      class="  hover:bg-gray-100  cursor-pointer px-3 border-r border-dark border-gray-300 focus:ring-0"
+                    >
+                      <div class="flex items-center ps-3">
+                        <p className="font-bold">{e?.total}</p>
+                        <p
+                          for="vue-checkbox-list"
+                          class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                        >
+                          {e?._id}
+                        </p>
+                      </div>
+                    </li>
+                  );
+              })}
+              {aggregateData?.data?.map((e) => {
+                if (e?._id !== null)
+                  return (
+                    <li
+                      onClick={() => {
+                        setCategory(e?._id);
+                        setSubCategory("");
+                      }}
+                      class=" hover:bg-gray-100  cursor-pointer px-3 border-r border-dark border-gray-300 focus:ring-0"
+                    >
+                      <div class="flex items-center ps-3">
+                        <p className="font-bold">{e?.total}</p>
+                        <p
+                          for="vue-checkbox-list"
+                          class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                        >
+                          {e?._id}
+                        </p>
+                      </div>
+                    </li>
+                  );
+              })}
+            </Slider>
+          </div>
+
+          <button
+            onClick={next}
+            className="absolute button shadow-2xl rounded-full  z-20 top-[10px] -right-2"
+          >
+            <svg
+              class="w-7 text-gray-400 cursor-pointer hover:bg-gray-300 hover:text-gray-500 border border-gray-300 rounded-full h-7 bg-gray-300/50"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="m9 5 7 7-7 7"
+              />
+            </svg>
+          </button>
         </div>
-        <ul class="items-start mt-4 mb-5 w-full gap-4 text-sm font-medium  rounded-sm grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
+        {/* <ul class="items-start mt-4 mb-5 w-full gap-4 text-sm font-medium  rounded-sm grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
           {aggregateData?.data?.map((e) => {
-            return (
-              <li class="w-full hover:bg-gray-200 bg-red-500 cursor-pointer px-3 border-r border-dark border-gray-300 focus:ring-0">
-                <div class="flex items-center ps-3">
-                  <p className="font-bold">{e?.total}</p>
-                  <p
-                    for="vue-checkbox-list"
-                    class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                  >
-                    {e?._id}
-                  </p>
-                </div>
-              </li>
-            );
+            if (e?._id !== null)
+              return (
+                <li
+                  onClick={() => {
+                    setCategory(e?._id);
+                    setSubCategory("");
+                  }}
+                  class="w-full hover:bg-gray-200 cursor-pointer px-3 border-r border-dark border-gray-300 focus:ring-0"
+                >
+                  <div class="flex items-center ps-3">
+                    <p className="font-bold">{e?.total}</p>
+                    <p
+                      for="vue-checkbox-list"
+                      class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                    >
+                      {e?._id}
+                    </p>
+                  </div>
+                </li>
+              );
           })}
-        </ul>
+        </ul> */}
       </div>
       <div className="w-full px-main h-auto bg-red-500f flex flex-col lg:flex-row gap-8">
         <div className="h-auto flex flex-col bg-yellow-500f w-full lg:w-[80%]">

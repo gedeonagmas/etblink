@@ -145,7 +145,6 @@ const Profile = () => {
     sunday: { from: "", to: "" },
   });
 
-
   const addServices = () => {
     if (service.length > 0 && !services.includes(service)) {
       setServices([...services, service]);
@@ -395,9 +394,14 @@ const Profile = () => {
                           <div className="flex gap-3 mt-3 items-center ml-4">
                             <input
                               onChange={(e) => {
-                                setCategory(c?.category);
+                                setCategory(
+                                  c?.category.toString().replaceAll("&", "and")
+                                );
                                 e.target.checked
-                                  ? (setSubCategory(sc), setDropdown(false))
+                                  ? (setSubCategory(
+                                      sc.toString().replaceAll("&", "and")
+                                    ),
+                                    setDropdown(false))
                                   : "";
                               }}
                               checked={subCategory === sc ? true : false}
