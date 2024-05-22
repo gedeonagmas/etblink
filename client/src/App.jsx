@@ -54,6 +54,7 @@ import UsersProfile from "./pages/dashboard/UsersProfile";
 import SalesDetail from "./pages/SalesDetail";
 import BlogsCategory from "./pages/blogs/BlogsCategory";
 import BlogsDetail from "./pages/blogs/BlogsDetail";
+import CreateCategory from "./pages/dashboard/admin/CreateCategory";
 
 export const userContext = createContext();
 
@@ -238,6 +239,10 @@ function App() {
               <Route
                 path="/dashboard/admin/admins"
                 element={<UserSales type="company" />}
+              ></Route>
+              <Route
+                path="/dashboard/admin/categories"
+                element={<CreateCategory />}
               ></Route>
 
               {/* ################################################################### */}
