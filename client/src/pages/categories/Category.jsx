@@ -8,11 +8,12 @@ import {
   useCompanyAggregateQuery,
   useLazyReadQuery,
   useReadQuery,
+  useReadRateQuery,
 } from "../../features/api/apiSlice";
 import Loading from "../../components/loading/Loading";
 import ResponsivePagination from "react-responsive-pagination";
 import "./pagination.css";
-import { categoryData, cityData, countryData } from "../categoryData";
+import { cityData, countryData } from "../categoryData";
 import Marquee from "react-fast-marquee";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -48,6 +49,21 @@ const markers = [
 
 const Category = ({ type }) => {
   const [page, setPage] = useState(1);
+  const {
+    data: categoryData,
+    isFetching: categoryIsFetching,
+    isError: categoryIsError,
+  } = useReadQuery({
+    url: `/user/categories?type=${type}`,
+    tag: ["categories"],
+  });
+
+  const {
+    data: places,
+    isFetching: placesIsFetching,
+    isError: placesIsError,
+  } = useReadQuery({ url: "/user/places", tag: ["places"] });
+
   const [lastPage, setLastPage] = useState("");
   const [search, setSearch] = useState("");
   const [totalPage, setTotalPage] = useState(1);
@@ -83,8 +99,8 @@ const Category = ({ type }) => {
   }, [company]);
 
   useEffect(() => {
-    const cats = categoryData.filter((e) => e.category === category);
-    setSubCategoryData(cats[0]?.subCategory);
+    const cats = categoryData?.data?.filter((e) => e.category === category);
+    cats && setSubCategoryData(cats[0]?.subCategory);
     category?.length < 1 && setSubCategory("");
 
     const cityKeyword = city
@@ -258,10 +274,10 @@ const Category = ({ type }) => {
             </option>
             <option value="">All</option>
             {type === "local"
-              ? cityData?.map((cit) => {
+              ? places?.data[0]?.city?.map((cit) => {
                   return <option value={cit}>{cit}</option>;
                 })
-              : countryData?.map((cot) => {
+              : places?.data[0]?.country?.map((cot) => {
                   return <option value={cot}>{cot}</option>;
                 })}
           </select>
@@ -276,9 +292,10 @@ const Category = ({ type }) => {
               Filter by Category
             </option>
             <option value="">All</option>
-            {categoryData?.map((cat) => {
-              return <option value={cat?.category}>{cat?.category}</option>;
-            })}
+            {categoryData?.data?.length > 0 &&
+              categoryData?.data?.map((cat) => {
+                return <option value={cat?.category}>{cat?.category}</option>;
+              })}
           </select>
 
           <select

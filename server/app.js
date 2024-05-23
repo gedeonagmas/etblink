@@ -44,7 +44,7 @@ app.use("/etblink/app/v1/utility", utilityRouter);
 
 //################################ background job ###########################
 // cron.schedule("1 * * * * *", boost);
-cron.schedule("0 0 * * *", boost);
+// cron.schedule("0 0 * * *", boost); this is the exact one
 //################################ background job ###########################
 
 app.get("/", (req, res) => {

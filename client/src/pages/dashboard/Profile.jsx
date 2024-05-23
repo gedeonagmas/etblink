@@ -3,6 +3,7 @@ import LoadingButton from "../../components/loading/LoadingButton";
 import Response from "../../components/Response";
 import {
   useLazyReadQuery,
+  useReadQuery,
   useUpdateMutation,
   useUpdateUsersCredentialsMutation,
 } from "../../features/api/apiSlice";
@@ -10,7 +11,6 @@ import "react-quill/dist/quill.snow.css";
 
 import Editor from "../../components/Editor";
 import { useLocation } from "react-router-dom";
-import { categoryData, cityData, countryData } from "./../categoryData";
 
 const List = (props) => {
   return (
@@ -91,17 +91,29 @@ const List = (props) => {
 const Profile = () => {
   const location = useLocation();
   const id = location?.search?.split("?id=")[1];
+  const {
+    data: categoryData,
+    isFetching: categoryIsFetching,
+    isError: categoryIsError,
+  } = useReadQuery({ url: "/user/categories", tag: ["categories"] });
+
+  const {
+    data: places,
+    isFetching: placesIsFetching,
+    isError: placesIsError,
+  } = useReadQuery({ url: "/user/places", tag: ["places"] });
+
   const user = JSON.parse(localStorage.getItem("etblink_user"));
   const [updateData, updateResponse] = useUpdateMutation();
   const [pending, setPending] = useState(false);
   // const [user, setUser] = useState({});
   const [name, setName] = useState("");
-  const [type, setType] = useState("Local");
+  const [type, setType] = useState("local");
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("");
   const [subCategory, setSubCategory] = useState("");
-  const [city, setCity] = useState(cityData[0]);
-  const [country, setCountry] = useState(countryData[0]);
+  const [city, setCity] = useState(places?.data[0]?.city[0]);
+  const [country, setCountry] = useState(places?.data[0]?.country[0]);
   const [address, setAddress] = useState("");
   const [phone, setPhone] = useState("");
   const [video, setVideo] = useState("");
@@ -385,37 +397,40 @@ const Profile = () => {
                 />
               </svg>
               <div className="h-[60vh] overflow-y-scroll w-full mt-6">
-                {categoryData?.map((c) => {
-                  return (
-                    <div className="mt-5">
-                      <p className="font-bold">{c?.category}</p>
-                      {c?.subCategory?.map((sc) => {
-                        return (
-                          <div className="flex gap-3 mt-3 items-center ml-4">
-                            <input
-                              onChange={(e) => {
-                                setCategory(
-                                  c?.category.toString().replaceAll("&", "and")
-                                );
-                                e.target.checked
-                                  ? (setSubCategory(
-                                      sc.toString().replaceAll("&", "and")
-                                    ),
-                                    setDropdown(false))
-                                  : "";
-                              }}
-                              checked={subCategory === sc ? true : false}
-                              type="radio"
-                              name="subCategory"
-                              id=""
-                            />
-                            <p className="">{sc}</p>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  );
-                })}
+                {categoryData?.data?.length > 0 &&
+                  categoryData?.data?.map((c) => {
+                    return (
+                      <div className="mt-5">
+                        <p className="font-bold">{c?.category}</p>
+                        {c?.subCategory?.map((sc) => {
+                          return (
+                            <div className="flex gap-3 mt-3 items-center ml-4">
+                              <input
+                                onChange={(e) => {
+                                  setCategory(
+                                    c?.category
+                                      .toString()
+                                      .replaceAll("&", "and")
+                                  );
+                                  e.target.checked
+                                    ? (setSubCategory(
+                                        sc.toString().replaceAll("&", "and")
+                                      ),
+                                      setDropdown(false))
+                                    : "";
+                                }}
+                                checked={subCategory === sc ? true : false}
+                                type="radio"
+                                name="subCategory"
+                                id=""
+                              />
+                              <p className="">{sc}</p>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    );
+                  })}
               </div>
             </div>
           )}
@@ -472,8 +487,8 @@ const Profile = () => {
             placeholder="Skylight Technologies"
             required
           >
-            {type === "local"
-              ? cityData?.map((c, i) => {
+            {type === "local" && places?.data && places?.data[0]?.city
+              ? places?.data[0]?.city?.map((c, i) => {
                   return (
                     <option
                       selected={i === 0 ? true : false}
@@ -483,8 +498,8 @@ const Profile = () => {
                     </option>
                   );
                 })
-              : type === "global"
-              ? countryData?.map((co, j) => {
+              : type === "global" && places?.data && places?.data[0]?.country
+              ? places?.data[0]?.country?.map((co, j) => {
                   return (
                     <option
                       selected={j === 0 ? true : false}

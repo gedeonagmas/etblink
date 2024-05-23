@@ -54,7 +54,8 @@ import UsersProfile from "./pages/dashboard/UsersProfile";
 import SalesDetail from "./pages/SalesDetail";
 import BlogsCategory from "./pages/blogs/BlogsCategory";
 import BlogsDetail from "./pages/blogs/BlogsDetail";
-import CreateCategory from "./pages/dashboard/admin/CreateCategory";
+import AddCategory from "./pages/dashboard/admin/AddCategory";
+import UpdateCategory from "./pages/dashboard/admin/UpdateCategory";
 
 export const userContext = createContext();
 
@@ -132,7 +133,6 @@ function App() {
                 path="/dashboard/company/sales"
                 element={<SalesDetail type="company" />}
               ></Route>
-
               <Route
                 path="/dashboard/company/views"
                 element={<Views type="company" />}
@@ -146,7 +146,6 @@ function App() {
                 element={<ChangePassword />}
               ></Route>
               {/* ################################################################### */}
-
               {/* ############################## SALES ############################## */}
               <Route path="/dashboard/sales" element={<Sellers />}></Route>
               <Route
@@ -165,14 +164,12 @@ function App() {
                 path="/dashboard/sales/referrals"
                 element={<Referrals type="sales" />}
               ></Route>
-
               <Route path="/dashboard/sales/earns" element={<Earns />}></Route>
               <Route
                 path="/dashboard/sales/ratings"
                 element={<Ratings />}
               ></Route>
               {/* ################################################################### */}
-
               {/* ############################## ADMIN ############################## */}
               <Route path="/dashboard/admin/news" element={<AddNews />}></Route>
               <Route
@@ -207,6 +204,14 @@ function App() {
                 path="/dashboard/admin/boost/detail"
                 element={<UpdateBoost />}
               ></Route>
+              <Route
+                path="/dashboard/admin/category"
+                element={<AddCategory />}
+              ></Route>{" "}
+              <Route
+                path="/dashboard/admin/category/detail"
+                element={<UpdateCategory />}
+              ></Route>
               <Route path="/dashboard/admin/blog" element={<AddBlog />}></Route>
               <Route
                 path="/dashboard/admin/blog/detail"
@@ -240,20 +245,13 @@ function App() {
                 path="/dashboard/admin/admins"
                 element={<UserSales type="company" />}
               ></Route>
-              <Route
-                path="/dashboard/admin/categories"
-                element={<CreateCategory />}
-              ></Route>
-
               {/* ################################################################### */}
-
               {/* ############################## VISITOR ############################## */}
               <Route
                 path="/dashboard/visitor/profile"
                 element={<UsersProfile type="visitors" />}
               ></Route>
               {/* ################################################################### */}
-
               {/* ############################## COMMON ############################## */}
               <Route path="/dashboard/visitor" element={<Visitors />}></Route>
               <Route path="/dashboard/success" element={<Success />}></Route>
@@ -263,7 +261,6 @@ function App() {
               <Route path="/dashboard/upgrade" element={<Upgrade />}></Route>
               <Route path="/dashboard/message" element={<Message />}></Route>
               {/* ################################################################### */}
-
               <Route path="*" element={<PageNotFound />}></Route>
             </Route>
             <Route path="*" element={<PageNotFound />}></Route>
