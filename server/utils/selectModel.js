@@ -1,11 +1,13 @@
 const { Admin } = require("../models/adminModel");
 const { Application } = require("../models/applicationModel");
 const { Blog } = require("../models/blogModel");
+const { BlogAdmin } = require("../models/blogsAdminModel");
 const { BoostHistory } = require("../models/boostHistoryModel");
 const { Boost } = require("../models/boostModel");
 const { Category } = require("../models/categoryModel");
 const { Company } = require("../models/companyModel");
 const { Group } = require("../models/groupModel");
+const { NewsAdmin } = require("../models/newsAdminModel");
 const { News } = require("../models/newsModel");
 const { Institution } = require("../models/organizationModel");
 const { Payment } = require("../models/paymentModel");
@@ -95,6 +97,12 @@ const selectModel = (name, next) => {
       break;
     case "places":
       model = Place;
+      break;
+    case "blog-admins":
+      model = BlogAdmin;
+      break;
+    case "news-admins":
+      model = NewsAdmin;
       break;
     default:
       return next(new AppError("something went wrong please try again!.", 500));

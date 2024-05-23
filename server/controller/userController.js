@@ -8,11 +8,14 @@ const { sendEmailHandler } = require("./emailController");
 const { Visitor } = require("../models/visitorModel");
 const { Sales } = require("../models/salesModel");
 const { Admin } = require("../models/adminModel");
+const { BlogAdmin } = require("../models/blogsAdminModel");
+const { NewsAdmin } = require("../models/newsAdminModel");
 const api = "http://localhost:4000/";
 
 const signupHandler = asyncCatch(async (req, res, next) => {
   const createAccount = async (model) => {
     const user = await User.create(req.body);
+    console.log(req.body);
     if (user) {
       const account = await model.create({});
 
@@ -55,6 +58,10 @@ const signupHandler = asyncCatch(async (req, res, next) => {
       return createAccount(Company);
     case "admin":
       return createAccount(Admin);
+    case "news-admin":
+      return createAccount(NewsAdmin);
+    case "blog-admin":
+      return createAccount(BlogAdmin);
     default:
       return next(
         new AppError("problem with creating your account please try again", 500)
@@ -278,7 +285,7 @@ const updateUsersCredentials = asyncCatch(async (req, res, next) => {
     (type === "email" && req.user.role === "admin") ||
     id === req.user._id.toString()
   ) {
-    user.email = email; 
+    user.email = email;
   } else {
     return next(
       new AppError("You are not authorized to perform this action", 404)

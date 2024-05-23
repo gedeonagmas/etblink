@@ -24,6 +24,10 @@ const userSchema = new mongoose.Schema(
           ? "company"
           : this.role === "sales"
           ? "sales"
+          : this.role === "news-admin"
+          ? "news-admin"
+          : this.role === "blog-admin"
+          ? "blog-admin"
           : "admin";
       },
     },

@@ -53,6 +53,8 @@ export const apiSlice = createApi({
     "payments",
     "categories",
     "places",
+    "news-admins",
+    "blogs-admins",
   ],
   endpoints: (builder) => ({
     //user signup
@@ -63,6 +65,7 @@ export const apiSlice = createApi({
         body: data,
         credentials: "include",
       }),
+      providesTags: ["news-admins", "blogs-admins", "users"],
     }),
 
     //user login

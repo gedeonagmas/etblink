@@ -341,6 +341,7 @@ import LoadingButton from "../../../components/loading/LoadingButton";
 import {
   useLazyReadQuery,
   useUpdateMutation,
+  useUserRegisterMutation,
 } from "../../../features/api/apiSlice";
 import Response from "../../../components/Response";
 import { format } from "timeago.js";
@@ -389,6 +390,8 @@ const UserSales = ({ type }) => {
   const [value, setValue] = useState(true);
   const [user, setUser] = useState();
 
+  const [addAdmin, setAddAdmin] = useState(false);
+
   const deleteHandler = () => {
     id &&
       deleteData({
@@ -411,6 +414,10 @@ const UserSales = ({ type }) => {
       return "sales";
     } else if (role === "company") {
       return "companies";
+    } else if (role === "news-admin") {
+      return "news-admins";
+    } else if (role === "blog-admin") {
+      return "blog-admins";
     }
   };
 
@@ -487,6 +494,27 @@ const UserSales = ({ type }) => {
     },
   ];
 
+  //register new admin
+  const [signupData, signupResponse] = useUserRegisterMutation();
+  const [signupPending, setSignupPending] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  const signupHandler = () => {
+    signupData({
+      role: type,
+      email,
+      password,
+      confirmPassword,
+    });
+  };
+  useEffect(() => {
+    if (signupResponse?.status === "fulfilled") {
+      window.location.reload();
+    }
+  }, [signupResponse]);
+
   console.log(user, "users");
   return (
     <div className="flex min-h-[85vh] pb-5 relative bg-dark bg-white flex-col h-auto w-full gap-5">
@@ -501,6 +529,17 @@ const UserSales = ({ type }) => {
           placeholder="Search..."
           required
         />
+        {type === "blog-admin" ||
+          (type === "news-admin" && (
+            <button
+              onClick={() => {
+                setAddAdmin(true);
+              }}
+              className="px-2 py-2 bg-main text-white rounded-lg"
+            >
+              Add new admin
+            </button>
+          ))}
       </div>
       <div className="w-full">
         {isFetching && <Loading />}
@@ -684,6 +723,108 @@ const UserSales = ({ type }) => {
           )}
         </div>
       )} */}
+
+      {addAdmin && (
+        <div className="absolute flex flex-col shadow-xl z-30 top-2 bg-white bg-dark right-0 w-full rounded-lg p-4 border border-gray-300">
+          <div className="relative cursor-pointer">
+            <svg
+              class="w-6 absolute top-1 right-1 hover:text-gray-600 h-6 text-gray-800 dark:text-white"
+              aria-hidden="true"
+              onClick={() => setAddAdmin(false)}
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18 17.94 6M18 18 6.06 6"
+              />
+            </svg>
+          </div>
+          <div className="py-5">
+            <Response response={signupResponse} setPending={setSignupPending} />
+            <div class="max-w-sm px-12 py-8 rounded-lg border shadow-lg mx-auto">
+              {/* <div class="mb-5">
+                <label
+                  for="email"
+                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Register
+                </label>
+
+                <select
+                  name=""
+                  id=""
+                  className="w-full border-gray-300 border rounded-lg p-3"
+                  onChange={(e) => setRole(e.target.value)}
+                >
+                  <option value="blog-admin">Blog Admin</option>
+                  <option value="news-admin">News Admin</option>
+                </select>
+              </div> */}
+              <div class="mb-5">
+                <label
+                  for="email"
+                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Email
+                </label>
+                <input
+                  onChange={(e) => setEmail(e.target.value)}
+                  type="email"
+                  id="email"
+                  class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+                  placeholder="name@flowbite.com"
+                  required
+                />
+              </div>
+              <div class="mb-5">
+                <label
+                  for="password"
+                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Password
+                </label>
+                <input
+                  onChange={(e) => setPassword(e.target.value)}
+                  type="password"
+                  id="password"
+                  class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+                  required
+                />
+              </div>
+              <div class="mb-5">
+                <label
+                  for="repeat-password"
+                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Repeat password
+                </label>
+                <input
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  type="password"
+                  id="repeat-password"
+                  class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+                  required
+                />
+              </div>
+
+              <LoadingButton
+                pending={signupPending}
+                onClick={signupHandler}
+                title="Create account"
+                color="bg-main"
+                width="w-48"
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

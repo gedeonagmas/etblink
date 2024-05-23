@@ -242,8 +242,20 @@ function App() {
                 element={<Profile />}
               ></Route>
               <Route
-                path="/dashboard/admin/admins"
-                element={<UserSales type="company" />}
+                path="/dashboard/admin/news-admins"
+                element={<UserSales type="news-admin" />}
+              ></Route>
+              <Route
+                path="/dashboard/admin/news-admins/manage"
+                element={<UsersProfile type="news-admin" />}
+              ></Route>
+              <Route
+                path="/dashboard/admin/blog-admins"
+                element={<UserSales type="blog-admin" />}
+              ></Route>
+              <Route
+                path="/dashboard/admin/blog-admins/manage"
+                element={<UsersProfile type="blog-admin" />}
               ></Route>
               {/* ################################################################### */}
               {/* ############################## VISITOR ############################## */}
