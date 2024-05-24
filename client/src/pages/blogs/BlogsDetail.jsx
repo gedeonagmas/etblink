@@ -13,7 +13,7 @@ const BlogsDetail = () => {
     ? location?.state.id
     : location?.search?.split("?id=")[1];
   const { data, isFetching, isError } = useReadQuery({
-    url: `/user/blogs?_id=${blogsId}`,
+    url: `/user/blogs?_id=${blogsId}&visible=true`,
     tag: ["blogs"],
   });
   const [blogs, setBlogs] = useState();
@@ -22,7 +22,7 @@ const BlogsDetail = () => {
     isFetching: localIsFetching,
     isError: localIsError,
   } = useReadQuery({
-    url: `/user/blogs?_id[ne]=${blogsId}&limits=5`,
+    url: `/user/blogs?_id[ne]=${blogsId}&visible=true&limits=5`,
     tag: ["blogs"],
   });
 

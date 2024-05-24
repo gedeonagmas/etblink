@@ -26,14 +26,14 @@ const BlogsCategory = () => {
   }, [blogs]);
   useEffect(() => {
     trigger({
-      url: `/user/blogs?limit=6&page=${page}`,
+      url: `/user/blogs?visible=true&limit=6&page=${page}`,
       tag: ["blogs"],
     });
   }, [page]);
 
   useEffect(() => {
     trigger({
-      url: `/user/blogs?limit=6&page=${page}&searchField=title&searchValue=${search}`,
+      url: `/user/blogs?visible=true&limit=6&page=${page}&searchField=title&searchValue=${search}`,
       tag: ["blogs"],
     });
   }, [search]);
