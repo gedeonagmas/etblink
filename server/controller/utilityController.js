@@ -245,6 +245,7 @@ const boostHandler = asyncCatch(async (req, res, next) => {
     if (req.body.paymentMethod === "deposit") {
       company.currentBalance = company.currentBalance * 1 - req.body.amount * 1;
     }
+
     company.isBoosted = true;
     company.boostEndDate = Date.parse(new Date(req.body.endDate));
     company.boostStartDate = Date.parse(new Date(req.body.startDate));

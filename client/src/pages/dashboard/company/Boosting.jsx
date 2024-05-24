@@ -712,6 +712,7 @@ const Boosting = () => {
                 email={user?.email}
                 amount={boostInfo?.amount}
                 paymentMethod={paymentMethod}
+                paymentType={paymentType}
                 title="Pay and Boost"
                 type="boost"
               />
