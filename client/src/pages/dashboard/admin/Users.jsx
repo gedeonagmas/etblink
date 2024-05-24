@@ -505,6 +505,7 @@ const UserSales = ({ type }) => {
     signupData({
       role: type,
       email,
+      type: "other",
       password,
       confirmPassword,
     });
@@ -529,17 +530,16 @@ const UserSales = ({ type }) => {
           placeholder="Search..."
           required
         />
-        {type === "blog-admin" ||
-          (type === "news-admin" && (
-            <button
-              onClick={() => {
-                setAddAdmin(true);
-              }}
-              className="px-2 py-2 bg-main text-white rounded-lg"
-            >
-              Add new admin
-            </button>
-          ))}
+        {type === "blog-admin" || type === "news-admin" ? (
+          <button
+            onClick={() => {
+              setAddAdmin(true);
+            }}
+            className="px-2 py-2 bg-main text-white rounded-lg"
+          >
+            Add new admin
+          </button>
+        ) : null}
       </div>
       <div className="w-full">
         {isFetching && <Loading />}

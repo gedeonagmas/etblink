@@ -259,13 +259,49 @@ function App() {
               ></Route>
               {/* ################################################################### */}
               {/* ############################## VISITOR ############################## */}
+              <Route path="/dashboard/visitor" element={<Visitors />}></Route>
               <Route
                 path="/dashboard/visitor/profile"
                 element={<UsersProfile type="visitors" />}
               ></Route>
               {/* ################################################################### */}
+              {/* ############################## NEWS-ADMIN ############################## */}
+              <Route
+                path="/dashboard/news-admin"
+                element={<Visitors />}
+              ></Route>
+              <Route
+                path="/dashboard/news-admin/profile"
+                element={<UsersProfile type="news-admins" />}
+              ></Route>
+              <Route
+                path="/dashboard/news-admin/news"
+                element={<AddNews />}
+              ></Route>
+              <Route
+                path="/dashboard/news-admin/news/detail"
+                element={<NewsDetailAdmin />}
+              ></Route>
+              {/* ################################################################### */}
+              {/* ############################## BLOG-ADMIN ############################## */}
+              <Route
+                path="/dashboard/blog-admin"
+                element={<Visitors />}
+              ></Route>{" "}
+              <Route
+                path="/dashboard/blog-admin/profile"
+                element={<UsersProfile type="blog-admins" />}
+              ></Route>
+              <Route
+                path="/dashboard/blog-admin/blog"
+                element={<AddBlog />}
+              ></Route>
+              <Route
+                path="/dashboard/blog-admin/blog/detail"
+                element={<UpdateBlog />}
+              ></Route>
+              {/* ################################################################### */}
               {/* ############################## COMMON ############################## */}
-              <Route path="/dashboard/visitor" element={<Visitors />}></Route>
               <Route path="/dashboard/success" element={<Success />}></Route>
               <Route path="/dashboard/admin" element={<Admin />}></Route>
               <Route path="/dashboard/saves" element={<Saves />}></Route>

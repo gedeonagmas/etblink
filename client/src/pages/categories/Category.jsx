@@ -14,7 +14,6 @@ import Loading from "../../components/loading/Loading";
 import ResponsivePagination from "react-responsive-pagination";
 import "./pagination.css";
 import { cityData, countryData } from "../categoryData";
-import Marquee from "react-fast-marquee";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";

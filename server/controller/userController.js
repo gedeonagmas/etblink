@@ -38,11 +38,16 @@ const signupHandler = asyncCatch(async (req, res, next) => {
           }
         );
 
-        const token = tokenGenerator(res, data._id);
+        const token =
+          req.body.type !== "other" ? tokenGenerator(res, data._id) : null;
 
         return res
           .status(200)
-          .json({ message: "Account Created Successfully", token, data });
+          .json({
+            message: "Account Created Successfully",
+            token: token ? token : null,
+            data,
+          });
       }
     } else {
       return next(new AppError("problem with creating account try again", 500));
@@ -266,7 +271,7 @@ const updatePassword = asyncCatch(async (req, res, next) => {
 
 const updateUsersCredentials = asyncCatch(async (req, res, next) => {
   const { password, email, type, id, confirmPassword } = req.body;
-
+  console.log(req.body, req.user.role, "role");
   const user = await User.findOne({ _id: id });
   if (!user) return next(new AppError("Users not found please try again", 404));
   // if (

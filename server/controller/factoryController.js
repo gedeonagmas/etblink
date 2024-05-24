@@ -101,7 +101,7 @@ const _create = asyncCatch(async (req, res, next) => {
 //read
 const _read = asyncCatch(async (req, res, next) => {
   const model = selectModel(req.params.table, next);
-// console.log(req.body);  
+  // console.log(req.query);
   if (model) {
     const params = { ...req.query };
     //removing unnecessary queries for filtering
@@ -179,6 +179,12 @@ const _read = asyncCatch(async (req, res, next) => {
         query.populate(req.query.populatingValue.split(",").join(" "));
         break;
       case "chats":
+        query.populate(req.query.populatingValue.split(",").join(" "));
+        break;
+      case "news":
+        query.populate(req.query.populatingValue.split(",").join(" "));
+        break;
+      case "blogs":
         query.populate(req.query.populatingValue.split(",").join(" "));
         break;
       default:

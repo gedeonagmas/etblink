@@ -26,14 +26,14 @@ const NewsCategory = () => {
   }, [news]);
   useEffect(() => {
     trigger({
-      url: `/user/news?limit=6&page=${page}`,
+      url: `/user/news?visible=true&limit=6&page=${page}`,
       tag: ["news"],
     });
   }, [page]);
 
   useEffect(() => {
     trigger({
-      url: `/user/news?limit=6&page=${page}&searchField=title&searchValue=${search}`,
+      url: `/user/news?visible=true&limit=6&page=${page}&searchField=title&searchValue=${search}`,
       tag: ["news"],
     });
   }, [search]);

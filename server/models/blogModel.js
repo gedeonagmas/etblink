@@ -22,6 +22,29 @@ const blogModel = new mongoose.Schema(
       type: String,
       validate: valid.paragraph("Description", 20, 3000),
     },
+
+    role: {
+      type: String,
+    },
+
+    createdBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: function () {
+        return this.role === "admin" ? "admin" : "blog-admin";
+      },
+    },
+
+    updatedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: function () {
+        return this.role === "admin" ? "admin" : "blog-admin";
+      },
+    },
+
+    visible: {
+      type: Boolean,
+      default: true,
+    },
   },
   {
     timestamps: true,

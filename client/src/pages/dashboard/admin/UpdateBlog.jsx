@@ -10,12 +10,17 @@ import Loading from "../../../components/loading/Loading";
 import Editor from "../../../components/Editor";
 
 const UpdateBlog = () => {
+  const user = JSON.parse(localStorage.getItem("etblink_user"));
+
   const location = useLocation()?.search?.split("?")[1];
   const {
     data: blogs,
     isFetching,
     isError,
-  } = useReadQuery({ url: `/user/blogs/${location}`, tag: ["blogs"] });
+  } = useReadQuery({
+    url: `/user/blogs?_id=${location}&populatingType=blogs&populatingValue=updatedBy,createdBy`,
+    tag: ["blogs"],
+  });
 
   const [updateData, updateResponse] = useUpdateMutation();
 
@@ -156,7 +161,7 @@ const UpdateBlog = () => {
               width="w-52"
             />
             <a
-              href={`/dashboard/admin/blog`}
+              href={`/dashboard/${user?.role}/blog`}
               className="py-2 w-52 rounded-lg bg-gray-500 text-center text-white"
             >
               Back

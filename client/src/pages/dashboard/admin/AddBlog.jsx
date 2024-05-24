@@ -4,7 +4,6 @@ import {
   useCreateMutation,
   useDeleteMutation,
   useLazyReadQuery,
-  useReadQuery,
   useUpdateMutation,
 } from "../../../features/api/apiSlice";
 import Response from "../../../components/Response";
@@ -18,6 +17,8 @@ import ResponsivePagination from "react-responsive-pagination";
 import "./../../categories/pagination.css";
 
 const AddBlog = () => {
+  const user = JSON.parse(localStorage.getItem("etblink_user"));
+
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
   const [totalPage, setTotalPage] = useState(1);
@@ -27,6 +28,7 @@ const AddBlog = () => {
   useEffect(() => {
     setPage(1);
   }, []);
+  const fetchBy = user?.role === "blog-admin" ? `createdBy=${user?._id}` : "";
 
   useEffect(() => {
     setTotalPage(Math.ceil(blogs?.total / 30));
@@ -34,20 +36,21 @@ const AddBlog = () => {
 
   useEffect(() => {
     trigger({
-      url: `/user/blogs?limit=30&page=${page}`,
+      url: `/user/blogs?${fetchBy}&limit=30&page=${page}`,
       tag: ["blogs"],
     });
   }, [page]);
 
   useEffect(() => {
     trigger({
-      url: `/user/blogs?limit=30&page=${page}&searchField=title&searchValue=${search}`,
+      url: `/user/blogs?${fetchBy}&limit=30&page=${page}&searchField=title&searchValue=${search}`,
       tag: ["blogs"],
     });
   }, [search]);
 
   const [addData, addResponse] = useCreateMutation();
   const [deleteData, deleteResponse] = useDeleteMutation();
+  const [updateData, updateResponse] = useUpdateMutation();
   const [pending, setPending] = useState(false);
   const [deletePending, setDeletePending] = useState(false);
   const [add, setAdd] = useState(false);
@@ -57,6 +60,7 @@ const AddBlog = () => {
   const [description, setDescription] = useState("");
   const [popup, setPopup] = useState(false);
   const [id, setId] = useState("");
+  const [visible, setVisible] = useState();
 
   const addHandler = () => {
     const formData = new FormData();
@@ -64,6 +68,9 @@ const AddBlog = () => {
     formData.append("subTitle", subTitle);
     formData.append("blogImage", blogImage);
     formData.append("description", description);
+    formData.append("role", user?.role);
+    formData.append("createdBy", user?._id);
+    formData.append("updatedBy", user?._id);
     formData.append("url", `/user/blogs`);
     formData.append("tag", ["blogs"]);
     addData(formData);
@@ -71,6 +78,14 @@ const AddBlog = () => {
 
   const deleteHandler = () => {
     id && deleteData({ url: `/user/blogs?id=${id}`, tag: ["blogs"] });
+  };
+
+  const updateHandler = (ids, value) => {
+    updateData({
+      visible: value ? false : true,
+      url: `/user/blogs?id=${ids}`,
+      tag: ["blogs"],
+    });
   };
 
   useEffect(() => {
@@ -108,7 +123,7 @@ const AddBlog = () => {
           className="ql-editors"
           dangerouslySetInnerHTML={{
             __html:
-              row?.description?.length > 50
+              row?.description?.length > 100
                 ? row?.description?.substring(0, 50) + "..."
                 : row?.description,
           }}
@@ -129,6 +144,14 @@ const AddBlog = () => {
       cell: (row) => <div className="">{format(row.updatedAt)}</div>,
       sortable: true,
     },
+    {
+      name: "VISIBILITY",
+      selector: (row) => row.updatedAt,
+      cell: (row) => (
+        <div className="">{row.visible ? "Visible" : "Hidden"}</div>
+      ),
+      sortable: true,
+    },
 
     {
       name: "Actions",
@@ -144,11 +167,19 @@ const AddBlog = () => {
             <Delete fontSize="small" />
           </button>
           <a
-            href={`/dashboard/admin/blog/detail?${row._id}`}
+            href={`/dashboard/${user?.role}/blog/detail?${row._id}`}
             className="py-1 px-2 rounded-lg bg-emerald-500 text-center text-white"
           >
             <Edit fontSize="small" />
           </a>
+          <button
+            onClick={() => {
+              updateHandler(row?._id, row?.visible);
+            }}
+            className="px-2 py-1 bg-main text-white rounded-lg"
+          >
+            <Delete fontSize="small" />
+          </button>
         </div>
       ),
       sortable: true,
@@ -157,9 +188,10 @@ const AddBlog = () => {
 
   console.log(blogs, "blogs");
   return (
-    <div className="flex min-h-[85vh] pb-5 relative bg-dark bg-white flex-col h-auto w-full gap-5">
+    <div className="flex min-h-[85vh] px-2 pb-5 relative bg-dark bg-white bg-dark flex-col h-auto w-full gap-5">
       <Response response={addResponse} setPending={setPending} />
       <Response response={deleteResponse} setPending={setDeletePending} />
+      <Response response={updateResponse} setPending={setPending} />
 
       <div className="flex px-5 items-center justify-between">
         <input

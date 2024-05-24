@@ -11,6 +11,10 @@ const newsSchema = new mongoose.Schema(
       type: String,
       validate: valid.required("Title"),
     },
+    subTitle: {
+      type: String,
+      validate: valid.required("Sub Title"),
+    },
     category: {
       type: String,
       enum: ["local", "global"],
@@ -21,9 +25,28 @@ const newsSchema = new mongoose.Schema(
       type: String,
       validate: valid.required("Description"),
     },
-    date: {
+
+    role: {
       type: String,
-      default: Date.now(),
+    },
+
+    createdBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: function () {
+        return this.role === "admin" ? "admin" : "news-admin";
+      },
+    },
+
+    updatedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: function () {
+        return this.role === "admin" ? "admin" : "news-admin";
+      },
+    },
+
+    visible: {
+      type: Boolean,
+      default: true,
     },
   },
   {

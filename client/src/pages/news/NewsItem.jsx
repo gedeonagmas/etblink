@@ -74,7 +74,15 @@ const NewsItem = ({ data }) => {
       <div className="mt-3 w-full bg-white bg-dark px-5 relative flex flex-col gap-3 items-start rounded-t-none rounded-md">
         <div className="w-full border-b  py-5 border-gray-300">
           <p className="font-bold  border-gray-300">{data?.title}</p>
-          <p className="text-sm mt-2">{data?.description}</p>
+          <div
+            className="ql-editors"
+            dangerouslySetInnerHTML={{
+              __html:
+                data?.description?.length > 200
+                  ? data?.description?.substring(0, 150) + "..."
+                  : data?.description,
+            }}
+          ></div>
         </div>
         <a
           href={`/news-detail?id=${data?._id}`}

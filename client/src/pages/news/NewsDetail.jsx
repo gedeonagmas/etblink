@@ -13,7 +13,7 @@ const NewsDetail = () => {
     ? location?.state.id
     : location?.search?.split("?id=")[1];
   const { data, isFetching, isError } = useReadQuery({
-    url: `/user/news?_id=${newsId}`,
+    url: `/user/news?_id=${newsId}&visible=true`,
     tag: ["news"],
   });
   const [news, setNews] = useState();
@@ -22,7 +22,7 @@ const NewsDetail = () => {
     isFetching: localIsFetching,
     isError: localIsError,
   } = useReadQuery({
-    url: `/user/news?_id[ne]=${newsId}&category=local&limits=5`,
+    url: `/user/news?_id[ne]=${newsId}&visible=true&category=local&limits=5`,
     tag: ["news"],
   });
 
@@ -31,7 +31,7 @@ const NewsDetail = () => {
     isFetching: globalIsFetching,
     isError: globalIsError,
   } = useReadQuery({
-    url: `/user/news?_id[ne]=${newsId}&category=global&limits=5`,
+    url: `/user/news?_id[ne]=${newsId}&visible=true&category=global&limits=5`,
     tag: ["news"],
   });
 
@@ -40,7 +40,7 @@ const NewsDetail = () => {
     isFetching: slidesIsFetching,
     isError: slidesIsError,
   } = useReadQuery({
-    url: `/user/news?_id[ne]=${newsId}&limits=20`,
+    url: `/user/news?_id[ne]=${newsId}&visible=true&limits=20`,
     tag: ["news"],
   });
 
@@ -108,9 +108,20 @@ const NewsDetail = () => {
           >
             <div className="absolute bottom-0 text-2xl h-auto px-4 w-full bg-black text-white">
               <Ticker show={true} isNewsTicker={true} slideSpeed={30}>
-                <NewsTicker id="1" title={news?.description} />
-                <NewsTicker id="2" title={news?.description} />
-                <NewsTicker id="3" title={news?.description} />
+                <NewsTicker
+                  id="1"
+                  title={
+                    <div
+                      className="ql-editors"
+                      dangerouslySetInnerHTML={{
+                        __html:
+                          news?.description?.length > 200
+                            ? news?.description?.substring(0, 150) + "..."
+                            : news?.description,
+                      }}
+                    ></div>
+                  }
+                />
               </Ticker>
             </div>
           </div>
@@ -218,7 +229,15 @@ const NewsDetail = () => {
                 alt=""
                 className="h-[500px] w-full mt-2 rounded-sm"
               />
-              <p className="mt-2">{news?.description}</p>
+              <div
+                className="ql-editors"
+                dangerouslySetInnerHTML={{
+                  __html:
+                    news?.description?.length > 200
+                      ? news?.description?.substring(0, 150) + "..."
+                      : news?.description,
+                }}
+              ></div>
 
               <p className="font-bold mt-10 text-lg">Read More</p>
               <div className="w-full slider-container relative">

@@ -7,14 +7,20 @@ import {
 import Response from "../../../components/Response";
 import LoadingButton from "../../../components/loading/LoadingButton";
 import Loading from "../../../components/loading/Loading";
+import Editor from "../../../components/Editor";
 
 const NewsDetailAdmin = () => {
+  const user = JSON.parse(localStorage.getItem("etblink_user"));
   const location = useLocation()?.search?.split("?")[1];
+
   const {
     data: news,
     isFetching,
     isError,
-  } = useReadQuery({ url: `/user/news/${location}`, tag: ["news"] });
+  } = useReadQuery({
+    url: `/user/news?_id=${location}&populatingType=news&populatingValue=updatedBy,createdBy`,
+    tag: ["news"],
+  });
 
   const [updateData, updateResponse] = useUpdateMutation();
 
@@ -22,12 +28,14 @@ const NewsDetailAdmin = () => {
 
   const [photo, setPhoto] = useState("");
   const [title, setTitle] = useState("");
+  const [subTitle, setSubTitle] = useState("");
   const [description, setDescription] = useState("");
 
   const updateHandler = () => {
     const formData = new FormData();
     formData.append("newsPhoto", photo);
     formData.append("title", title);
+    formData.append("subTitle", subTitle);
     formData.append("description", description);
     formData.append("url", `/user/news?id=${location}`);
     formData.append("tag", ["news"]);
@@ -39,6 +47,7 @@ const NewsDetailAdmin = () => {
       const data = news?.data[0];
       setPhoto(data?.newsPhoto ? data?.newsPhoto : photo);
       setTitle(data?.title ? data?.title : title);
+      setSubTitle(data?.subTitle ? data?.subTitle : subTitle);
       setDescription(data?.description ? data?.description : description);
     }
   }, [news]);
@@ -109,6 +118,23 @@ const NewsDetailAdmin = () => {
             required
           />
         </div>
+        <div className="mb-5 mt-5">
+          <label
+            for="name"
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+          >
+            Sub Title
+          </label>
+          <input
+            onChange={(e) => setSubTitle(e.target.value)}
+            value={subTitle}
+            type="text"
+            id="name"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder="Skylight Technologies"
+            required
+          />
+        </div>
         <div className="mb-5">
           <label
             for="name"
@@ -116,17 +142,24 @@ const NewsDetailAdmin = () => {
           >
             Description
           </label>
-          <textarea
-            onChange={(e) => setDescription(e.target.value)}
-            value={description}
-            name=""
-            id=""
-            cols="30"
-            rows="8"
-            placeholder="Description"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          ></textarea>
+
+          <Editor
+            description={description}
+            setDescription={setDescription}
+            theme="snow"
+          />
         </div>
+
+        <div className="mb-5">
+          <label
+            for="name"
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+          >
+            Created by
+          </label>
+          <p>{news?.data[0]?.createdBy?.email}</p>
+        </div>
+
         <div className="flex items-center gap-5">
           <LoadingButton
             pending={pending}
@@ -136,7 +169,7 @@ const NewsDetailAdmin = () => {
             width="w-52"
           />
           <a
-            href={`/dashboard/admin/news`}
+            href={`/dashboard/${user?.role}/news`}
             className="py-2 w-52 rounded-lg bg-gray-500 text-center text-white"
           >
             Back
