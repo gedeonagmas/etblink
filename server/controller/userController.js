@@ -41,13 +41,11 @@ const signupHandler = asyncCatch(async (req, res, next) => {
         const token =
           req.body.type !== "other" ? tokenGenerator(res, data._id) : null;
 
-        return res
-          .status(200)
-          .json({
-            message: "Account Created Successfully",
-            token: token ? token : null,
-            data,
-          });
+        return res.status(200).json({
+          message: "Account Created Successfully",
+          token: token ? token : null,
+          data,
+        });
       }
     } else {
       return next(new AppError("problem with creating account try again", 500));

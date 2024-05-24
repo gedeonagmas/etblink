@@ -83,6 +83,7 @@ utilityRouter.route("/updatePassword").put(authentication, updatePassword);
 utilityRouter
   .route("/updateUsersCredentials")
   .put(authentication, updateUsersCredentials);
+  
 utilityRouter.route("/rate").post(authentication, createRate);
 utilityRouter.route("/rate").get(readRate);
 utilityRouter.route("/rateMultiple").get(authentication, readMultipleRate);

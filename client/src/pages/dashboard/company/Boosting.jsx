@@ -14,7 +14,7 @@ const Boosting = () => {
   const user = JSON.parse(localStorage.getItem("etblink_user"));
   const [depositData, depositResponse] = useCreateBoostMutation();
   const [depositPending, setDepositPending] = useState(false);
-  const [boostPopup, setBoostPopup] = useState(true);
+
   const [boostInfo, setBoostInfo] = useState();
   const [paymentMethod, setPaymentMethod] = useState("");
   const [startDate, setStartDate] = useState("");
@@ -24,6 +24,20 @@ const Boosting = () => {
   const [errorMessage, setErrorMessage] = useState(false);
   const [pay, setPay] = useState(false);
   const [showError, setShowError] = useState(false);
+  const [paymentTypePopup, setPaymentTypePopup] = useState(false);
+  const [paymentType, setPaymentType] = useState("");
+
+  const [onlinePopup, setOnlinePopup] = useState(false);
+  const [bankPopup, setBankPopup] = useState(false);
+  const [checkPopup, setCheckPopup] = useState(false);
+  const [bankValidationError, setBankValidationError] = useState(false);
+
+  const [bankName, setBankName] = useState("");
+  const [accountNumber, setAccountNumber] = useState("");
+  const [yourName, setYourName] = useState("");
+  const [bankAmount, setBankAmount] = useState("");
+  const [bankDate, setBankDate] = useState("");
+  const [tranRef, setTranRef] = useState("");
 
   const {
     data: boosts,
@@ -143,11 +157,56 @@ const Boosting = () => {
     if (depositResponse?.status === "fulfilled") {
       setStartDate("");
       setEndDate("- - -");
-      setBoostPopup(false);
+      setOnlinePopup(false);
     }
   }, [depositResponse]);
 
-  console.log(boostedCompany, "boosted");
+  const paymentTypeHandler = () => {
+    switch (paymentType) {
+      case "online":
+        setDuration({
+          type: boostInfo?.duration?.split(" ")[1],
+          value: boostInfo?.duration?.split(" ")[0] * 1,
+        });
+        setOnlinePopup(true);
+        break;
+      case "bank":
+        setDuration({
+          type: boostInfo?.duration?.split(" ")[1],
+          value: boostInfo?.duration?.split(" ")[0] * 1,
+        });
+        setBankPopup(true);
+        break;
+      case "bank":
+        setDuration({
+          type: boostInfo?.duration?.split(" ")[1],
+          value: boostInfo?.duration?.split(" ")[0] * 1,
+        });
+        setCheckPopup(true);
+        break;
+      default:
+        break;
+    }
+  };
+
+  const bankSubmitHandler = () => {
+    if (
+      bankName.length < 1 ||
+      yourName.length < 1 ||
+      accountNumber.length < 1 ||
+      bankAmount.length < 1 ||
+      bankDate.length < 1 ||
+      tranRef.length < 1
+    ) {
+      setBankValidationError(true);
+    } else {
+      setBankValidationError(false);
+      console.log("payed");
+    }
+  };
+  // console.log(boostedCompany, "boosted");
+  console.log(paymentType, "boosted");
+
   return (
     <section class="bg-white dark:bg-gray-900 relative">
       <Response response={depositResponse} setPending={setDepositPending} />
@@ -270,11 +329,13 @@ const Boosting = () => {
                     }
                     onClick={() => {
                       setBoostInfo(e);
-                      setDuration({
-                        type: e?.duration?.split(" ")[1],
-                        value: e?.duration?.split(" ")[0] * 1,
-                      });
-                      setBoostPopup(true);
+                      setPaymentTypePopup(true);
+                      // setBoostInfo(e);
+                      // setDuration({
+                      //   type: e?.duration?.split(" ")[1],
+                      //   value: e?.duration?.split(" ")[0] * 1,
+                      // });
+                      // setBoostPopup(true);
                     }}
                     className={`text-white w-32 py-2 px-2 ${
                       !currentCompany?.data[0]?.isSubscribed
@@ -360,14 +421,97 @@ const Boosting = () => {
           </table>
         </div>
       </div>
-      {boostPopup && boostInfo && (
+      {paymentTypePopup && (
         <div className="fixed top-0 left-0 items-center justify-center flex flex-col w-full h-[100vh] bg-black/50">
           <div className="relative rounded-lg p-5 z-30 items-center lg:ml-56 mt-20 justify-center w-[350px] md:w-[500px] h-auto bg-white bg-dark">
             <svg
               class="w-6 h-6 cursor-pointer absolute top-2 right-2 text-gray-800 hover:text-gray-600 dark:text-white"
               aria-hidden="true"
               onClick={() => {
-                setBoostPopup(false);
+                setPaymentType("");
+                setPaymentTypePopup(false);
+              }}
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18 17.94 6M18 18 6.06 6"
+              />
+            </svg>
+            <p className="text-lg mt-4 font-bold">
+              Select your payment method.
+            </p>
+            <div className="w-full flex py-7 items-center justify-between">
+              <div className="rounded-lg hover:bg-gray-200 p-4 flex items-center gap-4 border">
+                <input
+                  onChange={(e) =>
+                    e.target.checked ? setPaymentType("online") : ""
+                  }
+                  type="radio"
+                  name="paymentType"
+                  id=""
+                />
+                <p className="text-xl font-bold">Online</p>
+              </div>
+              <div className="rounded-lg hover:bg-gray-200 p-4 flex items-center gap-4 border">
+                <input
+                  onChange={(e) =>
+                    e.target.checked ? setPaymentType("bank") : ""
+                  }
+                  type="radio"
+                  name="paymentType"
+                  id=""
+                />
+                <p className="text-xl font-bold">Bank</p>
+              </div>
+              <div className="rounded-lg hover:bg-gray-200 p-4 flex items-center gap-4 border">
+                <input
+                  onChange={(e) =>
+                    e.target.checked ? setPaymentType("check") : ""
+                  }
+                  type="radio"
+                  name="paymentType"
+                  id=""
+                />
+                <p className="text-xl font-bold">Check</p>
+              </div>
+            </div>
+            <div className="w-full flex items-center gap-5 justify-end">
+              <button
+                onClick={() => {
+                  setPaymentType("");
+                  setPaymentTypePopup(false);
+                }}
+                className="px-5 hover:bg-gray-300 py-3 rounded-lg bg-gray-200"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={paymentTypeHandler}
+                className="px-5 py-3 rounded-lg bg-main text-white"
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {onlinePopup && boostInfo && (
+        <div className="fixed top-0 left-0 items-center justify-center flex flex-col w-full h-[100vh] bg-black/50">
+          <div className="relative rounded-lg p-5 z-30 items-center lg:ml-56 mt-20 justify-center w-[350px] md:w-[500px] h-auto bg-white bg-dark">
+            <svg
+              class="w-6 h-6 cursor-pointer absolute top-2 right-2 text-gray-800 hover:text-gray-600 dark:text-white"
+              aria-hidden="true"
+              onClick={() => {
+                setOnlinePopup(false);
                 setShowError(false);
                 setEndDate("- - -");
                 setStartDate("");
@@ -659,6 +803,247 @@ const Boosting = () => {
               color="bg-main"
               width="w-full sm:rounded-lg sm:border sm:py-3 mt-5 sm:px-5 sm:hover:bg-red-500"
             /> */}
+          </div>
+        </div>
+      )}
+
+      {bankPopup && (
+        <div className="fixed top-0 left-0 items-center justify-center flex flex-col w-full h-[100vh] bg-black/50">
+          <div className="relative h-[500px] overflow-y-scroll rounded-lg p-5 z-30 items-center lg:ml-56 mt-20 justify-center w-[350px] md:w-[500px] bg-white bg-dark">
+            {bankValidationError && (
+              <p className="fixed top-10 lg:top-2 mt-20 right-20 lg:right-64 text-sm p-2 rounded-lg border border-red bg-red-200 text-red-500 font-bold">
+                All fields are required. Please Fill out the form correctly.
+              </p>
+            )}
+            <svg
+              class="w-6 h-6 cursor-pointer absolute top-2 right-2 text-gray-800 hover:text-gray-600 dark:text-white"
+              aria-hidden="true"
+              onClick={() => {
+                setBankPopup(false);
+              }}
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18 17.94 6M18 18 6.06 6"
+              />
+            </svg>
+            <div
+              class="flex items-center p-4 mt-6 mb-4 text-sm text-yellow-800 border border-yellow-300 rounded-lg bg-yellow-50 dark:bg-gray-800 dark:text-yellow-300 dark:border-yellow-800"
+              role="alert"
+            >
+              <svg
+                class="flex-shrink-0 inline w-4 h-4 me-3"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+              </svg>
+              <span class="sr-only">Info</span>
+              <div>
+                <span class="font-medium">Note! </span> Please first pay your
+                service payment from bank. then come back again and fill the
+                following form based on your bank payment information.
+              </div>
+            </div>
+            <p className="text-lg mt-3 font-bold">Bank Payment information.</p>
+            <div className="mb-5 mt-3">
+              <label
+                for="name"
+                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >
+                Bank Name
+              </label>
+              <input
+                onChange={(e) => setBankName(e.target.value)}
+                type="text"
+                id="name"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                placeholder="Bank Name"
+              />
+            </div>{" "}
+            <div className="mb-5">
+              <label
+                for="name"
+                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >
+                Account Number
+              </label>
+              <input
+                onChange={(e) => setAccountNumber(e.target.value)}
+                type="text"
+                id="name"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                placeholder="Account Number"
+              />
+            </div>{" "}
+            <div className="mb-5">
+              <label
+                for="name"
+                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >
+                Your Full Name
+              </label>
+              <input
+                onChange={(e) => setYourName(e.target.value)}
+                type="text"
+                id="name"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                placeholder="Your full name"
+              />
+            </div>{" "}
+            <div className="mb-5">
+              <label
+                for="name"
+                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >
+                Amount
+              </label>
+              <input
+                onChange={(e) => setBankAmount(e.target.value)}
+                type="text"
+                id="name"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                placeholder="Amount"
+              />
+            </div>{" "}
+            <div className="mb-5">
+              <label
+                for="name"
+                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >
+                Date
+              </label>
+              <input
+                onChange={(e) => setBankDate(e.target.value)}
+                type="date"
+                id="name"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              />
+            </div>
+            <div className="mb-5">
+              <label
+                for="name"
+                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >
+                Tran Ref(Transfer reference)
+              </label>
+              <input
+                onChange={(e) => setTranRef(e.target.value)}
+                type="text"
+                id="name"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                placeholder="FT24543f32232"
+              />
+            </div>
+            <div className="w-full flex items-center gap-5 justify-end">
+              <button
+                onClick={() => {
+                  setBankPopup(false);
+                }}
+                className="px-5 hover:bg-gray-300 py-3 rounded-lg bg-gray-200"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={bankSubmitHandler}
+                className="px-5 py-3 rounded-lg bg-main text-white"
+              >
+                Submit
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {checkPopup && (
+        <div className="fixed top-0 left-0 items-center justify-center flex flex-col w-full h-[100vh] bg-black/50">
+          <div className="relative rounded-lg p-5 z-30 items-center lg:ml-56 mt-20 justify-center w-[350px] md:w-[500px] h-auto bg-white bg-dark">
+            <svg
+              class="w-6 h-6 cursor-pointer absolute top-2 right-2 text-gray-800 hover:text-gray-600 dark:text-white"
+              aria-hidden="true"
+              onClick={() => {
+                setPaymentType("");
+                setPaymentTypePopup(false);
+              }}
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18 17.94 6M18 18 6.06 6"
+              />
+            </svg>
+            <p className="text-lg mt-4 font-bold">
+              Select your payment method.
+            </p>
+            <div className="w-full flex py-7 items-center justify-between">
+              <div className="rounded-lg hover:bg-gray-200 p-4 flex items-center gap-4 border">
+                <input
+                  onChange={(e) =>
+                    e.target.checked ? setPaymentType("online") : ""
+                  }
+                  type="radio"
+                  name="paymentType"
+                  id=""
+                />
+                <p className="text-xl font-bold">Online</p>
+              </div>
+              <div className="rounded-lg hover:bg-gray-200 p-4 flex items-center gap-4 border">
+                <input
+                  onChange={(e) =>
+                    e.target.checked ? setPaymentType("bank") : ""
+                  }
+                  type="radio"
+                  name="paymentType"
+                  id=""
+                />
+                <p className="text-xl font-bold">Bank</p>
+              </div>
+              <div className="rounded-lg hover:bg-gray-200 p-4 flex items-center gap-4 border">
+                <input
+                  onChange={(e) =>
+                    e.target.checked ? setPaymentType("check") : ""
+                  }
+                  type="radio"
+                  name="paymentType"
+                  id=""
+                />
+                <p className="text-xl font-bold">Check</p>
+              </div>
+            </div>
+            <div className="w-full flex items-center gap-5 justify-end">
+              <button
+                onClick={() => {
+                  setPaymentType("");
+                  setPaymentTypePopup(false);
+                }}
+                className="px-5 hover:bg-gray-300 py-3 rounded-lg bg-gray-200"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={paymentTypeHandler}
+                className="px-5 py-3 rounded-lg bg-main text-white"
+              >
+                Next
+              </button>
+            </div>
           </div>
         </div>
       )}
