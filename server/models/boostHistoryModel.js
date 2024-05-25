@@ -23,8 +23,16 @@ const boostHistorySchema = new mongoose.Schema(
       default: 0,
     },
 
-    paymentFrom: {
+    payFrom: {
       type: String,
+    },
+
+    bankDetail: {
+      type: Object,
+    },
+
+    checkDetail: {
+      type: Object,
     },
   },
   {

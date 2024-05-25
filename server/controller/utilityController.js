@@ -240,36 +240,42 @@ const upgradeHandler = asyncCatch(async (req, res, next) => {
 });
 
 const paymentHandler = asyncCatch(async (req, res, next) => {
-  const { serviceType, payFrom, endDate, startDate, amount, boostId } = req.body;
+  const { serviceType, payFrom, endDate, startDate, amount, boost } = req.body;
   const company = await Company.findById(req.body.company);
-  if (serviceType === "boosting") {
-    switch (payFrom) {
-      case "deposit":
-        company.currentBalance = company.currentBalance * 1 - amount * 1;
-        break;
-      case "online":
-        break;
-      case "bank":
-        break;
-      case "check":
-        break;
-      default:
-        break;
-    }
 
-    company.isBoosted = true;
+  const boostHandler = async () => {
+    company.isBoosted =
+      payFrom === "online" || payFrom === "deposit" ? true : false;
     company.boostEndDate = Date.parse(new Date(endDate));
     company.boostStartDate = Date.parse(new Date(startDate));
-    company.boostStatus = "Payed";
+    company.boostStatus =
+      payFrom === "online" || payFrom === "deposit" ? "Payed" : "Pending";
     await company.save();
+
+    const detail =
+      payFrom === "bank"
+        ? { bankDetail: req.body.bankDetail }
+        : payFrom === "check"
+        ? { checkDetail: req.body.checkDetail }
+        : undefined;
 
     await BoostHistory.create({
       company: req.body.company,
-      boost: boostId,
+      boost,
       startDate: Date.parse(new Date(startDate)),
       endDate: Date.parse(new Date(endDate)),
-      payFrom: payFrom,
+      payFrom,
+      detail,
     });
+  };
+
+  if (serviceType === "boosting") {
+    if (payFrom === "deposit") {
+      company.currentBalance = company.currentBalance * 1 - amount * 1;
+      boostHandler();
+    } else {
+      boostHandler();
+    }
 
     // const subject = "Your Transaction is Successful thank you.";
     // const message = `Your Transaction is Successful thank you.`;
