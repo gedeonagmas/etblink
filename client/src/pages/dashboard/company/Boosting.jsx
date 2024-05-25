@@ -7,37 +7,45 @@ import {
 import Loading from "../../../components/loading/Loading";
 import Response from "../../../components/Response";
 import LoadingButton from "../../../components/loading/LoadingButton";
-import { Datepicker } from "flowbite-react";
 import Pay from "../../Pay";
 
 const Boosting = () => {
   const user = JSON.parse(localStorage.getItem("etblink_user"));
-  const [depositData, depositResponse] = useCreateBoostMutation();
-  const [depositPending, setDepositPending] = useState(false);
+  const [boostingData, boostingResponse] = useCreateBoostMutation();
+  const [boostPending, setBoostPending] = useState(false);
 
   const [boostInfo, setBoostInfo] = useState();
-  const [paymentMethod, setPaymentMethod] = useState("");
+  const [payFrom, setPayFrom] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("- - -");
   const [duration, setDuration] = useState({ type: "", value: 0 });
   const [minStartDate, setMinStartDate] = useState(0);
   const [errorMessage, setErrorMessage] = useState(false);
-  const [pay, setPay] = useState(false);
+
   const [showError, setShowError] = useState(false);
   const [paymentTypePopup, setPaymentTypePopup] = useState(false);
-  const [paymentType, setPaymentType] = useState("");
 
   const [onlinePopup, setOnlinePopup] = useState(false);
   const [bankPopup, setBankPopup] = useState(false);
   const [checkPopup, setCheckPopup] = useState(false);
+  const [depositPopup, setDepositPopup] = useState(false);
+
   const [bankValidationError, setBankValidationError] = useState(false);
 
+  //bank information
   const [bankName, setBankName] = useState("");
   const [accountNumber, setAccountNumber] = useState("");
   const [yourName, setYourName] = useState("");
   const [bankAmount, setBankAmount] = useState("");
   const [bankDate, setBankDate] = useState("");
   const [tranRef, setTranRef] = useState("");
+
+  ////check information
+  const [checkBankName, setCheckBankName] = useState("");
+  const [checkNumber, setCheckNumber] = useState("");
+  const [checkYourName, setCheckYourName] = useState("");
+  const [checkAmount, setCheckAmount] = useState("");
+  const [checkDate, setCheckDate] = useState("");
 
   const {
     data: boosts,
@@ -121,67 +129,39 @@ const Boosting = () => {
   }, [boostedCompany]);
 
   useEffect(() => {
-    if (startDate?.length > 1 && paymentMethod?.length > 1) {
-      setPay(true);
+    if (startDate?.length > 1) {
       setErrorMessage(false);
     } else {
       setErrorMessage(true);
-      setPay(false);
     }
-  }, [startDate, paymentMethod]);
+  }, [startDate]);
 
   useEffect(() => {
-    if (currentCompany?.data[0]?.currentBalance < boostInfo?.amount) {
-      setPaymentMethod("new-payment");
-    } else {
-      setPaymentMethod("");
-    }
-  }, [currentCompany, boostInfo]);
-
-  const depositHandler = () => {
-    boostInfo &&
-      depositData({
-        startDate,
-        endDate: endDate?.split("/")?.join("-"),
-        boost: boostInfo?._id,
-        company: currentCompany?.data[0]?._id,
-        name: currentCompany?.data[0]?.name,
-        email: user?.email,
-        amount: boostInfo?.amount,
-        paymentMethod,
-        type: "boost",
-      });
-  };
-
-  useEffect(() => {
-    if (depositResponse?.status === "fulfilled") {
+    if (boostingResponse?.status === "fulfilled") {
       setStartDate("");
       setEndDate("- - -");
       setOnlinePopup(false);
     }
-  }, [depositResponse]);
+  }, [boostingResponse]);
 
   const paymentTypeHandler = () => {
-    switch (paymentType) {
+    boostInfo &&
+      setDuration({
+        type: boostInfo?.duration?.split(" ")[1],
+        value: boostInfo?.duration?.split(" ")[0] * 1,
+      });
+
+    switch (payFrom) {
       case "online":
-        setDuration({
-          type: boostInfo?.duration?.split(" ")[1],
-          value: boostInfo?.duration?.split(" ")[0] * 1,
-        });
         setOnlinePopup(true);
         break;
-      case "bank":
-        setDuration({
-          type: boostInfo?.duration?.split(" ")[1],
-          value: boostInfo?.duration?.split(" ")[0] * 1,
-        });
-        setBankPopup(true);
+      case "deposit":
+        setDepositPopup(true);
         break;
       case "bank":
-        setDuration({
-          type: boostInfo?.duration?.split(" ")[1],
-          value: boostInfo?.duration?.split(" ")[0] * 1,
-        });
+        setBankPopup(true);
+        break;
+      case "check":
         setCheckPopup(true);
         break;
       default:
@@ -189,7 +169,24 @@ const Boosting = () => {
     }
   };
 
-  const bankSubmitHandler = () => {
+  const payFromDepositHandler = () => {
+    boostInfo &&
+      boostingData({
+        startDate,
+        endDate: endDate?.split("/")?.join("-"),
+        boostId: boostInfo?._id,
+        company: currentCompany?.data[0]?._id,
+        name: currentCompany?.data[0]?.name,
+        email: user?.email,
+        amount: boostInfo?.amount,
+        payFrom,
+        serviceType: "boosting",
+      });
+  };
+
+  const payFromOnlineHandler = () => {};
+
+  const payFromBankHandler = () => {
     if (
       bankName.length < 1 ||
       yourName.length < 1 ||
@@ -201,15 +198,216 @@ const Boosting = () => {
       setBankValidationError(true);
     } else {
       setBankValidationError(false);
+
       console.log("payed");
     }
   };
+
+  const payFromCheckHandler = () => {};
+
+  const onlineAndDepositComponent = () => {
+    return (
+      <div className="fixed top-0 left-0 items-center justify-center flex flex-col w-full h-[100vh] bg-black/50">
+        <div className="relative rounded-lg p-5 z-30 items-center lg:ml-56 mt-20 justify-center w-[350px] md:w-[500px] h-[450px] bg-white bg-dark">
+          <svg
+            class="w-6 h-6 cursor-pointer absolute top-2 right-2 text-gray-800 hover:text-gray-600 dark:text-white"
+            aria-hidden="true"
+            onClick={() => {
+              payFrom === "online"
+                ? setOnlinePopup(false)
+                : payFrom === "deposit"
+                ? setDepositPopup(false)
+                : null;
+              setShowError(false);
+              setEndDate("- - -");
+              setStartDate("");
+            }}
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18 17.94 6M18 18 6.06 6"
+            />
+          </svg>
+
+          <div className="flex relative mb-5 flex-col gap-3">
+            {errorMessage && showError && (
+              <div
+                id="alert-2"
+                class="flex absolute top-0 left-20 items-center p-4 mb-4 text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+                role="alert"
+              >
+                <svg
+                  class="flex-shrink-0 w-4 h-4"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+                </svg>
+                <span class="sr-only">Info</span>
+                <div class="ms-3 text-sm font-medium">
+                  {startDate?.length < 1 && (
+                    <p className="text-sm">- Please select a start date.</p>
+                  )}
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setErrorMessage(false)}
+                  class="ms-auto -mx-1.5 ml-2 -my-1.5 bg-red-50 text-red-500 rounded-lg focus:ring-2 focus:ring-red-400 p-1.5 hover:bg-red-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:text-red-400 dark:hover:bg-gray-700"
+                  data-dismiss-target="#alert-2"
+                  aria-label="Close"
+                >
+                  <span class="sr-only">Close</span>
+                  <svg
+                    class="w-3 h-3"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 14 14"
+                  >
+                    <path
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+                    />
+                  </svg>
+                </button>
+              </div>
+            )}
+            <p className="">Select start date</p>
+            <input
+              onChange={(e) => setStartDate(e.target.value)}
+              min={minStartDate}
+              type="date"
+              name=""
+              id=""
+              className="px-3 py-2 rounded-lg bg-white bg-dark focus:ring-0 focus:outline-none border border-gray-300"
+            />
+            <div className="w-full mt-3 gap-5 flex items-center justify-center">
+              <div className="w-full items-center justify-center">
+                <p className="">Plan Name</p>
+                <p className="py-2 px-3 mt-2 rounded-lg border border-gray-300 w-full focus:outline-black">
+                  {boostInfo?.name}
+                </p>
+              </div>
+              <div className="w-full items-center justify-center">
+                <p className="">Amount</p>
+                <p className="py-2 mt-2 px-3 rounded-lg border border-gray-300 w-full focus:outline-black">
+                  {boostInfo?.amount} birr
+                </p>
+              </div>
+            </div>
+            <div className="w-full gap-5 flex items-center justify-center">
+              <div className="w-44 items-center justify-center">
+                <p className="mt-3">Duration</p>
+                <p className="py-2 px-3 mt-2 rounded-lg border border-gray-300 w-full focus:outline-black">
+                  {boostInfo?.duration}
+                </p>
+              </div>
+              <div className="w-full items-center justify-center">
+                <p className="mt-3">End Date</p>
+                <p className="py-2 px-3 mt-2 rounded-lg border border-gray-300 w-full focus:outline-black">
+                  {endDate}
+                  <span className=" mx-2">
+                    (
+                    {endDate != "- - -"
+                      ? formatDate(endDate)?.split(" ").splice(0, 4).join(" ")
+                      : null}
+                    )
+                  </span>
+                </p>
+              </div>
+            </div>
+            <div className="w-full gap-5 flex items-center justify-center"></div>
+          </div>
+          {startDate?.length > 0 && payFrom === "online" ? (
+            <Pay
+              startDate={startDate}
+              endDate={endDate?.split("/")?.join("-")}
+              boost={boostInfo?._id}
+              company={currentCompany?.data[0]?._id}
+              name={currentCompany?.data[0]?.name}
+              email={user?.email}
+              amount={boostInfo?.amount}
+              payFrom={payFrom}
+              title="Pay and Boost"
+              serviceType="boosting"
+            />
+          ) : startDate?.length > 0 && payFrom === "deposit" ? (
+            <LoadingButton
+              pending={boostPending}
+              onClick={payFromDepositHandler}
+              title={
+                <p className="flex gap-2 items-center justify-center rounded-lg w-full  text-white bg-main">
+                  <svg
+                    class="w-6 h-6 "
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm13.707-1.293a1 1 0 0 0-1.414-1.414L11 12.586l-1.793-1.793a1 1 0 0 0-1.414 1.414l2.5 2.5a1 1 0 0 0 1.414 0l4-4Z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                  Pay and Boost
+                </p>
+              }
+              color="bg-main"
+              width="w-full sm:py-2"
+            />
+          ) : (
+            <button
+              onClick={() => {
+                setShowError(true);
+              }}
+              className="flex  cursor-default gap-2 items-center justify-center h-10 mt-2 rounded-lg w-full  text-white bg-red-400"
+              type="submit"
+            >
+              <svg
+                class="w-6 h-6 "
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm13.707-1.293a1 1 0 0 0-1.414-1.414L11 12.586l-1.793-1.793a1 1 0 0 0-1.414 1.414l2.5 2.5a1 1 0 0 0 1.414 0l4-4Z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+              Pay and Boost
+            </button>
+          )}
+        </div>
+      </div>
+    );
+  };
+
   // console.log(boostedCompany, "boosted");
-  console.log(paymentType, "boosted");
+  console.log(payFrom, "boosted");
 
   return (
     <section class="bg-white dark:bg-gray-900 relative">
-      <Response response={depositResponse} setPending={setDepositPending} />
+      <Response response={boostingResponse} setPending={setBoostPending} />
 
       <div class="py-2 px-4 mx-auto max-w-screen-xl lg:py-6 lg:px-6">
         <div class="mx-auto mb-5 lg:mb-8">
@@ -354,6 +552,7 @@ const Boosting = () => {
             </div>
           ) : null}
         </div>
+
         <p className="font-light py-2 mt-10 text-lg">
           Companies in our boosted list.
         </p>
@@ -421,15 +620,16 @@ const Boosting = () => {
           </table>
         </div>
       </div>
+
       {paymentTypePopup && (
         <div className="fixed top-0 left-0 items-center justify-center flex flex-col w-full h-[100vh] bg-black/50">
-          <div className="relative rounded-lg p-5 z-30 items-center lg:ml-56 mt-20 justify-center w-[350px] md:w-[500px] h-auto bg-white bg-dark">
+          <div className="relative rounded-lg p-5 z-30 items-center lg:ml-56 mt-20 justify-center w-[350px] md:w-[500px] h-[450px] bg-white bg-dark">
             <svg
               class="w-6 h-6 cursor-pointer absolute top-2 right-2 text-gray-800 hover:text-gray-600 dark:text-white"
               aria-hidden="true"
               onClick={() => {
-                setPaymentType("");
                 setPaymentTypePopup(false);
+                setPayFrom("");
               }}
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -448,11 +648,11 @@ const Boosting = () => {
             <p className="text-lg mt-4 font-bold">
               Select your payment method.
             </p>
-            <div className="w-full flex py-7 items-center justify-between">
+            <div className="w-full py-7 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 items-center justify-between">
               <div className="rounded-lg hover:bg-gray-200 p-4 flex items-center gap-4 border">
                 <input
                   onChange={(e) =>
-                    e.target.checked ? setPaymentType("online") : ""
+                    e.target.checked ? setPayFrom("online") : ""
                   }
                   type="radio"
                   name="paymentType"
@@ -460,11 +660,33 @@ const Boosting = () => {
                 />
                 <p className="text-xl font-bold">Online</p>
               </div>
+              <div
+                className={`rounded-lg hover:bg-gray-200 p-4 flex items-center gap-4 border ${
+                  currentCompany?.data[0]?.currentBalance < boostInfo?.amount &&
+                  "bg-red-100"
+                }`}
+              >
+                <input
+                  disabled={
+                    currentCompany?.data[0]?.currentBalance < boostInfo?.amount
+                      ? true
+                      : false
+                  }
+                  // onChange={(e) =>
+                  //   setPayFrom(e.target.value === "on" ? "deposit" : "")
+                  // }
+                  onChange={(e) =>
+                    e.target.checked ? setPayFrom("deposit") : ""
+                  }
+                  type="radio"
+                  name="paymentType"
+                  id=""
+                />
+                <p className="text-xl font-bold">Deposit</p>
+              </div>
               <div className="rounded-lg hover:bg-gray-200 p-4 flex items-center gap-4 border">
                 <input
-                  onChange={(e) =>
-                    e.target.checked ? setPaymentType("bank") : ""
-                  }
+                  onChange={(e) => (e.target.checked ? setPayFrom("bank") : "")}
                   type="radio"
                   name="paymentType"
                   id=""
@@ -474,7 +696,7 @@ const Boosting = () => {
               <div className="rounded-lg hover:bg-gray-200 p-4 flex items-center gap-4 border">
                 <input
                   onChange={(e) =>
-                    e.target.checked ? setPaymentType("check") : ""
+                    e.target.checked ? setPayFrom("check") : ""
                   }
                   type="radio"
                   name="paymentType"
@@ -483,10 +705,11 @@ const Boosting = () => {
                 <p className="text-xl font-bold">Check</p>
               </div>
             </div>
+
             <div className="w-full flex items-center gap-5 justify-end">
               <button
                 onClick={() => {
-                  setPaymentType("");
+                  setPayFrom("");
                   setPaymentTypePopup(false);
                 }}
                 className="px-5 hover:bg-gray-300 py-3 rounded-lg bg-gray-200"
@@ -495,7 +718,9 @@ const Boosting = () => {
               </button>
               <button
                 onClick={paymentTypeHandler}
-                className="px-5 py-3 rounded-lg bg-main text-white"
+                className={`px-5 py-3 rounded-lg ${
+                  payFrom?.length > 0 ? "bg-main" : "bg-red-300"
+                } text-white`}
               >
                 Next
               </button>
@@ -504,309 +729,8 @@ const Boosting = () => {
         </div>
       )}
 
-      {onlinePopup && boostInfo && (
-        <div className="fixed top-0 left-0 items-center justify-center flex flex-col w-full h-[100vh] bg-black/50">
-          <div className="relative rounded-lg p-5 z-30 items-center lg:ml-56 mt-20 justify-center w-[350px] md:w-[500px] h-auto bg-white bg-dark">
-            <svg
-              class="w-6 h-6 cursor-pointer absolute top-2 right-2 text-gray-800 hover:text-gray-600 dark:text-white"
-              aria-hidden="true"
-              onClick={() => {
-                setOnlinePopup(false);
-                setShowError(false);
-                setEndDate("- - -");
-                setStartDate("");
-                setPay(false);
-              }}
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M6 18 17.94 6M18 18 6.06 6"
-              />
-            </svg>
-
-            <div className="flex relative mb-5 flex-col gap-3">
-              {errorMessage && showError && (
-                <div
-                  id="alert-2"
-                  class="flex absolute top-0 left-20 items-center p-4 mb-4 text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
-                  role="alert"
-                >
-                  <svg
-                    class="flex-shrink-0 w-4 h-4"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
-                  </svg>
-                  <span class="sr-only">Info</span>
-                  <div class="ms-3 text-sm font-medium">
-                    {startDate?.length < 1 && (
-                      <p className="text-sm">- Please select a start date.</p>
-                    )}
-                    {paymentMethod?.length < 1 && (
-                      <p className="text-sm">
-                        - Please choose a payment method.
-                      </p>
-                    )}
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => setErrorMessage(false)}
-                    class="ms-auto -mx-1.5 ml-2 -my-1.5 bg-red-50 text-red-500 rounded-lg focus:ring-2 focus:ring-red-400 p-1.5 hover:bg-red-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:text-red-400 dark:hover:bg-gray-700"
-                    data-dismiss-target="#alert-2"
-                    aria-label="Close"
-                  >
-                    <span class="sr-only">Close</span>
-                    <svg
-                      class="w-3 h-3"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 14 14"
-                    >
-                      <path
-                        stroke="currentColor"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-                      />
-                    </svg>
-                  </button>
-                </div>
-              )}
-              <p className="">Select start date</p>
-              {/* <Datepicker
-                onChange={(e) => setStartDate(e.target.value)}
-                minDate={new Date(2023, 0, 1)}
-                maxDate={new Date(2024, 2, 30)}
-                labelTodayButton="Today"
-                labelClearButton="Cancel"
-              /> */}
-              <input
-                onChange={(e) => setStartDate(e.target.value)}
-                min={minStartDate}
-                type="date"
-                name=""
-                id=""
-                // data-date-format="DD MMMM YYYY"
-                className="px-3 py-2 rounded-lg bg-white bg-dark focus:ring-0 focus:outline-none border border-gray-300"
-              />
-              <div className="w-full mt-3 gap-5 flex items-center justify-center">
-                <div className="w-full items-center justify-center">
-                  <p className="">Plan Name</p>
-                  <p className="py-2 px-3 mt-2 rounded-lg border border-gray-300 w-full focus:outline-black">
-                    {boostInfo?.name}
-                  </p>
-                </div>
-                <div className="w-full items-center justify-center">
-                  <p className="">Amount</p>
-                  <p className="py-2 mt-2 px-3 rounded-lg border border-gray-300 w-full focus:outline-black">
-                    {boostInfo?.amount} birr
-                  </p>
-                </div>
-              </div>
-              <div className="w-full gap-5 flex items-center justify-center">
-                <div className="w-44 items-center justify-center">
-                  <p className="mt-3">Duration</p>
-                  <p className="py-2 px-3 mt-2 rounded-lg border border-gray-300 w-full focus:outline-black">
-                    {boostInfo?.duration}
-                  </p>
-                </div>
-                <div className="w-full items-center justify-center">
-                  <p className="mt-3">End Date</p>
-                  <p className="py-2 px-3 mt-2 rounded-lg border border-gray-300 w-full focus:outline-black">
-                    {endDate}
-                    <span className=" mx-2">
-                      (
-                      {endDate != "- - -"
-                        ? formatDate(endDate)?.split(" ").splice(0, 4).join(" ")
-                        : null}
-                      )
-                    </span>
-                  </p>
-                </div>
-              </div>
-              <div className="w-full gap-5 flex items-center justify-center">
-                <div className="w-full items-center justify-center">
-                  <p className="mt-5 pt-5 border-t">
-                    Payment method{" "}
-                    <span className="text-xs font-light">
-                      {" "}
-                      (
-                      {currentCompany?.data[0]?.currentBalance <
-                      boostInfo?.amount
-                        ? "You don't have enough balance for direct payment"
-                        : null}
-                      )
-                    </span>
-                  </p>
-                  <div className="w-full mt-2 flex gap-4 items-center justify-center">
-                    <p
-                      className={`py-2 ${
-                        currentCompany?.data[0]?.currentBalance <
-                        boostInfo?.amount
-                          ? "bg-red-200"
-                          : null
-                      }  flex items-center gap-3 px-3 rounded-lg border border-gray-300 w-full focus:outline-black`}
-                    >
-                      <input
-                        disabled={
-                          currentCompany?.data[0]?.currentBalance <
-                          boostInfo?.amount
-                            ? true
-                            : false
-                        }
-                        onChange={(e) =>
-                          setPaymentMethod(
-                            e.target.value === "on" ? "deposit" : ""
-                          )
-                        }
-                        type="radio"
-                        name="boost"
-                        id=""
-                      />
-                      From deposit
-                    </p>
-
-                    <p className="py-2 flex items-center gap-3 px-3 rounded-lg border border-gray-300 w-full focus:outline-black">
-                      <input
-                        checked={
-                          currentCompany?.data[0]?.currentBalance <
-                            boostInfo?.amount || paymentMethod === "new-payment"
-                            ? true
-                            : false
-                        }
-                        onChange={(e) =>
-                          setPaymentMethod(
-                            e.target.value === "on" ? "new-payment" : ""
-                          )
-                        }
-                        type="radio"
-                        name="boost"
-                        id=""
-                      />
-                      New payment
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            {pay && paymentMethod === "new-payment" ? (
-              <Pay
-                startDate={startDate}
-                endDate={endDate?.split("/")?.join("-")}
-                boost={boostInfo?._id}
-                company={currentCompany?.data[0]?._id}
-                name={currentCompany?.data[0]?.name}
-                email={user?.email}
-                amount={boostInfo?.amount}
-                paymentMethod={paymentMethod}
-                paymentType={paymentType}
-                title="Pay and Boost"
-                type="boost"
-              />
-            ) : pay && paymentMethod === "deposit" ? (
-              <LoadingButton
-                pending={depositPending}
-                onClick={depositHandler}
-                title={
-                  <p className="flex gap-2 items-center justify-center rounded-lg w-full  text-white bg-main">
-                    <svg
-                      class="w-6 h-6 "
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      fill="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm13.707-1.293a1 1 0 0 0-1.414-1.414L11 12.586l-1.793-1.793a1 1 0 0 0-1.414 1.414l2.5 2.5a1 1 0 0 0 1.414 0l4-4Z"
-                        clip-rule="evenodd"
-                      />
-                    </svg>
-                    Pay and Boost
-                  </p>
-                }
-                color="bg-main"
-                width="w-full sm:py-2"
-              />
-            ) : (
-              // <button
-              //   onClick={depositHandler}
-              //   className="flex  cursor-default gap-2 items-center justify-center h-10 mt-2 rounded-lg w-full  text-white bg-main hover:bg-red-500"
-              //   type="submit"
-              // >
-              //   <svg
-              //     class="w-6 h-6 "
-              //     aria-hidden="true"
-              //     xmlns="http://www.w3.org/2000/svg"
-              //     width="24"
-              //     height="24"
-              //     fill="currentColor"
-              //     viewBox="0 0 24 24"
-              //   >
-              //     <path
-              //       fill-rule="evenodd"
-              //       d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm13.707-1.293a1 1 0 0 0-1.414-1.414L11 12.586l-1.793-1.793a1 1 0 0 0-1.414 1.414l2.5 2.5a1 1 0 0 0 1.414 0l4-4Z"
-              //       clip-rule="evenodd"
-              //     />
-              //   </svg>
-              //   Pay and Boost
-              // </button>
-              <button
-                onClick={() => {
-                  setShowError(true);
-                  if (startDate?.length > 1 && paymentMethod?.length > 1) {
-                    setPay(true);
-                  } else {
-                    setErrorMessage(true);
-                  }
-                }}
-                className="flex  cursor-default gap-2 items-center justify-center h-10 mt-2 rounded-lg w-full  text-white bg-red-400"
-                type="submit"
-              >
-                <svg
-                  class="w-6 h-6 "
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm13.707-1.293a1 1 0 0 0-1.414-1.414L11 12.586l-1.793-1.793a1 1 0 0 0-1.414 1.414l2.5 2.5a1 1 0 0 0 1.414 0l4-4Z"
-                    clip-rule="evenodd"
-                  />
-                </svg>
-                Pay and Boost
-              </button>
-            )}
-
-            {/* <LoadingButton
-              pending={boostPending}
-              onClick={boostHandler}
-              title="Pay and Boost"
-              color="bg-main"
-              width="w-full sm:rounded-lg sm:border sm:py-3 mt-5 sm:px-5 sm:hover:bg-red-500"
-            /> */}
-          </div>
-        </div>
-      )}
+      {onlinePopup && boostInfo && onlineAndDepositComponent()}
+      {depositPopup && boostInfo && onlineAndDepositComponent()}
 
       {bankPopup && (
         <div className="fixed top-0 left-0 items-center justify-center flex flex-col w-full h-[100vh] bg-black/50">
@@ -821,6 +745,7 @@ const Boosting = () => {
               aria-hidden="true"
               onClick={() => {
                 setBankPopup(false);
+                setPayFrom("");
               }}
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -950,13 +875,14 @@ const Boosting = () => {
               <button
                 onClick={() => {
                   setBankPopup(false);
+                  setPayFrom("");
                 }}
                 className="px-5 hover:bg-gray-300 py-3 rounded-lg bg-gray-200"
               >
                 Cancel
               </button>
               <button
-                onClick={bankSubmitHandler}
+                onClick={payFromBankHandler}
                 className="px-5 py-3 rounded-lg bg-main text-white"
               >
                 Submit
@@ -968,13 +894,13 @@ const Boosting = () => {
 
       {checkPopup && (
         <div className="fixed top-0 left-0 items-center justify-center flex flex-col w-full h-[100vh] bg-black/50">
-          <div className="relative rounded-lg p-5 z-30 items-center lg:ml-56 mt-20 justify-center w-[350px] md:w-[500px] h-auto bg-white bg-dark">
+          <div className="relative rounded-lg p-5 z-30 items-center lg:ml-56 mt-20 justify-center w-[350px] md:w-[500px] h-[450px] bg-white bg-dark">
             <svg
               class="w-6 h-6 cursor-pointer absolute top-2 right-2 text-gray-800 hover:text-gray-600 dark:text-white"
               aria-hidden="true"
               onClick={() => {
-                setPaymentType("");
                 setPaymentTypePopup(false);
+                setPayFrom("");
               }}
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -991,60 +917,8 @@ const Boosting = () => {
               />
             </svg>
             <p className="text-lg mt-4 font-bold">
-              Select your payment method.
+              Enter your check information.
             </p>
-            <div className="w-full flex py-7 items-center justify-between">
-              <div className="rounded-lg hover:bg-gray-200 p-4 flex items-center gap-4 border">
-                <input
-                  onChange={(e) =>
-                    e.target.checked ? setPaymentType("online") : ""
-                  }
-                  type="radio"
-                  name="paymentType"
-                  id=""
-                />
-                <p className="text-xl font-bold">Online</p>
-              </div>
-              <div className="rounded-lg hover:bg-gray-200 p-4 flex items-center gap-4 border">
-                <input
-                  onChange={(e) =>
-                    e.target.checked ? setPaymentType("bank") : ""
-                  }
-                  type="radio"
-                  name="paymentType"
-                  id=""
-                />
-                <p className="text-xl font-bold">Bank</p>
-              </div>
-              <div className="rounded-lg hover:bg-gray-200 p-4 flex items-center gap-4 border">
-                <input
-                  onChange={(e) =>
-                    e.target.checked ? setPaymentType("check") : ""
-                  }
-                  type="radio"
-                  name="paymentType"
-                  id=""
-                />
-                <p className="text-xl font-bold">Check</p>
-              </div>
-            </div>
-            <div className="w-full flex items-center gap-5 justify-end">
-              <button
-                onClick={() => {
-                  setPaymentType("");
-                  setPaymentTypePopup(false);
-                }}
-                className="px-5 hover:bg-gray-300 py-3 rounded-lg bg-gray-200"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={paymentTypeHandler}
-                className="px-5 py-3 rounded-lg bg-main text-white"
-              >
-                Next
-              </button>
-            </div>
           </div>
         </div>
       )}

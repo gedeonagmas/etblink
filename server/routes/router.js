@@ -33,7 +33,6 @@ const CryptoJS = require("crypto-js");
 const crypto = require("crypto");
 const asyncCatch = require("express-async-catch");
 const {
-  boostHandler,
   createRate,
   createSave,
   createView,
@@ -43,6 +42,7 @@ const {
   readRate,
   upgradeHandler,
   companyAggregation,
+  paymentHandler,
 } = require("../controller/utilityController.js");
 const { sendEmailHandler } = require("../controller/emailController.js");
 
@@ -83,7 +83,7 @@ utilityRouter.route("/updatePassword").put(authentication, updatePassword);
 utilityRouter
   .route("/updateUsersCredentials")
   .put(authentication, updateUsersCredentials);
-  
+
 utilityRouter.route("/rate").post(authentication, createRate);
 utilityRouter.route("/rate").get(readRate);
 utilityRouter.route("/rateMultiple").get(authentication, readMultipleRate);
@@ -92,7 +92,7 @@ utilityRouter.route("/save").post(createSave);
 utilityRouter.route("/save").delete(authentication, deleteSave);
 utilityRouter.route("/view").post(authentication, createView);
 utilityRouter.route("/upgrade").post(authentication, upgradeHandler);
-utilityRouter.route("/boost").post(authentication, boostHandler);
+utilityRouter.route("/boost").post(authentication, paymentHandler);
 utilityRouter.route("/companyAggregate").get(companyAggregation);
 
 //factory route
