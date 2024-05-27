@@ -416,7 +416,7 @@ const Subscription = () => {
   };
 
   // console.log(boostedCompany, "boosted");
-  console.log(startDate.length > 0, "boosted");
+  console.log(startDate, endDate, subscriptionInfo, "boosted");
 
   return (
     <section class="bg-white dark:bg-gray-900 relative">

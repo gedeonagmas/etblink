@@ -157,39 +157,40 @@ const _read = asyncCatch(async (req, res, next) => {
     query.skip(skip).limit(limit);
 
     //populating
-    switch (req.query.populatingType) {
-      case "users":
-        query.populate(req.query.populatingValue);
-        break;
-      case "saves":
-        query.populate(req.query.populatingValue.split(",").join(" "));
-      case "rates":
-        query.populate(req.query.populatingValue.split(",").join(" "));
-        break;
-      case "views":
-        query.populate(req.query.populatingValue.split(",").join(" "));
-        break;
-      case "boosthistories":
-        query.populate(req.query.populatingValue.split(",").join(" "));
-        break;
-      case "subscriptionhistories":
-        query.populate(req.query.populatingValue.split(",").join(" "));
-        break;
-      case "payments":
-        query.populate(req.query.populatingValue.split(",").join(" "));
-        break;
-      case "chats":
-        query.populate(req.query.populatingValue.split(",").join(" "));
-        break;
-      case "news":
-        query.populate(req.query.populatingValue.split(",").join(" "));
-        break;
-      case "blogs":
-        query.populate(req.query.populatingValue.split(",").join(" "));
-        break;
-      default:
-        query;
-    }
+    query.populate(req?.query?.populatingValue?.split(",").join(" "));
+    // switch (req.query.populatingType) {
+    //   case "users":
+    //     query.populate(req.query.populatingValue);
+    //     break;
+    //   case "saves":
+    //     query.populate(req.query.populatingValue.split(",").join(" "));
+    //   case "rates":
+    //     query.populate(req.query.populatingValue.split(",").join(" "));
+    //     break;
+    //   case "views":
+    //     query.populate(req.query.populatingValue.split(",").join(" "));
+    //     break;
+    //   case "boosthistories":
+    //     query.populate(req.query.populatingValue.split(",").join(" "));
+    //     break;
+    //   case "subscriptionhistories":
+    //     query.populate(req.query.populatingValue.split(",").join(" "));
+    //     break;
+    //   case "payments":
+    //     query.populate(req.query.populatingValue.split(",").join(" "));
+    //     break;
+    //   case "chats":
+    //     query.populate(req.query.populatingValue.split(",").join(" "));
+    //     break;
+    //   case "news":
+    //     query.populate(req.query.populatingValue.split(",").join(" "));
+    //     break;
+    //   case "blogs":
+    //     query.populate(req.query.populatingValue.split(",").join(" "));
+    //     break;
+    //   default:
+    //     query;
+    // }
 
     req.query.limits ? query.limit(req.query.limits) : null;
 

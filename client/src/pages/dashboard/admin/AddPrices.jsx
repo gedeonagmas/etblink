@@ -25,7 +25,7 @@ const AddPrices = () => {
   const [type, setType] = useState("");
   const [description, setDescription] = useState("");
   const [For, setFor] = useState("month");
-  const [duration, setDuration] = useState(0);
+  const [duration, setDuration] = useState("");
 
   const [addData, addResponse] = useCreateMutation();
   const [deleteData, deleteResponse] = useDeleteMutation();
@@ -45,12 +45,11 @@ const AddPrices = () => {
 
   const addHandler = () => {
     addData({
-      type,
+      name: type,
       description,
       amount,
       features: services,
-      For,
-      duration,
+      duration: `${duration} ${For}`,
       url: "/user/subscriptions",
       tag: ["subscriptions"],
     });
@@ -93,8 +92,8 @@ const AddPrices = () => {
                 className="flex w-full border px-4 border-dark rounded-lg relative justify-start py-4 gap-1 flex-col items-enter"
               >
                 <div className="flex flex-col gap-1">
-                  <p className=" py-1 border-b font-bold">Type</p>
-                  <p className="font-light">{e.type}</p>
+                  <p className=" py-1 border-b font-bold">Name</p>
+                  <p className="font-light">{e.name}</p>
                 </div>
                 <div className="mt-2 flex flex-col gap-1">
                   <p className="py-1  border-b font-bold">Amount</p>
@@ -102,7 +101,7 @@ const AddPrices = () => {
                 </div>
                 <div className="mt-2 flex flex-col gap-1">
                   <p className="py-1 border-b font-bold">Duration</p>
-                  <p className="font-light">{e.For + " " + e.duration}</p>
+                  <p className="font-light">{e.duration}</p>
                 </div>
                 <div className="mt-2 flex flex-col gap-1">
                   <p className="py-1 border-b font-bold">Services</p>
@@ -185,7 +184,7 @@ const AddPrices = () => {
               for="name"
               class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
             >
-              Type
+              Name
             </label>
             <input
               onChange={(e) => setType(e.target.value)}

@@ -3,19 +3,14 @@ const valid = require("../utils/validator");
 
 const subscriptionModel = new mongoose.Schema(
   {
+    name: {
+      type: String,
+      validate: valid.required("Name"),
+    },
+
     amount: {
       type: Number,
       validate: valid.numberLower("Amount", 0),
-    },
-
-    type: {
-      type: String,
-      validate: valid.required("Type"),
-    },
-
-    For: {
-      type: String,
-      validate: valid.required("Duration type"),
     },
 
     duration: {

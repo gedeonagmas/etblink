@@ -326,22 +326,23 @@ const paymentHandler = asyncCatch(async (req, res, next) => {
       return next(
         new AppError("You are not authorized to perform this action!")
       );
+
     switch (approvalType) {
       case "boosting":
         const boostHistory = await BoostHistory.findByIdAndUpdate(req.body.id, {
-          approved: true,
+          approved: req.body.value,
         });
         break;
       case "subscription":
         const subscriptionHistory = await SubscriptionHistory.findByIdAndUpdate(
           req.body.id,
-          { approved: true }
+          { approved: req.body.value }
         );
         break;
       case "fund":
         const fundHistory = await SubscriptionHistory.findByIdAndUpdate(
           req.body.id,
-          { approved: true }
+          { approved: req.body.value }
         );
         company.currentBalance =
           company.currentBalance * 1 + req.body.amount * 1;
