@@ -240,24 +240,33 @@ const upgradeHandler = asyncCatch(async (req, res, next) => {
 });
 
 const paymentHandler = asyncCatch(async (req, res, next) => {
-  const { serviceType, payFrom, endDate, startDate, amount, boost } = req.body;
-  const company = await Company.findById(req.body.company);
+  const {
+    serviceType,
+    payFrom,
+    endDate,
+    startDate,
+    amount,
+    boost,
+    subscription,
+    approvalType,
+  } = req.body;
 
-  const boostHandler = async () => {
+  const company = await Company.findById(req.body.company);
+  // console.log(req.body);
+  if (serviceType === "boosting") {
     company.isBoosted =
       payFrom === "online" || payFrom === "deposit" ? true : false;
+
     company.boostEndDate = Date.parse(new Date(endDate));
     company.boostStartDate = Date.parse(new Date(startDate));
+
     company.boostStatus =
       payFrom === "online" || payFrom === "deposit" ? "Payed" : "Pending";
-    await company.save();
 
-    const detail =
-      payFrom === "bank"
-        ? { bankDetail: req.body.bankDetail }
-        : payFrom === "check"
-        ? { checkDetail: req.body.checkDetail }
-        : undefined;
+    payFrom === "deposit" &&
+      (company.currentBalance = company.currentBalance * 1 - amount * 1);
+
+    await company.save();
 
     await BoostHistory.create({
       company: req.body.company,
@@ -265,100 +274,97 @@ const paymentHandler = asyncCatch(async (req, res, next) => {
       startDate: Date.parse(new Date(startDate)),
       endDate: Date.parse(new Date(endDate)),
       payFrom,
-      detail,
+      bankDetail: payFrom === "bank" ? req.body.bankDetail : undefined,
+      checkDetail: payFrom === "check" ? req.body.checkDetail : undefined,
     });
-  };
-
-  if (serviceType === "boosting") {
-    if (payFrom === "deposit") {
-      company.currentBalance = company.currentBalance * 1 - amount * 1;
-      boostHandler();
-    } else {
-      boostHandler();
-    }
 
     // const subject = "Your Transaction is Successful thank you.";
     // const message = `Your Transaction is Successful thank you.`;
     // return sendEmailHandler(subject, message, company?.email, from);
-  } else if (type === "serviceFee") {
-    if (payFrom === "deposit") {
-      company.currentBalance = company.currentBalance * 1 - amount * 1;
-    }
-    company.isSubscribed = true;
+  } else if (serviceType === "serviceFee") {
+    company.isSubscribed =
+      payFrom === "online" || payFrom === "deposit" ? true : false;
+
     company.subscriptionEndDate = Date.parse(new Date(endDate));
     company.subscriptionStartDate = Date.parse(new Date(startDate));
-    company.subscriptionStatus = "Payed";
+
+    company.subscriptionStatus =
+      payFrom === "online" || payFrom === "deposit" ? "Payed" : "Pending";
+
+    payFrom === "deposit" &&
+      (company.currentBalance = company.currentBalance * 1 - amount * 1);
+
     await company.save();
 
     await SubscriptionHistory.create({
       company: req.body.company,
-      subscription: boost,
+      subscription,
       startDate: Date.parse(new Date(startDate)),
       endDate: Date.parse(new Date(endDate)),
-      payFrom: payFrom,
+      payFrom,
+      bankDetail: payFrom === "bank" ? req.body.bankDetail : undefined,
+      checkDetail: payFrom === "check" ? req.body.checkDetail : undefined,
     });
 
     // const subject = "Your Transaction is Successful thank you.";
     // const message = `Your Transaction is Successful thank you.`;
     // return sendEmailHandler(subject, message, company?.email, from);
-  } else if (type === "fund") {
-    company.currentBalance = company.currentBalance * 1 + amount * 1;
-    await company.save();
-
+  } else if (serviceType === "fund") {
     await Payment.create({
       company: req.body.company,
       amount: amount,
-      status: "Payed",
       payFrom: payFrom,
+      bankDetail: payFrom === "bank" ? req.body.bankDetail : undefined,
+      checkDetail: payFrom === "check" ? req.body.checkDetail : undefined,
     });
+
+    // const subject = "Your Transaction is Successful thank you.";
+    // const message = `Your Transaction is Successful thank you.`;
+    // return sendEmailHandler(subject, message, company?.email, from);
+  } else if (serviceType === "approve") {
+    if (req.user.role !== "admin")
+      return next(
+        new AppError("You are not authorized to perform this action!")
+      );
+    switch (approvalType) {
+      case "boosting":
+        const boostHistory = await BoostHistory.findByIdAndUpdate(req.body.id, {
+          approved: true,
+        });
+        break;
+      case "subscription":
+        const subscriptionHistory = await SubscriptionHistory.findByIdAndUpdate(
+          req.body.id,
+          { approved: true }
+        );
+        break;
+      case "fund":
+        const fundHistory = await SubscriptionHistory.findByIdAndUpdate(
+          req.body.id,
+          { approved: true }
+        );
+        company.currentBalance =
+          company.currentBalance * 1 + req.body.amount * 1;
+        await company.save();
+        break;
+      default:
+        return res.status(500).json({
+          status: "Error",
+          message: `Something went wrong please try again later`,
+        });
+    }
 
     // const subject = "Your Transaction is Successful thank you.";
     // const message = `Your Transaction is Successful thank you.`;
     // return sendEmailHandler(subject, message, company?.email, from);
   }
-  // else if (req.body.type === "deposit") {
-  //   company.currentBalance = company.currentBalance * 1 - req.body.amount * 1;
-  //   await company.save();
 
-  //   const boost = await BoostHistory.create({
-  //     company: req.body.company,
-  //     boost: req.body.boost,
-  //     startDate: Date.parse(new Date(req.body.startDate)),
-  //     endDate: Date.parse(new Date(req.body.endDate)),
-  //     payFrom: req.body.payFrom,
-  //   });
-  // }
-
-  // await company.save();
-  // const boost = await BoostHistory.create({
-  //   company: req.body.company,
-  //   boost: req.body.boost,
-  //   startDate: Date.parse(new Date(req.body.startDate)),
-  //   endDate: Date.parse(new Date(req.body.endDate)),
-  //   payFrom: req.body.payFrom,
-  // });
-
-  // if (boost) {
   return res.status(200).json({
     status: "Payed",
-    message: `Your company is ${req.body.type + "ed"} Successfully. Thank you!`,
+    message: `Your company is ${
+      req.body.serviceType + "ed"
+    } Successfully. Thank you!`,
   });
-  // } else {
-  //   return next(
-  //     new AppError("something went wrong unable to upgrade your account!")
-  //   );
-  // }
-  // console.log(Date.parse(new Date(req.body.endDate)));
-  // const ISO = new Date().toISOString(); //'2024-04-21T01:57:29.465Z' ==> first get the current time in ISO format
-  // const startDate = Date.parse("2024-05-21T01:57:29.465Z"); // 1716256649465 ==> this will be the start date
-  // const endDate = Date.parse("2024-06-21T01:57:29.465Z"); //   1718935049465 ==> you just edit the year, month and
-  // date based on the predefined boost data from the front end
-
-  //when the company want to boost the system must check the following conditions.
-  // 1. check if the company subscription plan must be greater than boost endDate
-  // 2. check if there is less than 6 companies in boosting list. if the company is exceed to 6 allow company to
-  //  boost after 1 of the companies end data this company startDate must be > one of the nearest companies endDate.
-  // 3.
 });
 
 const companyAggregation = asyncCatch(async (req, res, next) => {

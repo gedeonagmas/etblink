@@ -12,12 +12,21 @@ const paymentSchema = new mongoose.Schema(
       default: 0,
     },
 
-    paymentMethod: {
+    payFrom: {
       type: String,
     },
 
-    status: {
-      type: String,
+    bankDetail: {
+      type: Object,
+    },
+
+    checkDetail: {
+      type: Object,
+    },
+
+    approved: {
+      type: Boolean,
+      default: false,
     },
   },
   {

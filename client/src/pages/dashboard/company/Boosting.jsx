@@ -138,9 +138,9 @@ const Boosting = () => {
 
   useEffect(() => {
     if (boostingResponse?.status === "fulfilled") {
-      setStartDate("");
-      setEndDate("- - -");
-      setOnlinePopup(false);
+      setTimeout(() => {
+        window.location.reload();
+      }, 3000);
     }
   }, [boostingResponse]);
 
@@ -246,7 +246,7 @@ const Boosting = () => {
   const onlineAndDepositComponent = () => {
     return (
       <div className="fixed top-0 left-0 items-center justify-center flex flex-col w-full h-[100vh] bg-black/50">
-        <div className="relative rounded-lg p-5 z-30 items-center lg:ml-56 mt-20 justify-center w-[350px] md:w-[500px] h-[450px] bg-white bg-dark">
+        <div className="relative rounded-lg p-5 z-30 items-center lg:ml-56 mt-20 justify-center w-[350px] md:w-[600px] h-[450px] bg-white bg-dark">
           <svg
             class="w-6 h-6 cursor-pointer absolute top-2 right-2 text-gray-800 hover:text-gray-600 dark:text-white"
             aria-hidden="true"
@@ -430,7 +430,7 @@ const Boosting = () => {
   };
 
   // console.log(boostedCompany, "boosted");
-  console.log(payFrom, "boosted");
+  console.log(startDate.length > 0, "boosted");
 
   return (
     <section class="bg-white dark:bg-gray-900 relative">
@@ -655,8 +655,8 @@ const Boosting = () => {
               class="w-6 h-6 cursor-pointer absolute top-2 right-2 text-gray-800 hover:text-gray-600 dark:text-white"
               aria-hidden="true"
               onClick={() => {
-                setPaymentTypePopup(false);
                 setPayFrom("");
+                setPaymentTypePopup(false);
               }}
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -759,9 +759,9 @@ const Boosting = () => {
 
       {bankPopup && boostInfo && (
         <div className="fixed top-0 left-0 items-center justify-center flex flex-col w-full h-[100vh] bg-black/50">
-          <div className="relative h-[500px] overflow-y-scroll rounded-lg p-5 z-30 items-center lg:ml-56 mt-20 justify-center w-[350px] md:w-[500px] bg-white bg-dark">
+          <div className="relative h-[500px] overflow-y-scroll rounded-lg p-5 z-30 items-center lg:ml-56 mt-20 justify-center w-[350px] md:w-[600px] bg-white bg-dark">
             {bankValidationError && (
-              <p className="fixed top-10 lg:top-2 mt-20 right-20 lg:right-64 text-sm p-2 rounded-lg border border-red bg-red-200 text-red-500 font-bold">
+              <p className="fixed top-10 lg:top-2 mt-28 right-20 lg:right-80 text-sm p-2 rounded-lg border border-red bg-red-200 text-red-500 font-bold">
                 All fields are required. Please Fill out the form correctly.
               </p>
             )}
@@ -769,8 +769,8 @@ const Boosting = () => {
               class="w-6 h-6 cursor-pointer absolute top-2 right-2 text-gray-800 hover:text-gray-600 dark:text-white"
               aria-hidden="true"
               onClick={() => {
+                setBankValidationError(false);
                 setBankPopup(false);
-                setPayFrom("");
               }}
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -805,6 +805,54 @@ const Boosting = () => {
                 service payment from bank. then come back again and fill the
                 following form based on your bank payment information.
               </div>
+            </div>
+            <p className="text-lg mt-3 font-bold">Boosting Plan Information</p>
+            <div className="flex relative mt-3 mb-5 flex-col gap-3">
+              <p className="">Select start date</p>
+              <input
+                onChange={(e) => setStartDate(e.target.value)}
+                min={minStartDate}
+                type="date"
+                name=""
+                id=""
+                className="px-3 py-2 rounded-lg bg-white bg-dark focus:ring-0 focus:outline-none border border-gray-300"
+              />
+              <div className="w-full mt-3 gap-5 flex items-center justify-center">
+                <div className="w-full items-center justify-center">
+                  <p className="">Plan Name</p>
+                  <p className="py-2 px-3 mt-2 rounded-lg border border-gray-300 w-full focus:outline-black">
+                    {boostInfo?.name}
+                  </p>
+                </div>
+                <div className="w-full items-center justify-center">
+                  <p className="">Amount</p>
+                  <p className="py-2 mt-2 px-3 rounded-lg border border-gray-300 w-full focus:outline-black">
+                    {boostInfo?.amount} birr
+                  </p>
+                </div>
+              </div>
+              <div className="w-full gap-5 flex items-center justify-center">
+                <div className="w-44 items-center justify-center">
+                  <p className="mt-3">Duration</p>
+                  <p className="py-2 px-3 mt-2 rounded-lg border border-gray-300 w-full focus:outline-black">
+                    {boostInfo?.duration}
+                  </p>
+                </div>
+                <div className="w-full items-center justify-center">
+                  <p className="mt-3">End Date</p>
+                  <p className="py-2 px-3 mt-2 rounded-lg border border-gray-300 w-full focus:outline-black">
+                    {endDate}
+                    <span className=" mx-2">
+                      (
+                      {endDate != "- - -"
+                        ? formatDate(endDate)?.split(" ").splice(0, 4).join(" ")
+                        : null}
+                      )
+                    </span>
+                  </p>
+                </div>
+              </div>
+              <div className="w-full gap-5 flex items-center justify-center"></div>
             </div>
             <p className="text-lg mt-3 font-bold">Bank Payment information.</p>
             <div className="mb-5 mt-3">
@@ -900,31 +948,66 @@ const Boosting = () => {
               <button
                 onClick={() => {
                   setBankPopup(false);
-                  setPayFrom("");
                 }}
                 className="px-5 hover:bg-gray-300 py-3 rounded-lg bg-gray-200"
               >
                 Cancel
               </button>
-              <button
-                onClick={() => {
-                  if (
-                    bankName.length < 1 ||
-                    yourName.length < 1 ||
-                    accountNumber.length < 1 ||
-                    bankAmount.length < 1 ||
-                    bankDate.length < 1 ||
-                    tranRef.length < 1
-                  ) {
-                    setBankValidationError(true);
-                  } else {
-                    payFromBankHandler();
+              {bankName.length < 1 ||
+              yourName.length < 1 ||
+              accountNumber.length < 1 ||
+              bankAmount.length < 1 ||
+              bankDate.length < 1 ||
+              tranRef.length < 1 ||
+              startDate.length < 1 ? (
+                <button
+                  onClick={() => {
+                    if (
+                      bankName.length < 1 ||
+                      yourName.length < 1 ||
+                      accountNumber.length < 1 ||
+                      bankAmount.length < 1 ||
+                      bankDate.length < 1 ||
+                      tranRef.length < 1 ||
+                      startDate.length < 1
+                    ) {
+                      setBankValidationError(true);
+                    } else {
+                      setBankValidationError(false);
+                    }
+                  }}
+                  className={`w-52 py-3 rounded-lg bg-red-400 cursor-default text-white`}
+                >
+                  Submit
+                </button>
+              ) : (
+                <LoadingButton
+                  pending={boostPending}
+                  onClick={payFromBankHandler}
+                  title={
+                    <p className="flex gap-2 items-center justify-center rounded-lg w-full  text-white bg-main">
+                      <svg
+                        class="w-6 h-6 "
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        fill="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm13.707-1.293a1 1 0 0 0-1.414-1.414L11 12.586l-1.793-1.793a1 1 0 0 0-1.414 1.414l2.5 2.5a1 1 0 0 0 1.414 0l4-4Z"
+                          clip-rule="evenodd"
+                        />
+                      </svg>
+                      Submit
+                    </p>
                   }
-                }}
-                className="px-5 py-3 rounded-lg bg-main text-white"
-              >
-                Submit
-              </button>
+                  color="bg-main"
+                  width="w-52 sm:py-3"
+                />
+              )}
             </div>
           </div>
         </div>
@@ -932,9 +1015,9 @@ const Boosting = () => {
 
       {checkPopup && boostInfo && (
         <div className="fixed top-0 left-0 items-center justify-center flex flex-col w-full h-[100vh] bg-black/50">
-          <div className="relative h-[500px] overflow-y-scroll rounded-lg p-5 z-30 items-center lg:ml-56 mt-20 justify-center w-[350px] md:w-[500px] bg-white bg-dark">
+          <div className="relative h-[500px] overflow-y-scroll rounded-lg p-5 z-30 items-center lg:ml-56 mt-20 justify-center w-[350px] md:w-[600px] bg-white bg-dark">
             {checkValidationError && (
-              <p className="fixed top-10 lg:top-2 mt-20 right-20 lg:right-64 text-sm p-2 rounded-lg border border-red bg-red-200 text-red-500 font-bold">
+              <p className="fixed top-10 lg:top-2 mt-28 right-20 lg:right-80 text-sm p-2 rounded-lg border border-red bg-red-200 text-red-500 font-bold">
                 All fields are required. Please Fill out the form correctly.
               </p>
             )}
@@ -942,8 +1025,8 @@ const Boosting = () => {
               class="w-6 h-6 cursor-pointer absolute top-2 right-2 text-gray-800 hover:text-gray-600 dark:text-white"
               aria-hidden="true"
               onClick={() => {
+                setCheckValidationError(false);
                 setCheckPopup(false);
-                setPayFrom("");
               }}
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -979,7 +1062,55 @@ const Boosting = () => {
                 following form based on your bank payment information.
               </div>
             </div>
-            <p className="text-lg mt-3 font-bold">Bank Payment information.</p>
+            <p className="text-lg mt-3 font-bold">Boosting Plan Information</p>
+            <div className="flex relative mt-3 mb-5 flex-col gap-3">
+              <p className="">Select start date</p>
+              <input
+                onChange={(e) => setStartDate(e.target.value)}
+                min={minStartDate}
+                type="date"
+                name=""
+                id=""
+                className="px-3 py-2 rounded-lg bg-white bg-dark focus:ring-0 focus:outline-none border border-gray-300"
+              />
+              <div className="w-full mt-3 gap-5 flex items-center justify-center">
+                <div className="w-full items-center justify-center">
+                  <p className="">Plan Name</p>
+                  <p className="py-2 px-3 mt-2 rounded-lg border border-gray-300 w-full focus:outline-black">
+                    {boostInfo?.name}
+                  </p>
+                </div>
+                <div className="w-full items-center justify-center">
+                  <p className="">Amount</p>
+                  <p className="py-2 mt-2 px-3 rounded-lg border border-gray-300 w-full focus:outline-black">
+                    {boostInfo?.amount} birr
+                  </p>
+                </div>
+              </div>
+              <div className="w-full gap-5 flex items-center justify-center">
+                <div className="w-44 items-center justify-center">
+                  <p className="mt-3">Duration</p>
+                  <p className="py-2 px-3 mt-2 rounded-lg border border-gray-300 w-full focus:outline-black">
+                    {boostInfo?.duration}
+                  </p>
+                </div>
+                <div className="w-full items-center justify-center">
+                  <p className="mt-3">End Date</p>
+                  <p className="py-2 px-3 mt-2 rounded-lg border border-gray-300 w-full focus:outline-black">
+                    {endDate}
+                    <span className=" mx-2">
+                      (
+                      {endDate != "- - -"
+                        ? formatDate(endDate)?.split(" ").splice(0, 4).join(" ")
+                        : null}
+                      )
+                    </span>
+                  </p>
+                </div>
+              </div>
+              <div className="w-full gap-5 flex items-center justify-center"></div>
+            </div>
+            <p className="text-lg mt-3 font-bold">Check Payment information.</p>
             <div className="mb-5 mt-3">
               <label
                 for="name"
@@ -1058,30 +1189,64 @@ const Boosting = () => {
               <button
                 onClick={() => {
                   setCheckPopup(false);
-                  setPayFrom("");
                 }}
                 className="px-5 hover:bg-gray-300 py-3 rounded-lg bg-gray-200"
               >
                 Cancel
               </button>
-              <button
-                onClick={() => {
-                  if (
-                    checkBankName.length < 1 ||
-                    checkYourName.length < 1 ||
-                    checkNumber.length < 1 ||
-                    checkAmount.length < 1 ||
-                    checkDate.length < 1
-                  ) {
-                    setCheckValidationError(true);
-                  } else {
-                    payFromCheckHandler();
+              {checkBankName.length < 1 ||
+              checkYourName.length < 1 ||
+              checkNumber.length < 1 ||
+              checkAmount.length < 1 ||
+              checkDate.length < 1 ||
+              startDate.length < 1 ? (
+                <button
+                  onClick={() => {
+                    if (
+                      checkBankName.length < 1 ||
+                      checkYourName.length < 1 ||
+                      checkNumber.length < 1 ||
+                      checkAmount.length < 1 ||
+                      checkDate.length < 1 ||
+                      startDate.length < 1
+                    ) {
+                      setCheckValidationError(true);
+                    } else {
+                      setCheckValidationError(false);
+                    }
+                  }}
+                  className={`w-52 py-3 rounded-lg bg-red-400 cursor-default text-white`}
+                >
+                  Submit
+                </button>
+              ) : (
+                <LoadingButton
+                  pending={boostPending}
+                  onClick={payFromCheckHandler}
+                  title={
+                    <p className="flex gap-2 items-center justify-center rounded-lg w-full  text-white bg-main">
+                      <svg
+                        class="w-6 h-6 "
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        fill="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm13.707-1.293a1 1 0 0 0-1.414-1.414L11 12.586l-1.793-1.793a1 1 0 0 0-1.414 1.414l2.5 2.5a1 1 0 0 0 1.414 0l4-4Z"
+                          clip-rule="evenodd"
+                        />
+                      </svg>
+                      Submit
+                    </p>
                   }
-                }}
-                className="px-5 py-3 rounded-lg bg-main text-white"
-              >
-                Submit
-              </button>
+                  color="bg-main"
+                  width="w-52 sm:py-3"
+                />
+              )}
             </div>
           </div>
         </div>

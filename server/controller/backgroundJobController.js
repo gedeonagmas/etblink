@@ -2,6 +2,8 @@ const { User } = require("../models/userModel");
 const { Notification } = require("../models/notificationModel");
 const { sendEmailHandler } = require("./emailController");
 const cron = require("node-cron");
+const { BoostHistory } = require("../models/boostHistoryModel");
+const { SubscriptionHistory } = require("../models/subscriptionHistoryModel");
 
 const boost = async () => {
   const date = new Date().toISOString().split("T")[0];
@@ -29,6 +31,51 @@ const boost = async () => {
     // send email
     return sendEmailHandler({ subject, message, to: e?.email, from });
   };
+
+  const boostHistory = await BoostHistory.find({
+    startDate: Date.now(),
+    approved: true,
+  });
+  
+  if (boostHistory?.length > 0) {
+    boostHistory?.map(async (history) => {
+      const company = await User({ user: history?._id }).populate("user");
+      company.user.startDate = history.startDate;
+      company.user.endDate = history.endDate;
+      company.user.isBoosted = true;
+      const response = await company.save();
+      if (response) {
+        const subject = "New boosted plan is added to your company.";
+        const message = ` new boosted plan is added to your company and your boosting service is released from ${
+          new Date(history.startDate).split("T")[0]
+        } to ${new Date(history.endDate).split("T")[0]}`;
+
+        emailSender(subject, message, e);
+      }
+    });
+  }
+
+  const subscriptionHistory = await SubscriptionHistory.find({
+    startDate: Date.now(),
+    approved: true,
+  });
+  if (subscriptionHistory?.length > 0) {
+    subscriptionHistory?.map(async (history) => {
+      const company = await User({ user: history?._id }).populate("user");
+      company.user.subscriptionStartDate = history.startDate;
+      company.user.subscriptionEndDate = history.endDate;
+      company.user.isSubscribed = true;
+      const response = await company.save();
+      if (response) {
+        const subject = "New subscription plan is added to your company.";
+        const message = ` new service plan is added to your company and your service service is released from ${
+          new Date(history.startDate).split("T")[0]
+        } to ${new Date(history.endDate).split("T")[0]}`;
+
+        emailSender(subject, message, e);
+      }
+    });
+  }
 
   const users = await User.find({ role: "company" }).populate("user");
   cron.schedule("12 12 7,14 * *", () => {

@@ -24,7 +24,7 @@ const AddPrices = () => {
   const [amount, setAmount] = useState(0);
   const [type, setType] = useState("");
   const [description, setDescription] = useState("");
-  const [For, setFor] = useState("");
+  const [For, setFor] = useState("month");
   const [duration, setDuration] = useState(0);
 
   const [addData, addResponse] = useCreateMutation();

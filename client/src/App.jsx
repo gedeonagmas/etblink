@@ -56,6 +56,7 @@ import BlogsCategory from "./pages/blogs/BlogsCategory";
 import BlogsDetail from "./pages/blogs/BlogsDetail";
 import AddCategory from "./pages/dashboard/admin/AddCategory";
 import UpdateCategory from "./pages/dashboard/admin/UpdateCategory";
+import Bills from "./pages/dashboard/admin/Bills";
 
 export const userContext = createContext();
 
@@ -257,6 +258,7 @@ function App() {
                 path="/dashboard/admin/blog-admins/manage"
                 element={<UsersProfile type="blog-admin" />}
               ></Route>
+              <Route path="/dashboard/admin/bills" element={<Bills />}></Route>
               {/* ################################################################### */}
               {/* ############################## VISITOR ############################## */}
               <Route path="/dashboard/visitor" element={<Visitors />}></Route>

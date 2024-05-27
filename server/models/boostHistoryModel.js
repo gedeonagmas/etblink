@@ -34,6 +34,11 @@ const boostHistorySchema = new mongoose.Schema(
     checkDetail: {
       type: Object,
     },
+
+    approved: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,
