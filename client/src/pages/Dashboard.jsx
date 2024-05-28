@@ -16,7 +16,11 @@ import Company from "./dashboard/Company";
 import logo from "./../assets/logo.png";
 import callCenterImage from "../assets/promotion.avif";
 import gedi from "../assets/gedi.jpg";
-import { useReadQuery, useUserLogoutMutation } from "../features/api/apiSlice";
+import {
+  useNotificationViewMutation,
+  useReadQuery,
+  useUserLogoutMutation,
+} from "../features/api/apiSlice";
 import Response from "../components/Response";
 import Banner from "./../components/Banner";
 import SmallBanner from "../components/SmallBanner";
@@ -41,6 +45,21 @@ const Dashboard = () => {
     url: `/user/views?viewer[eq]=${user?.user?._id}&populatingType=views&populatingValue=company,viewer`,
     tag: ["view", "companies"],
   });
+
+  const {
+    data: notifications,
+    isFetching: notificationsIsFetching,
+    isError: notificationsIsError,
+  } = useReadQuery({
+    url: `/user/notifications?receiver[eq]=${user?.user?._id}&isViewed=false`,
+    tag: ["notifications"],
+  });
+
+  const [updateData, updateResponse] = useNotificationViewMutation();
+
+  const notificationViewHandler = () => {
+    updateData({ receiver: user?.user?._id });
+  };
 
   const [logout, logoutResponse] = useUserLogoutMutation();
   const [pending, setPending] = useState(false);
@@ -544,29 +563,38 @@ const Dashboard = () => {
                       </div>
                     </a>
                   )}
-                  <div className="items-center flex flex-col justify-center">
-                    <button
-                      type="button"
-                      class="relative inline-flex items-center p-1s text-sm font-medium text-center t"
-                    >
-                      <svg
-                        class="w-6 h-6 text-gray-800 dark:text-white"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        fill="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path d="M17.133 12.632v-1.8a5.407 5.407 0 0 0-4.154-5.262.955.955 0 0 0 .021-.106V3.1a1 1 0 0 0-2 0v2.364a.933.933 0 0 0 .021.106 5.406 5.406 0 0 0-4.154 5.262v1.8C6.867 15.018 5 15.614 5 16.807 5 17.4 5 18 5.538 18h12.924C19 18 19 17.4 19 16.807c0-1.193-1.867-1.789-1.867-4.175Zm-13.267-.8a1 1 0 0 1-1-1 9.424 9.424 0 0 1 2.517-6.391A1.001 1.001 0 1 1 6.854 5.8a7.43 7.43 0 0 0-1.988 5.037 1 1 0 0 1-1 .995Zm16.268 0a1 1 0 0 1-1-1A7.431 7.431 0 0 0 17.146 5.8a1 1 0 0 1 1.471-1.354 9.424 9.424 0 0 1 2.517 6.391 1 1 0 0 1-1 .995ZM8.823 19a3.453 3.453 0 0 0 6.354 0H8.823Z" />
-                      </svg>
 
-                      <div class="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-main border-2 border-white rounded-full -top-2 -end-3 dark:border-gray-900">
-                        20
-                      </div>
-                    </button>
-                    <p className="text-xs font-semibold">notifications</p>
-                  </div>
+                  <a
+                    onClick={notificationViewHandler}
+                    href={`/dashboard/notifications`}
+                    className="cursor-pointer"
+                  >
+                    <div className="items-center flex flex-col justify-center">
+                      <button
+                        type="button"
+                        class="relative flex flex-col items-center text-sm font-medium text-center"
+                      >
+                        <svg
+                          class="w-6 h-6 text-gray-800 dark:text-white"
+                          aria-hidden="true"
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          fill="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path d="M17.133 12.632v-1.8a5.407 5.407 0 0 0-4.154-5.262.955.955 0 0 0 .021-.106V3.1a1 1 0 0 0-2 0v2.364a.933.933 0 0 0 .021.106 5.406 5.406 0 0 0-4.154 5.262v1.8C6.867 15.018 5 15.614 5 16.807 5 17.4 5 18 5.538 18h12.924C19 18 19 17.4 19 16.807c0-1.193-1.867-1.789-1.867-4.175Zm-13.267-.8a1 1 0 0 1-1-1 9.424 9.424 0 0 1 2.517-6.391A1.001 1.001 0 1 1 6.854 5.8a7.43 7.43 0 0 0-1.988 5.037 1 1 0 0 1-1 .995Zm16.268 0a1 1 0 0 1-1-1A7.431 7.431 0 0 0 17.146 5.8a1 1 0 0 1 1.471-1.354 9.424 9.424 0 0 1 2.517 6.391 1 1 0 0 1-1 .995ZM8.823 19a3.453 3.453 0 0 0 6.354 0H8.823Z" />
+                        </svg>
+
+                        <div class="absolute inline-flex items-center justify-center w-6 h-6 text-xs p-1 font-bold text-white bg-main border-2 border-white rounded-full -top-2 end-3 dark:border-gray-900">
+                          {notifications?.data
+                            ? notifications?.data?.length
+                            : 0}
+                        </div>
+                        <p className="text-xs font-semibold">notifications</p>
+                      </button>
+                    </div>
+                  </a>
                 </div>
                 <div className="flex ml-3 gap-2 -mt-2 lg:mt-0 items-center">
                   <button
@@ -983,6 +1011,30 @@ const Dashboard = () => {
 
                 <li>
                   <a
+                    href="/dashboard/admin/approval"
+                    class="flex items-center p-2 text-gray-500 hover:text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                  >
+                    <svg
+                      class="w-6 h-6"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M8 3a2 2 0 0 0-2 2v3h12V5a2 2 0 0 0-2-2H8Zm-3 7a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h1v-4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v4h1a2 2 0 0 0 2-2v-5a2 2 0 0 0-2-2H5Zm4 11a1 1 0 0 1-1-1v-4h8v4a1 1 0 0 1-1 1H9Z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
+
+                    <span class="flex-1 ms-3 whitespace-nowrap">Approvals</span>
+                  </a>
+                </li>
+                <li>
+                  <a
                     href="/dashboard/admin/bills"
                     class="flex items-center p-2 text-gray-500 hover:text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
                   >
@@ -1007,7 +1059,6 @@ const Dashboard = () => {
                     </span>
                   </a>
                 </li>
-
                 <li>
                   <a
                     href="/dashboard/admin/category"

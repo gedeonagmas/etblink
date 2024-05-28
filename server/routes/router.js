@@ -43,6 +43,7 @@ const {
   upgradeHandler,
   companyAggregation,
   paymentHandler,
+  notificationView,
 } = require("../controller/utilityController.js");
 const { sendEmailHandler } = require("../controller/emailController.js");
 
@@ -94,6 +95,7 @@ utilityRouter.route("/view").post(authentication, createView);
 utilityRouter.route("/upgrade").post(authentication, upgradeHandler);
 utilityRouter.route("/boost").post(authentication, paymentHandler);
 utilityRouter.route("/companyAggregate").get(companyAggregation);
+utilityRouter.route("/notificationView").put(notificationView);
 
 //factory route
 router.route("/:table/:id").get(authentication, _read_single);

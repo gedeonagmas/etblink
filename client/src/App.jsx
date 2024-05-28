@@ -57,6 +57,7 @@ import BlogsDetail from "./pages/blogs/BlogsDetail";
 import AddCategory from "./pages/dashboard/admin/AddCategory";
 import UpdateCategory from "./pages/dashboard/admin/UpdateCategory";
 import Bills from "./pages/dashboard/admin/Bills";
+import Notifications from "./pages/dashboard/Notifications";
 
 export const userContext = createContext();
 
@@ -258,7 +259,7 @@ function App() {
                 path="/dashboard/admin/blog-admins/manage"
                 element={<UsersProfile type="blog-admin" />}
               ></Route>
-              <Route path="/dashboard/admin/bills" element={<Bills />}></Route>
+              <Route path="/dashboard/admin/approval" element={<Bills />}></Route>
               {/* ################################################################### */}
               {/* ############################## VISITOR ############################## */}
               <Route path="/dashboard/visitor" element={<Visitors />}></Route>
@@ -307,6 +308,7 @@ function App() {
               <Route path="/dashboard/success" element={<Success />}></Route>
               <Route path="/dashboard/admin" element={<Admin />}></Route>
               <Route path="/dashboard/saves" element={<Saves />}></Route>
+              <Route path="/dashboard/notifications" element={<Notifications />}></Route>
               <Route path="/dashboard/views" element={<Views />}></Route>
               <Route path="/dashboard/upgrade" element={<Upgrade />}></Route>
               <Route path="/dashboard/message" element={<Message />}></Route>

@@ -4,6 +4,7 @@ const { sendEmailHandler } = require("./emailController");
 const cron = require("node-cron");
 const { BoostHistory } = require("../models/boostHistoryModel");
 const { SubscriptionHistory } = require("../models/subscriptionHistoryModel");
+const { notificationSender } = require("./utilityController");
 
 const boost = async () => {
   const date = new Date().toISOString().split("T")[0];
@@ -21,13 +22,13 @@ const boost = async () => {
     const from = "billing@etblink.com";
 
     // send local notification
-    await Notification.create({
-      message,
-      role: e?.role,
-      sender: "etblink",
-      receiver: e?._id,
-    });
+    // await Notification.create({
+    //   message,
+    //   role: e?.role,
+    //   receiver: e?._id,
+    // });
 
+    notificationSender(message, e?.role, e?._id);
     // send email
     return sendEmailHandler({ subject, message, to: e?.email, from });
   };
@@ -36,7 +37,7 @@ const boost = async () => {
     startDate: Date.now(),
     approved: true,
   });
-  
+
   if (boostHistory?.length > 0) {
     boostHistory?.map(async (history) => {
       const company = await User({ user: history?._id }).populate("user");

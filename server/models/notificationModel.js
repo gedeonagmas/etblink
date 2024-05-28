@@ -22,11 +22,6 @@ const notificationSchema = new mongoose.Schema(
           : "admin";
       },
     },
-    sender: {
-      type: String,
-      validate: valid.required("Sender"),
-    },
-
     isViewed: {
       type: Boolean,
       default: false,

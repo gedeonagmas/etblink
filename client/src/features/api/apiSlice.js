@@ -55,6 +55,7 @@ export const apiSlice = createApi({
     "places",
     "news-admins",
     "blogs-admins",
+    "notifications",
   ],
   endpoints: (builder) => ({
     //user signup
@@ -135,6 +136,17 @@ export const apiSlice = createApi({
         body: data,
         credentials: "include",
       }),
+    }),
+
+    //user notificationView
+    notificationView: builder.mutation({
+      query: (data) => ({
+        url: `/utility/notificationView`,
+        method: "PUT",
+        body: data,
+        credentials: "include",
+      }),
+      providesTags: ["notifications"],
     }),
 
     //create
@@ -409,4 +421,5 @@ export const {
   useUpgradeMutation,
   useCreateBoostMutation,
   useCompanyAggregateQuery,
+  useNotificationViewMutation,
 } = apiSlice;

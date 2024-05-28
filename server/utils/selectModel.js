@@ -9,6 +9,7 @@ const { Company } = require("../models/companyModel");
 const { Group } = require("../models/groupModel");
 const { NewsAdmin } = require("../models/newsAdminModel");
 const { News } = require("../models/newsModel");
+const { Notification } = require("../models/notificationModel");
 const { Institution } = require("../models/organizationModel");
 const { Payment } = require("../models/paymentModel");
 const { Place } = require("../models/placeModel");
@@ -103,6 +104,9 @@ const selectModel = (name, next) => {
       break;
     case "news-admins":
       model = NewsAdmin;
+      break;
+    case "notifications":
+      model = Notification;
       break;
     default:
       return next(new AppError("something went wrong please try again!.", 500));

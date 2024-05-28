@@ -11,7 +11,16 @@ const { BoostHistory } = require("../models/boostHistoryModel");
 const { SubscriptionHistory } = require("../models/subscriptionHistoryModel");
 const { Payment } = require("../models/paymentModel");
 const { sendEmailHandler } = require("./emailController");
+const { Notification } = require("../models/notificationModel");
 const from = "billing@etblink.com";
+
+const notificationSender = async (message, role, receiver) => {
+  return await Notification.create({
+    message,
+    role,
+    receiver,
+  });
+};
 
 const createRate = asyncCatch(async (req, res, next) => {
   const rateHandler = async () => {
@@ -76,6 +85,23 @@ const readRate = asyncCatch(async (req, res, next) => {
     .populate("rater accepter")
     .limit(20)
     .sort("-createdAt");
+  res.status(200).json({
+    status: "Read",
+    data,
+  });
+});
+
+const notificationView = asyncCatch(async (req, res, next) => {
+  const data = await Notification.find({
+    receiver: req.body.receiver,
+    isViewed: false,
+  });
+
+  data.map(async (note) => {
+    await Notification.findByIdAndUpdate(note._id, { isViewed: true });
+  });
+
+  await data.save();
   res.status(200).json({
     status: "Read",
     data,
@@ -186,24 +212,28 @@ const upgradeHandler = asyncCatch(async (req, res, next) => {
   const sales =
     req.body.role === "sales" && (await Visitor.findById(req.body.user));
 
+  console.log(sales);
   const account =
     req.body.role === "company"
       ? await Company.create({})
-      : await Sales.create({
-          firstName: sales.firstName ? sales.firstName : undefined,
-          middleName: sales.middleName ? sales.middleName : undefined,
-          lastName: sales.lastName ? sales.lastName : undefined,
-          bio: sales.bio ? sales.bio : undefined,
-          gender: sales.gender ? sales.gender : undefined,
-          phone: sales.phone ? sales.phone : undefined,
-          address: sales.address ? sales.address : undefined,
-          profilePicture: sales.profilePicture
-            ? sales.profilePicture
-            : undefined,
-          profileFillStatus: sales.profileFillStatus
-            ? sales.profileFillStatus
-            : undefined,
-        });
+      : await Sales.create(
+          {
+            firstName: sales.firstName ? sales.firstName : undefined,
+            middleName: sales.middleName ? sales.middleName : undefined,
+            lastName: sales.lastName ? sales.lastName : undefined,
+            bio: sales.bio ? sales.bio : undefined,
+            gender: sales.gender ? sales.gender : undefined,
+            phone: sales.phone ? sales.phone : undefined,
+            address: sales.address ? sales.address : undefined,
+            profilePicture: sales.profilePicture
+              ? sales.profilePicture
+              : undefined,
+            profileFillStatus: sales.profileFillStatus
+              ? sales.profileFillStatus
+              : undefined,
+          },
+          { validateBeforeSave: false }
+        );
 
   if (account._id) {
     await User.findByIdAndUpdate(
@@ -252,7 +282,7 @@ const paymentHandler = asyncCatch(async (req, res, next) => {
   } = req.body;
 
   const company = await Company.findById(req.body.company);
-  // console.log(req.body);
+
   if (serviceType === "boosting") {
     company.isBoosted =
       payFrom === "online" || payFrom === "deposit" ? true : false;
@@ -329,23 +359,23 @@ const paymentHandler = asyncCatch(async (req, res, next) => {
 
     switch (approvalType) {
       case "boosting":
-        const boostHistory = await BoostHistory.findByIdAndUpdate(req.body.id, {
+        await BoostHistory.findByIdAndUpdate(req.body.id, {
           approved: req.body.value,
         });
         break;
       case "subscription":
-        const subscriptionHistory = await SubscriptionHistory.findByIdAndUpdate(
-          req.body.id,
-          { approved: req.body.value }
-        );
+        await SubscriptionHistory.findByIdAndUpdate(req.body.id, {
+          approved: req.body.value,
+        });
         break;
       case "fund":
-        const fundHistory = await SubscriptionHistory.findByIdAndUpdate(
-          req.body.id,
-          { approved: req.body.value }
-        );
+        await Payment.findByIdAndUpdate(req.body.id, {
+          approved: req.body.value,
+        });
         company.currentBalance =
-          company.currentBalance * 1 + req.body.amount * 1;
+          req.body.value === true
+            ? company.currentBalance * 1 - req.body.amount * 1
+            : company.currentBalance * 1 + req.body.amount * 1;
         await company.save();
         break;
       default:
@@ -355,16 +385,15 @@ const paymentHandler = asyncCatch(async (req, res, next) => {
         });
     }
 
-    // const subject = "Your Transaction is Successful thank you.";
-    // const message = `Your Transaction is Successful thank you.`;
+    const subject = "Your Transaction is Successful thank you.";
+    const message = `Your Transaction is Successful thank you.`;
+    notificationSender(message, "company", company?._id);
     // return sendEmailHandler(subject, message, company?.email, from);
   }
 
   return res.status(200).json({
     status: "Payed",
-    message: `Your company is ${
-      req.body.serviceType + "ed"
-    } Successfully. Thank you!`,
+    message: `Transaction Successful Thank you!`,
   });
 });
 
@@ -398,100 +427,10 @@ module.exports = {
   upgradeHandler,
   paymentHandler,
   companyAggregation,
+  notificationSender,
+  notificationView,
 };
 
-// const boostHandler = asyncCatch(async (req, res, next) => {
-//   const { type, payFrom, endDate, startDate, amount, boost } = req.body;
-//   const company = await Company.findById(req.body.company);
-//   if (type === "boost") {
-//     if (payFrom === "deposit") {
-//       company.currentBalance = company.currentBalance * 1 - amount * 1;
-//     }
-//     company.isBoosted = true;
-//     company.boostEndDate = Date.parse(new Date(endDate));
-//     company.boostStartDate = Date.parse(new Date(startDate));
-//     company.boostStatus = "Payed";
-//     await company.save();
-
-//     await BoostHistory.create({
-//       company: req.body.company,
-//       boost: boost,
-//       startDate: Date.parse(new Date(startDate)),
-//       endDate: Date.parse(new Date(endDate)),
-//       payFrom: payFrom,
-//     });
-
-//     // const subject = "Your Transaction is Successful thank you.";
-//     // const message = `Your Transaction is Successful thank you.`;
-//     // return sendEmailHandler(subject, message, company?.email, from);
-//   } else if (type === "subscription") {
-//     if (payFrom === "deposit") {
-//       company.currentBalance = company.currentBalance * 1 - amount * 1;
-//     }
-//     company.isSubscribed = true;
-//     company.subscriptionEndDate = Date.parse(new Date(endDate));
-//     company.subscriptionStartDate = Date.parse(new Date(startDate));
-//     company.subscriptionStatus = "Payed";
-//     await company.save();
-
-//     await SubscriptionHistory.create({
-//       company: req.body.company,
-//       subscription: boost,
-//       startDate: Date.parse(new Date(startDate)),
-//       endDate: Date.parse(new Date(endDate)),
-//       payFrom: payFrom,
-//     });
-
-//     // const subject = "Your Transaction is Successful thank you.";
-//     // const message = `Your Transaction is Successful thank you.`;
-//     // return sendEmailHandler(subject, message, company?.email, from);
-//   } else if (type === "fund") {
-//     company.currentBalance = company.currentBalance * 1 + amount * 1;
-//     await company.save();
-
-//     await Payment.create({
-//       company: req.body.company,
-//       amount: amount,
-//       status: "Payed",
-//       payFrom: payFrom,
-//     });
-
-//     // const subject = "Your Transaction is Successful thank you.";
-//     // const message = `Your Transaction is Successful thank you.`;
-//     // return sendEmailHandler(subject, message, company?.email, from);
-//   }
-//   // else if (req.body.type === "deposit") {
-//   //   company.currentBalance = company.currentBalance * 1 - req.body.amount * 1;
-//   //   await company.save();
-
-//   //   const boost = await BoostHistory.create({
-//   //     company: req.body.company,
-//   //     boost: req.body.boost,
-//   //     startDate: Date.parse(new Date(req.body.startDate)),
-//   //     endDate: Date.parse(new Date(req.body.endDate)),
-//   //     payFrom: req.body.payFrom,
-//   //   });
-//   // }
-
-//   // await company.save();
-//   // const boost = await BoostHistory.create({
-//   //   company: req.body.company,
-//   //   boost: req.body.boost,
-//   //   startDate: Date.parse(new Date(req.body.startDate)),
-//   //   endDate: Date.parse(new Date(req.body.endDate)),
-//   //   payFrom: req.body.payFrom,
-//   // });
-
-//   // if (boost) {
-//   return res.status(200).json({
-//     status: "Payed",
-//     message: `Your company is ${req.body.type + "ed"} Successfully. Thank you!`,
-//   });
-//   // } else {
-//   //   return next(
-//   //     new AppError("something went wrong unable to upgrade your account!")
-//   //   );
-//   // }
 //   // console.log(Date.parse(new Date(req.body.endDate)));
 //   // const ISO = new Date().toISOString(); //'2024-04-21T01:57:29.465Z' ==> first get the current time in ISO format
 //   // const startDate = Date.parse("2024-05-21T01:57:29.465Z"); // 1716256649465 ==> this will be the start date

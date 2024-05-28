@@ -6,7 +6,7 @@ import {
 } from "../../../features/api/apiSlice";
 import { format } from "timeago.js";
 import Tables from "../../../components/Tables";
-import { Close, Delete, Details, Edit } from "@mui/icons-material";
+import { Close, Delete, Details, Edit, MoreHoriz } from "@mui/icons-material";
 import ResponsivePagination from "react-responsive-pagination";
 import "./../../categories/pagination.css";
 import Loading from "../../../components/loading/Loading";
@@ -65,9 +65,11 @@ const Bills = () => {
     });
   }, [search, type]);
 
-  const approveHandler = (ids, value) => {
+  const approveHandler = (ids, value, company, amount) => {
     approveData({
       value,
+      amount,
+      company,
       id: ids,
       serviceType: "approve",
       approvalType:
@@ -95,7 +97,7 @@ const Bills = () => {
     {
       name: "START DATE",
       selector: (row) => row?.startDate,
-      cell: (row) => <div className="">{row?.startDate}</div>,
+      cell: (row) => <div className="">{format(row?.startDate)}</div>,
       sortable: true,
     },
     {
@@ -162,16 +164,7 @@ const Bills = () => {
             }}
             className="px-2 py-1 bg-main text-white rounded-lg"
           >
-            <Details fontSize="small" />
-          </button>
-
-          <button
-            onClick={() => {
-              updateHandler(row?._id, row?.visible);
-            }}
-            className="px-2 py-1 bg-main text-white rounded-lg"
-          >
-            <Delete fontSize="small" />
+            <MoreHoriz fontSize="small" />
           </button>
         </div>
       ),
@@ -179,10 +172,18 @@ const Bills = () => {
     },
   ];
 
+  useEffect(() => {
+    if (approveResponse.status === "fulfilled") {
+      setPopup(false);
+    }
+  }, [approveResponse]);
+
   console.log(data, totalPage, "type");
   return (
     <div className="relative">
       <Response response={approveResponse} setPending={setApprovePending} />
+      <div className="flex px-5 items-center justify-between">
+        
       <select
         onChange={(e) => setType(e.target.value)}
         name=""
@@ -194,8 +195,15 @@ const Bills = () => {
         </option>
         <option value="subscription">Subscription</option>
         <option value="fund">Fund</option>
-      </select>
-
+      </select><input
+          onChange={(e) => setSearch(e.target.value)}
+          type="search"
+          id="default-search"
+          class="block w-full max-w-md px-4 h-12 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          placeholder="Search..."
+          required
+        />
+</div>
       <div className="w-full">
         {isFetching && <Loading />}
         {isError && <p>Something went wrong unable to read boost data</p>}
@@ -228,44 +236,44 @@ const Bills = () => {
           </div>
 
           <p className="font-bold">Company Name</p>
-          <p>{detail.company.name}</p>
+          <p>{detail?.company?.name}</p>
 
           <p className="font-bold">Phone</p>
-          <p>{detail.company.phone}</p>
+          <p>{detail?.company?.phone}</p>
 
           <p className="font-bold">Bank Name</p>
           <p>
-            {detail.payFrom === "check"
-              ? detail.checkDetail.checkBankName
-              : detail.bankDetail.bankName}
+            {detail?.payFrom === "check"
+              ? detail?.checkDetail.checkBankName
+              : detail?.bankDetail.bankName}
           </p>
 
           <p className="font-bold">Account(Check) Number</p>
           <p>
-            {detail.payFrom === "check"
-              ? detail.checkDetail.checkNumber
-              : detail.bankDetail.accountNumber}
+            {detail?.payFrom === "check"
+              ? detail?.checkDetail.checkNumber
+              : detail?.bankDetail.accountNumber}
           </p>
 
           <p className="font-bold">Customer full name</p>
           <p>
-            {detail.payFrom === "check"
-              ? detail.checkDetail.checkYourName
-              : detail.bankDetail.yourName}
+            {detail?.payFrom === "check"
+              ? detail?.checkDetail?.checkYourName
+              : detail?.bankDetail?.yourName}
           </p>
 
           <p className="font-bold">Amount</p>
           <p>
-            {detail.payFrom === "check"
-              ? detail.checkDetail.checkAmount
-              : detail.bankDetail.bankAmount}
+            {detail?.payFrom === "check"
+              ? detail?.checkDetail?.checkAmount
+              : detail?.bankDetail?.bankAmount}
           </p>
 
           <p className="font-bold">Date</p>
           <p>
-            {detail.payFrom === "check"
-              ? detail.checkDetail.checkDate
-              : detail.bankDetail.bankDate}
+            {detail?.payFrom === "check"
+              ? detail?.checkDetail?.checkDate
+              : detail?.bankDetail?.bankDate}
           </p>
 
           <div className="flex gap-5 justify-end mt-3">
@@ -279,7 +287,14 @@ const Bills = () => {
             <LoadingButton
               pending={approvePending}
               onClick={() =>
-                approveHandler(detail._id, detail?.approved ? false : true)
+                approveHandler(
+                  detail?._id,
+                  detail?.approved ? false : true,
+                  detail?.company?._id,
+                  detail?.payFrom === "check"
+                    ? detail?.checkDetail?.checkAmount
+                    : detail?.bankDetail?.bankAmount
+                )
               }
               title={detail?.approved ? "Reject" : "Approve"}
               color="bg-main"
