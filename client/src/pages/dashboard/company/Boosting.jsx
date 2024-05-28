@@ -113,7 +113,12 @@ const Boosting = () => {
 
   useEffect(() => {
     if (boostedCompany?.data?.length < 6) {
-      setMinStartDate(new Date()?.toISOString()?.split("T")[0]);
+      const date = new Date()?.toISOString()?.split("T")[0];
+      setMinStartDate(
+        `${date?.split("-")[0]}-${date?.split("-")[1]}-${
+          date?.split("-")[2] * 1 + 1
+        }`
+      );
     } else {
       let minDate = boostedCompany?.data[0]?.endDate;
       boostedCompany?.data?.map((e) => {
@@ -123,8 +128,13 @@ const Boosting = () => {
           return true;
         }
       });
-      minDate &&
-        setMinStartDate(new Date(minDate)?.toISOString()?.split("T")[0]);
+      const date = minDate && new Date(minDate)?.toISOString()?.split("T")[0];
+
+      setMinStartDate(
+        `${date?.split("-")[0]}-${date?.split("-")[1]}-${
+          date?.split("-")[2] * 1 + 1
+        }`
+      );
     }
   }, [boostedCompany]);
 
@@ -516,7 +526,7 @@ const Boosting = () => {
           {boostedCompany?.data?.length < 6 ? (
             <div>
               Your can start your boosting from
-              <span className="font-bold px-2">Now ({minStartDate})</span>
+              <span className="font-bold px-2"> {minStartDate}</span>
             </div>
           ) : (
             <div>

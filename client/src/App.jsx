@@ -49,7 +49,7 @@ import UpdateBlog from "./pages/dashboard/admin/UpdateBlog";
 import AddBlog from "./pages/dashboard/admin/AddBlog";
 import UpdatePrices from "./pages/dashboard/admin/UpdatePrices";
 import AddPrices from "./pages/dashboard/admin/AddPrices";
-import UserSales from "./pages/dashboard/admin/Users";
+import Users from "./pages/dashboard/admin/Users";
 import UsersProfile from "./pages/dashboard/UsersProfile";
 import SalesDetail from "./pages/SalesDetail";
 import BlogsCategory from "./pages/blogs/BlogsCategory";
@@ -125,7 +125,7 @@ function App() {
               ></Route>
               <Route
                 path="/dashboard/company/subscription"
-                element={<Subscription />}
+                element={<Subscription type="default" />}
               ></Route>
               <Route
                 path="/dashboard/company/saves"
@@ -221,7 +221,7 @@ function App() {
               ></Route>
               <Route
                 path="/dashboard/admin/sales"
-                element={<UserSales type="sales" />}
+                element={<Users type="sales" />}
               ></Route>
               <Route
                 path="/dashboard/admin/sales/manage"
@@ -229,7 +229,7 @@ function App() {
               ></Route>
               <Route
                 path="/dashboard/admin/visitor"
-                element={<UserSales type="visitor" />}
+                element={<Users type="visitor" />}
               ></Route>
               <Route
                 path="/dashboard/admin/visitors/manage"
@@ -237,7 +237,7 @@ function App() {
               ></Route>
               <Route
                 path="/dashboard/admin/companies"
-                element={<UserSales type="company" />}
+                element={<Users type="company" />}
               ></Route>
               <Route
                 path="/dashboard/admin/companies/manage"
@@ -245,7 +245,7 @@ function App() {
               ></Route>
               <Route
                 path="/dashboard/admin/news-admins"
-                element={<UserSales type="news-admin" />}
+                element={<Users type="news-admin" />}
               ></Route>
               <Route
                 path="/dashboard/admin/news-admins/manage"
@@ -253,13 +253,20 @@ function App() {
               ></Route>
               <Route
                 path="/dashboard/admin/blog-admins"
-                element={<UserSales type="blog-admin" />}
+                element={<Users type="blog-admin" />}
               ></Route>
               <Route
                 path="/dashboard/admin/blog-admins/manage"
                 element={<UsersProfile type="blog-admin" />}
               ></Route>
-              <Route path="/dashboard/admin/approval" element={<Bills />}></Route>
+              <Route
+                path="/dashboard/admin/approval"
+                element={<Bills />}
+              ></Route>
+              <Route
+                path="/dashboard/admin/subscription/custom"
+                element={<Subscription type="custom" />}
+              ></Route>
               {/* ################################################################### */}
               {/* ############################## VISITOR ############################## */}
               <Route path="/dashboard/visitor" element={<Visitors />}></Route>
@@ -308,7 +315,10 @@ function App() {
               <Route path="/dashboard/success" element={<Success />}></Route>
               <Route path="/dashboard/admin" element={<Admin />}></Route>
               <Route path="/dashboard/saves" element={<Saves />}></Route>
-              <Route path="/dashboard/notifications" element={<Notifications />}></Route>
+              <Route
+                path="/dashboard/notifications"
+                element={<Notifications />}
+              ></Route>
               <Route path="/dashboard/views" element={<Views />}></Route>
               <Route path="/dashboard/upgrade" element={<Upgrade />}></Route>
               <Route path="/dashboard/message" element={<Message />}></Route>

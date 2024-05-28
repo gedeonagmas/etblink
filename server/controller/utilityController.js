@@ -304,6 +304,7 @@ const paymentHandler = asyncCatch(async (req, res, next) => {
       startDate: Date.parse(new Date(startDate)),
       endDate: Date.parse(new Date(endDate)),
       payFrom,
+      approved: payFrom === "online" || payFrom === "deposit" ? true : false,
       bankDetail: payFrom === "bank" ? req.body.bankDetail : undefined,
       checkDetail: payFrom === "check" ? req.body.checkDetail : undefined,
     });
@@ -312,6 +313,7 @@ const paymentHandler = asyncCatch(async (req, res, next) => {
     // const message = `Your Transaction is Successful thank you.`;
     // return sendEmailHandler(subject, message, company?.email, from);
   } else if (serviceType === "serviceFee") {
+    console.log(req.body.company,'comapny');
     company.isSubscribed =
       payFrom === "online" || payFrom === "deposit" ? true : false;
 
@@ -332,6 +334,7 @@ const paymentHandler = asyncCatch(async (req, res, next) => {
       startDate: Date.parse(new Date(startDate)),
       endDate: Date.parse(new Date(endDate)),
       payFrom,
+      approved: payFrom === "online" || payFrom === "deposit" ? true : false,
       bankDetail: payFrom === "bank" ? req.body.bankDetail : undefined,
       checkDetail: payFrom === "check" ? req.body.checkDetail : undefined,
     });
