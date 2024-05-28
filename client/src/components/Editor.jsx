@@ -5,11 +5,6 @@ import "react-quill/dist/quill.snow.css";
 import "./styles.css";
 
 export const Editor = ({ description, setDescription, theme }) => {
-  //   const [state, setState] = React.useState({ value: null });
-  //   const handleChange = (value) => {
-  //     setState({ value });
-  //   };
-
   return (
     <div className="text-editor">
       <EditorToolbar />
