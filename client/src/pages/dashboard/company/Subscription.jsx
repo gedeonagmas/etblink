@@ -807,7 +807,7 @@ const Subscription = ({ type }) => {
             {type === "custom" && (
               <div className="w-full">
                 <p className="text-lg mt-4 font-bold">
-                  Select payment information.{" "}
+                  Enter payment information.{" "}
                   <span className="text-sm font-normal text-red-500">
                     (all fields are required)
                   </span>
@@ -831,14 +831,19 @@ const Subscription = ({ type }) => {
                         </select>
                       </div>
 
-                      <div className="flex w-full flex-col gap-1">
+                      <div
+                        className={`flex ${
+                          planName === "free" ? "bg-red-300" : ""
+                        } w-full flex-col gap-1`}
+                      >
                         <p className="text-sm">Amount</p>
                         <input
+                          disabled={planName === "free" ? true : false}
                           type="number"
                           onChange={(e) => setPlanAmount(e.target.value)}
                           name=""
                           id=""
-                          min={0}
+                          min={1}
                           className="h-10 border border-gray-300 text-sm rounded-sm"
                           placeholder="100"
                         />
@@ -886,67 +891,74 @@ const Subscription = ({ type }) => {
                 </div>
               </div>
             )}
-            <p className="text-lg mt-4 font-bold">Select your payment type.</p>
-            <div className="w-full py-7 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 items-center justify-between">
-              <div className="rounded-lg hover:bg-gray-200 p-4 flex items-center gap-4 border">
-                <input
-                  onChange={(e) =>
-                    e.target.checked ? setPayFrom("online") : ""
-                  }
-                  type="radio"
-                  name="paymentType"
-                  id=""
-                />
-                <p className="text-xl font-bold">Online</p>
+            {planName !== "free" && (
+              <div className="w-full">
+                <p className="text-lg mt-4 font-bold">
+                  Select your payment type.
+                </p>
+                <div className="w-full py-7 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 items-center justify-between">
+                  <div className="rounded-lg hover:bg-gray-200 p-4 flex items-center gap-4 border">
+                    <input
+                      onChange={(e) =>
+                        e.target.checked ? setPayFrom("online") : ""
+                      }
+                      type="radio"
+                      name="paymentType"
+                      id=""
+                    />
+                    <p className="text-xl font-bold">Online</p>
+                  </div>
+                  <div
+                    className={`rounded-lg hover:bg-gray-200 p-4 flex items-center gap-4 border ${
+                      currentCompany?.data[0]?.currentBalance <
+                        subscriptionInfo?.amount && "bg-red-100"
+                    }`}
+                  >
+                    <input
+                      disabled={
+                        currentCompany?.data[0]?.currentBalance <
+                        subscriptionInfo?.amount
+                          ? true
+                          : false
+                      }
+                      // onChange={(e) =>
+                      //   setPayFrom(e.target.value === "on" ? "deposit" : "")
+                      // }
+                      onChange={(e) =>
+                        e.target.checked ? setPayFrom("deposit") : ""
+                      }
+                      type="radio"
+                      name="paymentType"
+                      id=""
+                    />
+                    <p className="text-xl font-bold">Deposit</p>
+                  </div>
+                  <div className="rounded-lg hover:bg-gray-200 p-4 flex items-center gap-4 border">
+                    <input
+                      onChange={(e) =>
+                        e.target.checked ? setPayFrom("bank") : ""
+                      }
+                      type="radio"
+                      name="paymentType"
+                      id=""
+                    />
+                    <p className="text-xl font-bold">Bank</p>
+                  </div>
+                  <div className="rounded-lg hover:bg-gray-200 p-4 flex items-center gap-4 border">
+                    <input
+                      onChange={(e) =>
+                        e.target.checked ? setPayFrom("check") : ""
+                      }
+                      type="radio"
+                      name="paymentType"
+                      id=""
+                    />
+                    <p className="text-xl font-bold">Check</p>
+                  </div>
+                </div>
               </div>
-              <div
-                className={`rounded-lg hover:bg-gray-200 p-4 flex items-center gap-4 border ${
-                  currentCompany?.data[0]?.currentBalance <
-                    subscriptionInfo?.amount && "bg-red-100"
-                }`}
-              >
-                <input
-                  disabled={
-                    currentCompany?.data[0]?.currentBalance <
-                    subscriptionInfo?.amount
-                      ? true
-                      : false
-                  }
-                  // onChange={(e) =>
-                  //   setPayFrom(e.target.value === "on" ? "deposit" : "")
-                  // }
-                  onChange={(e) =>
-                    e.target.checked ? setPayFrom("deposit") : ""
-                  }
-                  type="radio"
-                  name="paymentType"
-                  id=""
-                />
-                <p className="text-xl font-bold">Deposit</p>
-              </div>
-              <div className="rounded-lg hover:bg-gray-200 p-4 flex items-center gap-4 border">
-                <input
-                  onChange={(e) => (e.target.checked ? setPayFrom("bank") : "")}
-                  type="radio"
-                  name="paymentType"
-                  id=""
-                />
-                <p className="text-xl font-bold">Bank</p>
-              </div>
-              <div className="rounded-lg hover:bg-gray-200 p-4 flex items-center gap-4 border">
-                <input
-                  onChange={(e) =>
-                    e.target.checked ? setPayFrom("check") : ""
-                  }
-                  type="radio"
-                  name="paymentType"
-                  id=""
-                />
-                <p className="text-xl font-bold">Check</p>
-              </div>
-            </div>
-
-            <div className="w-full flex items-center gap-5 justify-end">
+            )}
+            <div className="w-full flex items-center mt-3 gap-5 justify-end">
               <button
                 onClick={() => {
                   setPayFrom("");
@@ -965,11 +977,16 @@ const Subscription = ({ type }) => {
                     paymentTypeHandler();
                   } else if (type === "custom") {
                     if (
+                      (planName === "custom",
                       payFrom &&
-                      planName &&
-                      planAmount &&
-                      planDuration.type &&
-                      planDuration.value
+                        planAmount &&
+                        planDuration.type &&
+                        planDuration.value)
+                    ) {
+                      paymentTypeHandler();
+                    } else if (
+                      (planName === "free",
+                      payFrom && planDuration.type && planDuration.value)
                     ) {
                       paymentTypeHandler();
                     } else {
