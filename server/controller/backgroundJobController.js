@@ -5,6 +5,7 @@ const cron = require("node-cron");
 const { BoostHistory } = require("../models/boostHistoryModel");
 const { SubscriptionHistory } = require("../models/subscriptionHistoryModel");
 const { notificationSender } = require("./utilityController");
+// const { message } = require("./../utils/messages");
 
 const boost = async () => {
   const date = new Date().toISOString().split("T")[0];
@@ -21,14 +22,9 @@ const boost = async () => {
   const emailSender = async (subject, message, e) => {
     const from = "billing@etblink.com";
 
-    // send local notification
-    // await Notification.create({
-    //   message,
-    //   role: e?.role,
-    //   receiver: e?._id,
-    // });
-
+    //send local notification
     notificationSender(message, e?.role, e?._id);
+
     // send email
     return sendEmailHandler({ subject, message, to: e?.email, from });
   };
@@ -40,18 +36,25 @@ const boost = async () => {
 
   if (boostHistory?.length > 0) {
     boostHistory?.map(async (history) => {
-      const company = await User({ user: history?._id }).populate("user");
-      company.user.startDate = history.startDate;
-      company.user.endDate = history.endDate;
-      company.user.isBoosted = true;
-      const response = await company.save();
+      const company = await User.find({ user: history?.company }).populate(
+        "user"
+      );
+
+      company[0].user.boostStartDate = history.startDate;
+      company[0].user.boostEndDate = history.endDate;
+      company[0].user.isBoosted = true;
+      company[0].user.boostStatus = "Started";
+      const response = await company[0].user.save();
+
       if (response) {
         const subject = "New boosted plan is added to your company.";
-        const message = ` new boosted plan is added to your company and your boosting service is released from ${
-          new Date(history.startDate).split("T")[0]
-        } to ${new Date(history.endDate).split("T")[0]}`;
+        const message = `new boosted plan is added to your company and your boosting service is released from ${new Date(
+          history.startDate
+        ).toDateString()} to ${new Date(
+          history.endDate
+        ).toDateString()}. thank you for working with us!!!`;
 
-        emailSender(subject, message, e);
+        emailSender(subject, message, company[0]);
       }
     });
   }
@@ -62,18 +65,25 @@ const boost = async () => {
   });
   if (subscriptionHistory?.length > 0) {
     subscriptionHistory?.map(async (history) => {
-      const company = await User({ user: history?._id }).populate("user");
-      company.user.subscriptionStartDate = history.startDate;
-      company.user.subscriptionEndDate = history.endDate;
-      company.user.isSubscribed = true;
-      const response = await company.save();
-      if (response) {
-        const subject = "New subscription plan is added to your company.";
-        const message = ` new service plan is added to your company and your service service is released from ${
-          new Date(history.startDate).split("T")[0]
-        } to ${new Date(history.endDate).split("T")[0]}`;
+      const company = await User.find({ user: history?.company }).populate(
+        "user"
+      );
 
-        emailSender(subject, message, e);
+      company[0].user.subscriptionStartDate = history.startDate;
+      company[0].user.subscriptionEndDate = history.endDate;
+      company[0].user.isSubscribed = true;
+      company[0].user.subscriptionStatus = "Started";
+      const response = await company[0].user.save();
+
+      if (response) {
+        const subject = "New service plan is added to your company.";
+        const message = `new service plan is added to your company and your service is released from ${new Date(
+          history.startDate
+        ).toDateString()} to ${new Date(
+          history.endDate
+        ).toDateString()}. thank you for working with us!!!`;
+
+        emailSender(subject, message, company[0]);
       }
     });
   }

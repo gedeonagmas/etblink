@@ -22,6 +22,12 @@ const notificationSender = async (message, role, receiver) => {
   });
 };
 
+const emailSender = async (subject, message, e) => {
+  const from = "billing@etblink.com";
+  notificationSender(message, e?.role, e?.user?._id);
+  return sendEmailHandler({ subject, message, to: e?.email, from });
+};
+
 const createRate = asyncCatch(async (req, res, next) => {
   const rateHandler = async () => {
     const rate = await Rate.aggregate([
@@ -279,6 +285,7 @@ const paymentHandler = asyncCatch(async (req, res, next) => {
     boost,
     subscription,
     approvalType,
+    actionType,
   } = req.body;
 
   const company = await Company.findById(req.body.company);
@@ -298,7 +305,7 @@ const paymentHandler = asyncCatch(async (req, res, next) => {
 
     await company.save();
 
-    await BoostHistory.create({
+    const response = await BoostHistory.create({
       company: req.body.company,
       boost,
       startDate: Date.parse(new Date(startDate)),
@@ -309,9 +316,16 @@ const paymentHandler = asyncCatch(async (req, res, next) => {
       checkDetail: payFrom === "check" ? req.body.checkDetail : undefined,
     });
 
-    // const subject = "Your Transaction is Successful thank you.";
-    // const message = `Your Transaction is Successful thank you.`;
-    // return sendEmailHandler(subject, message, company?.email, from);
+    if (response) {
+      const subject = "New boosted plan is added to your company.";
+      const message = `new boosted plan is added to your company and your boosting service is released from ${new Date(
+        history.startDate
+      ).toDateString()} to ${new Date(
+        history.endDate
+      ).toDateString()}. thank you for working with us!!!`;
+
+      emailSender(subject, message, e);
+    }
   } else if (serviceType === "serviceFee") {
     console.log(req.body.company, "comapny");
     company.isSubscribed =
@@ -360,37 +374,74 @@ const paymentHandler = asyncCatch(async (req, res, next) => {
         new AppError("You are not authorized to perform this action!")
       );
 
-    switch (approvalType) {
-      case "boosting":
-        await BoostHistory.findByIdAndUpdate(req.body.id, {
-          approved: req.body.value,
-        });
-        break;
-      case "subscription":
-        await SubscriptionHistory.findByIdAndUpdate(req.body.id, {
-          approved: req.body.value,
-        });
-        break;
-      case "fund":
-        await Payment.findByIdAndUpdate(req.body.id, {
-          approved: req.body.value,
-        });
+    const approveHandler = async (model) => {
+      if (approvalType === "fund") {
         company.currentBalance =
           req.body.value === true
             ? company.currentBalance * 1 - req.body.amount * 1
             : company.currentBalance * 1 + req.body.amount * 1;
         await company.save();
-        break;
-      default:
-        return res.status(500).json({
-          status: "Error",
-          message: `Something went wrong please try again later`,
-        });
-    }
+      }
 
-    const subject = "Your Transaction is Successful thank you.";
-    const message = `Your Transaction is Successful thank you.`;
-    notificationSender(message, "company", company?._id);
+      return await model.findByIdAndUpdate(req.body.id, {
+        approved: req.body.value,
+      });
+    };
+
+    const startHandler = async (model, type) => {
+      const history = await model.findById(req.body.id);
+
+      if (history) {
+        const company = await User.find({ user: history?.company }).populate(
+          "user"
+        );
+
+        if (type === "boost") {
+          company[0].user.boostStartDate = history.startDate;
+          company[0].user.boostEndDate = history.endDate;
+          company[0].user.isBoosted = req.body.value;
+          company[0].user.boostStatus = req.body.value ? "Started" : "Pending";
+        }
+
+        if (type === "subscribe") {
+          company[0].user.subscriptionStartDate = history.startDate;
+          company[0].user.subscriptionEndDate = history.endDate;
+          company[0].user.isSubscribed = req.body.value;
+          company[0].user.subscriptionStatus = req.body.value
+            ? "Started"
+            : "Pending";
+        }
+
+        const response = await company[0].user.save();
+        if (response) {
+          const subject = `New ${
+            type === "boost" ? "boost" : "service"
+          } plan is added to your company.`;
+          const message = `new ${
+            type === "boost" ? "boost" : "service"
+          } plan is added to your company and your service is released from ${new Date(
+            history.startDate
+          ).toDateString()} to ${new Date(
+            history.endDate
+          ).toDateString()}. thank you for working with us!!!`;
+
+          emailSender(subject, message, company[0]);
+        }
+      }
+    };
+
+    approvalType === "boosting" && approveHandler(BoostHistory);
+    approvalType === "subscription" && approveHandler(SubscriptionHistory);
+    approvalType === "fund" && approveHandler(Payment);
+
+    actionType === "boosting" && startHandler(BoostHistory, "boost");
+    actionType === "subscription" &&
+      startHandler(SubscriptionHistory, "subscribe");
+
+    //######### send email and local notifications ###############
+    // const subject = "Your Transaction is Successful thank you.";
+    // const message = `Your Transaction is Successful thank you.`;
+    // notificationSender(message, "company", company?._id);
     // return sendEmailHandler(subject, message, company?.email, from);
   }
 
@@ -412,7 +463,6 @@ const companyAggregation = asyncCatch(async (req, res, next) => {
     },
   ]);
 
-  console.log(categories);
   return res.status(200).json({
     status: "Read",
     data: categories,

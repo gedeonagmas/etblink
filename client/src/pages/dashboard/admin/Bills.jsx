@@ -16,8 +16,10 @@ import Response from "../../../components/Response";
 const Bills = () => {
   const [getHistory, { data, isFetching, isError }] = useLazyReadQuery();
   const [approveData, approveResponse] = useCreateBoostMutation();
+  const [startData, startResponse] = useCreateBoostMutation();
 
   const [approvePending, setApprovePending] = useState(false);
+  const [startPending, setStartPending] = useState(false);
 
   const [type, setType] = useState("boost");
   const [detail, setDetail] = useState("");
@@ -81,6 +83,22 @@ const Bills = () => {
     });
   };
 
+  const startHandler = (ids, value, company, amount) => {
+    startData({
+      value,
+      amount,
+      company,
+      id: ids,
+      serviceType: "approve",
+      actionType:
+        type === "boost"
+          ? "boosting"
+          : type === "subscription"
+          ? "subscription"
+          : null,
+    });
+  };
+
   const columns = [
     {
       name: "COMPANY",
@@ -100,6 +118,25 @@ const Bills = () => {
       cell: (row) => <div className="">{format(row?.startDate)}</div>,
       sortable: true,
     },
+    {
+      name: "END DATE",
+      selector: (row) => row?.startDate,
+      cell: (row) => <div className="">{format(row?.endDate)}</div>,
+      sortable: true,
+    },
+    {
+      name: "COMPANY SERVICE",
+      selector: (row) => row?.startDate,
+      cell: (row) => (
+        <div className="">
+          {type === "boost"
+            ? row?.company?.boostStatus
+            : row?.company?.subscriptionStatus}
+        </div>
+      ),
+      sortable: true,
+    },
+
     {
       name: `BANK NAME`,
       selector: (row) => row?.payFrom,
@@ -178,24 +215,31 @@ const Bills = () => {
     }
   }, [approveResponse]);
 
+  useEffect(() => {
+    if (startResponse.status === "fulfilled") {
+      setPopup(false);
+    }
+  }, [startResponse]);
+
   console.log(data, totalPage, "type");
   return (
     <div className="relative">
       <Response response={approveResponse} setPending={setApprovePending} />
+      <Response response={startResponse} setPending={setStartPending} />
       <div className="flex px-5 items-center justify-between">
-        
-      <select
-        onChange={(e) => setType(e.target.value)}
-        name=""
-        id=""
-        className="my-4"
-      >
-        <option selected value="boost">
-          Boost
-        </option>
-        <option value="subscription">Subscription</option>
-        <option value="fund">Fund</option>
-      </select><input
+        <select
+          onChange={(e) => setType(e.target.value)}
+          name=""
+          id=""
+          className="my-4"
+        >
+          <option selected value="boost">
+            Boost
+          </option>
+          <option value="subscription">Subscription</option>
+          <option value="fund">Fund</option>
+        </select>
+        <input
           onChange={(e) => setSearch(e.target.value)}
           type="search"
           id="default-search"
@@ -203,7 +247,7 @@ const Bills = () => {
           placeholder="Search..."
           required
         />
-</div>
+      </div>
       <div className="w-full">
         {isFetching && <Loading />}
         {isError && <p>Something went wrong unable to read boost data</p>}
@@ -227,7 +271,7 @@ const Bills = () => {
         ) : null}
       </div>
       {popup && detail && (
-        <div className="max-w-xl w-full bg-gray-100 shadow-lg bg-dark z-20 h-[430px] p-5 rounded-lg border flex flex-col items-start justify-start absolute right-5 top-20 ">
+        <div className="max-w-xl gap-2 w-full bg-gray-100 shadow-lg bg-dark z-20 h-[430px] overflow-y-scroll p-5 rounded-lg border flex flex-col items-start justify-start absolute right-5 top-20 ">
           <div
             onClick={() => setPopup(false)}
             className="cursor-pointer absolute right-1 top-1"
@@ -245,38 +289,60 @@ const Bills = () => {
           <p>
             {detail?.payFrom === "check"
               ? detail?.checkDetail.checkBankName
-              : detail?.bankDetail.bankName}
+              : detail?.payFrom === "bank"
+              ? detail?.bankDetail.bankName
+              : null}
           </p>
 
           <p className="font-bold">Account(Check) Number</p>
           <p>
             {detail?.payFrom === "check"
               ? detail?.checkDetail.checkNumber
-              : detail?.bankDetail.accountNumber}
+              : detail?.payFrom === "bank"
+              ? detail?.bankDetail.accountNumber
+              : null}
           </p>
 
           <p className="font-bold">Customer full name</p>
           <p>
             {detail?.payFrom === "check"
               ? detail?.checkDetail?.checkYourName
-              : detail?.bankDetail?.yourName}
+              : detail?.payFrom === "bank"
+              ? detail?.bankDetail?.yourName
+              : null}
           </p>
 
           <p className="font-bold">Amount</p>
           <p>
             {detail?.payFrom === "check"
               ? detail?.checkDetail?.checkAmount
-              : detail?.bankDetail?.bankAmount}
+              : detail?.payFrom === "bank"
+              ? detail?.bankDetail?.bankAmount
+              : null}
           </p>
 
           <p className="font-bold">Date</p>
           <p>
             {detail?.payFrom === "check"
               ? detail?.checkDetail?.checkDate
-              : detail?.bankDetail?.bankDate}
+              : detail?.payFrom === "bank"
+              ? detail?.bankDetail?.bankDate
+              : null}
           </p>
 
-          <div className="flex gap-5 justify-end mt-3">
+          <p className="font-bold">Approval Status</p>
+          <p>{detail?.approved ? "Approved" : "Not Approved"}</p>
+
+          {(detail?.company?.subscriptionEndDate > Date.now() &&
+            detail?.company?.isSubscribed) ||
+          (detail?.company?.boostEndDate > Date.now() &&
+            detail?.company?.isBoosted) ? (
+            <div className="border border-red-500 text-red-600 bg-red-200 p-3 rounded-lg">
+              This company service is not expired yet are you sure to assign new
+              service
+            </div>
+          ) : null}
+          <div className="flex border p-3 gap-5 justify-end mt-3">
             <button
               onClick={() => setPopup(false)}
               className="px-4 py-2 rounded-lg border bg-gray-200 hover:bg-gray-300"
@@ -284,22 +350,65 @@ const Bills = () => {
               Cancel
             </button>
 
-            <LoadingButton
-              pending={approvePending}
-              onClick={() =>
-                approveHandler(
-                  detail?._id,
-                  detail?.approved ? false : true,
-                  detail?.company?._id,
-                  detail?.payFrom === "check"
-                    ? detail?.checkDetail?.checkAmount
-                    : detail?.bankDetail?.bankAmount
-                )
-              }
-              title={detail?.approved ? "Reject" : "Approve"}
-              color="bg-main"
-              width="w-36 sm:rounded-lg sm:border sm:py-2 sm:px-5 sm:hover:bg-red-500"
-            />
+            {detail?.company?.boostStatus === "Pending" ||
+            detail?.company?.subscriptionStatus === "Pending" ? (
+              <LoadingButton
+                pending={approvePending}
+                onClick={() =>
+                  approveHandler(
+                    detail?._id,
+                    detail?.approved ? false : true,
+                    detail?.company?._id,
+                    detail?.payFrom === "check"
+                      ? detail?.checkDetail?.checkAmount
+                      : detail?.bankDetail?.bankAmount
+                  )
+                }
+                title={detail?.approved ? "Reject" : "Approve"}
+                color="bg-main"
+                width="w-36 sm:rounded-lg sm:border sm:py-2 sm:px-5 sm:hover:bg-red-500"
+              />
+            ) : (
+              <button disabled className="w-36 py-2 px-5 rounded-lg bg-red-300">
+                Reject
+              </button>
+            )}
+
+            {detail?.approved && type !== "fund" ? (
+              <LoadingButton
+                pending={startPending}
+                onClick={() =>
+                  startHandler(
+                    detail?._id,
+                    detail?.company?.boostStatus === "Pending" ||
+                      detail?.company?.subscriptionStatus === "Pending"
+                      ? true
+                      : false,
+                    detail?.company?._id,
+                    detail?.payFrom === "check"
+                      ? detail?.checkDetail?.checkAmount
+                      : detail?.bankDetail?.bankAmount
+                  )
+                }
+                title={
+                  detail?.company?.boostStatus === "Pending" ||
+                  detail?.company?.subscriptionStatus === "Pending"
+                    ? "Start service"
+                    : "Cancel service"
+                }
+                color="bg-emerald-500"
+                width="w-40 sm:rounded-lg sm:border sm:py-3 sm:px-5 sm:hover:bg-emerald-400"
+              />
+            ) : (
+              type !== "fund" && (
+                <button
+                  disabled
+                  className="w-36 py-3 px-5 rounded-lg bg-emerald-300"
+                >
+                  Start service
+                </button>
+              )
+            )}
           </div>
         </div>
       )}

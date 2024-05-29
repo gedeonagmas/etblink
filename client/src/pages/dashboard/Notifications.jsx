@@ -81,7 +81,7 @@ const Notifications = () => {
         {notifications && notifications?.data?.length > 0 ? (
           notifications?.data?.map((e) => {
             return (
-              <div className="relative p-5 w-full md:w-[350px] lg:w-[240px] xl:w-[270px] h-28 flex flex-col gap-1 rounded-lg border shadow-md bg-white bg-dark">
+              <div className="relative p-5 w-full md:w-[350px] lg:w-[240px] xl:w-[270px] h-[136px] flex flex-col gap-1 rounded-lg border shadow-md bg-white bg-dark">
                 <p>
                   {e?.message?.substring(0, 100)}{" "}
                   <span
