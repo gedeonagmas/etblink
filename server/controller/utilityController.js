@@ -313,7 +313,7 @@ const paymentHandler = asyncCatch(async (req, res, next) => {
     // const message = `Your Transaction is Successful thank you.`;
     // return sendEmailHandler(subject, message, company?.email, from);
   } else if (serviceType === "serviceFee") {
-    console.log(req.body.company,'comapny');
+    console.log(req.body.company, "comapny");
     company.isSubscribed =
       payFrom === "online" || payFrom === "deposit" ? true : false;
 
