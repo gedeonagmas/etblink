@@ -17,37 +17,11 @@ import { cityData, countryData } from "../categoryData";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
-
-const markers = [
-  {
-    id: 1,
-    name: "Qobustan",
-    position: { lat: 40.0709493, lng: 49.3694411 },
-  },
-  {
-    id: 2,
-    name: "Sumqayit",
-    position: { lat: 20.5788843, lng: 34.5485073 },
-  },
-  {
-    id: 3,
-    name: "Baku",
-    position: { lat: 16.3947365, lng: 54.6898045 },
-  },
-  {
-    id: 4,
-    name: "ethiopia",
-    position: { lat: 65.3947365, lng: 4.6898045 },
-  },
-  {
-    id: 5,
-    name: "london",
-    position: { lat: -16.3947365, lng: -10.6898045 },
-  },
-];
+import { useLocation } from "react-router-dom";
 
 const Category = ({ type }) => {
   const [page, setPage] = useState(1);
+  const location = useLocation()?.state;
   const {
     data: categoryData,
     isFetching: categoryIsFetching,
@@ -135,6 +109,15 @@ const Category = ({ type }) => {
     sliderRef.slickPrev();
   };
 
+  useState(() => {
+    setSearch(location?.name);
+    if (location?.type === "local") {
+      setCity(location?.city);
+    } else if (location?.type === "global") {
+      setCountry(location?.country);
+    }
+  }, [location]);
+
   const settings = {
     dots: false,
     infinite: true,
@@ -187,7 +170,7 @@ const Category = ({ type }) => {
       },
     ],
   };
-  // console.log(subCategoryData, "company");
+  console.log(location, "location");
   return (
     <div className="w-full relative pb-6 pt-24 bg-gray-50 bg-dark h-auto">
       {/* {companyFetching && <Loading />} */}

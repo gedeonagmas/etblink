@@ -18,6 +18,7 @@ import { useEffect, useState } from "react";
 import { useReadQuery } from "../features/api/apiSlice";
 import Loading from "../components/loading/Loading";
 import { format } from "timeago.js";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   const {
@@ -47,9 +48,19 @@ const Home = () => {
     tag: ["youtubes"],
   });
 
+  const {
+    data: places,
+    isFetching: placesIsFetching,
+    isError: placesIsError,
+  } = useReadQuery({ url: "/user/places", tag: ["places"] });
+
   const [companies, setCompanies] = useState([]);
   const [news, setNews] = useState([]);
   const [youtubes, setYoutubes] = useState([]);
+  const [name, setName] = useState("");
+  const [category, setCategory] = useState("");
+  const [city, setCity] = useState("");
+  const [country, setCountry] = useState("");
 
   useEffect(() => {
     if (company?.data) {
@@ -69,12 +80,6 @@ const Home = () => {
     }
   }, [youtube]);
 
-  // const hoverHandler = (id) => {
-  //   const ids = document.getElementById(id);
-  //   ids?.classList?.value?.includes("hidden")
-  //     ? ids?.classList?.remove("hidden")
-  //     : ids?.classList?.add("hidden");
-  // };
   const divStyle = {
     display: "flex",
     alignItems: "center",
@@ -84,6 +89,22 @@ const Home = () => {
   };
   const slideImages = ["etblink.jpg", "etblink2.jpg", "etblink3.jpg"];
 
+  const navigate = useNavigate();
+  const searchHandler = () => {
+    navigate(category === "global" ? `/global` : "/local", {
+      state: { type: category, city, country, name },
+    });
+  };
+
+  useEffect(() => {
+    if (category === "local") {
+      setCity(places?.data[0]?.city[0]);
+    } else if (category === "global") {
+      setCountry(places?.data[0]?.country[0]);
+    }
+  }, [category]);
+
+  console.log(places, "category");
   return (
     <>
       {/* <Header /> */}
@@ -119,16 +140,16 @@ const Home = () => {
             </Slide>
 
             {/* hero page content */}
-            <div className="flex absolute top-60 ml-0 lg:ml-[8%] z-30 w-[540px]  h-auto gap-2 items-start justify-start">
-              <div className="absolute -mt-32 p-5 rounded-sm bg-black/35 mx-auto">
-                <h1 className="mb-2 tracking-wider text-4xl font-extrabold leading-none text-white dark:text-gray-300 ">
+            <div className="flex absolute top-60 ml-0d ml-[8%] z-30 w-[540px]  h-auto gap-2 items-start justify-start">
+              <div className="absolute -mt-32 p-5  rounded-sm bg-black/35 mx-auto">
+                <h1 className="mb-2 tracking-wider text-2xl md:text-4xl font-extrabold leading-none text-white dark:text-gray-300 ">
                   Connecting Businesses
                 </h1>
-                <h1 className="mb-6 mt-4 tracking-wider text-4xl font-extrabold leading-none text-white dark:text-gray-300 ">
+                <h1 className="mb-6 mt-4 tracking-wider text-2xl md:text-4xl font-extrabold leading-none text-white dark:text-gray-300 ">
                   Worldwide
                 </h1>
 
-                <p className=" text-sm mx-1 lg:mx-0 font-normal text-gray-200 text-dark">
+                <p className=" text-sm mx-1 mr-3 w-[320px] lg:w-[450px] lg:mx-0 font-normal text-gray-200 text-dark">
                   Unlock endless opportunities with our B2B portal - Connecting
                   businesses, fostering partnerships, and showcasing your
                   services or products!
@@ -136,32 +157,34 @@ const Home = () => {
               </div>
             </div>
             <div className="w-full px-main relative pt-10 bg-cover h-[100%] bg-no-repeat md:py-0 bg-[url('/bg3.jpg')] bg-dark bg-bottom grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-              <div className="absolute shadow-xl grid  w-full grid-cols-4 text-gray-500 mx-1 lg:mx-[7.5%] lg:w-[55.5%] -top-10 left-0 h-[70px] rounded-lg border border-gray-300 bg-white bg-dark z-20">
-                <div className="flex p-2 items-center justify-start border-r">
+              <div className="absolute shadow-xl grid  w-[85%] lg:w-[calc(100%-620px)]  grid-cols-2 md:grid-cols-4  -top-10 right-[8%] left-[8%] h-[84px] text-gray-500 rounded-lg border border-gray-300 bg-white bg-dark z-20">
+                <div className="flex flex-col p-2 items-center gap-1 justify-start border-r">
                   <svg
-                    class="w-6 h-6 "
+                    class="w-7 h-7"
                     aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
+                    width="24"
+                    height="24"
+                    fill="currentColor"
                     viewBox="0 0 24 24"
                   >
                     <path
-                      stroke="currentColor"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="m10.8 17.8-6.4 2.1 2.1-6.4m4.3 4.3L19 9a3 3 0 0 0-4-4l-8.4 8.6m4.3 4.3-4.3-4.3m2.1 2.1L15 9.1m-2.1-2 4.2 4.2"
+                      fill-rule="evenodd"
+                      d="M2 7a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V7Zm5.01 1H5v2.01h2.01V8Zm3 0H8v2.01h2.01V8Zm3 0H11v2.01h2.01V8Zm3 0H14v2.01h2.01V8Zm3 0H17v2.01h2.01V8Zm-12 3H5v2.01h2.01V11Zm3 0H8v2.01h2.01V11Zm3 0H11v2.01h2.01V11Zm3 0H14v2.01h2.01V11Zm3 0H17v2.01h2.01V11Zm-12 3H5v2.01h2.01V14ZM8 14l-.001 2 8.011.01V14H8Zm11.01 0H17v2.01h2.01V14Z"
+                      clip-rule="evenodd"
                     />
                   </svg>
+
                   <input
+                    onChange={(e) => setName(e.target.value)}
                     type="text"
-                    className="h-full border-0 bg-dark focus:outline-none focus:ring-0 outline-none w-32"
-                    placeholder="Keywords"
+                    className="h-10 border-0 bg-dark text-center focus:outline-none focus:ring-0 outline-none w-32"
+                    placeholder="Name"
                   />
                 </div>
-                <div className="flex p-2 items-center justify-start border-r">
+                <div className="flex flex-col p-2 items-center gap-1 justify-start border-r">
                   <svg
-                    class="w-6 h-6 "
+                    class="w-7 h-7 "
                     aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -175,15 +198,22 @@ const Home = () => {
                       d="M5 11.2v.8l7 4 7-4v-.8m-14 5v.8l7 4 7-4v-1M12 3 5 7l7 4 7-4-7-4Z"
                     />
                   </svg>
-                  <input
-                    type="text"
-                    className="h-full border-0 bg-dark focus:outline-none focus:ring-0 outline-none w-32"
-                    placeholder="Category"
-                  />
+                  <select
+                    onChange={(e) => setCategory(e.target.value)}
+                    name=""
+                    id=""
+                    className="h-10 border-0 text-center items-center bg-dark focus:outline-none focus:ring-0 outline-none w-32"
+                  >
+                    <option selected disabled value="">
+                      Category
+                    </option>
+                    <option value="local">Local</option>
+                    <option value="global">Global</option>
+                  </select>
                 </div>
-                <div className="flex p-2 items-center justify-start border-r">
+                <div className="flex bg-white md:bg-transparent flex-col p-2 gap-1 items-center justify-start border-r">
                   <svg
-                    class="w-6 h-6 "
+                    class="w-7 h-7 "
                     aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -204,13 +234,58 @@ const Home = () => {
                       d="M17.8 14h0a7 7 0 1 0-11.5 0h0l.1.3.3.3L12 21l5.1-6.2.6-.7.1-.2Z"
                     />
                   </svg>
-                  <input
-                    type="text"
-                    className="h-full border-0 bg-dark focus:outline-none focus:ring-0 outline-none w-32"
-                    placeholder="Location"
-                  />
+                  <select
+                    onChange={(e) =>
+                      category === "local"
+                        ? setCity(e.target.value)
+                        : category === "global"
+                        ? setCountry(e.target.value)
+                        : null
+                    }
+                    name=""
+                    id=""
+                    className="h-10 border-0 bg-dark focus:outline-none focus:ring-0 outline-none w-32"
+                  >
+                    <option selected disabled value="">
+                      {category === "local"
+                        ? "Cities"
+                        : category === "global"
+                        ? "Country"
+                        : "Location"}
+                    </option>
+                    {category === "local" &&
+                    places?.data &&
+                    places?.data[0]?.city
+                      ? places?.data[0]?.city?.map((c, i) => {
+                          return (
+                            <option
+                              selected={i === 0 ? true : false}
+                              value={c.toString()}
+                            >
+                              {c}
+                            </option>
+                          );
+                        })
+                      : category === "global" &&
+                        places?.data &&
+                        places?.data[0]?.country
+                      ? places?.data[0]?.country?.map((co, j) => {
+                          return (
+                            <option
+                              selected={j === 0 ? true : false}
+                              value={co.toString()}
+                            >
+                              {co}
+                            </option>
+                          );
+                        })
+                      : null}
+                  </select>
                 </div>
-                <div className="flex p-2 cursor-pointer items-center justify-center rounded-r-lg text-white bg-[rgb(252,45,45)]">
+                <div
+                  onClick={searchHandler}
+                  className="flex flex-col h-[78px] p-2 cursor-pointer items-center hover:bg-red-500 justify-center rounded-r-lg text-white bg-[rgb(252,45,45)]"
+                >
                   <p className="text-lg  text-center uppercase">Search</p>
                 </div>
               </div>
@@ -402,7 +477,7 @@ const Home = () => {
               </div>
             </div>
             {/* small advert */}
-            <div className="w-full h-52  mt-4 px-main place-items-center grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3 ">
+            <div className="w-full h-52 mt-28 md:mt-8 lg:mt-4 px-main place-items-center grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3 ">
               <div className="flex rounded-md h-[70px] border border-gray-200 shadow-2xl px-2 gap-2 w-full items-center justify-start">
                 <p className="text-3xl font-bold uppercase text-main">
                   ETB <span className="text-gray-600">LINK</span>
@@ -427,8 +502,8 @@ const Home = () => {
 
             {/* services */}
             <div className="flex flex-col lg:flex-row px-main gap-3 mt-10 lg:-mt-5 items-center justify-between">
-              <div className="flex flex-col lg:flex-row gap-5 w-[300px]  items-center justify-center">
-                <div className="flex  shadow-2xl w-[200px] rounded-l-none px-7 py-4  bg-main text-white rounded-lg flex-col items-center justify-center gap-1">
+              <div className="flex flex-col lg:flex-row gap-5 w-full lg:w-[290px]  items-center justify-center">
+                <div className="flex  shadow-2xl w-full lg:w-[210px] rounded-l-none px-7 py-4  bg-main text-white rounded-lg flex-col items-center justify-center gap-1">
                   <svg
                     class="w-10 h-10"
                     aria-hidden="true"
@@ -444,7 +519,7 @@ const Home = () => {
                   <p className="text-lg mt-2 font-light">Global</p>
                   <p className="text-sm -mt-2">2.1k+ listed</p>
                 </div>
-                <div className="flex shadow-2xl w-[200px] rounded-l-none px-7 py-4  bg-emerald-500 text-white rounded-lg flex-col items-center justify-center gap-1">
+                <div className="flex shadow-2xl w-full lg:w-[210px] rounded-l-none px-7 py-4  bg-emerald-500 text-white rounded-lg flex-col items-center justify-center gap-1">
                   <svg
                     class="w-10 h-10"
                     aria-hidden="true"
@@ -550,22 +625,20 @@ const Home = () => {
           <Banner />
         </div>
 
-        <div className="w-full  py-20 flex  bg-dark text-dark flex-col items-center justify-center">
+        <div className="w-full px-main py-20 flex  bg-dark text-dark flex-col items-center justify-center">
           <p className="text-4xl text-center font-semibold text-gray-700">
             Join Thousands of Global{" "}
             <span className="text-main">Businesses</span> Who Trust in Us
           </p>
-          <p className="text-[17px] px-main mt-3 py-3 font-light text-gray-500">
-            <center>
-              Ethiopian Business Directory (ETB Link) is a comprehensive online
-              platform that facilitates connections between businesses and
-              potential customers, wholesalers, retailers, manufacturers, and
-              service providers in Ethiopia. And as will as wholesalers and
-              manufacturers worldwide
-            </center>
+          <p className="text-[17px] text-center mt-3 py-3 font-light text-gray-500">
+            Ethiopian Business Directory (ETB Link) is a comprehensive online
+            platform that facilitates connections between businesses and
+            potential customers, wholesalers, retailers, manufacturers, and
+            service providers in Ethiopia. And as will as wholesalers and
+            manufacturers worldwide
           </p>
 
-          <div className="grid px-main mt-7 grid-cols-1 md:grid-cols-2 lg:grid-cols-3  w-full place-items-centers gap-7">
+          <div className="grid mt-7 grid-cols-1 md:grid-cols-2 lg:grid-cols-3  w-full place-items-centers gap-7">
             {/* {companyFetching ? (
               <Loading />
             ) : companyError ? (
@@ -592,7 +665,11 @@ const Home = () => {
           ) : youtubeError ? (
             <p>Something went error unable to read the data.</p>
             ) : */}
-          {youtubes?.length > 0 ? <YoutubeItems data={youtubes} /> : <p></p>}
+          {youtubes?.length > 0 ? (
+            <YoutubeItems data={youtubes} />
+          ) : (
+            <p>No videos available to play!</p>
+          )}
 
           <div className="w-full  py-8 flex flex-col items-center justify-center">
             <p className="text-4xl font-semibold text-gray-700">
@@ -601,7 +678,7 @@ const Home = () => {
             <p className="text-[17px] mt-3 py-1 font-light text-gray-500">
               our top news
             </p>
-            <div className="grid px-main grid-cols-1 mt-3 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 mt-3 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {/* {newsFetching ? (
                 <Loading />
               ) : newsError ? (
@@ -690,7 +767,7 @@ const Home = () => {
           </div>
           <Sponsors />
 
-          <div className="flex flex-col lg:flex-row w-full mt-16 gap-6 px-main">
+          <div className="flex flex-col lg:flex-row w-full mt-16 gap-6">
             <div className="flex flex-col flex-[70%] shadow-lg bg-white bg-dark p-4 items-center justify-start border-t-4 border-main">
               <p className="text-xl self-start font-bold text-main py-3">
                 Ethiopian business link news

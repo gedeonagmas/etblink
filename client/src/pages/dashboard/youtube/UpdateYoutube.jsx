@@ -23,12 +23,14 @@ const UpdateYoutube = () => {
   const [videoId, setVideoId] = useState("");
   const [title, setTitle] = useState("");
   const [subtitle, setSubtitle] = useState("");
+  const [category, setCategory] = useState("");
 
   const updateHandler = () => {
     updateData({
       videoId,
       title,
       subtitle,
+      category,
       url: `/user/youtubes?id=${location}`,
       tag: ["youtubes"],
     });
@@ -40,6 +42,7 @@ const UpdateYoutube = () => {
       setVideoId(data?.videoId ? data?.videoId : videoId);
       setTitle(data?.title ? data?.title : title);
       setSubtitle(data?.subtitle ? data?.subtitle : subtitle);
+      setCategory(data?.category ? data?.category : category);
     }
   }, [youtubes]);
 
@@ -99,6 +102,24 @@ const UpdateYoutube = () => {
             id="name"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="Skylight Technologies"
+            required
+          />
+        </div>
+
+        <div className="mb-5">
+          <label
+            for="name"
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+          >
+            Category
+          </label>
+          <input
+            onChange={(e) => setCategory(e.target.value)}
+            value={category}
+            type="text"
+            id="name"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder="Category"
             required
           />
         </div>

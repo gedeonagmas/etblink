@@ -10,7 +10,6 @@ import {
 import Response from "../../../components/Response";
 import { format } from "timeago.js";
 import Loading from "../../../components/loading/Loading";
-import YouTube from "react-youtube";
 import ResponsivePagination from "react-responsive-pagination";
 import "./../../categories/pagination.css";
 import Pop from "../../../components/Pop";
@@ -53,6 +52,7 @@ const AddYoutube = () => {
   const [videoId, setVideoId] = useState("");
   const [title, setTitle] = useState("");
   const [subtitle, setSubtitle] = useState("");
+  const [category, setCategory] = useState("");
 
   const [popup, setPopup] = useState(false);
   const [id, setId] = useState("");
@@ -62,6 +62,7 @@ const AddYoutube = () => {
       videoId,
       title,
       subtitle,
+      category,
       url: "/user/youtubes",
       tag: ["youtubes"],
     });
@@ -76,17 +77,6 @@ const AddYoutube = () => {
       setPopup(false);
     }
   }, [deleteResponse]);
-
-  const opts = {
-    width: "97%",
-    height: "180px",
-    borderRadius: "2rem",
-    playerVars: { autoplay: 1 },
-  };
-
-  const videoReady = (event) => {
-    event.target.pauseVideo();
-  };
 
   console.log(youtubes, "youtubes");
   return (
@@ -118,26 +108,36 @@ const AddYoutube = () => {
           youtubes?.data?.map((e) => {
             return (
               <div
-                key={e._id}
+                key={e?._id}
                 className="flex w-full border px-4 border-dark rounded-lg relative justify-start py-4 gap-1 flex-col items-enter"
               >
-                <YouTube videoId={e.videoId} opts={opts} onReady={videoReady} />
+                <iframe
+                  src={`https://www.youtube.com/embed/${e}`}
+                  frameBorder="0"
+                  allow="autoplay; encrypted-media"
+                  allowFullScreen
+                  title="video"
+                />
                 <div className="flex flex-col gap-1">
                   <p className=" py-1 border-b font-bold">Title</p>
                   <p className="flex items-center justify-start gap-1">
-                    {e.title}
+                    {e?.title}
                   </p>
                 </div>
                 <div className="mt-2 flex flex-col gap-1">
                   <p className="py-1 border-b font-bold">Subtitle</p>
-                  <p className="">{e.subtitle}</p>
+                  <p className="">{e?.subtitle}</p>
+                </div>
+                <div className="mt-2 flex flex-col gap-1">
+                  <p className="py-1 border-b font-bold">Category</p>
+                  <p className="">{e?.category}</p>
                 </div>
                 <p className="text-sm self-end font-light">{format(e?.date)}</p>
                 <div className="flex w-full gap-3 items-center justify-between">
                   <button
                     onClick={() => {
                       setPopup(true);
-                      setId(e._id);
+                      setId(e?._id);
                     }}
                     className="py-2 w-32 rounded-lg bg-main text-white"
                   >
@@ -254,6 +254,32 @@ const AddYoutube = () => {
               required
             />
           </div>
+
+          <div className="mb-5">
+            <label
+              for="name"
+              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            >
+              Category
+            </label>
+            <select
+              onChange={(e) => setCategory(e.target.value)}
+              name=""
+              id=""
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            >
+              <option value="business" selected>
+                Business
+              </option>
+              <option value="interview" selected>
+                Interview
+              </option>
+              <option value="how-it-made" selected>
+                How it made
+              </option>
+            </select>
+          </div>
+
           <LoadingButton
             pending={pending}
             onClick={addHandler}

@@ -1,5 +1,6 @@
 const AppError = require("../utils/AppError");
 const nodemailer = require("nodemailer");
+const { emailTemplate } = require("../utils/emailTemplate");
 
 const sendEmailHandler = ({
   subject,
@@ -27,7 +28,7 @@ const sendEmailHandler = ({
     to: email ? email : to,
     text: message,
     subject: subject,
-    html: html ? html : null,
+    html: emailTemplate(subject, message),
   };
 
   return transporter.sendMail(mailOptions, function (error, info) {

@@ -15,9 +15,9 @@ const youtubeSchema = new mongoose.Schema(
       type: String,
       validate: valid.required("Subtitle"),
     },
-    date: {
+    category: {
       type: String,
-      default: Date.now(),
+      validate: valid.required("Category"),
     },
   },
   {

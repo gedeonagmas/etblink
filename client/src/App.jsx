@@ -91,6 +91,7 @@ function App() {
                 path="/global"
                 element={<Category type="global" />}
               ></Route>
+              <Route path="/companies" element={<Category type="" />}></Route>
               <Route path="/company" element={<CompanyDetail />}></Route>
               <Route path="/news" element={<NewsCategory />}></Route>
               <Route path="/news-detail" element={<NewsDetail />}></Route>
