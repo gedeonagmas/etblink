@@ -230,7 +230,6 @@ const AddCategory = () => {
           </div>
           {placesIsFetching && <Loading />}
           {placesIsError && <p>Something went wrong for reading places data</p>}
-          {places && places?.data ? (
             <>
               <List
                 list={city}
@@ -260,9 +259,6 @@ const AddCategory = () => {
                 />
               </div>
             </>
-          ) : (places && places?.message) || places?.data?.length === 0 ? (
-            <div>There is no data to display.</div>
-          ) : null}
         </div>
       )}
 

@@ -52,7 +52,7 @@ const Category = ({ type }) => {
     isError: aggregateIsError,
   } = useCompanyAggregateQuery();
 
-  console.log(aggregateData?.data, "aggregate");
+  console.log(aggregateData, "aggregate");
   const [
     trigger,
     { data: company, isFetching: companyFetching, isError: companyError },
@@ -255,11 +255,12 @@ const Category = ({ type }) => {
               Filter by {type === "local" ? "City" : "Country"}
             </option>
             <option value="">All</option>
-            {type === "local"
+            {type === "local" && places?.data
               ? places?.data[0]?.city?.map((cit) => {
                   return <option value={cit}>{cit}</option>;
                 })
-              : places?.data[0]?.country?.map((cot) => {
+              : places?.data &&
+                places?.data[0]?.country?.map((cot) => {
                   return <option value={cot}>{cot}</option>;
                 })}
           </select>
@@ -326,7 +327,7 @@ const Category = ({ type }) => {
               }}
               {...settings}
             >
-              {aggregateData?.data?.map((e) => {
+              {aggregateData?.category?.map((e) => {
                 if (e?._id !== null)
                   return (
                     <li
@@ -337,51 +338,14 @@ const Category = ({ type }) => {
                       class=" hover:bg-gray-100  cursor-pointer px-3 border-r border-dark border-gray-300 focus:ring-0"
                     >
                       <div class="flex items-center ps-3">
-                        <p className="font-bold">{e?.total}</p>
-                        <p
-                          for="vue-checkbox-list"
-                          class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                        >
-                          {e?._id}
+                        <p className="font-bold">
+                          {e?.total >= 1000
+                            ? parseFloat(e?.total / 1000).toFixed(1) + "K"
+                            : e?.total >= 1000000
+                            ? parseFloat(e?.total / 1000000).toFixed(2) + "M"
+                            : e?.total}
+                          +
                         </p>
-                      </div>
-                    </li>
-                  );
-              })}
-              {aggregateData?.data?.map((e) => {
-                if (e?._id !== null)
-                  return (
-                    <li
-                      onClick={() => {
-                        setCategory(e?._id);
-                        setSubCategory("");
-                      }}
-                      class="  hover:bg-gray-100  cursor-pointer px-3 border-r border-dark border-gray-300 focus:ring-0"
-                    >
-                      <div class="flex items-center ps-3">
-                        <p className="font-bold">{e?.total}</p>
-                        <p
-                          for="vue-checkbox-list"
-                          class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                        >
-                          {e?._id}
-                        </p>
-                      </div>
-                    </li>
-                  );
-              })}
-              {aggregateData?.data?.map((e) => {
-                if (e?._id !== null)
-                  return (
-                    <li
-                      onClick={() => {
-                        setCategory(e?._id);
-                        setSubCategory("");
-                      }}
-                      class=" hover:bg-gray-100  cursor-pointer px-3 border-r border-dark border-gray-300 focus:ring-0"
-                    >
-                      <div class="flex items-center ps-3">
-                        <p className="font-bold">{e?.total}</p>
                         <p
                           for="vue-checkbox-list"
                           class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
@@ -419,7 +383,7 @@ const Category = ({ type }) => {
           </button>
         </div>
         {/* <ul class="items-start mt-4 mb-5 w-full gap-4 text-sm font-medium  rounded-sm grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
-          {aggregateData?.data?.map((e) => {
+          {aggregateData?.category?.map((e) => {
             if (e?._id !== null)
               return (
                 <li

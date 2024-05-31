@@ -271,6 +271,9 @@ const AddYoutube = () => {
               <option value="business" selected>
                 Business
               </option>
+              <option value="life-experience" selected>
+                Life Experience
+              </option>
               <option value="interview" selected>
                 Interview
               </option>

@@ -470,9 +470,21 @@ const companyAggregation = asyncCatch(async (req, res, next) => {
     },
   ]);
 
+  const type = await Company.aggregate([
+    {
+      $group: {
+        _id: "$type",
+        total: {
+          $sum: 1,
+        },
+      },
+    },
+  ]);
+
   return res.status(200).json({
     status: "Read",
-    data: categories,
+    category: categories,
+    type: type,
   });
 });
 

@@ -15,7 +15,10 @@ import {
 import Header from "./Header";
 import Footer from "./Footer";
 import { useEffect, useState } from "react";
-import { useReadQuery } from "../features/api/apiSlice";
+import {
+  useCompanyAggregateQuery,
+  useReadQuery,
+} from "../features/api/apiSlice";
 import Loading from "../components/loading/Loading";
 import { format } from "timeago.js";
 import { useNavigate } from "react-router-dom";
@@ -40,13 +43,10 @@ const Home = () => {
   });
 
   const {
-    data: youtube,
-    isFetching: youtubeFetching,
-    isError: youtubeError,
-  } = useReadQuery({
-    url: "/user/youtubes?limits=4",
-    tag: ["youtubes"],
-  });
+    data: aggregateData,
+    isFetching: aggregateFetching,
+    isError: aggregateError,
+  } = useCompanyAggregateQuery();
 
   const {
     data: places,
@@ -56,7 +56,6 @@ const Home = () => {
 
   const [companies, setCompanies] = useState([]);
   const [news, setNews] = useState([]);
-  const [youtubes, setYoutubes] = useState([]);
   const [name, setName] = useState("");
   const [category, setCategory] = useState("");
   const [city, setCity] = useState("");
@@ -73,12 +72,6 @@ const Home = () => {
       setNews(newses?.data);
     }
   }, [newses]);
-
-  useEffect(() => {
-    if (youtube?.data) {
-      setYoutubes(youtube?.data);
-    }
-  }, [youtube]);
 
   const divStyle = {
     display: "flex",
@@ -97,14 +90,34 @@ const Home = () => {
   };
 
   useEffect(() => {
-    if (category === "local") {
+    if (category === "local" && places?.data) {
       setCity(places?.data[0]?.city[0]);
-    } else if (category === "global") {
+    } else if (category === "global" && places?.data) {
       setCountry(places?.data[0]?.country[0]);
     }
-  }, [category]);
+  }, [category, places]);
 
-  console.log(places, "category");
+  const categoryTemplate = (image, name, value) => {
+    return (
+      <div className="flex  rounded-lg flex-col items-center justify-center">
+        <div className=" rounded-full bg-white bg-dark shadow-sm">
+          <img src={image} alt={name} className="w-[65px] h-[65px]" />
+        </div>
+
+        <p className="mt-2 font-bold">{name}</p>
+        <p className="-mt-1 font-poppins text-sm">
+          {value >= 1000
+            ? parseFloat(value / 1000).toFixed(1) + "K"
+            : value >= 1000000
+            ? parseFloat(value / 1000000).toFixed(2) + "M"
+            : value}
+          + listed
+        </p>
+      </div>
+    );
+  };
+
+  console.log(aggregateData, "category");
   return (
     <>
       {/* <Header /> */}
@@ -156,6 +169,7 @@ const Home = () => {
                 </p>
               </div>
             </div>
+
             <div className="w-full px-main relative pt-10 bg-cover h-[100%] bg-no-repeat md:py-0 bg-[url('/bg3.jpg')] bg-dark bg-bottom grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
               <div className="absolute shadow-xl grid  w-[85%] lg:w-[calc(100%-620px)]  grid-cols-2 md:grid-cols-4  -top-10 right-[8%] left-[8%] h-[84px] text-gray-500 rounded-lg border border-gray-300 bg-white bg-dark z-20">
                 <div className="flex flex-col p-2 items-center gap-1 justify-start border-r">
@@ -476,6 +490,7 @@ const Home = () => {
                 </div>
               </div>
             </div>
+
             {/* small advert */}
             <div className="w-full h-52 mt-28 md:mt-8 lg:mt-4 px-main place-items-center grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3 ">
               <div className="flex rounded-md h-[70px] border border-gray-200 shadow-2xl px-2 gap-2 w-full items-center justify-start">
@@ -502,121 +517,97 @@ const Home = () => {
 
             {/* services */}
             <div className="flex flex-col lg:flex-row px-main gap-3 mt-10 lg:-mt-5 items-center justify-between">
-              <div className="flex flex-col lg:flex-row gap-5 w-full lg:w-[290px]  items-center justify-center">
-                <div className="flex  shadow-2xl w-full lg:w-[210px] rounded-l-none px-7 py-4  bg-main text-white rounded-lg flex-col items-center justify-center gap-1">
-                  <svg
-                    class="w-10 h-10"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M12 7.205c4.418 0 8-1.165 8-2.602C20 3.165 16.418 2 12 2S4 3.165 4 4.603c0 1.437 3.582 2.602 8 2.602ZM12 22c4.963 0 8-1.686 8-2.603v-4.404c-.052.032-.112.06-.165.09a7.75 7.75 0 0 1-.745.387c-.193.088-.394.173-.6.253-.063.024-.124.05-.189.073a18.934 18.934 0 0 1-6.3.998c-2.135.027-4.26-.31-6.3-.998-.065-.024-.126-.05-.189-.073a10.143 10.143 0 0 1-.852-.373 7.75 7.75 0 0 1-.493-.267c-.053-.03-.113-.058-.165-.09v4.404C4 20.315 7.037 22 12 22Zm7.09-13.928a9.91 9.91 0 0 1-.6.253c-.063.025-.124.05-.189.074a18.935 18.935 0 0 1-6.3.998c-2.135.027-4.26-.31-6.3-.998-.065-.024-.126-.05-.189-.074a10.163 10.163 0 0 1-.852-.372 7.816 7.816 0 0 1-.493-.268c-.055-.03-.115-.058-.167-.09V12c0 .917 3.037 2.603 8 2.603s8-1.686 8-2.603V7.596c-.052.031-.112.059-.165.09a7.816 7.816 0 0 1-.745.386Z" />
-                  </svg>
+              <div className="flex flex-col xl:flex-row gap-5 w-full lg:w-[290px]  items-center justify-center">
+                {aggregateData &&
+                  aggregateData?.type &&
+                  aggregateData?.type?.map((e) => {
+                    if (e?._id !== null)
+                      return (
+                        <div
+                          className={`flex  shadow-2xl w-full lg:w-[210px] rounded-l-none px-7 py-4 ${
+                            e?._id === "local" ? "bg-main" : "bg-emerald-500"
+                          } text-white rounded-lg flex-col items-center justify-center gap-1`}
+                        >
+                          <svg
+                            class="w-10 h-10"
+                            aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            fill="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path d="M12 7.205c4.418 0 8-1.165 8-2.602C20 3.165 16.418 2 12 2S4 3.165 4 4.603c0 1.437 3.582 2.602 8 2.602ZM12 22c4.963 0 8-1.686 8-2.603v-4.404c-.052.032-.112.06-.165.09a7.75 7.75 0 0 1-.745.387c-.193.088-.394.173-.6.253-.063.024-.124.05-.189.073a18.934 18.934 0 0 1-6.3.998c-2.135.027-4.26-.31-6.3-.998-.065-.024-.126-.05-.189-.073a10.143 10.143 0 0 1-.852-.373 7.75 7.75 0 0 1-.493-.267c-.053-.03-.113-.058-.165-.09v4.404C4 20.315 7.037 22 12 22Zm7.09-13.928a9.91 9.91 0 0 1-.6.253c-.063.025-.124.05-.189.074a18.935 18.935 0 0 1-6.3.998c-2.135.027-4.26-.31-6.3-.998-.065-.024-.126-.05-.189-.074a10.163 10.163 0 0 1-.852-.372 7.816 7.816 0 0 1-.493-.268c-.055-.03-.115-.058-.167-.09V12c0 .917 3.037 2.603 8 2.603s8-1.686 8-2.603V7.596c-.052.031-.112.059-.165.09a7.816 7.816 0 0 1-.745.386Z" />
+                          </svg>
 
-                  <p className="text-lg mt-2 font-light">Global</p>
-                  <p className="text-sm -mt-2">2.1k+ listed</p>
-                </div>
-                <div className="flex shadow-2xl w-full lg:w-[210px] rounded-l-none px-7 py-4  bg-emerald-500 text-white rounded-lg flex-col items-center justify-center gap-1">
-                  <svg
-                    class="w-10 h-10"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke="currentColor"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M19 6c0 1.657-3.134 3-7 3S5 7.657 5 6m14 0c0-1.657-3.134-3-7-3S5 4.343 5 6m14 0v6M5 6v6m0 0c0 1.657 3.134 3 7 3s7-1.343 7-3M5 12v6c0 1.657 3.134 3 7 3s7-1.343 7-3v-6"
-                    />
-                  </svg>
-
-                  <p className="text-lg mt-2 font-light">Local</p>
-                  <p className="text-sm -mt-2">3k+ listed</p>
-                </div>
+                          <p className="text-lg mt-2 font-light">
+                            {e?._id === "local"
+                              ? "Local"
+                              : e?._id === "global"
+                              ? "Global"
+                              : null}
+                          </p>
+                          <p className="text-sm -mt-2">
+                            {e?.total >= 1000
+                              ? parseFloat(e?.total / 1000).toFixed(1) + "K"
+                              : e?.total >= 1000000
+                              ? parseFloat(e?.total / 1000000).toFixed(2) + "M"
+                              : e?.total}
+                            + listed
+                          </p>
+                        </div>
+                      );
+                  })}
               </div>
               <div className="w-1 bg-gray-200 bg-dark hidden lg:block h-20 my-2 mx-2 rounded-full"></div>
               {/* service types  */}
-              <div className="grid grid-cols-2 text-[15px] mt-3 lg:mt-0 md:grid-cols-4 place-items-center gap-10 ml-6 lg:grid-cols-6">
-                <div className="flex  rounded-lg flex-col items-center justify-center">
-                  <div className=" rounded-full bg-white bg-dark shadow-sm">
-                    <img
-                      src="./etbagreeculture.png"
-                      alt=""
-                      className="w-[65px] h-[65px]"
-                    />
-                  </div>
-
-                  <p className="mt-2 font-bold">Agriculture</p>
-                  <p className="-mt-1 font-poppins text-sm">232+ listed</p>
-                </div>
-                <div className="flex rounded-lg flex-col items-center justify-center">
-                  <div className="rounded-full bg-white bg-dark shadow-sm">
-                    <img
-                      src="./etbconstruction.png"
-                      alt=""
-                      className="w-[65px] h-[65px]"
-                    />
-                  </div>
-
-                  <p className="mt-2 font-bold">Construction</p>
-                  <p className="-mt-1 font-poppins text-sm">240+ listed</p>
-                </div>
-                <div className="flex rounded-lg flex-col items-center justify-center">
-                  <div className="p-2h rounded-full bg-white bg-dark shadow-sm">
-                    <img
-                      src="./etbembassy.png"
-                      alt=""
-                      className="w-[65px] h-[65px]"
-                    />
-                  </div>
-
-                  <p className="mt-2 font-bold">Embassy</p>
-                  <p className="-mt-1 font-poppins text-sm">96+ listed</p>
-                </div>
-                <div className="flex rounded-lg flex-col items-center justify-center">
-                  <div className="p-2h rounded-full bg-white bg-dark shadow-sm">
-                    <img
-                      src="./etbgovernmentoffice.png"
-                      alt=""
-                      className="w-[65px] h-[65px]"
-                    />
-                  </div>
-
-                  <p className="mt-2 font-bold">Government...</p>
-                  <p className="-mt-1 font-poppins text-sm">10+ listed</p>
-                </div>
-                <div className="flex rounded-lg flex-col items-center justify-center">
-                  <div className="p-2h rounded-full bg-white bg-dark shadow-sm">
-                    <img
-                      src="./etbtourism.png"
-                      alt=""
-                      className="w-[65px] h-[65px]"
-                    />
-                  </div>
-
-                  <p className="mt-2 font-bold">Tourism</p>
-                  <p className="-mt-1 font-poppins text-sm">22+ listed</p>
-                </div>
-                <div className="flex rounded-lg flex-col items-center justify-center">
-                  <div className="p-2h rounded-full bg-white bg-dark shadow-sm">
-                    <img
-                      src="./etbexport.png"
-                      alt=""
-                      className="w-[65px] h-[65px]"
-                    />
-                  </div>
-
-                  <p className="mt-2 font-bold">Export</p>
-                  <p className="-mt-1 font-poppins text-sm">198+ listed</p>
-                </div>
+              <div className="grid grid-cols-2 text-[15px] w-full mt-3 lg:mt-0 md:grid-cols-3 place-items-start gap-10 ml-6 lg:grid-cols-4 xl:grid-cols-6">
+                {aggregateData &&
+                  aggregateData?.category &&
+                  aggregateData?.category?.map((e) => {
+                    if (e?._id === "Agriculture") {
+                      return categoryTemplate(
+                        "./etbagreeculture.png",
+                        e?._id,
+                        e?.total
+                      );
+                    }
+                    if (e?._id === "Construction") {
+                      return categoryTemplate(
+                        "./etbconstruction.png",
+                        e?._id,
+                        e?.total
+                      );
+                    }
+                    if (e?._id === "Embassy") {
+                      return categoryTemplate(
+                        "./etbembassy.png",
+                        e?._id,
+                        e?.total
+                      );
+                    }
+                    if (e?._id === "Government") {
+                      return categoryTemplate(
+                        "./etbgovernmentoffice.png",
+                        e?._id,
+                        e?.total
+                      );
+                    }
+                    if (e?._id === "Tourism") {
+                      return categoryTemplate(
+                        "./etbtourism.png",
+                        e?._id,
+                        e?.total
+                      );
+                    }
+                    if (e?._id === "Exporter") {
+                      return categoryTemplate(
+                        "./etbexport.png",
+                        e?._id,
+                        e?.total
+                      );
+                    }
+                  })}
               </div>
             </div>
           </div>
@@ -665,11 +656,8 @@ const Home = () => {
           ) : youtubeError ? (
             <p>Something went error unable to read the data.</p>
             ) : */}
-          {youtubes?.length > 0 ? (
-            <YoutubeItems data={youtubes} />
-          ) : (
-            <p>No videos available to play!</p>
-          )}
+
+          <YoutubeItems />
 
           <div className="w-full  py-8 flex flex-col items-center justify-center">
             <p className="text-4xl font-semibold text-gray-700">
