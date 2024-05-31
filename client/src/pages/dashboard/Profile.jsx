@@ -111,6 +111,7 @@ const Profile = () => {
   const [type, setType] = useState("local");
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("");
+  const [categoryImage, setCategoryImage] = useState("");
   const [subCategory, setSubCategory] = useState("");
   const [city, setCity] = useState(places?.data[0]?.city[0]);
   const [country, setCountry] = useState(places?.data[0]?.country[0]);
@@ -201,6 +202,9 @@ const Profile = () => {
       setTitle(data?.title ? data.title : title);
       setType(data?.type ? data.type : type);
       setCategory(data?.category ? data.category : category);
+      setCategoryImage(
+        data?.categoryImage ? data.categoryImage : categoryImage
+      );
       setSubCategory(data?.subCategory ? data.subCategory : subCategory);
       setCity(data?.city ? data.city : city);
       setCountry(data?.country ? data.country : country);
@@ -233,6 +237,7 @@ const Profile = () => {
     formData.append("title", title);
     formData.append("category", category);
     formData.append("subCategory", subCategory);
+    formData.append("categoryImage", categoryImage);
     formData.append("city", city);
     formData.append("country", country);
     formData.append("phone", phone);
@@ -285,7 +290,7 @@ const Profile = () => {
         tag: ["users"],
       });
   };
-  console.log(category, city, country, subCategory, "user");
+  console.log(users?.data[0], "user");
   return (
     <div className="w-full p-5 flex pb-10 flex-col rounded-lg border gap-2 items-start justify-center">
       <Response
@@ -412,6 +417,7 @@ const Profile = () => {
                                       .toString()
                                       .replaceAll("&", "and")
                                   );
+                                  setCategoryImage(c?.categoryImage);
                                   e.target.checked
                                     ? (setSubCategory(
                                         sc.toString().replaceAll("&", "and")

@@ -149,6 +149,16 @@ export const apiSlice = createApi({
       providesTags: ["notifications"],
     }),
 
+    //recentlyAddedCompany
+    recentlyAddedCompany: builder.query({
+      query: () => ({
+        url: `/utility/recentlyAddedCompany`,
+        method: "GET",
+        credentials: "include",
+      }),
+      providesTags: ["companies"],
+    }),
+
     //create
     create: builder.mutation({
       query: (data) => {
@@ -422,4 +432,5 @@ export const {
   useCreateBoostMutation,
   useCompanyAggregateQuery,
   useNotificationViewMutation,
+  useRecentlyAddedCompanyQuery,
 } = apiSlice;

@@ -100,6 +100,18 @@ const Category = ({ type }) => {
     });
   }, [city, country, category, subCategory, search, page]);
 
+  useState(() => {
+    setSearch(location?.name);
+    if (location?.type === "local") {
+      setCity(location?.city);
+    } else if (location?.type === "global") {
+      setCountry(location?.country);
+    }
+    if (location?.category) {
+      setCategory(location?.category);
+    }
+  }, [location]);
+
   //################## slider ##########################
   let sliderRef = useRef(null);
   const next = () => {
@@ -108,15 +120,6 @@ const Category = ({ type }) => {
   const previous = () => {
     sliderRef.slickPrev();
   };
-
-  useState(() => {
-    setSearch(location?.name);
-    if (location?.type === "local") {
-      setCity(location?.city);
-    } else if (location?.type === "global") {
-      setCountry(location?.country);
-    }
-  }, [location]);
 
   const settings = {
     dots: false,
@@ -170,6 +173,7 @@ const Category = ({ type }) => {
       },
     ],
   };
+
   console.log(location, "location");
   return (
     <div className="w-full relative pb-6 pt-24 bg-gray-50 bg-dark h-auto">

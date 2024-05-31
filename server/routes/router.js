@@ -44,6 +44,7 @@ const {
   companyAggregation,
   paymentHandler,
   notificationView,
+  recentlyAddedCompany,
 } = require("../controller/utilityController.js");
 const { sendEmailHandler } = require("../controller/emailController.js");
 
@@ -60,6 +61,7 @@ const files = upload.fields([
   { name: "video", maxCount: 1 },
   { name: "chatFile", maxCount: 10 },
   { name: "blogImage", maxCount: 1 },
+  { name: "categoryImage", maxCount: 1 },
 ]);
 
 //user account route
@@ -96,6 +98,7 @@ utilityRouter.route("/upgrade").post(authentication, upgradeHandler);
 utilityRouter.route("/boost").post(authentication, paymentHandler);
 utilityRouter.route("/companyAggregate").get(companyAggregation);
 utilityRouter.route("/notificationView").put(notificationView);
+utilityRouter.route("/recentlyAddedCompany").get(recentlyAddedCompany);
 
 //factory route
 router.route("/:table/:id").get(authentication, _read_single);

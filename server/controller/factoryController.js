@@ -43,6 +43,9 @@ const fileHandler = (value, req) => {
     if (req.files.profilePicture) {
       value.profilePicture = api + req.files.profilePicture[0].filename;
     }
+    if (req.files.categoryImage) {
+      value.categoryImage = api + req.files.categoryImage[0].filename;
+    }
   }
   return value;
 };

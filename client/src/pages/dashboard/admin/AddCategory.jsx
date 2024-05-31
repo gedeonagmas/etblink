@@ -37,6 +37,7 @@ const AddCategory = () => {
   const [subCategory, setSubCategory] = useState("");
   const [subCategories, setSubCategories] = useState([]);
   const [categoryType, setCategoryType] = useState("local");
+  const [categoryImage, setCategoryImage] = useState("");
 
   const [city, setCity] = useState("");
   const [cities, setCities] = useState([]);
@@ -54,13 +55,14 @@ const AddCategory = () => {
   const [id, setId] = useState("");
 
   const addHandler = () => {
-    addData({
-      category,
-      subCategory: subCategories,
-      type: categoryType,
-      url: "/user/categories",
-      tag: ["categories"],
-    });
+    const formData = new FormData();
+    formData.append("category", category);
+    formData.append("categoryType", categoryType);
+    formData.append("subCategories", subCategories);
+    formData.append("categoryImage", categoryImage);
+    formData.append("url", "/user/categories");
+    formData.append("tag", ["categories"]);
+    addData(formData);
   };
 
   const deleteHandler = () => {
@@ -169,6 +171,16 @@ const AddCategory = () => {
                   <p className=" py-1 border-b font-bold">Type</p>
                   <p className="font-light">{e?.type}</p>
                 </div>
+
+                <div className="flex flex-col gap-1">
+                  <p className=" py-1 border-b font-bold">Image</p>
+                  <img
+                    src={e?.categoryImage}
+                    alt=""
+                    className="w-32 h-32 rounded-lg"
+                  />
+                </div>
+
                 <div className="flex w-full items-center justify-between">
                   <div className="mt-2 flex flex-col gap-1">
                     <p className="py-1 border-b font-bold">Created At</p>
@@ -230,35 +242,35 @@ const AddCategory = () => {
           </div>
           {placesIsFetching && <Loading />}
           {placesIsError && <p>Something went wrong for reading places data</p>}
-            <>
-              <List
-                list={city}
-                setList={setCity}
-                lists={cities}
-                setLists={setCities}
-                addLists={addCities}
-                title="Add Cities"
-              />
+          <>
+            <List
+              list={city}
+              setList={setCity}
+              lists={cities}
+              setLists={setCities}
+              addLists={addCities}
+              title="Add Cities"
+            />
 
-              <List
-                list={country}
-                setList={setCountry}
-                lists={countries}
-                setLists={setCountries}
-                addLists={addCountries}
-                title="Add Countries"
-              />
+            <List
+              list={country}
+              setList={setCountry}
+              lists={countries}
+              setLists={setCountries}
+              addLists={addCountries}
+              title="Add Countries"
+            />
 
-              <div className="flex items-center gap-5 mt-5">
-                <LoadingButton
-                  pending={pending}
-                  onClick={updateHandler}
-                  title="Save"
-                  color="bg-emerald-500"
-                  width="w-52"
-                />
-              </div>
-            </>
+            <div className="flex items-center gap-5 mt-5">
+              <LoadingButton
+                pending={pending}
+                onClick={updateHandler}
+                title="Save"
+                color="bg-emerald-500"
+                width="w-52"
+              />
+            </div>
+          </>
         </div>
       )}
 

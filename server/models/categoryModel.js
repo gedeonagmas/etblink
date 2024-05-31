@@ -13,6 +13,11 @@ const categorySchema = new mongoose.Schema(
       //   validate: valid.numberLower("Amount", 0),
     },
 
+    categoryImage: {
+      type: String,
+      validate: valid.required("Image"),
+    },
+
     type: {
       type: String,
       enum: ["local", "global"],

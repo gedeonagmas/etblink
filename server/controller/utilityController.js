@@ -12,6 +12,7 @@ const { SubscriptionHistory } = require("../models/subscriptionHistoryModel");
 const { Payment } = require("../models/paymentModel");
 const { sendEmailHandler } = require("./emailController");
 const { Notification } = require("../models/notificationModel");
+const { Category } = require("../models/categoryModel");
 const from = "billing@etblink.com";
 
 const notificationSender = async (message, role, receiver) => {
@@ -470,6 +471,18 @@ const companyAggregation = asyncCatch(async (req, res, next) => {
     },
   ]);
 
+  const mainCategory = await Category.find({}, "category categoryImage type");
+  let finalData = [];
+  categories?.map((c) => {
+    const filtered = mainCategory.filter((f) => f.category === c._id);
+    finalData.push({
+      _id: c._id,
+      total: c.total,
+      categoryImage: filtered?.length > 0 ? filtered[0].categoryImage : "",
+      type: filtered?.length > 0 ? filtered[0].type : "",
+    });
+  });
+
   const type = await Company.aggregate([
     {
       $group: {
@@ -481,10 +494,41 @@ const companyAggregation = asyncCatch(async (req, res, next) => {
     },
   ]);
 
+  // console.log(finalData, "final");
   return res.status(200).json({
     status: "Read",
-    category: categories,
+    category: finalData,
     type: type,
+  });
+});
+
+const recentlyAddedCompany = asyncCatch(async (req, res, next) => {
+  const importer = await Company.find(
+    { category: "Advertisement" },
+    "name title logo"
+  ).limit(10);
+
+  const exporter = await Company.find(
+    { category: "Exporters" },
+    "name title logo"
+  ).limit(10);
+
+  const government = await Company.find(
+    { category: "Government" },
+    "name title logo"
+  ).limit(10);
+
+  const tourism = await Company.find(
+    { category: "Tourism" },
+    "name title logo"
+  ).limit(10);
+
+  console.log(importer, "final");
+  return res.status(200).json({
+    importer,
+    exporter,
+    government,
+    tourism,
   });
 });
 
@@ -501,6 +545,7 @@ module.exports = {
   companyAggregation,
   notificationSender,
   notificationView,
+  recentlyAddedCompany,
 };
 
 //   // console.log(Date.parse(new Date(req.body.endDate)));

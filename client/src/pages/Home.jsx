@@ -14,14 +14,18 @@ import {
 } from "@mui/icons-material";
 import Header from "./Header";
 import Footer from "./Footer";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   useCompanyAggregateQuery,
   useReadQuery,
+  useRecentlyAddedCompanyQuery,
 } from "../features/api/apiSlice";
 import Loading from "../components/loading/Loading";
 import { format } from "timeago.js";
 import { useNavigate } from "react-router-dom";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import Slider from "react-slick";
 
 const Home = () => {
   const {
@@ -32,6 +36,12 @@ const Home = () => {
     url: "/user/companies?isBoosted[eq]=true&limit=6&page=1",
     tag: ["companies"],
   });
+
+  const {
+    data: recentCompany,
+    isFetching: recentCompanyFetching,
+    isError: recentCompanyError,
+  } = useRecentlyAddedCompanyQuery();
 
   const {
     data: newses,
@@ -96,11 +106,22 @@ const Home = () => {
       setCountry(places?.data[0]?.country[0]);
     }
   }, [category, places]);
-
-  const categoryTemplate = (image, name, value) => {
+  console.log(name, category, "hhhhhhhhhh");
+  const categoryTemplate = (image, name, value, type) => {
     return (
-      <div className="flex  rounded-lg flex-col items-center justify-center">
-        <div className=" rounded-full bg-white bg-dark shadow-sm">
+      <div
+        onClick={() => {
+          setName(name);
+          setCategory(type);
+          setCity(" ");
+          setCountry(" ");
+          navigate(category === "global" ? `/global` : "/local", {
+            state: { type: category, city, country, name },
+          });
+        }}
+        className="flex cursor-pointer relatives p-2 text-center bg-blue-500d rounded-lg flex-col items-center justify-center"
+      >
+        <div className="w-fulls self-center items-center flex justify-center px-2 h-[70px]s p-2 rounded-full bg-white bg-dark shadow-sm">
           <img src={image} alt={name} className="w-[65px] h-[65px]" />
         </div>
 
@@ -117,7 +138,63 @@ const Home = () => {
     );
   };
 
-  console.log(aggregateData, "category");
+  let sliderRef = useRef(null);
+  const next = () => {
+    sliderRef.slickNext();
+  };
+  const previous = () => {
+    sliderRef.slickPrev();
+  };
+
+  const settings = {
+    dots: false,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 6,
+    slidesToScroll: 6,
+    initialSlide: 0,
+    responsive: [
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 2,
+        },
+      },
+
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 3,
+        },
+      },
+      {
+        breakpoint: 900,
+        settings: {
+          slidesToShow: 4,
+        },
+      },
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 5,
+        },
+      },
+      {
+        breakpoint: 1150,
+        settings: {
+          slidesToShow: 5,
+        },
+      },
+      {
+        breakpoint: 1300,
+        settings: {
+          slidesToShow: 6,
+        },
+      },
+    ],
+  };
+
+  console.log(recentCompany, "recent company");
   return (
     <>
       {/* <Header /> */}
@@ -304,191 +381,214 @@ const Home = () => {
                 </div>
               </div>
 
-              <div className="absolute hidden lg:flex right-0 text-[13px] py-2 lg:-top-[150px] z-30 mr-main w-[380px] h-auto justify-end items-center">
-                <div className="absolute right-0 top-0 z-30 bg-dark w-full">
-                  <p className="px-4 mt-1 pt-2">Recently added business</p>
-                  <ul
-                    className="flex w-[380px] flex-wrap border-b border-dark py-[2px] -mb-px font-medium text-center"
-                    id="default-tab"
-                    data-tabs-toggle="#default-tab-contents"
-                    role="tablist"
+              {recentCompany && (
+                <div className="absolute hidden lg:flex right-0 text-[13px] py-2 lg:-top-[150px] z-30 mr-main w-[380px] h-auto justify-end items-center">
+                  <div className="absolute right-0 top-0 z-30 bg-dark w-full">
+                    <p className="px-4 mt-1 pt-2">Recently added business</p>
+                    <ul
+                      className="flex w-[380px] flex-wrap border-b border-dark py-[2px] -mb-px font-medium text-center"
+                      id="default-tab"
+                      data-tabs-toggle="#default-tab-contents"
+                      role="tablist"
+                    >
+                      {Object.keys(recentCompany)?.map((e) => {
+                        return (
+                          <li className="me-1" role="presentation">
+                            <button
+                              className="inline-block pr-2 pl-4 py-1 rounded-t-lg"
+                              id="profiles-tab"
+                              data-tabs-target={`#${e}`}
+                              type="button"
+                              role="tab"
+                              aria-controls={`${e}`}
+                              aria-selected="true"
+                            >
+                              {e}
+                            </button>
+                          </li>
+                        );
+                      })}
+
+                      {/* <li className="me-2" role="presentation">
+                        <button
+                          className="inline-block px-2 py-1 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+                          id="dashboard-tab"
+                          data-tabs-target="#dashboard"
+                          type="button"
+                          role="tab"
+                          aria-controls="dashboard"
+                          aria-selected="false"
+                        >
+                          Exporters
+                        </button>
+                      </li>
+                      <li className="me-2" role="presentation">
+                        <button
+                          className="inline-block px-2 py-1 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+                          id="settings-tab"
+                          data-tabs-target="#settings"
+                          type="button"
+                          role="tab"
+                          aria-controls="settings"
+                          aria-selected="false"
+                        >
+                          Banks
+                        </button>
+                      </li>
+                      <li role="presentation">
+                        <button
+                          className="inline-block px-2 py-1 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+                          id="contacts-tab"
+                          data-tabs-target="#contacts"
+                          type="button"
+                          role="tab"
+                          aria-controls="contacts"
+                          aria-selected="false"
+                        >
+                          Hotels
+                        </button>
+                      </li> */}
+                    </ul>
+                  </div>
+                  <div
+                    id="default-tab-contents"
+                    className="bg-white bg-dark relative w-full shadow-2xl h-[205px] "
                   >
-                    <li className="me-1" role="presentation">
-                      <button
-                        className="inline-block pr-2 pl-4 py-1 rounded-t-lg"
-                        id="profiles-tab"
-                        data-tabs-target="#profiles"
-                        type="button"
-                        role="tab"
-                        aria-controls="profiles"
-                        aria-selected="true"
-                      >
-                        Importers
-                      </button>
-                    </li>
-                    <li className="me-2" role="presentation">
-                      <button
-                        className="inline-block px-2 py-1 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
-                        id="dashboard-tab"
-                        data-tabs-target="#dashboard"
-                        type="button"
-                        role="tab"
-                        aria-controls="dashboard"
-                        aria-selected="false"
-                      >
-                        Exporters
-                      </button>
-                    </li>
-                    <li className="me-2" role="presentation">
-                      <button
-                        className="inline-block px-2 py-1 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
-                        id="settings-tab"
-                        data-tabs-target="#settings"
-                        type="button"
-                        role="tab"
-                        aria-controls="settings"
-                        aria-selected="false"
-                      >
-                        Banks
-                      </button>
-                    </li>
-                    <li role="presentation">
-                      <button
-                        className="inline-block px-2 py-1 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
-                        id="contacts-tab"
-                        data-tabs-target="#contacts"
-                        type="button"
-                        role="tab"
-                        aria-controls="contacts"
-                        aria-selected="false"
-                      >
-                        Hotels
-                      </button>
-                    </li>
-                  </ul>
+                    {recentCompany &&
+                    recentCompany?.importers &&
+                    recentCompany?.importer?.length > 0
+                      ? recentCompany?.importer?.map((e) => {
+                          return (
+                            <div
+                              className="hidden relative h-full w-full"
+                              id="importer"
+                              role="tabpanel"
+                              aria-labelledby="importer-tab"
+                            >
+                              <div className="flex pt-[68px] w-full px-4 justify-between py-1 border-t border-dark border-gray-300 gap-2 items-center">
+                                <p className="px-2 py-[2px] rounded-full border border-main text-main font-bold">
+                                  etblink
+                                </p>
+
+                                <p className="">
+                                  ethiopian business link portals
+                                </p>
+                                <p className=" text-blue-500 cursor-pointer flex items-center justify-center">
+                                  Visit{" "}
+                                </p>
+                              </div>
+                              <div className="flex w-full  px-4 justify-between py-1 border-t border-dark border-gray-300 gap-2 items-center">
+                                <p className="px-2 py-[2px] rounded-full border border-main text-main font-bold">
+                                  etblink
+                                </p>
+
+                                <p className="">
+                                  ethiopian business link portals
+                                </p>
+                                <p className=" text-blue-500 cursor-pointer flex items-center justify-center">
+                                  Visit{" "}
+                                </p>
+                              </div>
+                              <div className="flex w-full  px-4 justify-between py-1 border-t border-dark border-gray-300 gap-2 items-center">
+                                <p className="px-2 py-[2px] rounded-full border border-main text-main font-bold">
+                                  etblink
+                                </p>
+
+                                <p className="">
+                                  ethiopian business link portals
+                                </p>
+                                <p className=" text-blue-500 cursor-pointer flex items-center justify-center">
+                                  Visit{" "}
+                                </p>
+                              </div>
+
+                              <div className="flex w-full  px-4 justify-between py-1 border-t border-dark border-gray-300 gap-2 items-center">
+                                <p className="px-2 py-[2px] rounded-full border border-main text-main font-bold">
+                                  etblink
+                                </p>
+
+                                <p className="">
+                                  ethiopian business link portals
+                                </p>
+                                <p className=" text-blue-500 cursor-pointer flex items-center justify-center">
+                                  Visit{" "}
+                                </p>
+                              </div>
+                            </div>
+                          );
+                        })
+                      : null}
+
+                    <div
+                      className="hidden h-full p-4 bg-gray-50 bg-dark"
+                      id="dashboard"
+                      role="tabpanel"
+                      aria-labelledby="dashboard-tab"
+                    >
+                      <p className="text-sm mt-12 text-gray-500 text-dark">
+                        This is some placeholder content the{" "}
+                        <strong className="font-medium text-gray-800 dark:text-white">
+                          Dashboard tabs associated content
+                        </strong>
+                        . Clicking another tab will toggle the visibility of
+                        this one for the next. The tab JavaScript swaps classes
+                        to control the content visibility and styling.
+                      </p>
+                    </div>
+
+                    <div
+                      className="hidden p-4 h-full bg-gray-50 bg-dark"
+                      id="settings"
+                      role="tabpanel"
+                      aria-labelledby="settings-tab"
+                    >
+                      <p className="text-sm mt-12 text-gray-500 text-dark">
+                        This is some placeholder content the{" "}
+                        <strong className="font-medium text-gray-800 dark:text-white">
+                          Settings tabs associated content
+                        </strong>
+                        . Clicking another tab will toggle the visibility of
+                        this one for the next. The tab JavaScript swaps classes
+                        to control the content visibility and styling.
+                      </p>
+                    </div>
+
+                    <div
+                      className="hidden p-4 h-full bg-gray-50 bg-dark"
+                      id="contacts"
+                      role="tabpanel"
+                      aria-labelledby="contacts-tab"
+                    >
+                      <p className="text-sm mt-12 text-gray-500 text-dark">
+                        This is some placeholder content the{" "}
+                        <strong className="font-medium text-gray-800 dark:text-white">
+                          Contacts tabs associated content
+                        </strong>
+                        . Clicking another tab will toggle the visibility of
+                        this one for the next. The tab JavaScript swaps classes
+                        to control the content visibility and styling.
+                      </p>
+                    </div>
+
+                    <div
+                      className="hidden p-4 h-full bg-gray-50 bg-dark"
+                      id="embassies"
+                      role="tabpanel"
+                      aria-labelledby="embassies-tab"
+                    >
+                      <p className="text-sm mt-12 text-gray-500 text-dark">
+                        This is some placeholder content the{" "}
+                        <strong className="font-medium text-gray-800 dark:text-white">
+                          Contacts tabs associated content
+                        </strong>
+                        . Clicking another tab will toggle the visibility of
+                        this one for the next. The tab JavaScript swaps classes
+                        to control the content visibility and styling.
+                      </p>
+                    </div>
+                  </div>
                 </div>
-                <div
-                  id="default-tab-contents"
-                  className="bg-white bg-dark relative w-full shadow-2xl h-[205px] "
-                >
-                  <div
-                    className="hidden relative h-full w-full"
-                    id="profiles"
-                    role="tabpanel"
-                    aria-labelledby="profiles-tab"
-                  >
-                    <div className="flex pt-[68px] w-full px-4 justify-between py-1 border-t border-dark border-gray-300 gap-2 items-center">
-                      <p className="px-2 py-[2px] rounded-full border border-main text-main font-bold">
-                        etblink
-                      </p>
-
-                      <p className="">ethiopian business link portals</p>
-                      <p className=" text-blue-500 cursor-pointer flex items-center justify-center">
-                        Visit{" "}
-                      </p>
-                    </div>
-                    <div className="flex w-full  px-4 justify-between py-1 border-t border-dark border-gray-300 gap-2 items-center">
-                      <p className="px-2 py-[2px] rounded-full border border-main text-main font-bold">
-                        etblink
-                      </p>
-
-                      <p className="">ethiopian business link portals</p>
-                      <p className=" text-blue-500 cursor-pointer flex items-center justify-center">
-                        Visit{" "}
-                      </p>
-                    </div>
-                    <div className="flex w-full  px-4 justify-between py-1 border-t border-dark border-gray-300 gap-2 items-center">
-                      <p className="px-2 py-[2px] rounded-full border border-main text-main font-bold">
-                        etblink
-                      </p>
-
-                      <p className="">ethiopian business link portals</p>
-                      <p className=" text-blue-500 cursor-pointer flex items-center justify-center">
-                        Visit{" "}
-                      </p>
-                    </div>
-
-                    <div className="flex w-full  px-4 justify-between py-1 border-t border-dark border-gray-300 gap-2 items-center">
-                      <p className="px-2 py-[2px] rounded-full border border-main text-main font-bold">
-                        etblink
-                      </p>
-
-                      <p className="">ethiopian business link portals</p>
-                      <p className=" text-blue-500 cursor-pointer flex items-center justify-center">
-                        Visit{" "}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div
-                    className="hidden h-full p-4 bg-gray-50 bg-dark"
-                    id="dashboard"
-                    role="tabpanel"
-                    aria-labelledby="dashboard-tab"
-                  >
-                    <p className="text-sm mt-12 text-gray-500 text-dark">
-                      This is some placeholder content the{" "}
-                      <strong className="font-medium text-gray-800 dark:text-white">
-                        Dashboard tabs associated content
-                      </strong>
-                      . Clicking another tab will toggle the visibility of this
-                      one for the next. The tab JavaScript swaps classes to
-                      control the content visibility and styling.
-                    </p>
-                  </div>
-
-                  <div
-                    className="hidden p-4 h-full bg-gray-50 bg-dark"
-                    id="settings"
-                    role="tabpanel"
-                    aria-labelledby="settings-tab"
-                  >
-                    <p className="text-sm mt-12 text-gray-500 text-dark">
-                      This is some placeholder content the{" "}
-                      <strong className="font-medium text-gray-800 dark:text-white">
-                        Settings tabs associated content
-                      </strong>
-                      . Clicking another tab will toggle the visibility of this
-                      one for the next. The tab JavaScript swaps classes to
-                      control the content visibility and styling.
-                    </p>
-                  </div>
-
-                  <div
-                    className="hidden p-4 h-full bg-gray-50 bg-dark"
-                    id="contacts"
-                    role="tabpanel"
-                    aria-labelledby="contacts-tab"
-                  >
-                    <p className="text-sm mt-12 text-gray-500 text-dark">
-                      This is some placeholder content the{" "}
-                      <strong className="font-medium text-gray-800 dark:text-white">
-                        Contacts tabs associated content
-                      </strong>
-                      . Clicking another tab will toggle the visibility of this
-                      one for the next. The tab JavaScript swaps classes to
-                      control the content visibility and styling.
-                    </p>
-                  </div>
-
-                  <div
-                    className="hidden p-4 h-full bg-gray-50 bg-dark"
-                    id="embassies"
-                    role="tabpanel"
-                    aria-labelledby="embassies-tab"
-                  >
-                    <p className="text-sm mt-12 text-gray-500 text-dark">
-                      This is some placeholder content the{" "}
-                      <strong className="font-medium text-gray-800 dark:text-white">
-                        Contacts tabs associated content
-                      </strong>
-                      . Clicking another tab will toggle the visibility of this
-                      one for the next. The tab JavaScript swaps classes to
-                      control the content visibility and styling.
-                    </p>
-                  </div>
-                </div>
-              </div>
+              )}
             </div>
 
             {/* small advert */}
@@ -516,15 +616,20 @@ const Home = () => {
             </div>
 
             {/* services */}
-            <div className="flex flex-col lg:flex-row px-main gap-3 mt-10 lg:-mt-5 items-center justify-between">
-              <div className="flex flex-col xl:flex-row gap-5 w-full lg:w-[290px]  items-center justify-center">
+            <div className="flex flex-col xl:flex-row px-main gap-3 mt-10 lg:-mt-5 items-center justify-between">
+              <div className="flex flex-col md:flex-row gap-5 w-full xl:w-[290px]  items-center justify-center">
                 {aggregateData &&
                   aggregateData?.type &&
                   aggregateData?.type?.map((e) => {
                     if (e?._id !== null)
                       return (
                         <div
-                          className={`flex  shadow-2xl w-full lg:w-[210px] rounded-l-none px-7 py-4 ${
+                          onClick={() => {
+                            navigate(
+                              e?._id === "global" ? `/global` : "/local"
+                            );
+                          }}
+                          className={`flex cursor-pointer shadow-2xl w-full xl:w-[210px] rounded-l-none px-7 py-4 ${
                             e?._id === "local" ? "bg-main" : "bg-emerald-500"
                           } text-white rounded-lg flex-col items-center justify-center gap-1`}
                         >
@@ -559,55 +664,141 @@ const Home = () => {
                       );
                   })}
               </div>
-              <div className="w-1 bg-gray-200 bg-dark hidden lg:block h-20 my-2 mx-2 rounded-full"></div>
+              <div className="w-1 bg-gray-200 bg-dark hidden xl:block h-20 my-2 mx-2 rounded-full"></div>
               {/* service types  */}
-              <div className="grid grid-cols-2 text-[15px] w-full mt-3 lg:mt-0 md:grid-cols-3 place-items-start gap-10 ml-6 lg:grid-cols-4 xl:grid-cols-6">
-                {aggregateData &&
-                  aggregateData?.category &&
-                  aggregateData?.category?.map((e) => {
-                    if (e?._id === "Agriculture") {
-                      return categoryTemplate(
-                        "./etbagreeculture.png",
-                        e?._id,
-                        e?.total
-                      );
-                    }
-                    if (e?._id === "Construction") {
-                      return categoryTemplate(
-                        "./etbconstruction.png",
-                        e?._id,
-                        e?.total
-                      );
-                    }
-                    if (e?._id === "Embassy") {
-                      return categoryTemplate(
-                        "./etbembassy.png",
-                        e?._id,
-                        e?.total
-                      );
-                    }
-                    if (e?._id === "Government") {
-                      return categoryTemplate(
-                        "./etbgovernmentoffice.png",
-                        e?._id,
-                        e?.total
-                      );
-                    }
-                    if (e?._id === "Tourism") {
-                      return categoryTemplate(
-                        "./etbtourism.png",
-                        e?._id,
-                        e?.total
-                      );
-                    }
-                    if (e?._id === "Exporter") {
-                      return categoryTemplate(
-                        "./etbexport.png",
-                        e?._id,
-                        e?.total
-                      );
-                    }
-                  })}
+
+              <div className="w-full max-w-[100%] relative lg:w-[90%]s xl:w-[70%] gap-2">
+                <button
+                  onClick={previous}
+                  className="absolute button shadow-2xl rounded-full  z-20 top-[65px] -left-3"
+                >
+                  <svg
+                    class="w-7 text-gray-400 cursor-pointer hover:bg-gray-300 hover:text-gray-500 border border-gray-300 rounded-full h-7 bg-gray-300/50"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="m15 19-7-7 7-7"
+                    />
+                  </svg>
+                </button>
+                <Slider
+                  ref={(slider) => {
+                    sliderRef = slider;
+                  }}
+                  {...settings}
+                >
+                  {" "}
+                  {/* <div className="w-full flex"></div> */}
+                  {aggregateData &&
+                    aggregateData?.category &&
+                    aggregateData?.category?.map((e) => {
+                      // if (e?._id === "Agriculture") {
+                      if (e?._id !== null)
+                        return (
+                          <div
+                            onClick={() => {
+                              navigate(
+                                e?.type === "global" ? `/global` : "/local",
+                                {
+                                  state: {
+                                    type: e?.type,
+                                    category: e?._id,
+                                  },
+                                }
+                              );
+                            }}
+                            className="flex cursor-pointer relatives p-2 text-center bg-blue-500d rounded-lg flex-col items-center justify-center"
+                          >
+                            <div className="w-fulls self-center items-center flex justify-center px-2 h-[70px]s p-2 rounded-full bg-white bg-dark shadow-sm">
+                              <img
+                                src={e?.categoryImage}
+                                alt={e?._id}
+                                className="w-[65px] h-[65px]"
+                              />
+                            </div>
+
+                            <p className="mt-2 font-bold">{e?._id}</p>
+                            <p className="-mt-1 font-poppins text-sm">
+                              {e?.total >= 1000
+                                ? parseFloat(e?.total / 1000).toFixed(1) + "K"
+                                : e?.total >= 1000000
+                                ? parseFloat(e?.total / 1000000).toFixed(2) +
+                                  "M"
+                                : e?.total}
+                              + listed
+                            </p>
+                          </div>
+                        );
+
+                      // }
+                      // if (e?._id === "Construction") {
+                      //   return categoryTemplate(
+                      //     "./etbconstruction.png",
+                      //     e?._id,
+                      //     e?.total
+                      //   );
+                      // }
+                      // if (e?._id === "Embassy") {
+                      //   return categoryTemplate(
+                      //     "./etbembassy.png",
+                      //     e?._id,
+                      //     e?.total
+                      //   );
+                      // }
+                      // if (e?._id === "Government") {
+                      //   return categoryTemplate(
+                      //     "./etbgovernmentoffice.png",
+                      //     e?._id,
+                      //     e?.total
+                      //   );
+                      // }
+                      // if (e?._id === "Tourism") {
+                      //   return categoryTemplate(
+                      //     "./etbtourism.png",
+                      //     e?._id,
+                      //     e?.total
+                      //   );
+                      // }
+                      // if (e?._id === "Exporter") {
+                      //   return categoryTemplate(
+                      //     "./etbexport.png",
+                      //     e?._id,
+                      //     e?.total
+                      //   );
+                      // }
+                    })}
+                </Slider>
+                <button
+                  onClick={next}
+                  className="absolute button shadow-2xl rounded-full  z-20 top-[65px] -right-3"
+                >
+                  <svg
+                    class="w-7 text-gray-400 cursor-pointer hover:bg-gray-300 hover:text-gray-500 border border-gray-300 rounded-full h-7 bg-gray-300/50"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="m9 5 7 7-7 7"
+                    />
+                  </svg>
+                </button>
               </div>
             </div>
           </div>

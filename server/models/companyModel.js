@@ -20,6 +20,10 @@ const schema = new mongoose.Schema(
     },
 
     subCategory: {
+      type: String, 
+    },
+
+    categoryImage: {
       type: String,
     },
 
