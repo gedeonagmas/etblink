@@ -391,8 +391,8 @@ export const apiSlice = createApi({
     }),
 
     companyAggregate: builder.query({
-      query: () => ({
-        url: `/utility/companyAggregate`,
+      query: (data) => ({
+        url: `/utility/companyAggregate?type=${data?.type}`,
         method: "GET",
         credentials: "include",
       }),

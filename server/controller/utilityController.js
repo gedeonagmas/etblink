@@ -463,26 +463,46 @@ const companyAggregation = asyncCatch(async (req, res, next) => {
   const categories = await Company.aggregate([
     {
       $group: {
-        _id: "$category",
-        total: {
-          $sum: 1,
+        _id: {
+          category: "$category",
+          type: "$type",
+          total: {
+            $sum: 1,
+          },
         },
       },
     },
   ]);
 
-  const mainCategory = await Category.find({}, "category categoryImage type");
+  const types =
+    req.query.type === "local"
+      ? { type: "local" }
+      : req.query.type === "global"
+      ? { type: "global" }
+      : {};
+  const mainCategory = await Category.find(
+    types,
+    "category categoryImage type"
+  );
   let finalData = [];
   categories?.map((c) => {
-    const filtered = mainCategory.filter((f) => f.category === c._id);
+    const filtered = mainCategory.filter((f) => {
+      if (f.category === c._id?.category && c._id.type === req.query.type) {
+        return true;
+      } else {
+        return false;
+      }
+    });
+    console.log(filtered?.length > 0, filtered, "ffffffffffff");
     finalData.push({
-      _id: c._id,
-      total: c.total,
-      categoryImage: filtered?.length > 0 ? filtered[0].categoryImage : "",
-      type: filtered?.length > 0 ? filtered[0].type : "",
+      category: c._id.category,
+      total: c._id.total,
+      categoryImage: filtered?.length > 0 ? filtered.categoryImage : "",
+      type: filtered?.length > 0 ? filtered.type : "",
     });
   });
 
+  console.log(categories, mainCategory, "ff", finalData, "final");
   const type = await Company.aggregate([
     {
       $group: {
@@ -523,7 +543,7 @@ const recentlyAddedCompany = asyncCatch(async (req, res, next) => {
     "name title logo"
   ).limit(10);
 
-  console.log(importer, "final");
+  // console.log(importer, "final");
   return res.status(200).json({
     importer,
     exporter,

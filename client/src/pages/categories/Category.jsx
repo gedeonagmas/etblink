@@ -21,6 +21,7 @@ import { useLocation } from "react-router-dom";
 
 const Category = ({ type }) => {
   const [page, setPage] = useState(1);
+  console.log(type, "ttttttttttttttttttttt");
   const location = useLocation()?.state;
   const {
     data: categoryData,
@@ -50,7 +51,7 @@ const Category = ({ type }) => {
     data: aggregateData,
     isFetching: aggregateIsFetching,
     isError: aggregateIsError,
-  } = useCompanyAggregateQuery();
+  } = useCompanyAggregateQuery({ type });
 
   console.log(aggregateData, "aggregate");
   const [
@@ -95,7 +96,7 @@ const Category = ({ type }) => {
       : "";
 
     trigger({
-      url: `/user/companies?limit=15&page=${page}${cityKeyword}${countryKeyword}${categoryKeyword}${subCategoryKeyword}${searchKeyword}`,
+      url: `/user/companies?type=${type}&limit=15&page=${page}${cityKeyword}${countryKeyword}${categoryKeyword}${subCategoryKeyword}${searchKeyword}`,
       tag: ["companies"],
     });
   }, [city, country, category, subCategory, search, page]);
@@ -332,11 +333,11 @@ const Category = ({ type }) => {
               {...settings}
             >
               {aggregateData?.category?.map((e) => {
-                if (e?._id !== null)
+                if (e?.category && e?.type === type)
                   return (
                     <li
                       onClick={() => {
-                        setCategory(e?._id);
+                        setCategory(e?.category);
                         setSubCategory("");
                       }}
                       class=" hover:bg-gray-100  cursor-pointer px-3 border-r border-dark border-gray-300 focus:ring-0"
@@ -354,7 +355,7 @@ const Category = ({ type }) => {
                           for="vue-checkbox-list"
                           class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                         >
-                          {e?._id}
+                          {e?.category}
                         </p>
                       </div>
                     </li>
