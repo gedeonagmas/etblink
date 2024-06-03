@@ -46,6 +46,12 @@ const fileHandler = (value, req) => {
     if (req.files.categoryImage) {
       value.categoryImage = api + req.files.categoryImage[0].filename;
     }
+    if (req.files.sponsorImage) {
+      value.sponsorImage = api + req.files.sponsorImage[0].filename;
+    }
+    if (req.files.bannerImage) {
+      value.bannerImage = api + req.files.bannerImage[0].filename;
+    }
   }
   return value;
 };

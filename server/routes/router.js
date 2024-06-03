@@ -62,6 +62,8 @@ const files = upload.fields([
   { name: "chatFile", maxCount: 10 },
   { name: "blogImage", maxCount: 1 },
   { name: "categoryImage", maxCount: 1 },
+  { name: "sponsorImage", maxCount: 1 },
+  { name: "bannerImage", maxCount: 1 },
 ]);
 
 //user account route

@@ -487,22 +487,24 @@ const companyAggregation = asyncCatch(async (req, res, next) => {
   let finalData = [];
   categories?.map((c) => {
     const filtered = mainCategory.filter((f) => {
-      if (f.category === c._id?.category && c._id.type === req.query.type) {
+      // console.log(f.category,c._id, f.type, "ffffffffffff");
+
+      if (f.category === c._id?.category && c._id.type === f.type) {
         return true;
       } else {
         return false;
       }
     });
-    console.log(filtered?.length > 0, filtered, "ffffffffffff");
+    // console.log(filtered?.length > 0, filtered, "ffffffffffff");
     finalData.push({
       category: c._id.category,
       total: c._id.total,
-      categoryImage: filtered?.length > 0 ? filtered.categoryImage : "",
-      type: filtered?.length > 0 ? filtered.type : "",
+      categoryImage: filtered?.length > 0 ? filtered[0].categoryImage : "",
+      type: filtered?.length > 0 ? filtered[0].type : "",
     });
   });
 
-  console.log(categories, mainCategory, "ff", finalData, "final");
+  // console.log(finalData, "final");
   const type = await Company.aggregate([
     {
       $group: {

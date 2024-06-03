@@ -1,5 +1,6 @@
 const { Admin } = require("../models/adminModel");
 const { Application } = require("../models/applicationModel");
+const { Banner } = require("../models/bannerModel");
 const { Blog } = require("../models/blogModel");
 const { BlogAdmin } = require("../models/blogsAdminModel");
 const { BoostHistory } = require("../models/boostHistoryModel");
@@ -16,11 +17,13 @@ const { Place } = require("../models/placeModel");
 const { Rate } = require("../models/ratesModel");
 const { Sales } = require("../models/salesModel");
 const { Save } = require("../models/saveModel");
+const { Sponsor } = require("../models/sponsorsModel");
 const { SubscriptionHistory } = require("../models/subscriptionHistoryModel");
 const { Subscription } = require("../models/subscriptionModel");
 const { User } = require("../models/userModel");
 const { View } = require("../models/viewModel");
 const { Visitor } = require("../models/visitorModel");
+const { YoutubeAdmin } = require("../models/youtubeAdminModel");
 const { Youtube } = require("../models/youtubeModel");
 const AppError = require("./AppError");
 
@@ -105,8 +108,17 @@ const selectModel = (name, next) => {
     case "news-admins":
       model = NewsAdmin;
       break;
+    case "youtube-admins":
+      model = YoutubeAdmin;
+      break;
     case "notifications":
       model = Notification;
+      break;
+    case "banners":
+      model = Banner;
+      break;
+    case "sponsors":
+      model = Sponsor;
       break;
     default:
       return next(new AppError("something went wrong please try again!.", 500));

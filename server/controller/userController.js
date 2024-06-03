@@ -10,6 +10,7 @@ const { Sales } = require("../models/salesModel");
 const { Admin } = require("../models/adminModel");
 const { BlogAdmin } = require("../models/blogsAdminModel");
 const { NewsAdmin } = require("../models/newsAdminModel");
+const { YoutubeAdmin } = require("../models/youtubeAdminModel");
 const api = "http://localhost:4000/";
 
 const signupHandler = asyncCatch(async (req, res, next) => {
@@ -65,6 +66,8 @@ const signupHandler = asyncCatch(async (req, res, next) => {
       return createAccount(NewsAdmin);
     case "blog-admin":
       return createAccount(BlogAdmin);
+    case "youtube-admin":
+      return createAccount(YoutubeAdmin);
     default:
       return next(
         new AppError("problem with creating your account please try again", 500)

@@ -28,6 +28,8 @@ const userSchema = new mongoose.Schema(
           ? "news-admin"
           : this.role === "blog-admin"
           ? "blog-admin"
+          : this.role === "youtube-admin"
+          ? "youtube-admin"
           : "admin";
       },
     },
