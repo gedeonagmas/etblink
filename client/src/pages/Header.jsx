@@ -115,7 +115,7 @@ const Header = () => {
           />
           {user ? (
             <div className="flex items-center gap-3">
-              <p className="px-2 py-1 text-white rounded-xl bg-main">
+              <p className="px-2 hidden lg:block py-1 text-white rounded-xl bg-main">
                 {user.email.split("@")[0]}
               </p>
               <a href={`/dashboard/${user.role}`} className="cursor-pointer">
@@ -355,7 +355,7 @@ const Header = () => {
             </li>
             <li className="" role="presentation">
               <a
-                href="/blogs"
+                href="/event"
                 className="inline-block hover:text-[rgb(252,45,45)]  w-full p-5 font-medium rtl:text-right text-gray-500 border border-b-0 border-gray-300  focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 gap-3"
               >
                 Event
@@ -788,6 +788,34 @@ const Header = () => {
                   </div>
                 </a>
 
+                <a
+                  onClick={notificationViewHandler}
+                  href={`/dashboard/notifications`}
+                  className="cursor-pointer"
+                >
+                  <div className="items-center flex flex-col justify-center">
+                    <button
+                      type="button"
+                      class="relative inline-flex items-center text-sm font-medium text-center"
+                    >
+                      <svg
+                        class="w-7 h-7 "
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        fill="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path d="M17.133 12.632v-1.8a5.407 5.407 0 0 0-4.154-5.262.955.955 0 0 0 .021-.106V3.1a1 1 0 0 0-2 0v2.364a.933.933 0 0 0 .021.106 5.406 5.406 0 0 0-4.154 5.262v1.8C6.867 15.018 5 15.614 5 16.807 5 17.4 5 18 5.538 18h12.924C19 18 19 17.4 19 16.807c0-1.193-1.867-1.789-1.867-4.175Zm-13.267-.8a1 1 0 0 1-1-1 9.424 9.424 0 0 1 2.517-6.391A1.001 1.001 0 1 1 6.854 5.8a7.43 7.43 0 0 0-1.988 5.037 1 1 0 0 1-1 .995Zm16.268 0a1 1 0 0 1-1-1A7.431 7.431 0 0 0 17.146 5.8a1 1 0 0 1 1.471-1.354 9.424 9.424 0 0 1 2.517 6.391 1 1 0 0 1-1 .995ZM8.823 19a3.453 3.453 0 0 0 6.354 0H8.823Z" />
+                      </svg>
+
+                      <div class="absolute inline-flex items-center justify-center w-6 h-6 text-xs p-1 font-bold text-white bg-main border-2 border-white rounded-full -top-2 -end-3 dark:border-gray-900">
+                        {notifications?.data ? notifications?.data?.length : 0}
+                      </div>
+                    </button>
+                  </div>
+                </a>
                 {user?.role === "company" && (
                   <a href={`/dashboard/views`} className="cursor-pointer">
                     <div className="items-center flex flex-col justify-center">
@@ -1069,7 +1097,7 @@ const Header = () => {
             </li>
             <li className="me-2 ml-2" role="presentation">
               <a
-                href="/blogs"
+                href="/event"
                 className="inline-block hover:text-[rgb(252,45,45)] p-2 rounded-t-lg"
               >
                 Event

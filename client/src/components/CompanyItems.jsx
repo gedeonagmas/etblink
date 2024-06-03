@@ -79,15 +79,28 @@ const CompanyItems = ({ value, phoneNo, type, data, disabled }) => {
   }, [socket]);
 
   const openClosedHandler = (workingDays) => {
-    const day = Object.keys(workingDays)?.filter((e) =>
-      e
-        ?.toLowerCase()
-        ?.startsWith(new Date()?.toString()?.split(" ")[0]?.toLowerCase())
-    );
+    // const day =workingDays&& Object.keys(workingDays)?.filter((e) =>
+    //   e
+    //     ?.toLowerCase()
+    //     ?.startsWith(new Date()?.toString()?.split(" ")[0]?.toLowerCase())
+    // );
 
-    console.log(workingDays[day[0]]?.from, "ddddddddddd");
+    // console.log(workingDays[day[0]]?.from, "ddddddddddd");
     return "Open";
   };
+
+  const sizeHandler = (text, size) => {
+    return text?.length > size ? text?.substring(0, size) + "..." : text;
+  };
+
+  const detailHandler = (id, types) => {
+    const ids = document.getElementById(id);
+    console.log(id, types);
+    types === "hide"
+      ? ids?.classList?.add("hidden")
+      : ids?.classList?.remove("hidden");
+  };
+
   // console.log(onlineUsers, companies?.data[0]?.email, "users");
   // console.log(views, "views");
   // console.log(user?.user?._id, "current user");
@@ -267,8 +280,15 @@ const CompanyItems = ({ value, phoneNo, type, data, disabled }) => {
             <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
           </svg>
         </div>
-        <p className="text-[20px] flex items-center justify-center gap-3 mt-3 font-semibold text-gray-700 dark:text-gray-100">
-          {data?.name}
+        <div className="text-[20px] relative px-2 flex items-center text-center justify-center gap-3 mt-3 font-semibold text-gray-700 dark:text-gray-100">
+          {sizeHandler(data?.name, 30)}{" "}
+          {/* <span
+            onMouseOver={() => detailHandler(data?._id, "hide")}
+            onMouseLeave={() => detailHandler(data?._id, "show")}
+            className="-ml-3"
+          >
+            ...
+          </span> */}
           <svg
             class="w-6 h-6 text-emerald-500"
             aria-hidden="true"
@@ -284,8 +304,16 @@ const CompanyItems = ({ value, phoneNo, type, data, disabled }) => {
               clip-rule="evenodd"
             />
           </svg>
+          {/* <p
+            id={data?._id}
+            className="absolute hidden text-[16px] -bottom-2 bg-white w-full shadow-lg left-2 border rounded-sm px-2 py-1 text-start"
+          >
+            {data?.name}
+          </p> */}
+        </div>
+        <p className="text-[15px] font-light mt-2">
+          {sizeHandler(data?.title, 30)}
         </p>
-        <p className="text-[15px] font-light mt-2">{data?.title}</p>
 
         <div
           className={`w-full px-4 py-2 border-b border-gray-200 mt-2 text-gray-500 dark:text-white flex ${
@@ -315,7 +343,7 @@ const CompanyItems = ({ value, phoneNo, type, data, disabled }) => {
                 d="M17.8 14h0a7 7 0 1 0-11.5 0h0l.1.3.3.3L12 21l5.1-6.2.6-.7.1-.2Z"
               />
             </svg>
-            {data?.address}
+            {sizeHandler(data?.address, 15)}
           </div>
           <div className="flex -ml-2 gap-1 items-center text-[16px] font-light justify-center">
             <svg

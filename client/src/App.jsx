@@ -97,8 +97,8 @@ function App() {
               <Route path="/company" element={<CompanyDetail />}></Route>
               <Route path="/news" element={<NewsCategory />}></Route>
               <Route path="/news-detail" element={<NewsDetail />}></Route>
-              <Route path="/blogs" element={<BlogsCategory />}></Route>
-              <Route path="/blogs-detail" element={<BlogsDetail />}></Route>
+              <Route path="/event" element={<BlogsCategory />}></Route>
+              <Route path="/event-detail" element={<BlogsDetail />}></Route>
               <Route path="/prices" element={<Prices />}></Route>
               <Route path="/about" element={<About />}></Route>
               <Route path="/ethiopia" element={<Ethiopia />}></Route>

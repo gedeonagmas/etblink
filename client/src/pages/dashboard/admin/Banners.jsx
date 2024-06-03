@@ -123,7 +123,11 @@ const Banners = () => {
             <svg
               class="w-6 absolute top-1 right-1 hover:text-gray-600 h-6 text-gray-800 dark:text-white"
               aria-hidden="true"
-              onClick={() => setAdd(false)}
+              onClick={() => {
+                setType("");
+                setBannerImage("");
+                setAdd(false);
+              }}
               xmlns="http://www.w3.org/2000/svg"
               width="24"
               height="24"
@@ -149,9 +153,17 @@ const Banners = () => {
               id=""
               className="w-full bg-white bg-dark h-10 rounded-lg"
             >
-              <option value="home-small">Home small</option>
-              <option value="home-large">Home large</option>
-              <option value="home-bottom">Home bottom</option>
+              <option selected disabled value="">
+                Select type
+              </option>
+              <option value="home-one-1">Home one 1</option>
+              <option value="home-one-2">Home one 2</option>
+              <option value="home-one-3">Home one 3</option>
+              <option value="home-two">Home two</option>
+              <option value="home-three">Home three</option>
+              <option value="category-one">Category one</option>
+              <option value="category-two">Category two</option>
+              <option value="dashboard-one">Dashboard one</option>
             </select>
           </div>
           <div className="mb-5 mt-5">

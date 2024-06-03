@@ -38,6 +38,15 @@ const Category = ({ type }) => {
     isError: placesIsError,
   } = useReadQuery({ url: "/user/places", tag: ["places"] });
 
+  const {
+    data: banners,
+    isFetching: bannersIsFetching,
+    isError: bannersIsError,
+  } = useReadQuery({
+    url: `/user/banners`,
+    tag: ["banners"],
+  });
+
   const [lastPage, setLastPage] = useState("");
   const [search, setSearch] = useState("");
   const [totalPage, setTotalPage] = useState(1);
@@ -413,14 +422,19 @@ const Category = ({ type }) => {
       </div>
       <div className="w-full px-main h-auto bg-red-500f flex flex-col lg:flex-row gap-8">
         <div className="h-auto flex flex-col bg-yellow-500f w-full lg:w-[80%]">
-          <Banner
-            slideImages={["skylightadd.jpg"]}
-            duration={200}
-            arrows={false}
-            indicators={false}
-            width="w-full"
-            height="h-[110px]"
-          />
+          {banners && banners?.data && (
+            <Banner
+              slideImages={banners?.data
+                ?.filter((e) => e?.type === "category-one")
+                ?.map((c) => c?.bannerImage)}
+              duration={200}
+              arrows={false}
+              indicators={false}
+              width="w-full"
+              height="h-[110px]"
+            />
+          )}
+
           {/* <div className="py-2 mt-3 flex items-center justify-between flex-col lg:flex-row gap-2">
             <p className="font-bold">
               245 Total companies{" "}
@@ -526,14 +540,19 @@ const Category = ({ type }) => {
           </svg>
         </div> */}
           </div>
-          <Banner
-            slideImages={["./sofi.jpeg"]}
-            duration={200}
-            arrows={true}
-            indicators={true}
-            width="w-full"
-            height="h-[500px]"
-          />
+          {banners && banners?.data && (
+            <Banner
+              slideImages={banners?.data
+                ?.filter((e) => e?.type === "category-two")
+                ?.map((c) => c?.bannerImage)}
+              duration={200}
+              arrows={true}
+              indicators={false}
+              width="w-full"
+              height="h-[500px]"
+            />
+          )}
+
           {/* <div className="">
         <img src="./sofi.jpeg" alt="" className="w-full h-[500px]" />
       </div> */}

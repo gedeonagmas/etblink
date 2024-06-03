@@ -73,6 +73,21 @@ const Home = () => {
     isError: placesIsError,
   } = useReadQuery({ url: "/user/places", tag: ["places"] });
 
+  const value = [
+    { type: "home-one" },
+    { type: "home-two" },
+    { type: "home-three" },
+  ];
+
+  const {
+    data: banners,
+    isFetching: bannersIsFetching,
+    isError: bannersIsError,
+  } = useReadQuery({
+    url: `/user/banners`,
+    tag: ["banners"],
+  });
+
   const [companies, setCompanies] = useState([]);
   const [news, setNews] = useState([]);
   const [name, setName] = useState("");
@@ -115,37 +130,6 @@ const Home = () => {
       setCountry(places?.data[0]?.country[0]);
     }
   }, [category, places]);
-  console.log(blogs?.data[0], "hhhhhhhhhh");
-  const categoryTemplate = (image, name, value, type) => {
-    return (
-      <div
-        onClick={() => {
-          setName(name);
-          setCategory(type);
-          setCity(" ");
-          setCountry(" ");
-          navigate(category === "global" ? `/global` : "/local", {
-            state: { type: category, city, country, name },
-          });
-        }}
-        className="flex cursor-pointer relatives p-2 text-center bg-blue-500d rounded-lg flex-col items-center justify-center"
-      >
-        <div className="w-fulls self-center items-center flex justify-center px-2 h-[70px]s p-2 rounded-full bg-white bg-dark shadow-sm">
-          <img src={image} alt={name} className="w-[65px] h-[65px]" />
-        </div>
-
-        <p className="mt-2 font-bold">{name}</p>
-        <p className="-mt-1 font-poppins text-sm">
-          {value >= 1000
-            ? parseFloat(value / 1000).toFixed(1) + "K"
-            : value >= 1000000
-            ? parseFloat(value / 1000000).toFixed(2) + "M"
-            : value}
-          + listed
-        </p>
-      </div>
-    );
-  };
 
   let sliderRefHome1 = useRef(null);
   const next = () => {
@@ -236,7 +220,7 @@ const Home = () => {
     }
   }, [tab, recentCompany]);
 
-  console.log(aggregateData, "recent company");
+  console.log(banners, "banners");
   return (
     <>
       {/* <Header /> */}
@@ -490,7 +474,7 @@ const Home = () => {
             </div>
 
             {/* small advert */}
-            <div className="w-full h-52 mt-28 md:mt-10 lg:mt-4 px-main place-items-center grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3 ">
+            <div className="w-full h-52 mt-32 md:mt-[88px] px-main place-items-center grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3 ">
               {/* <div className="flex rounded-md h-[70px] border border-gray-200 shadow-2xl px-2 gap-2 w-full items-center justify-start">
                 <p className="text-3xl font-bold uppercase text-main">
                   ETB <span className="text-gray-600">LINK</span>
@@ -511,34 +495,49 @@ const Home = () => {
               >
                 Well come to <span className="text-main ml-3">etblink</span>
               </div> */}
-              <Banner
-                slideImages={["./skylight.jpg"]}
-                duration={200}
-                arrows={false}
-                indicators={false}
-                width="w-full"
-                height="h-[70px]"
-              />
-              <Banner
-                slideImages={["./skylight.jpg"]}
-                duration={200}
-                arrows={false}
-                indicators={false}
-                width="w-full"
-                height="h-[70px]"
-              />
-              <Banner
-                slideImages={["./skylight.jpg"]}
-                duration={200}
-                arrows={false}
-                indicators={false}
-                width="w-full"
-                height="h-[70px]"
-              />
+
+              {banners && banners?.data && (
+                <Banner
+                  slideImages={banners?.data
+                    ?.filter((e) => e?.type === "home-one-1")
+                    ?.map((c) => c?.bannerImage)}
+                  duration={200}
+                  arrows={true}
+                  indicators={false}
+                  width="w-full"
+                  height="h-[70px]"
+                />
+              )}
+
+              {banners && banners?.data && (
+                <Banner
+                  slideImages={banners?.data
+                    ?.filter((e) => e?.type === "home-one-2")
+                    ?.map((c) => c?.bannerImage)}
+                  duration={200}
+                  arrows={true}
+                  indicators={false}
+                  width="w-full"
+                  height="h-[70px]"
+                />
+              )}
+
+              {banners && banners?.data && (
+                <Banner
+                  slideImages={banners?.data
+                    ?.filter((e) => e?.type === "home-one-3")
+                    ?.map((c) => c?.bannerImage)}
+                  duration={200}
+                  arrows={true}
+                  indicators={false}
+                  width="w-full"
+                  height="h-[70px]"
+                />
+              )}
             </div>
 
             {/* services */}
-            <div className="flex flex-col xl:flex-row px-main gap-3 mt-10 lg:-mt-5 items-center justify-between">
+            <div className="flex flex-col xl:flex-row px-main gap-3 mt-12 lg:-mt-24 items-center justify-between">
               <div className="flex flex-col md:flex-row gap-5 w-full xl:w-[290px]  items-center justify-center">
                 {aggregateData &&
                   aggregateData?.type &&
@@ -726,14 +725,18 @@ const Home = () => {
           </div>
         </div>
         <div className="px-main">
-          <Banner
-            slideImages={["skylightadd.jpg"]}
-            duration={200}
-            arrows={false}
-            indicators={false}
-            width="w-full"
-            height="h-[110px]"
-          />
+          {banners && banners?.data && (
+            <Banner
+              slideImages={banners?.data
+                ?.filter((e) => e?.type === "home-two")
+                ?.map((c) => c?.bannerImage)}
+              duration={200}
+              arrows={true}
+              indicators={false}
+              width="w-full"
+              height="h-[110px]"
+            />
+          )}
         </div>
 
         <div className="w-full px-main py-20 flex  bg-dark text-dark flex-col items-center justify-center">
@@ -1166,14 +1169,18 @@ const Home = () => {
                   </div>
                 </div>
               </div> */}
-              <Banner
-                slideImages={["./skylight.jpg"]}
-                duration={200}
-                arrows={false}
-                indicators={false}
-                width="w-full"
-                height="h-full"
-              />
+              {banners && banners?.data && (
+                <Banner
+                  slideImages={banners?.data
+                    ?.filter((e) => e?.type === "home-three")
+                    ?.map((c) => c?.bannerImage)}
+                  duration={200}
+                  arrows={true}
+                  indicators={false}
+                  width="w-full"
+                  height="h-full"
+                />
+              )}
             </div>
           </div>
         </div>

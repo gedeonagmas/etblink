@@ -94,7 +94,7 @@ const Footer = () => {
       >
         <div className="w-full flex items-center justify-between h-auto">
           <div className="w-full items-center justify-center flex flex-col">
-            <p className="text-4xl font-semibold text-gray-700">
+            <p className="text-4xl text-center font-semibold text-gray-700">
               Our <span className="text-main">Representatives</span>
             </p>
             <p className="text-[17px] mt-3 py-1 font-light text-gray-500">
@@ -414,15 +414,15 @@ const Footer = () => {
 
         {/* <div className="h-52 -ml-14 border-gray-700 w-[1px] border border-dotted"></div> */}
         <div className="mt-7 ">
-          <div className="flex flex-col items-center gap-4 justify-center w-full">
-            <div className="w-52 px-2 py-1 cursor-pointer hover:border-gray-400 h-auto rounded-lg border">
+          <div className="flex flex-col items-center gap-4 justify-start lg:justify-center w-full">
+            <div className="w-52 self-start lg:self-center px-2 py-1 cursor-pointer hover:border-gray-400 h-auto rounded-lg border">
               <img
                 src="./appstores.png"
                 alt=""
                 className="w-full h-12 rounded-lg"
               />
             </div>
-            <div className="w-52 px-2 py-1 cursor-pointer hover:border-gray-400 h-auto rounded-lg border">
+            <div className="w-52 px-2 self-start lg:self-center py-1 cursor-pointer hover:border-gray-400 h-auto rounded-lg border">
               <img
                 src="./google.png"
                 alt=""
@@ -431,7 +431,7 @@ const Footer = () => {
             </div>
           </div>
 
-          <div className="flex  w-auto mt-5 h-auto items-center justify-center gap-4">
+          <div className="flex  w-auto mt-5 h-auto lg:items-center lg:justify-center items-start justify-start gap-4">
             <a href="#" className="h-6 w-6  flex items-center justify-center">
               <svg
                 className="w-6 h-6"
@@ -500,7 +500,7 @@ const Footer = () => {
             </a>
           </div>
         </div>
-        <div className="ml-5">
+        <div className="lg:ml-5">
           {/* <p className="text-xl font-bold mt-5 uppercase w-40 py-2 border-b">
             Contact us
           </p>
@@ -513,23 +513,23 @@ const Footer = () => {
           <img
             src="./etblogofooter.png"
             alt=""
-            className="w-[200px] h-[90px] border-2 lg:border-0 dark:bg-gray-500 rounded-sm"
+            className="w-[200px] mt-4 lg:mt-0 h-[90px] border-2 lg:border-0 dark:bg-gray-500 rounded-sm"
           />
-          <p className="mt-2 text-sm">
+          <p className="mt-4 lg:mt-2 text-sm">
             We are dedicated to providing a comprehensive and user-friendly
             platform that seamlessly connects businesses and consumers.
           </p>
         </div>
       </div>
 
-      <div className="px-main flex text-white pb-4 bg-black w-full text-sm items-center justify-between">
-        <div className="mt-5">
+      <div className="px-main flex flex-col lg:flex-row text-white pb-4 bg-black w-full text-sm items-center justify-between">
+        <div className="lg:mt-5">
           <p className="text-lg font-bold uppercase">Ethiopian business Link</p>
           {/* <p className="text-xs">
             Copyright Skylight technologies @2024 Technology share company in
             ethiopia Technology share company in ethiopia
           </p> */}
-          <p className="text-xs mr-20">
+          <p className="text-xs mt-2 lg:mt-0 lg:mr-20">
             Ethiopian Business Link is a sister company of Skylight Technologies
             PLC. Skylight Technologies is a reputable technology company
             offering website design, software development, and networking
@@ -538,14 +538,12 @@ const Footer = () => {
             satisfaction sets them apart in the industry.
           </p>
         </div>
-        <div className="mt-5">
+        <div className="mt-5 self-start lg:self-end">
           <img
             src="./skylight.png"
             alt=""
-            className="w-[300px] h-[60px] border-2 lg:border-0 dark:bg-gray-500 rounded-sm"
+            className="w-[300px] h-[90px] border-2 mr-5 lg:mr-0 lg:border-0 dark:bg-gray-500 rounded-sm"
           />
-          {/* <p className="text-2xl font-extrabold uppercase italic">Skylight</p>
-          <p className="ml-10 text-sm">Technologies</p> */}
         </div>
       </div>
     </div>

@@ -4,7 +4,7 @@ import SmallBanner from "../../components/SmallBanner";
 import ResponsivePagination from "react-responsive-pagination";
 import "./../categories/pagination.css";
 import { useEffect, useState } from "react";
-import { useLazyReadQuery } from "../../features/api/apiSlice";
+import { useLazyReadQuery, useReadQuery } from "../../features/api/apiSlice";
 import BlogsItem from "./BlogsItem";
 
 const BlogsCategory = () => {
@@ -31,6 +31,15 @@ const BlogsCategory = () => {
     });
   }, [page]);
 
+  const {
+    data: banners,
+    isFetching: bannersIsFetching,
+    isError: bannersIsError,
+  } = useReadQuery({
+    url: `/user/banners`,
+    tag: ["banners"],
+  });
+
   useEffect(() => {
     trigger({
       url: `/user/blogs?visible=true&limit=6&page=${page}&searchField=title&searchValue=${search}`,
@@ -47,7 +56,18 @@ const BlogsCategory = () => {
       ></div>
       <div className="w-full px-main h-auto py-4 bg-red-500f flex flex-col lg:flex-row gap-4">
         <div className="h-auto flex flex-col bg-yellow-500f w-full lg:w-[80%]">
-          <Banner />
+          {banners && banners?.data && (
+            <Banner
+              slideImages={banners?.data
+                ?.filter((e) => e?.type === "category-one")
+                ?.map((c) => c?.bannerImage)}
+              duration={200}
+              arrows={false}
+              indicators={false}
+              width="w-full"
+              height="h-[110px]"
+            />
+          )}
           <div className="py-2 mt-3 flex items-center justify-between flex-col lg:flex-row gap-2">
             <input
               onChange={(e) => setSearch(e.target.value)}
@@ -96,7 +116,7 @@ const BlogsCategory = () => {
               })
             ) : (blogs && blogs?.message) || blogs?.data?.length === 0 ? (
               <div className="w-full items-center justify-center flex">
-                There is no boost history!
+                There is no blog to display!
               </div>
             ) : null}
           </div>
@@ -113,7 +133,23 @@ const BlogsCategory = () => {
             />
           </div>
         </div>
-        <SmallBanner />
+        <div className="flex flex-col gap-4 w-full lg:w-[20%]">
+          <div className="flex w-full mb-1 justify-between items-center">
+            <p className="font-bold">Featured Products</p>
+          </div>
+          {banners && banners?.data && (
+            <Banner
+              slideImages={banners?.data
+                ?.filter((e) => e?.type === "category-one")
+                ?.map((c) => c?.bannerImage)}
+              duration={200}
+              arrows={true}
+              indicators={false}
+              width="w-full"
+              height="h-[500px]"
+            />
+          )}
+        </div>
       </div>
     </div>
   );

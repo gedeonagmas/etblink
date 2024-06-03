@@ -110,7 +110,7 @@ const _create = asyncCatch(async (req, res, next) => {
 //read
 const _read = asyncCatch(async (req, res, next) => {
   const model = selectModel(req.params.table, next);
-  // console.log(req.query);
+
   if (model) {
     const params = { ...req.query };
     //removing unnecessary queries for filtering
@@ -130,10 +130,11 @@ const _read = asyncCatch(async (req, res, next) => {
     //filtering
     let queryObject = JSON.parse(
       JSON.stringify(params).replace(
-        /\b(gte|lte|lt|gt|eq|ne)\b/g,
+        /\b(gte|lte|lt|gt|eq|ne|or)\b/g,
         (match) => `$${match}`
       )
     );
+
     // queryObject.boostStartDate["$lt"] = queryObject.boostStartDate["$lt"] * 1;
     // queryObject.subscriptionEndDate["$gt"] =
     //   queryObject.subscriptionEndDate["$gt"] * 1;
