@@ -114,12 +114,12 @@ const Category = ({ type }) => {
   }, [location]);
 
   //################## slider ##########################
-  let sliderRef = useRef(null);
+  let sliderRefCategory = useRef(null);
   const next = () => {
-    sliderRef.slickNext();
+    sliderRefCategory.slickNext();
   };
   const previous = () => {
-    sliderRef.slickPrev();
+    sliderRefCategory.slickPrev();
   };
 
   const settings = {
@@ -303,32 +303,32 @@ const Category = ({ type }) => {
         </div>
 
         <div className="relative my-7 w-full flex items-center">
-          <button
-            onClick={previous}
-            className="absolute button shadow-2xl rounded-full  z-20 top-[10px] -left-2"
-          >
-            <svg
-              class="w-7 text-gray-400 cursor-pointer hover:bg-gray-300 hover:text-gray-500 border border-gray-300 rounded-full h-7 bg-gray-300/50"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              fill="none"
-              viewBox="0 0 24 24"
+          <div className="w-[100%] slider-container relative">
+            <button
+              onClick={previous}
+              className="absolute button shadow-2xl rounded-full  z-20 top-[10px] -left-2"
             >
-              <path
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="m15 19-7-7 7-7"
-              />
-            </svg>
-          </button>
-          <div className="w-full slider-container relative">
+              <svg
+                class="w-7 text-gray-400 cursor-pointer hover:bg-gray-300 hover:text-gray-500 border border-gray-300 rounded-full h-7 bg-gray-300/50"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="m15 19-7-7 7-7"
+                />
+              </svg>
+            </button>{" "}
             <Slider
               ref={(slider) => {
-                sliderRef = slider;
+                sliderRefCategory = slider;
               }}
               {...settings}
             >
@@ -361,31 +361,30 @@ const Category = ({ type }) => {
                     </li>
                   );
               })}
-            </Slider>
-          </div>
-
-          <button
-            onClick={next}
-            className="absolute button shadow-2xl rounded-full  z-20 top-[10px] -right-2"
-          >
-            <svg
-              class="w-7 text-gray-400 cursor-pointer hover:bg-gray-300 hover:text-gray-500 border border-gray-300 rounded-full h-7 bg-gray-300/50"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              fill="none"
-              viewBox="0 0 24 24"
+            </Slider>{" "}
+            <button
+              onClick={next}
+              className="absolute button shadow-2xl rounded-full  z-20 top-[10px] -right-2"
             >
-              <path
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="m9 5 7 7-7 7"
-              />
-            </svg>
-          </button>
+              <svg
+                class="w-7 text-gray-400 cursor-pointer hover:bg-gray-300 hover:text-gray-500 border border-gray-300 rounded-full h-7 bg-gray-300/50"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="m9 5 7 7-7 7"
+                />
+              </svg>
+            </button>
+          </div>
         </div>
         {/* <ul class="items-start mt-4 mb-5 w-full gap-4 text-sm font-medium  rounded-sm grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
           {aggregateData?.category?.map((e) => {
@@ -414,8 +413,15 @@ const Category = ({ type }) => {
       </div>
       <div className="w-full px-main h-auto bg-red-500f flex flex-col lg:flex-row gap-8">
         <div className="h-auto flex flex-col bg-yellow-500f w-full lg:w-[80%]">
-          <Banner />
-          <div className="py-2 mt-3 flex items-center justify-between flex-col lg:flex-row gap-2">
+          <Banner
+            slideImages={["skylightadd.jpg"]}
+            duration={200}
+            arrows={false}
+            indicators={false}
+            width="w-full"
+            height="h-[110px]"
+          />
+          {/* <div className="py-2 mt-3 flex items-center justify-between flex-col lg:flex-row gap-2">
             <p className="font-bold">
               245 Total companies{" "}
               <span className="font-normal ml-2">22 local | 45 global</span>
@@ -445,7 +451,7 @@ const Category = ({ type }) => {
                 </svg>
               </span>
             </p>
-          </div>
+          </div> */}
 
           <div className="flex flex-col gap-10">
             <div className="grid mt-5 grid-cols-1  md:grid-cols-2 lg:grid-cols-3 w-full place-items-center gap-6">
@@ -483,7 +489,55 @@ const Category = ({ type }) => {
             </div>
           </div>
         </div>
-        <SmallBanner />
+
+        <div className="flex flex-col gap-4 w-full lg:w-[20%]">
+          <div className="flex w-full mb-1 justify-between items-center">
+            <p className="font-bold">Featured Products</p>
+            {/* <div className="flex gap-2 items-center justify-center">
+          <svg
+            class="w-6 h-6 text-gray-400 dark:text-white"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M5 12h14M5 12l4-4m-4 4 4 4"
+            />
+          </svg>
+          <svg
+            class="w-6 h-6 text-gray-800 dark:text-white"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M19 12H5m14 0-4 4m4-4-4-4"
+            />
+          </svg>
+        </div> */}
+          </div>
+          <Banner
+            slideImages={["./sofi.jpeg"]}
+            duration={200}
+            arrows={true}
+            indicators={true}
+            width="w-full"
+            height="h-[500px]"
+          />
+          {/* <div className="">
+        <img src="./sofi.jpeg" alt="" className="w-full h-[500px]" />
+      </div> */}
+        </div>
       </div>
     </div>
   );

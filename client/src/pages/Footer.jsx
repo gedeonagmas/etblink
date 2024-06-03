@@ -24,12 +24,12 @@ const Footer = () => {
   });
 
   const [id, setId] = useState("");
-  let sliderRef = useRef(null);
+  let sliderRefFooter = useRef(null);
   const next = () => {
-    sliderRef.slickNext();
+    sliderRefFooter.slickNext();
   };
   const previous = () => {
-    sliderRef.slickPrev();
+    sliderRefFooter.slickPrev();
   };
 
   const settings = {
@@ -129,7 +129,7 @@ const Footer = () => {
           <div className="w-full slider-container relative">
             <Slider
               ref={(slider) => {
-                sliderRef = slider;
+                sliderRefFooter = slider;
               }}
               {...settings}
             >

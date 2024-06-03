@@ -78,6 +78,16 @@ const CompanyItems = ({ value, phoneNo, type, data, disabled }) => {
     });
   }, [socket]);
 
+  const openClosedHandler = (workingDays) => {
+    const day = Object.keys(workingDays)?.filter((e) =>
+      e
+        ?.toLowerCase()
+        ?.startsWith(new Date()?.toString()?.split(" ")[0]?.toLowerCase())
+    );
+
+    console.log(workingDays[day[0]]?.from, "ddddddddddd");
+    return "Open";
+  };
   // console.log(onlineUsers, companies?.data[0]?.email, "users");
   // console.log(views, "views");
   // console.log(user?.user?._id, "current user");
@@ -97,7 +107,7 @@ const CompanyItems = ({ value, phoneNo, type, data, disabled }) => {
             } rounded-b-none rounded-xl`}
           />
           <div className="absolute top-4 border-4 border-gray-300 border-dashed left-2 rounded-full shadow-lg px-4 py-1 bg-white text-black">
-            Open
+            {openClosedHandler(data?.workingDays)}
           </div>
           <Link
             to="/dashboard/views"

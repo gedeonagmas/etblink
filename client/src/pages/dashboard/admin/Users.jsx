@@ -418,6 +418,8 @@ const UserSales = ({ type }) => {
       return "news-admins";
     } else if (role === "blog-admin") {
       return "blog-admins";
+    } else if (role === "youtube-admin") {
+      return "youtube-admins";
     }
   };
 
@@ -530,7 +532,9 @@ const UserSales = ({ type }) => {
           placeholder="Search..."
           required
         />
-        {type === "blog-admin" || type === "news-admin" ? (
+        {type === "blog-admin" ||
+        type === "news-admin" ||
+        type === "youtube-admin" ? (
           <button
             onClick={() => {
               setAddAdmin(true);

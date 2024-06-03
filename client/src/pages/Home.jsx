@@ -48,8 +48,17 @@ const Home = () => {
     isFetching: newsFetching,
     isError: newsError,
   } = useReadQuery({
-    url: "/user/news?limits=12",
+    url: "/user/news?visible=true&limits=6",
     tag: ["news"],
+  });
+
+  const {
+    data: blogs,
+    isFetching: blogsFetching,
+    isError: blogsError,
+  } = useReadQuery({
+    url: "/user/blogs?visible=true&limits=6",
+    tag: ["blogs"],
   });
 
   const {
@@ -77,11 +86,11 @@ const Home = () => {
     }
   }, [company]);
 
-  useEffect(() => {
-    if (newses?.data) {
-      setNews(newses?.data);
-    }
-  }, [newses]);
+  // useEffect(() => {
+  //   if (newses?.data) {
+  //     setNews(newses?.data);
+  //   }
+  // }, [newses]);
 
   const divStyle = {
     display: "flex",
@@ -106,7 +115,7 @@ const Home = () => {
       setCountry(places?.data[0]?.country[0]);
     }
   }, [category, places]);
-  console.log(name, category, "hhhhhhhhhh");
+  console.log(blogs?.data[0], "hhhhhhhhhh");
   const categoryTemplate = (image, name, value, type) => {
     return (
       <div
@@ -138,12 +147,12 @@ const Home = () => {
     );
   };
 
-  let sliderRef = useRef(null);
+  let sliderRefHome1 = useRef(null);
   const next = () => {
-    sliderRef.slickNext();
+    sliderRefHome1.slickNext();
   };
   const previous = () => {
-    sliderRef.slickPrev();
+    sliderRefHome1.slickPrev();
   };
 
   const settings = {
@@ -482,7 +491,7 @@ const Home = () => {
 
             {/* small advert */}
             <div className="w-full h-52 mt-28 md:mt-10 lg:mt-4 px-main place-items-center grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3 ">
-              <div className="flex rounded-md h-[70px] border border-gray-200 shadow-2xl px-2 gap-2 w-full items-center justify-start">
+              {/* <div className="flex rounded-md h-[70px] border border-gray-200 shadow-2xl px-2 gap-2 w-full items-center justify-start">
                 <p className="text-3xl font-bold uppercase text-main">
                   ETB <span className="text-gray-600">LINK</span>
                 </p>
@@ -501,7 +510,31 @@ const Home = () => {
                 className="rounded-sm items-center uppercase justify-center flex bg-black text-white text-2xl h-[70px] w-full"
               >
                 Well come to <span className="text-main ml-3">etblink</span>
-              </div>
+              </div> */}
+              <Banner
+                slideImages={["./skylight.jpg"]}
+                duration={200}
+                arrows={false}
+                indicators={false}
+                width="w-full"
+                height="h-[70px]"
+              />
+              <Banner
+                slideImages={["./skylight.jpg"]}
+                duration={200}
+                arrows={false}
+                indicators={false}
+                width="w-full"
+                height="h-[70px]"
+              />
+              <Banner
+                slideImages={["./skylight.jpg"]}
+                duration={200}
+                arrows={false}
+                indicators={false}
+                width="w-full"
+                height="h-[70px]"
+              />
             </div>
 
             {/* services */}
@@ -581,7 +614,7 @@ const Home = () => {
                 </button>
                 <Slider
                   ref={(slider) => {
-                    sliderRef = slider;
+                    sliderRefHome1 = slider;
                   }}
                   {...settings}
                 >
@@ -693,7 +726,14 @@ const Home = () => {
           </div>
         </div>
         <div className="px-main">
-          <Banner />
+          <Banner
+            slideImages={["skylightadd.jpg"]}
+            duration={200}
+            arrows={false}
+            indicators={false}
+            width="w-full"
+            height="h-[110px]"
+          />
         </div>
 
         <div className="w-full px-main py-20 flex  bg-dark text-dark flex-col items-center justify-center">
@@ -746,6 +786,23 @@ const Home = () => {
             <p className="text-[17px] mt-3 py-1 font-light text-gray-500">
               our top news
             </p>
+            <a href={`/news`} className="self-end">
+              <svg
+                class="w-6 h-6 cursor-pointer hover:text-gray-400"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 12H5m14 0-4 4m4-4-4-4"
+                />
+              </svg>
+            </a>
             <div className="grid grid-cols-1 mt-3 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {/* {newsFetching ? (
                 <Loading />
@@ -753,53 +810,55 @@ const Home = () => {
                 <p>Something went error unable to read the data.</p>
                 ) : */}
 
-              {news?.length > 0 ? (
-                news?.map((e, i) => {
-                  if (i < 3) {
-                    return (
-                      <div
-                        key={e?._id}
-                        className="flex w-full rounded-sm relative justify-start py-4 flex-col items-enter"
-                      >
-                        <img
-                          src={e?.newsPhoto}
-                          className="w-full lg:w-[400px] h-[230px] rounded-sm"
-                        />
-                        <p className="flex items-center justify-start gap-2 text-main text-[12px] mt-1">
-                          {format(e?.date)}
-                        </p>
-                        <p className="font-bold flex items-center text-lg justify-start gap-2">
-                          {e?.title}
-                        </p>
-                        <p className="text-sm">{e?.subtitle}</p>
+              {newses?.data?.length > 0 ? (
+                newses?.data?.map((e, i) => {
+                  return (
+                    <div
+                      key={e?._id}
+                      className="flex w-full rounded-sm relative justify-start py-4 flex-col items-enter"
+                    >
+                      <img
+                        src={e?.newsPhoto}
+                        className="w-full lg:w-[400px] h-[230px] rounded-sm"
+                      />
+                      <div className="flex items-center justify-between gap-2 text-main text-[12px] mt-1">
+                        <p>{format(e?.createdAt)}</p>
+                        <a href={`/news-detail?id=${e?._id}`}>
+                          <svg
+                            class="w-6 h-6 cursor-pointer hover:text-gray-400"
+                            aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              stroke="currentColor"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              d="M19 12H5m14 0-4 4m4-4-4-4"
+                            />
+                          </svg>
+                        </a>
                       </div>
-                    );
-                  }
+                      <p className="font-bold flex items-center text-lg justify-start gap-2">
+                        {e?.title?.length > 40
+                          ? e?.title?.substring(0, 40) + "..."
+                          : e?.title}
+                      </p>
+                      <p className="text-sm">
+                        {e?.subTitle?.length > 40
+                          ? e?.subTitle?.substring(0, 40) + "..."
+                          : e?.subTitle}
+                      </p>
+                    </div>
+                  );
                 })
-              ) : news?.length < 0 ? (
+              ) : news?.data?.length < 0 ? (
                 <p>There is no data to display.</p>
               ) : null}
-              {/* {[0, 1, 2].map((e, i) => {
-                return (
-                  <div
-                    key={i}
-                    className="flex w-full rounded-sm relative justify-start py-4 flex-col items-enter"
-                  >
-                    <img src="./build1.jpg" className="w-full rounded-sm" />
-                    <p className="flex items-center justify-start gap-2 text-main text-[12px] mt-1">
-                      jan 22, 2024
-                    </p>
-                    <p className="font-bold flex items-center text-lg justify-start gap-2">
-                      News title text
-                    </p>
-                    <p className="text-sm">
-                      News sub title and video description
-                    </p>
-                  </div>
-                );
-              })} */}
             </div>
-            <div className="w-full px-main mt-3 gap-4 center">
+            {/* <div className="w-full px-main mt-3 gap-4 center">
               <svg
                 class="w-5 h-5 text-gray-800 dark:text-white"
                 aria-hidden="true"
@@ -831,73 +890,95 @@ const Home = () => {
                   d="m9 5 7 7-7 7"
                 />
               </svg>
-            </div>
+            </div> */}
           </div>
           <Sponsors />
 
           <div className="flex flex-col lg:flex-row w-full mt-16 gap-6">
-            <div className="flex flex-col flex-[70%] shadow-lg bg-white bg-dark p-4 items-center justify-start border-t-4 border-main">
-              <p className="text-xl self-start font-bold text-main py-3">
-                Ethiopian business link news
-              </p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 w-full">
-                {newsFetching ? (
-                  <Loading />
-                ) : newsError ? (
-                  <p>Something went error unable to read the data.</p>
-                ) : news?.length > 0 ? (
-                  news?.map((e, i) => {
-                    if (i >= 3) {
+            <div className="flex flex-col w-[70%] shadow-lg bg-white bg-dark p-4 items-center justify-start border-t-4 border-main">
+              <div className="w-full flex items-center justify-between">
+                <p className="text-xl self-start font-bold text-main py-3">
+                  Latest blogs
+                </p>
+                <a href={`/blogs`} className="self-end">
+                  <svg
+                    class="w-6 h-6 cursor-pointer hover:text-gray-400"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M19 12H5m14 0-4 4m4-4-4-4"
+                    />
+                  </svg>
+                </a>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-x-4 w-full">
+                {
+                  //   blogsFetching ? (
+                  //   <Loading />
+                  // ) : blogsError ? (
+                  //   <p>Something went error unable to read the data.</p>
+                  //   ) :
+                  blogs && blogs?.data?.length > 0 ? (
+                    blogs?.data?.map((e, i) => {
                       return (
                         <div
                           key={e?._id}
                           className="flex w-full rounded-sm relative justify-start py-4 flex-col items-enter"
                         >
                           <img
-                            src={e?.newsPhoto}
+                            src={e?.blogImage}
                             className="w-full h-[120px] rounded-sm"
                           />
-                          <p className="flex items-center justify-start gap-2 text-main text-[12px] mt-1">
-                            {format(e?.date)}
-                          </p>
+                          <div className="flex items-center justify-between gap-2 text-main text-[12px] mt-1">
+                            <p>{format(e?.createdAt)}</p>
+                            <a href={`/blogs-detail?id=${e?._id}`}>
+                              <svg
+                                class="w-6 h-6 cursor-pointer hover:text-gray-400"
+                                aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  stroke="currentColor"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  stroke-width="2"
+                                  d="M19 12H5m14 0-4 4m4-4-4-4"
+                                />
+                              </svg>
+                            </a>
+                          </div>
                           <p className="font-bold flex items-center text-lg justify-start gap-2">
-                            {e?.title}
+                            {e?.title?.length > 40
+                              ? e?.title?.substring(0, 40) + "..."
+                              : e?.title}
                           </p>
-                          <p className="text-sm">{e?.subtitle}</p>
+                          <p className="text-sm">
+                            {" "}
+                            {e?.subTitle?.length > 40
+                              ? e?.subTitle?.substring(0, 40) + "..."
+                              : e?.subTitle}
+                          </p>
                         </div>
                       );
-                    }
-                  })
-                ) : news?.length < 0 ? (
-                  <p>There is no data to display.</p>
-                ) : null}
-                {/* {[0, 1, 2, 3, 4, 5, 6, 7].map((e, i) => {
-                  return (
-                    <div
-                      key={i}
-                      className="flex w-full rounded-sm relative justify-start py-4 flex-col items-start"
-                    >
-                      <img
-                        src="./build1.jpg"
-                        controls
-                        autoplay
-                        muted
-                        className="w-full h-24"
-                      />
-                      <p className="flex items-center justify-start gap-2 text-main text-[12px]">
-                        jan 22, 2024
-                      </p>
-                      <p className="font-bold flex items-center justify-start gap-2">
-                        News title text
-                      </p>
-                      <p className="text-sm">News sub title</p>
-                    </div>
-                  );
-                })} */}
+                    })
+                  ) : blogs?.data?.length < 0 ? (
+                    <p>There is no data to display.</p>
+                  ) : null
+                }
               </div>
             </div>
-            <div className="flex flex-col shadow-lg bg-white items-start border-t-4 border-main bg-dark p-4 gap-4 flex-[30%]">
-              <div className="flex flex-col  w-full justify-start">
+
+            <div className="flex relative flex-col shadow-lg bg-white items-start border-t-4 border-main bg-dark p-4 gap-4 w-[30%]">
+              {/* <div className="flex flex-col  w-full justify-start">
                 <p className="text-xl self-start font-bold text-main py-4">
                   Etb business link
                 </p>
@@ -990,28 +1071,7 @@ const Home = () => {
                     More
                   </button>
                 </div>
-                {/* <div className="flex items-center mt-20 justify-between w-full">
-                  <div className="flex gap-2 items-center justify-center">
-                    <img
-                      src="./build1.jpg"
-                      alt=""
-                      className="h-24 w-20 rounded-sm"
-                    />
-                    <div className="text-sm shadow-sm rounded-sm">
-                      <p>etblink</p>
-                    </div>
-                  </div>
-                  <div className="flex gap-2 items-center justify-center">
-                    <img
-                      src="./build1.jpg"
-                      alt=""
-                      className="h-24 w-20 rounded-sm"
-                    />
-                    <div className="text-sm shadow-sm rounded-sm">
-                      <p>etblink</p>
-                    </div>
-                  </div>
-                </div> */}
+               
 
                 <div className="w-full relative mt-8 my-2 flex gap-2 items-center justify-center text-white">
                   <div className="flex flex-col items-center justify-center w-auto">
@@ -1105,7 +1165,15 @@ const Home = () => {
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> */}
+              <Banner
+                slideImages={["./skylight.jpg"]}
+                duration={200}
+                arrows={false}
+                indicators={false}
+                width="w-full"
+                height="h-full"
+              />
             </div>
           </div>
         </div>

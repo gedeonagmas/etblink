@@ -58,6 +58,8 @@ import AddCategory from "./pages/dashboard/admin/AddCategory";
 import UpdateCategory from "./pages/dashboard/admin/UpdateCategory";
 import Bills from "./pages/dashboard/admin/Bills";
 import Notifications from "./pages/dashboard/Notifications";
+import Sponsors from "./pages/dashboard/admin/Sponsors";
+import Banners from "./pages/dashboard/admin/Banners";
 
 export const userContext = createContext();
 
@@ -241,6 +243,14 @@ function App() {
                 element={<Users type="company" />}
               ></Route>
               <Route
+                path="/dashboard/admin/sponsors"
+                element={<Sponsors />}
+              ></Route>
+              <Route
+                path="/dashboard/admin/banners"
+                element={<Banners />}
+              ></Route>
+              <Route
                 path="/dashboard/admin/companies/manage"
                 element={<Profile />}
               ></Route>
@@ -259,6 +269,14 @@ function App() {
               <Route
                 path="/dashboard/admin/blog-admins/manage"
                 element={<UsersProfile type="blog-admin" />}
+              ></Route>
+              <Route
+                path="/dashboard/admin/youtube-admins"
+                element={<Users type="youtube-admin" />}
+              ></Route>
+              <Route
+                path="/dashboard/admin/youtube-admins/manage"
+                element={<UsersProfile type="youtube-admin" />}
               ></Route>
               <Route
                 path="/dashboard/admin/approval"
@@ -292,6 +310,24 @@ function App() {
               <Route
                 path="/dashboard/news-admin/news/detail"
                 element={<NewsDetailAdmin />}
+              ></Route>
+              {/* ################################################################### */}
+              {/* ############################## NEWS-ADMIN ############################## */}
+              <Route
+                path="/dashboard/youtube-admin"
+                element={<Visitors />}
+              ></Route>
+              <Route
+                path="/dashboard/youtube-admin/profile"
+                element={<UsersProfile type="youtube-admins" />}
+              ></Route>
+              <Route
+                path="/dashboard/youtube-admin/youtube"
+                element={<AddYouTube />}
+              ></Route>
+              <Route
+                path="/dashboard/youtube-admin/youtube/detail"
+                element={<UpdateYoutube />}
               ></Route>
               {/* ################################################################### */}
               {/* ############################## BLOG-ADMIN ############################## */}

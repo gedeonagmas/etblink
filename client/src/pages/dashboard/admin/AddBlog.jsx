@@ -12,7 +12,7 @@ import Loading from "../../../components/loading/Loading";
 import Pop from "../../../components/Pop";
 import Editor from "../../../components/Editor";
 import Tables from "../../../components/Tables";
-import { Delete, Edit } from "@mui/icons-material";
+import { Delete, Edit, Visibility, VisibilityOff } from "@mui/icons-material";
 import ResponsivePagination from "react-responsive-pagination";
 import "./../../categories/pagination.css";
 
@@ -159,12 +159,11 @@ const AddBlog = () => {
         <div className="flex w-20 gap-1 justify-between items-center">
           <button
             onClick={() => {
-              setPopup(true);
-              setId(row._id);
+              updateHandler(row?._id, row?.visible);
             }}
-            className="px-2 py-1 bg-main text-white rounded-lg"
+            className="px-2 py-1 bg-blue-500 text-white rounded-lg"
           >
-            <Delete fontSize="small" />
+            {row?.visible ? <VisibilityOff /> : <Visibility fontSize="small" />}
           </button>
           <a
             href={`/dashboard/${user?.role}/blog/detail?${row._id}`}
@@ -174,7 +173,8 @@ const AddBlog = () => {
           </a>
           <button
             onClick={() => {
-              updateHandler(row?._id, row?.visible);
+              setPopup(true);
+              setId(row._id);
             }}
             className="px-2 py-1 bg-main text-white rounded-lg"
           >

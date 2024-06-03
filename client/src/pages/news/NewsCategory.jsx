@@ -46,7 +46,14 @@ const NewsCategory = () => {
       ></div>
       <div className="w-full px-main h-auto py-4 bg-red-500f flex flex-col lg:flex-row gap-4">
         <div className="h-auto flex flex-col bg-yellow-500f w-full lg:w-[80%]">
-          <Banner />
+        <Banner
+            slideImages={["skylightadd.jpg"]}
+            duration={200}
+            arrows={false}
+            indicators={false}
+            width="w-full"
+            height="h-[110px]"
+          />
           <div className="py-2 mt-3 flex items-center justify-between flex-col lg:flex-row gap-2">
             <input
               onChange={(e) => setSearch(e.target.value)}
