@@ -70,14 +70,18 @@ const schema = new mongoose.Schema(
       validate: valid.paragraph("description", 100, 10000),
     },
 
-    latitude: {
+    // latitude: {
+    //   type: String,
+    // },
+
+    // longitude: {
+    //   type: String,
+    // },
+
+    maps: {
       type: String,
     },
-
-    longitude: {
-      type: String,
-    },
-
+    
     services: {
       type: [
         {

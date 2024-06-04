@@ -105,7 +105,7 @@ const Category = ({ type }) => {
       : "";
 
     trigger({
-      url: `/user/companies?type=${type}&limit=15&page=${page}${cityKeyword}${countryKeyword}${categoryKeyword}${subCategoryKeyword}${searchKeyword}`,
+      url: `/user/companies?type=${type}&limit=15&page=${page}${cityKeyword}${countryKeyword}${categoryKeyword}${subCategoryKeyword}${searchKeyword}&populatingValue=sales`,
       tag: ["companies"],
     });
   }, [city, country, category, subCategory, search, page]);
@@ -479,7 +479,7 @@ const Category = ({ type }) => {
                 company?.data?.map((e, i) => {
                   return (
                     <CompanyItems
-                      value={e._id}
+                      value={e?._id}
                       phoneNo={`${e?.phone?.substring(0, 5)}**`}
                       type="small"
                       data={e}

@@ -12,19 +12,14 @@ import {
   useSendEmailMutation,
   useCreateSaveMutation,
   useCreateViewMutation,
+  useLazyReadQuery,
 } from "../../features/api/apiSlice";
 import Loading from "../../components/loading/Loading";
 import LoadingButton from "../../components/loading/LoadingButton";
 import Response from "../../components/Response";
 import { format } from "timeago.js";
-
-const markers = [
-  {
-    id: 1,
-    name: "Qobustan",
-    position: { lat: 40.0709493, lng: 49.3694411 },
-  },
-];
+import ResponsivePagination from "react-responsive-pagination";
+import "./pagination.css";
 
 const CompanyDetail = (props) => {
   const location = useLocation();
@@ -35,15 +30,6 @@ const CompanyDetail = (props) => {
   const [emailData, emailResponse] = useSendEmailMutation();
   const { data, isFetching, isError } = useReadQuery({
     url: `/user/users?user[eq]=${companyId}&populatingType=users&populatingValue=user`,
-    tag: ["companies", "users"],
-  });
-
-  const {
-    data: rates,
-    isFetching: ratedIsFetching,
-    isError: isErr,
-  } = useReadQuery({
-    url: `/user/rates?accepter[eq]=${companyId}&populatingType=rates&populatingValue=rater`,
     tag: ["companies", "users"],
   });
 
@@ -61,6 +47,7 @@ const CompanyDetail = (props) => {
   const [emailPending, setEmailPending] = useState(false);
   const [savePending, setSavePending] = useState(false);
   const [viewPending, setViewPending] = useState(false);
+  const [emailError, setEmailError] = useState(false);
   const [rating, setRating] = useState("3.5");
   const [from, setFrom] = useState("");
   const [fullName, setFullName] = useState("");
@@ -88,7 +75,17 @@ const CompanyDetail = (props) => {
   };
 
   const sendEmailHandler = () => {
-    emailData({ from, to: data?.data[0]?.email, subject, message, fullName });
+    if (
+      from?.length > 0 &&
+      subject?.length > 0 &&
+      message?.length > 0 &&
+      fullName?.length > 0
+    ) {
+      setEmailError(false);
+      emailData({ from, to: data?.data[0]?.email, subject, message, fullName });
+    } else {
+      setEmailError(true);
+    }
   };
 
   const saveHandler = () => {
@@ -113,9 +110,47 @@ const CompanyDetail = (props) => {
     location && viewHandler();
   }, []);
 
-  // console.log(data, "data");
-  // console.log(company, "company");
-  // console.log(location?.search?.split("?id=")[1], "location",location);
+  useEffect(() => {
+    var maps = company?.maps;
+    var htmlObject = document.getElementById("iframe-div");
+    htmlObject.innerHTML = maps;
+  }, [company]);
+
+  const [
+    saleTrigger,
+    { data: sales, isFetching: salesIsFetching, isError: salesIsErr },
+  ] = useLazyReadQuery();
+
+  useEffect(() => {
+    saleTrigger({
+      url: `/user/users?_id[eq]=${company?.sales}&populatingValue=user`,
+      tag: ["users"],
+    });
+  }, [company]);
+
+  const [
+    rateTrigger,
+    { data: rates, isFetching: ratedIsFetching, isError: rateIsErr },
+  ] = useLazyReadQuery();
+  const [page, setPage] = useState(1);
+  const [totalPage, setTotalPage] = useState(1);
+
+  useEffect(() => {
+    setPage(1);
+  }, []);
+
+  useEffect(() => {
+    rateTrigger({
+      url: `/user/rates?accepter[eq]=${companyId}&populatingType=rates&populatingValue=rater&page=${page}&limit=6`,
+      tag: ["companies", "users"],
+    });
+  }, [companyId, page]);
+
+  useEffect(() => {
+    setTotalPage(Math.ceil(rates?.total / 6));
+  }, [rates]);
+
+  console.log(rates?.data, "sales data");
   return (
     <div className="relative overflow-hidden z-20">
       <Response response={rateResponse} setPending={setPending} />
@@ -187,32 +222,27 @@ const CompanyDetail = (props) => {
           <div className="w-full flex flex-col lg:flex-row gap-0">
             <div className="h-auto px-main mt-4 py-4 flex flex-col gap-10 bg-yellow-500f w-full lg:w-[67%]">
               <div className="flex flex-col lg:flex-row text-sm items-center justify-between">
-                <p className="py-2  px-3 cursor-pointer rounded-sm flex items-center justify-center  gap-2">
+                <p className="py-2  px-3 rounded-sm flex items-center justify-center  gap-2">
                   <svg
-                    class="w-5 h-5 text-gray-800 dark:text-white"
+                    class="w-6 h-6 text-gray-800 dark:text-white"
                     aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
+                    width="24"
+                    height="24"
+                    fill="currentColor"
                     viewBox="0 0 24 24"
                   >
                     <path
-                      stroke="currentColor"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M12 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"
+                      fill-rule="evenodd"
+                      d="M5.005 10.19a1 1 0 0 1 1 1v.233l5.998 3.464L18 11.423v-.232a1 1 0 1 1 2 0V12a1 1 0 0 1-.5.866l-6.997 4.042a1 1 0 0 1-1 0l-6.998-4.042a1 1 0 0 1-.5-.866v-.81a1 1 0 0 1 1-1ZM5 15.15a1 1 0 0 1 1 1v.232l5.997 3.464 5.998-3.464v-.232a1 1 0 1 1 2 0v.81a1 1 0 0 1-.5.865l-6.998 4.042a1 1 0 0 1-1 0L4.5 17.824a1 1 0 0 1-.5-.866v-.81a1 1 0 0 1 1-1Z"
+                      clip-rule="evenodd"
                     />
-                    <path
-                      stroke="currentColor"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M17.8 14h0a7 7 0 1 0-11.5 0h0l.1.3.3.3L12 21l5.1-6.2.6-.7.1-.2Z"
-                    />
+                    <path d="M12.503 2.134a1 1 0 0 0-1 0L4.501 6.17A1 1 0 0 0 4.5 7.902l7.002 4.047a1 1 0 0 0 1 0l6.998-4.04a1 1 0 0 0 0-1.732l-6.997-4.042Z" />
                   </svg>
-                  London
+
+                  {company?.category}
                 </p>
-                <p className="py-2  px-3 cursor-pointer rounded-sm flex items-center justify-center  gap-2">
+                {/* <p className="py-2  px-3 cursor-pointer rounded-sm flex items-center justify-center  gap-2">
                   <svg
                     class="w-5 h-5 text-gray-800 dark:text-white"
                     aria-hidden="true"
@@ -229,41 +259,57 @@ const CompanyDetail = (props) => {
                     />
                   </svg>
                   4 hours ago
-                </p>
-                <p className="py-2  px-3 cursor-pointer rounded-sm flex items-center justify-center  gap-2">
+                </p> */}
+                <p className="py-2  px-3 rounded-sm flex items-center justify-center  gap-2">
                   <svg
-                    class="w-5 h-5 text-gray-800 dark:text-white"
+                    class="w-6 h-6 text-gray-800 dark:text-white"
                     aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
                     fill="none"
                     viewBox="0 0 24 24"
                   >
                     <path
                       stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
                       stroke-width="2"
-                      d="M21 12c0 1.2-4 6-9 6s-9-4.8-9-6c0-1.2 4-6 9-6s9 4.8 9 6Z"
+                      d="M15 4h3a1 1 0 0 1 1 1v15a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h3m0 3h6m-3 5h3m-6 0h.01M12 16h3m-6 0h.01M10 3v4h4V3h-4Z"
+                    />
+                  </svg>
+
+                  {company?.subCategory}
+                </p>
+                <p className="py-2  px-3 rounded-sm flex items-center justify-center  gap-2">
+                  <svg
+                    class="w-6 h-6 text-gray-800 dark:text-white"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"
                     />
                     <path
                       stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
                       stroke-width="2"
-                      d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                      d="M17.8 13.938h-.011a7 7 0 1 0-11.464.144h-.016l.14.171c.1.127.2.251.3.371L12 21l5.13-6.248c.194-.209.374-.429.54-.659l.13-.155Z"
                     />
                   </svg>
-                  2300 views
+
+                  {company?.type === "local" ? company?.city : company?.country}
                 </p>
-                <p className="py-2  px-3 cursor-pointer rounded-sm flex items-center justify-center  gap-2">
-                  <svg
-                    class="w-5 h-5 text-yellow-400"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M13.8 4.2a2 2 0 0 0-3.6 0L8.4 8.4l-4.6.3a2 2 0 0 0-1.1 3.5l3.5 3-1 4.4c-.5 1.7 1.4 3 2.9 2.1l3.9-2.3 3.9 2.3c1.5 1 3.4-.4 3-2.1l-1-4.4 3.4-3a2 2 0 0 0-1.1-3.5l-4.6-.3-1.8-4.2Z" />
-                  </svg>
-                  {company?.rating?.average}
-                </p>
-                <p className="py-2  px-3 cursor-pointer rounded-sm flex items-center justify-center  gap-2">
+                {/* <p className="py-2  px-3 rounded-sm flex items-center justify-center  gap-2">
                   <svg
                     class="w-5 h-5 text-red-500"
                     aria-hidden="true"
@@ -273,9 +319,12 @@ const CompanyDetail = (props) => {
                   >
                     <path d="m12.7 20.7 6.2-7.1c2.7-3 2.6-6.5.8-8.7A5 5 0 0 0 16 3c-1.3 0-2.7.4-4 1.4A6.3 6.3 0 0 0 8 3a5 5 0 0 0-3.7 1.9c-1.8 2.2-2 5.8.8 8.7l6.2 7a1 1 0 0 0 1.4 0Z" />
                   </svg>
-                  456 saves
-                </p>
-                <p className="py-2  px-3 cursor-pointer rounded-sm flex items-center justify-center  gap-2">
+                  {company?.saves?.total} saves
+                </p> */}
+                <a
+                  href="/dashboard/message"
+                  className="py-2  px-3 cursor-pointer rounded-sm flex items-center justify-center  gap-2"
+                >
                   <svg
                     class="w-5 h-5 text-gray-800 dark:text-white"
                     aria-hidden="true"
@@ -292,7 +341,7 @@ const CompanyDetail = (props) => {
                     />
                   </svg>
                   chat
-                </p>
+                </a>
               </div>
 
               <div className="">
@@ -364,7 +413,7 @@ const CompanyDetail = (props) => {
               </div>
 
               {/* ratings */}
-              <div className="w-full">
+              <div className="w-full relative">
                 <p className="text-xl mt-10 font-bold">Add Review and Rating</p>
                 <p className="text-lg mt-7 font-bold">Rate us</p>
 
@@ -457,42 +506,56 @@ const CompanyDetail = (props) => {
                 </div>
                 <p className="text-lg mt-10 font-bold">Peoples who rate us</p>
 
-                {rates?.data &&
-                  rates?.data?.map((e) => {
-                    return (
-                      <div className="mt-10">
-                        <div class="flex items-center mb-4">
-                          <img
-                            class="w-10 h-10 me-4 rounded-full"
-                            src="./gedi.jpg"
-                            alt=""
-                          />
-                          <div class="font-medium dark:text-white">
-                            <p>
-                              {e?.fullName}
-                              <time
-                                datetime="2014-08-16 19:00"
-                                class="block text-sm text-gray-500 dark:text-gray-400"
-                              >
-                                {format(e?.createdAt)}
-                              </time>
-                            </p>
+                <div className="flex flex-col">
+                  {rates?.data &&
+                    rates?.data?.map((e) => {
+                      return (
+                        <div className="mt-10">
+                          <div class="flex items-center mb-4">
+                            <img
+                              class="w-10 h-10 me-4 rounded-full"
+                              src={e?.rater?.profilePicture}
+                              alt=""
+                            />
+                            <div class="font-medium dark:text-white">
+                              <p>
+                                {e?.fullName}
+                                <time
+                                  datetime="2014-08-16 19:00"
+                                  class="block text-sm text-gray-500 dark:text-gray-400"
+                                >
+                                  {format(e?.updatedAt)}
+                                </time>
+                              </p>
+                            </div>
                           </div>
+                          <div className="w-full ml-14 flex justify-start gap-3 items-center">
+                            <Rating>
+                              <Rating.Star />
+                              <Rating.Star />
+                              <Rating.Star />
+                              <Rating.Star />
+                              <Rating.Star filled={false} />
+                            </Rating>
+                            <p>{e?.value}</p>
+                          </div>
+                          <p className="mt-1 ml-14">{e?.message}</p>
                         </div>
-                        <div className="w-full ml-14 flex justify-start gap-3 items-center">
-                          <Rating>
-                            <Rating.Star />
-                            <Rating.Star />
-                            <Rating.Star />
-                            <Rating.Star />
-                            <Rating.Star filled={false} />
-                          </Rating>
-                          <p>{e?.value}</p>
-                        </div>
-                        <p className="mt-1 ml-14">{e?.message}</p>
-                      </div>
-                    );
-                  })}
+                      );
+                    })}
+
+                  <div className="py-3">
+                    <ResponsivePagination
+                      total={totalPage}
+                      current={page}
+                      onPageChange={(currentPage) => setPage(currentPage)}
+                      previousLabel="Previous"
+                      previousClassName="w-24"
+                      nextClassName="w-24"
+                      nextLabel="Next"
+                    />
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -533,77 +596,79 @@ const CompanyDetail = (props) => {
                     Get directions
                   </p>
                 </div>
-                <Map markers={[...markers]} height="35vh" />
+                {/* <Map markers={[...markers]} height="35vh" /> */}
+                <div id="iframe-div" className="relative">
+                  {/* <iframe
+                    src={`https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d${company?.latitude}!2d-${company?.longitude}!3d2.1022195001665533!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x10a06c0a948cf5d5%3A0x108270c99e90f0b3!2sAfrica!5e0!3m2!1sen!2set!4v1710817332813!5m2!1sen!2set`}
+                    width="100%"
+                    height="300"
+                    // style="border:0;"
 
-                <div className="mt-7 gap-2 flex flex-col">
-                  <p className="py-2 cursor-pointer rounded-sm flex items-center justify-start  gap-2">
+                    allowfullscreen=""
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"
+                  ></iframe> */}
+                  {/* <iframe
+                    width="100%"
+                    id="iframe"
+                    height="300"
+                    src="https://maps.google.com/maps?q=9.0087841,38.7879883&hl=es;&z=9&amp;output=embed"
+                  ></iframe> */}
+                </div>
+                <div className="mt-7 gap-2 justify-start items-center flex flex-col">
+                  <p className="py-2 w-full rounded-sm flex items-center justify-start  gap-2">
                     <svg
-                      class="w-5 h-5 text-gray-800 dark:text-white"
+                      class="w-6 h-6 text-blue-500"
                       aria-hidden="true"
                       xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
+                      width="24"
+                      height="24"
+                      fill="currentColor"
                       viewBox="0 0 24 24"
                     >
                       <path
-                        stroke="currentColor"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M12 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"
-                      />
-                      <path
-                        stroke="currentColor"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M17.8 14h0a7 7 0 1 0-11.5 0h0l.1.3.3.3L12 21l5.1-6.2.6-.7.1-.2Z"
+                        fill-rule="evenodd"
+                        d="M11.906 1.994a8.002 8.002 0 0 1 8.09 8.421 7.996 7.996 0 0 1-1.297 3.957.996.996 0 0 1-.133.204l-.108.129c-.178.243-.37.477-.573.699l-5.112 6.224a1 1 0 0 1-1.545 0L5.982 15.26l-.002-.002a18.146 18.146 0 0 1-.309-.38l-.133-.163a.999.999 0 0 1-.13-.202 7.995 7.995 0 0 1 6.498-12.518ZM15 9.997a3 3 0 1 1-5.999 0 3 3 0 0 1 5.999 0Z"
+                        clip-rule="evenodd"
                       />
                     </svg>
-                    London
-                  </p>
-                  <p className="py-2 cursor-pointer rounded-sm flex items-center justify-start  gap-2">
-                    <svg
-                      class="w-5 h-5 text-gray-800 dark:text-white"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        stroke="currentColor"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M12 8v4l3 3m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                      />
-                    </svg>
-                    4 hours ago
-                  </p>
-                  <p className="py-2 cursor-pointer rounded-sm flex items-center justify-start  gap-2">
-                    <svg
-                      class="w-5 h-5 text-gray-800 dark:text-white"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        stroke="currentColor"
-                        stroke-width="2"
-                        d="M21 12c0 1.2-4 6-9 6s-9-4.8-9-6c0-1.2 4-6 9-6s9 4.8 9 6Z"
-                      />
-                      <path
-                        stroke="currentColor"
-                        stroke-width="2"
-                        d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
-                      />
-                    </svg>
-                    2300 views
+
+                    {company?.address}
                   </p>
 
-                  <p className="py-2 cursor-pointer rounded-sm flex items-center justify-start  gap-2">
+                  <p className="py-2  rounded-sm flex items-center justify-start w-full  gap-2">
                     <svg
-                      class="w-5 h-5 "
+                      class="w-6 h-6 text-emerald-600"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M4.998 7.78C6.729 6.345 9.198 5 12 5c2.802 0 5.27 1.345 7.002 2.78a12.713 12.713 0 0 1 2.096 2.183c.253.344.465.682.618.997.14.286.284.658.284 1.04s-.145.754-.284 1.04a6.6 6.6 0 0 1-.618.997 12.712 12.712 0 0 1-2.096 2.183C17.271 17.655 14.802 19 12 19c-2.802 0-5.27-1.345-7.002-2.78a12.712 12.712 0 0 1-2.096-2.183 6.6 6.6 0 0 1-.618-.997C2.144 12.754 2 12.382 2 12s.145-.754.284-1.04c.153-.315.365-.653.618-.997A12.714 12.714 0 0 1 4.998 7.78ZM12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
+                    {company?.views?.total} views
+                  </p>
+                  <p className="py-2  rounded-sm flex items-center justify-start w-full  gap-2">
+                    <svg
+                      class="w-6 h-6 -mt-[7px] text-yellow-400"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M13.8 4.2a2 2 0 0 0-3.6 0L8.4 8.4l-4.6.3a2 2 0 0 0-1.1 3.5l3.5 3-1 4.4c-.5 1.7 1.4 3 2.9 2.1l3.9-2.3 3.9 2.3c1.5 1 3.4-.4 3-2.1l-1-4.4 3.4-3a2 2 0 0 0-1.1-3.5l-4.6-.3-1.8-4.2Z" />
+                    </svg>
+                    {company?.rating?.average} ratings
+                  </p>
+                  <p className="py-2  rounded-sm flex items-center justify-start w-full  gap-2">
+                    <svg
+                      class="w-6 h-6 text-red-500"
                       aria-hidden="true"
                       xmlns="http://www.w3.org/2000/svg"
                       fill="currentColor"
@@ -611,34 +676,37 @@ const CompanyDetail = (props) => {
                     >
                       <path d="m12.7 20.7 6.2-7.1c2.7-3 2.6-6.5.8-8.7A5 5 0 0 0 16 3c-1.3 0-2.7.4-4 1.4A6.3 6.3 0 0 0 8 3a5 5 0 0 0-3.7 1.9c-1.8 2.2-2 5.8.8 8.7l6.2 7a1 1 0 0 0 1.4 0Z" />
                     </svg>
-                    456 saves
+                    {company?.saves?.total} saves
                   </p>
-                </div>
-
-                <p className="py-2 cursor-pointer rounded-sm flex items-center justify-start  gap-2">
-                  <svg
-                    class="w-5 h-5 text-gray-800 dark:text-white"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
+                  <a
+                    href="/dashboard/message"
+                    className="py-2  rounded-sm cursor-pointer flex items-center justify-start w-full  gap-2"
                   >
-                    <path
-                      stroke="currentColor"
-                      stroke-width="2"
-                      d="M21 12c0 1.2-4 6-9 6s-9-4.8-9-6c0-1.2 4-6 9-6s9 4.8 9 6Z"
-                    />
-                    <path
-                      stroke="currentColor"
-                      stroke-width="2"
-                      d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
-                    />
-                  </svg>
-                  views
-                </p>
+                    <svg
+                      class="w-6 h-6 text-[#00aeff]"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M7 9h5m3 0h2M7 12h2m3 0h5M5 5h14c.6 0 1 .4 1 1v9c0 .6-.4 1-1 1h-6.6a1 1 0 0 0-.7.3l-2.9 2.5c-.3.3-.8.1-.8-.3V17c0-.6-.4-1-1-1H5a1 1 0 0 1-1-1V6c0-.6.4-1 1-1Z"
+                      />
+                    </svg>
+                    chat now
+                  </a>
+                </div>
                 <p className="text-lg mt-7 ">Follow us</p>
                 <div className="flex mt-4 items-center justify-between w-full">
-                  <a href="#" className="">
+                  <a
+                    href={`//${company?.socialMedias?.facebook}`}
+                    className="cursor-pointer hover:text-red-500"
+                    target="_blank"
+                  >
                     <svg
                       className="w-5 h-5"
                       aria-hidden="true"
@@ -652,58 +720,52 @@ const CompanyDetail = (props) => {
                         clipRule="evenodd"
                       />
                     </svg>
-                    <span className="sr-only">Discord community</span>
                   </a>
-                  <a href="#" className="">
+                  <a
+                    href={`//${company?.socialMedias?.instagram}`}
+                    className="cursor-pointer hover:text-red-500"
+                    target="_blank"
+                  >
                     <svg
-                      className="w-6 h-6 "
+                      class="w-6 h-6"
                       aria-hidden="true"
                       xmlns="http://www.w3.org/2000/svg"
-                      fill="currentColor"
+                      width="24"
+                      height="24"
+                      fill="none"
                       viewBox="0 0 24 24"
                     >
                       <path
-                        fillRule="evenodd"
-                        d="M21.7 8c0-.7-.4-1.3-.8-2-.5-.5-1.2-.8-2-.8C16.2 5 12 5 12 5s-4.2 0-7 .2c-.7 0-1.4.3-2 .9-.3.6-.6 1.2-.7 2l-.2 3.1v1.5c0 1.1 0 2.2.2 3.3 0 .7.4 1.3.8 2 .6.5 1.4.8 2.2.8l6.7.2s4.2 0 7-.2c.7 0 1.4-.3 2-.9.3-.5.6-1.2.7-2l.2-3.1v-1.6c0-1 0-2.1-.2-3.2ZM10 14.6V9l5.4 2.8-5.4 2.8Z"
-                        clipRule="evenodd"
+                        fill="currentColor"
+                        fill-rule="evenodd"
+                        d="M3 8a5 5 0 0 1 5-5h8a5 5 0 0 1 5 5v8a5 5 0 0 1-5 5H8a5 5 0 0 1-5-5V8Zm5-3a3 3 0 0 0-3 3v8a3 3 0 0 0 3 3h8a3 3 0 0 0 3-3V8a3 3 0 0 0-3-3H8Zm7.597 2.214a1 1 0 0 1 1-1h.01a1 1 0 1 1 0 2h-.01a1 1 0 0 1-1-1ZM12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6Zm-5 3a5 5 0 1 1 10 0 5 5 0 0 1-10 0Z"
+                        clip-rule="evenodd"
                       />
                     </svg>
+                  </a>
+                  <a
+                    href={`//${company?.socialMedias?.twitter}`}
+                    className="cursor-pointer hover:text-red-500"
+                    target="_blank"
+                  >
+                    <svg
+                      class="w-6 h-6"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M13.795 10.533 20.68 2h-3.073l-5.255 6.517L7.69 2H1l7.806 10.91L1.47 22h3.074l5.705-7.07L15.31 22H22l-8.205-11.467Zm-2.38 2.95L9.97 11.464 4.36 3.627h2.31l4.528 6.317 1.443 2.02 6.018 8.409h-2.31l-4.934-6.89Z" />
+                    </svg>
+                  </a>
 
-                    <span className="sr-only">Discord community</span>
-                  </a>
-                  <a href="#" className="">
-                    <svg
-                      className="w-6 h-6 "
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M12.5 8.8v1.7a3.7 3.7 0 0 1 3.3-1.7c3.5 0 4.2 2.2 4.2 5v5.7h-3.2v-5c0-1.3-.2-2.8-2.1-2.8-1.9 0-2.2 1.3-2.2 2.6v5.2H9.3V8.8h3.2ZM7.2 6.1a1.6 1.6 0 0 1-2 1.6 1.6 1.6 0 0 1-1-2.2A1.6 1.6 0 0 1 6.6 5c.3.3.5.7.5 1.1Z"
-                        clipRule="evenodd"
-                      />
-                      <path d="M7.2 8.8H4v10.7h3.2V8.8Z" />
-                    </svg>
-                  </a>
-                  <a href="#" className="">
-                    <svg
-                      className="w-5 h-5"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="currentColor"
-                      viewBox="0 0 20 17"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M20 1.892a8.178 8.178 0 0 1-2.355.635 4.074 4.074 0 0 0 1.8-2.235 8.344 8.344 0 0 1-2.605.98A4.13 4.13 0 0 0 13.85 0a4.068 4.068 0 0 0-4.1 4.038 4 4 0 0 0 .105.919A11.705 11.705 0 0 1 1.4.734a4.006 4.006 0 0 0 1.268 5.392 4.165 4.165 0 0 1-1.859-.5v.05A4.057 4.057 0 0 0 4.1 9.635a4.19 4.19 0 0 1-1.856.07 4.108 4.108 0 0 0 3.831 2.807A8.36 8.36 0 0 1 0 14.184 11.732 11.732 0 0 0 6.291 16 11.502 11.502 0 0 0 17.964 4.5c0-.177 0-.35-.012-.523A8.143 8.143 0 0 0 20 1.892Z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                    <span className="sr-only">Twitter page</span>
-                  </a>
-                  <a href="#" className="">
+                  <a
+                    href={`//${company?.socialMedias?.linkedin}`}
+                    className="cursor-pointer hover:text-red-500"
+                    target="_blank"
+                  >
                     <svg
                       className="w-6 h-6 "
                       aria-hidden="true"
@@ -779,10 +841,10 @@ const CompanyDetail = (props) => {
                 </div>
               </div>
 
-              <div className="w-full text-sm p-5 rounded-md border shadow-lg shadow-gray-300">
+              <div className="w-full relative text-sm p-5 rounded-md border shadow-lg shadow-gray-300">
                 <p className="flex text-sm gap-2 items-center">
                   <svg
-                    class="w-5 h-5 text-gray-800 dark:text-white"
+                    class="w-5 h-5 text-emerald-500"
                     aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="currentColor"
@@ -797,16 +859,17 @@ const CompanyDetail = (props) => {
                   Contact Business
                 </p>
 
-                <div class="flex items-center mt-6 mb-4">
-                  <img
-                    class="w-12 h-12 me-4 rounded-full"
-                    src={company?.logo}
-                    alt=""
-                  />
+                <div class="flex flex-col xl:flex-row items-center gap-2 mt-3 mb-4">
+                  <div className="xl:self-start w-12 h-12">
+                    <img
+                      class="w-12 h-12  rounded-full"
+                      src={company?.logo}
+                      alt=""
+                    />
+                  </div>
                   <div class="font-medium dark:text-white">
                     <p>
                       {company?.name}
-
                       <time
                         datetime="2014-08-16 19:00"
                         class="block text-sm text-gray-500 dark:text-gray-400"
@@ -836,7 +899,7 @@ const CompanyDetail = (props) => {
                 <div>
                   <label
                     for="last_name"
-                    class="block mb-2 text-sm mt-4 font-medium text-gray-900 dark:text-white"
+                    class="block mb-2 text-sm mt-2 font-medium text-gray-900 dark:text-white"
                   >
                     Email
                   </label>
@@ -880,7 +943,11 @@ const CompanyDetail = (props) => {
                   class="block p-2.5 mb-4 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder="Write your message here..."
                 ></textarea>
-
+                {emailError && (
+                  <p className="flex w-full mb-2 border border-red-500 p-2 rounded-lg bg-red-200 text-red-500 text-sm gap-2 items-center">
+                    All fields are required!
+                  </p>
+                )}
                 <LoadingButton
                   pending={emailPending}
                   onClick={sendEmailHandler}
@@ -909,84 +976,21 @@ const CompanyDetail = (props) => {
                 </p>
 
                 <div className="flex w-full mt-5 flex-col items-center justify-center">
-                  <div class="flex items-center mb-4">
+                  <div class="flex flex-col gap-3 items-center mb-4">
                     <img
                       class="w-24 h-24 me-4 rounded-full"
-                      src="./gedi.jpg"
+                      src={sales?.data[0]?.user?.profilePicture}
                       alt=""
                     />
                     <div class="font-medium gap-1 flex flex-col dark:text-white">
-                      <p className="text-xl font-bold">Gedeon agmas</p>
-                      <p className="">gedeona..@gmail.com</p>
-                      <p>+251 954304543</p>
+                      <p className="text-xl font-bold">
+                        {sales?.data[0]?.user?.firstName +
+                          " " +
+                          sales?.data[0]?.user?.lastName}
+                      </p>
+                      <p className="">{sales?.data[0]?.email}</p>
+                      <p>{sales?.data[0]?.user?.phone}</p>
                     </div>
-                  </div>
-                  <div className="flex mt-4 items-center justify-between w-full">
-                    <a href="#" className="">
-                      <svg
-                        className="w-5 h-5"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="currentColor"
-                        viewBox="0 0 8 19"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M6.135 3H8V0H6.135a4.147 4.147 0 0 0-4.142 4.142V6H0v3h2v9.938h3V9h2.021l.592-3H5V3.591A.6.6 0 0 1 5.592 3h.543Z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                      <span className="sr-only">Discord community</span>
-                    </a>
-                    <a href="#" className="">
-                      <svg
-                        className="w-6 h-6 "
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M21.7 8c0-.7-.4-1.3-.8-2-.5-.5-1.2-.8-2-.8C16.2 5 12 5 12 5s-4.2 0-7 .2c-.7 0-1.4.3-2 .9-.3.6-.6 1.2-.7 2l-.2 3.1v1.5c0 1.1 0 2.2.2 3.3 0 .7.4 1.3.8 2 .6.5 1.4.8 2.2.8l6.7.2s4.2 0 7-.2c.7 0 1.4-.3 2-.9.3-.5.6-1.2.7-2l.2-3.1v-1.6c0-1 0-2.1-.2-3.2ZM10 14.6V9l5.4 2.8-5.4 2.8Z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-
-                      <span className="sr-only">Discord community</span>
-                    </a>
-                    <a href="#" className="">
-                      <svg
-                        className="w-6 h-6 "
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M12.5 8.8v1.7a3.7 3.7 0 0 1 3.3-1.7c3.5 0 4.2 2.2 4.2 5v5.7h-3.2v-5c0-1.3-.2-2.8-2.1-2.8-1.9 0-2.2 1.3-2.2 2.6v5.2H9.3V8.8h3.2ZM7.2 6.1a1.6 1.6 0 0 1-2 1.6 1.6 1.6 0 0 1-1-2.2A1.6 1.6 0 0 1 6.6 5c.3.3.5.7.5 1.1Z"
-                          clipRule="evenodd"
-                        />
-                        <path d="M7.2 8.8H4v10.7h3.2V8.8Z" />
-                      </svg>
-                    </a>
-                    <a href="#" className="">
-                      <svg
-                        className="w-5 h-5"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="currentColor"
-                        viewBox="0 0 20 17"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M20 1.892a8.178 8.178 0 0 1-2.355.635 4.074 4.074 0 0 0 1.8-2.235 8.344 8.344 0 0 1-2.605.98A4.13 4.13 0 0 0 13.85 0a4.068 4.068 0 0 0-4.1 4.038 4 4 0 0 0 .105.919A11.705 11.705 0 0 1 1.4.734a4.006 4.006 0 0 0 1.268 5.392 4.165 4.165 0 0 1-1.859-.5v.05A4.057 4.057 0 0 0 4.1 9.635a4.19 4.19 0 0 1-1.856.07 4.108 4.108 0 0 0 3.831 2.807A8.36 8.36 0 0 1 0 14.184 11.732 11.732 0 0 0 6.291 16 11.502 11.502 0 0 0 17.964 4.5c0-.177 0-.35-.012-.523A8.143 8.143 0 0 0 20 1.892Z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                      <span className="sr-only">Twitter page</span>
-                    </a>
                   </div>
                 </div>
               </div>

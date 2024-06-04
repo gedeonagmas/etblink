@@ -502,7 +502,7 @@ const Home = () => {
                     ?.filter((e) => e?.type === "home-one-1")
                     ?.map((c) => c?.bannerImage)}
                   duration={200}
-                  arrows={true}
+                  arrows={false}
                   indicators={false}
                   width="w-full"
                   height="h-[70px]"
@@ -515,7 +515,7 @@ const Home = () => {
                     ?.filter((e) => e?.type === "home-one-2")
                     ?.map((c) => c?.bannerImage)}
                   duration={200}
-                  arrows={true}
+                  arrows={false}
                   indicators={false}
                   width="w-full"
                   height="h-[70px]"
@@ -528,7 +528,7 @@ const Home = () => {
                     ?.filter((e) => e?.type === "home-one-3")
                     ?.map((c) => c?.bannerImage)}
                   duration={200}
-                  arrows={true}
+                  arrows={false}
                   indicators={false}
                   width="w-full"
                   height="h-[70px]"
@@ -731,7 +731,7 @@ const Home = () => {
                 ?.filter((e) => e?.type === "home-two")
                 ?.map((c) => c?.bannerImage)}
               duration={200}
-              arrows={true}
+              arrows={false}
               indicators={false}
               width="w-full"
               height="h-[110px]"

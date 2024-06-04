@@ -106,17 +106,27 @@ utilityRouter.route("/recentlyAddedCompany").get(recentlyAddedCompany);
 router.route("/:table/:id").get(authentication, _read_single);
 router.route("/sendEmail").post(async (req, res, next) => {
   const { from, to, message, subject, fullName } = req.body;
-  console.log(req.body, "body", next);
+  // console.log(req.body, "body", next);
   const response = "Your email is sent successfully.";
-  sendEmailHandler(
+  return sendEmailHandler({
     subject,
     message,
     to,
-    from + " " + fullName,
+    from: from + " " + fullName,
     response,
     res,
-    next
-  );
+    next,
+  });
+
+  // sendEmailHandler({
+  //   subject,
+  //   message,
+  //   to,
+  //   from: ,
+  //   response,
+  //   res,
+  //   next,
+  // });
 });
 
 router

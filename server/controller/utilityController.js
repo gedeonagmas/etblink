@@ -64,11 +64,7 @@ const createRate = asyncCatch(async (req, res, next) => {
     const user = await User.find({ user: req.body.accepter });
     if (user) {
       const subject = "Your rating is updated.";
-      const message = `new service plan is added to your company and your service is released from ${new Date(
-        history.startDate
-      ).toDateString()} to ${new Date(
-        history.endDate
-      ).toDateString()}. thank you for working with us!!!`;
+      const message = `new service plan is added to your company and your service is released from  thank you for working with us!!!`;
 
       emailSender(subject, message, user[0], "donotreplay@etblink.com");
     }

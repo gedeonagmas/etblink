@@ -120,6 +120,7 @@ const Profile = () => {
   const [video, setVideo] = useState("");
   const [website, setWebsite] = useState("");
   const [description, setDescription] = useState("");
+  const [maps, setMaps] = useState("");
   const [latitude, setLatitude] = useState("");
   const [longitude, setLongitude] = useState("");
   const [service, setService] = useState("");
@@ -174,8 +175,14 @@ const Profile = () => {
 
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function (position) {
-      setLatitude(position.coords.latitude);
-      setLongitude(position.coords.longitude);
+      setMaps(`<iframe
+      width="100%"
+      id="iframe"
+      height="300"
+      src="https://maps.google.com/maps?q=${position?.coords?.latitude},${position?.coords?.longitude}&hl=es;&z=9&amp;output=embed"
+    ></iframe>`);
+      // setLatitude(position.coords.latitude);
+      // setLongitude(position.coords.longitude);
       // console.log(`Latitude: ${latitude}, Longitude: ${longitude}`, position);
     });
   } else {
@@ -207,6 +214,7 @@ const Profile = () => {
       );
       setSubCategory(data?.subCategory ? data.subCategory : subCategory);
       setCity(data?.city ? data.city : city);
+      setMaps(data?.maps ? data.maps : maps);
       setCountry(data?.country ? data.country : country);
       setName(data?.name ? data.name : name);
       setPhone(data?.phone ? data.phone : phone);
@@ -249,8 +257,9 @@ const Profile = () => {
     formData.append("logo", logo);
     formData.append("banner", banner);
     formData.append("address", address);
-    formData.append("latitude", latitude);
-    formData.append("longitude", longitude);
+    formData.append("maps", maps);
+    // formData.append("latitude", latitude);
+    // formData.append("longitude", longitude);
     formData.append("socialMedias", JSON.stringify(socialMedias));
     formData.append("workingDays", JSON.stringify(workingDays));
     formData.append("url", `/user/companies?id=${users?.data[0]?.user?._id}`);
