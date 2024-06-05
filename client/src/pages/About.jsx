@@ -3,6 +3,15 @@ import "react-circular-progressbar/dist/styles.css";
 import Sponsors from "../components/Sponsors";
 
 const About = () => {
+  const teams = [
+    {
+      name: "Tewodros Kebede",
+      role: "CEO and Owner",
+      description: "Founder and CEO at Skylight technology",
+      email: "tewodroskebed@gmail.com",
+    },
+  ];
+
   return (
     <div className="w-full flex flex-col relative bg-gray-50 bg-dark h-auto">
       <div
@@ -27,7 +36,7 @@ const About = () => {
             />
           </div>
           <div className="h-20 w-20">
-            <CircularProgressbar value={70} text={`${70}%`} />
+            <CircularProgressbar value={40} text={`${70}%`} />
           </div>
           <div className="h-20 w-20">
             <CircularProgressbar value={70} text={`${70}%`} />
@@ -40,7 +49,7 @@ const About = () => {
 
       <div class="w-full px-main mt-24 flex items-center gap-10 flex-col md:flex-row">
         <div>
-          <img class="w-[500px] h-[300px]" src="image-1.jpg" alt="" />
+          <img class="w-[500px] h-[350px]" src="image-1.jpg" alt="" />
         </div>
         <div className="flex max-w-[500px] flex-col gap-4">
           <p className="font-bold text-2xl">
@@ -48,41 +57,51 @@ const About = () => {
             amet consectetur.
           </p>
           <p className="text-sm">
-            Lorem ipsum dolor sit, ametes dodu consectetur adipisicing elit.
-            Omnis temporibus officia velit, distinctio eos veritatis elit omnis.
+            Ethiopian Business Link (ETB Link) is an Online Business link
+            directory developed by a sister company, skylight Technology PLC.
+            Making us one of the first truly dedicated online directories for
+            local businesses. The Ethiopian Business Link (etblink.com) is a way
+            of leaving behind the time-consuming, search for different
+            businesses at the Search Engine. We can help your business get
+            noticed and drive more customers to your door.
           </p>
 
           <p className="text-sm mt-2">
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Sit
-            corrupti hic adipisci voluptatum nesciunt in maxime cumque, fugiat
-            eligendi aliquam numquam placeat voluptates! Amet ipsa veritatis
-            animi illum ea veniam!
+            Ethiopian Business Link (etblink.com) is a comprehensive online
+            portal dedicated to promoting and connecting businesses within
+            Ethiopia and globally. Our platform serves as a hub for business
+            news, insights, and networking opportunities in various industries,
+            including technology, finance, agriculture, healthcare, and more.
           </p>
 
-          <div
-          className="flex gap-2 cursor-pointer text-white text-center w-52 mt-2 rounded-full py-3 px-x items-center justify-center bg-main"
-        >
-          <svg
-            className="w-6 h-6"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M19 12H5m14 0-4 4m4-4-4-4"
-            />
-          </svg>
-          Read more
-        </div>
+          {/* <div className="flex gap-2 cursor-pointer text-white text-center w-52 mt-2 rounded-full py-3 px-x items-center justify-center bg-main">
+            <svg
+              className="w-6 h-6"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M19 12H5m14 0-4 4m4-4-4-4"
+              />
+            </svg>
+            Read more
+          </div> */}
         </div>
       </div>
 
-      <p className="px-main text-2xl self-center mt-24 font-bold">Our teams</p>
+      <p className="font-light mt-14 px-main text-lg">
+        Join us at ETBLink.com to stay informed about the latest business
+        trends, connect with like-minded professionals, and explore new
+        opportunities for success in the dynamic Ethiopian business landscape.
+        Let us be your bridge to a thriving business future.
+      </p>
+      <p className="px-main text-2xl self-center mt-14 font-bold">Our teams</p>
       <div className="grid w-full place-items-center px-main self-center gap-12 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mt-10">
         {[0, 1, 2, 3, 4, 5, 6, 7].map((e, i) => {
           return (
@@ -111,7 +130,9 @@ const About = () => {
 
       <p className="px-main text-2xl px-main mt-24 font-bold">Sponsors</p>
       <p className="px-main mt-2">People works with us</p>
-      <Sponsors />
+      <div className="w-full px-main">
+        <Sponsors />
+      </div>
     </div>
   );
 };

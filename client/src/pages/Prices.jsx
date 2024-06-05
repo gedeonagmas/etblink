@@ -7,7 +7,7 @@ const Prices = () => {
       <div
         style={{
           backgroundImage: "url('./image-4.jpg')",
-                  backgroundRepeat: false,
+          backgroundRepeat: false,
         }}
         className="h-[70vh] bg-cover bg-center relative z-20 w-full"
       ></div>
@@ -40,7 +40,7 @@ const Prices = () => {
         Select from our price list
       </p>
       <div className="grid w-full place-items-center py-5 px-main self-center gap-x-20 gap-y-20 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mt-10">
-        <div className="w-full hover:border-red-600 relative shadow-2xl shadow-red-400 max-w-[300px] flex flex-col text-center bg-white bg-dark border border-gray-200 border-dark rounded-lg dark:bg-gray-800 dark:border-gray-700">
+        {/* <div className="w-full hover:border-red-600 relative shadow-2xl shadow-red-400 max-w-[300px] flex flex-col text-center bg-white bg-dark border border-gray-200 border-dark rounded-lg dark:bg-gray-800 dark:border-gray-700">
           <div
             className="relative flex flex-col items-center justify-center"
             href="#"
@@ -102,6 +102,9 @@ const Prices = () => {
               </svg>
             </p>
           </div>
+        </div> */}
+        <div className="flex w-full relative bg-gray-200 items-start justify-start gap-2 rounded-lg shadow-xl">
+          <div className="h-16 z-20 rounded-sm absolute top-0 left-0 w-full from-blue-500 to-red-500 bg-gradient-to-tr"></div>
         </div>
 
         <div className="w-full hover:border-blue-600 relative shadow-2xl shadow-blue-400 max-w-[300px] flex flex-col text-center bg-white bg-dark border border-gray-200 border-dark rounded-lg dark:bg-gray-800 dark:border-gray-700">
@@ -258,19 +261,22 @@ const Prices = () => {
           <img class="w-[500px] h-[300px]" src="image-1.jpg" alt="" />
         </div>
         <div className="flex max-w-[500px] flex-col gap-4">
-              <p className="font-bold text-lg">
-                Lorem ipsum dolor sit officia <br />amet consectetur.
-              </p>
-              <p className="text-sm">
-                Lorem ipsum dolor sit, ametes dodu consectetur adipisicing elit.
-                Omnis temporibus officia velit, distinctio eos veritatis elit
-                omnis.
-                  </p>
-                  
-                  <p className="text-sm mt-2">
-                Lorem ipsum dolor, sit amet consectetur adipisicing elit. Sit corrupti hic adipisci voluptatum nesciunt in maxime cumque, fugiat eligendi aliquam numquam placeat voluptates! Amet ipsa veritatis animi illum ea veniam!
-              </p>
-            </div>
+          <p className="font-bold text-lg">
+            Lorem ipsum dolor sit officia <br />
+            amet consectetur.
+          </p>
+          <p className="text-sm">
+            Lorem ipsum dolor sit, ametes dodu consectetur adipisicing elit.
+            Omnis temporibus officia velit, distinctio eos veritatis elit omnis.
+          </p>
+
+          <p className="text-sm mt-2">
+            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Sit
+            corrupti hic adipisci voluptatum nesciunt in maxime cumque, fugiat
+            eligendi aliquam numquam placeat voluptates! Amet ipsa veritatis
+            animi illum ea veniam!
+          </p>
+        </div>
       </div>
     </div>
   );

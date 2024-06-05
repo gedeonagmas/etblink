@@ -2,7 +2,7 @@ import { Search } from "@mui/icons-material";
 import { DarkThemeToggle } from "flowbite-react";
 import { Slide } from "react-slideshow-image";
 import "react-slideshow-image/dist/styles.css";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Response from "../components/Response";
 import LoadingButton from "../components/loading/LoadingButton";
@@ -12,6 +12,7 @@ import {
   useUserLoginMutation,
   useUserLogoutMutation,
 } from "../features/api/apiSlice";
+import axios from "axios";
 
 const Header = () => {
   const user = JSON.parse(localStorage.getItem("etblink_user"));
@@ -72,9 +73,27 @@ const Header = () => {
   //     : ids?.classList?.add("hidden");
   // };
   const [currencies, setCurrencies] = useState(true);
+  const [currencyData, setCurrencyData] = useState("");
+  const location = useLocation();
+
+  const getCurrencies = async () => {
+    const data = await axios.get(
+      "https://api.freecurrencyapi.com/v1/latest?apikey=fca_live_nJ6qpEZORgz6qvsi7fisjtLTIkm8zVLNSmeWUQ5b"
+    );
+
+    console.log(data, "currencies data");
+  };
+
+  // useEffect(() => {
+  //   getCurrencies();
+  // }, []);
+
   useEffect(() => {
     const onPageScroll = () => {
-      if (window.scrollY > 100) {
+      if (
+        window.scrollY > 100 ||
+        location?.pathname?.split("/")[1]?.length > 0
+      ) {
         setCurrencies(false);
       } else {
         setCurrencies(true);
