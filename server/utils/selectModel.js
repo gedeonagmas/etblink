@@ -14,6 +14,7 @@ const { Notification } = require("../models/notificationModel");
 const { Institution } = require("../models/organizationModel");
 const { Payment } = require("../models/paymentModel");
 const { Place } = require("../models/placeModel");
+const { UserProfile } = require("../models/userProfile");
 const { Rate } = require("../models/ratesModel");
 const { Sales } = require("../models/salesModel");
 const { Save } = require("../models/saveModel");
@@ -25,7 +26,7 @@ const { View } = require("../models/viewModel");
 const { Visitor } = require("../models/visitorModel");
 const { YoutubeAdmin } = require("../models/youtubeAdminModel");
 const { Youtube } = require("../models/youtubeModel");
-const AppError = require("./AppError");
+const { Job } = require("../models/jobModel");
 
 const selectModel = (name, next) => {
   let model;
@@ -33,14 +34,8 @@ const selectModel = (name, next) => {
     case "users":
       model = User;
       break;
-    case "institutions":
-      model = Institution;
-      break;
     case "companies":
       model = Company;
-      break;
-    case "cases":
-      model = Case;
       break;
     case "categories":
       model = Category;
@@ -50,12 +45,6 @@ const selectModel = (name, next) => {
       break;
     case "payments":
       model = Payment;
-      break;
-    case "case-managers":
-      model = CaseManager;
-      break;
-    case "lawyers":
-      model = Lawyer;
       break;
     case "groups":
       model = Group;
@@ -90,27 +79,30 @@ const selectModel = (name, next) => {
     case "blogs":
       model = Blog;
       break;
-    case "sales":
-      model = Sales;
+    case "jobs":
+      model = Job;
       break;
-    case "visitors":
-      model = Visitor;
-      break;
-    case "admins":
-      model = Admin;
-      break;
+    // case "sales":
+    //   model = Sales;
+    //   break;
+    // case "visitors":
+    //   model = Visitor;
+    //   break;
+    // case "admins":
+    //   model = Admin;
+    //   break;
     case "places":
       model = Place;
       break;
-    case "blog-admins":
-      model = BlogAdmin;
-      break;
-    case "news-admins":
-      model = NewsAdmin;
-      break;
-    case "youtube-admins":
-      model = YoutubeAdmin;
-      break;
+    // case "blog-admins":
+    //   model = BlogAdmin;
+    //   break;
+    // case "news-admins":
+    //   model = NewsAdmin;
+    //   break;
+    // case "youtube-admins":
+    //   model = YoutubeAdmin;
+    //   break;
     case "notifications":
       model = Notification;
       break;
@@ -121,7 +113,7 @@ const selectModel = (name, next) => {
       model = Sponsor;
       break;
     default:
-      return next(new AppError("something went wrong please try again!.", 500));
+      model = UserProfile;
   }
   return model;
 };

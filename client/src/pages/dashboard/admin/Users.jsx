@@ -351,12 +351,12 @@ import Tables from "../../../components/Tables";
 import ResponsivePagination from "react-responsive-pagination";
 import "./../../categories/pagination.css";
 import ProfilePicture from "../../../components/ProfilePicture";
-import CompanyItems from "../../../components/CompanyItems";
 
 const UserSales = ({ type }) => {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
   const [totalPage, setTotalPage] = useState(1);
+  const [userType, setUserType] = useState("visitor");
 
   const [trigger, { data: users, isFetching, isError }] = useLazyReadQuery();
 
@@ -370,17 +370,10 @@ const UserSales = ({ type }) => {
 
   useEffect(() => {
     trigger({
-      url: `/user/users?role=${type}&limit=10&page=${page}&populatingType=users&populatingValue=user`,
+      url: `/user/users?role=${userType}&limit=10&page=${page}&searchField=email&searchValue=${search}&populatingType=users&populatingValue=user`,
       tag: ["users"],
     });
-  }, [page]);
-
-  useEffect(() => {
-    trigger({
-      url: `/user/users?role=${type}&limit=10&page=${page}&searchField=email&searchValue=${search}&populatingType=users&populatingValue=user`,
-      tag: ["users"],
-    });
-  }, [search]);
+  }, [page, search, userType]);
 
   const [deleteData, deleteResponse] = useUpdateMutation();
   const [deletePending, setDeletePending] = useState(false);
@@ -420,6 +413,8 @@ const UserSales = ({ type }) => {
       return "blog-admins";
     } else if (role === "youtube-admin") {
       return "youtube-admins";
+    } else if (role === "job-admin") {
+      return "job-admins";
     }
   };
 
@@ -476,7 +471,11 @@ const UserSales = ({ type }) => {
             {row?.isActive ? "Freeze" : "Activate"}
           </button>
           <a
-            href={`/dashboard/admin/${typeHandler(type)}/manage?id=${row?._id}`}
+            href={
+              userType === "company"
+                ? `/dashboard/admin/companies/manage?id=${row?._id}`
+                : `/dashboard/admin/users/manage?user=${userType}&id=${row?._id}`
+            }
             className="px-1 py-1 w-11 bg-emerald-500 text-white rounded-lg"
           >
             More
@@ -505,9 +504,9 @@ const UserSales = ({ type }) => {
 
   const signupHandler = () => {
     signupData({
-      role: type,
+      role: userType,
       email,
-      type: "other",
+      signupType: "other",
       password,
       confirmPassword,
     });
@@ -520,10 +519,26 @@ const UserSales = ({ type }) => {
 
   console.log(user, "users");
   return (
-    <div className="flex min-h-[85vh] pb-5 relative bg-dark bg-white flex-col h-auto w-full gap-5">
+    <div className="flex px-[4%] min-h-[85vh] pb-5 relative bg-dark bg-white flex-col h-auto w-full gap-5">
       <Response response={deleteResponse} setPending={setDeletePending} />
 
-      <div className="flex px-5 items-center justify-between">
+      <select
+        onChange={(e) => setUserType(e.target.value)}
+        name=""
+        id=""
+        className="block w-full max-w-md px-4 h-12 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+      >
+        <option selected value="visitor">
+          Visitor
+        </option>
+        <option value="sales">Sales</option>
+        <option value="company">Company</option>
+        <option value="news-admin">News Admin</option>
+        <option value="blog-admin">Blog Admin</option>
+        <option value="youtube-admin">Youtube Admin</option>
+        <option value="job-admin">Job Admin</option>
+      </select>
+      <div className="flex items-center justify-between">
         <input
           onChange={(e) => setSearch(e.target.value)}
           type="search"
@@ -532,9 +547,10 @@ const UserSales = ({ type }) => {
           placeholder="Search..."
           required
         />
-        {type === "blog-admin" ||
-        type === "news-admin" ||
-        type === "youtube-admin" ? (
+        {userType === "blog-admin" ||
+        userType === "news-admin" ||
+        userType === "youtube-admin" ||
+        userType === "job-admin" ? (
           <button
             onClick={() => {
               setAddAdmin(true);
@@ -547,7 +563,7 @@ const UserSales = ({ type }) => {
       </div>
       <div className="w-full">
         {isFetching && <Loading />}
-        {isError && <p>Something went wrong unable to read boost data</p>}
+        {isError && <p>Something went wrong unable to read users data</p>}
         {users && users?.data?.length > 0 ? (
           <div>
             <Tables data={users?.data} columns={columns} title="users" />

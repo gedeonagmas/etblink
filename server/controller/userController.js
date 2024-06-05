@@ -11,6 +11,7 @@ const { Admin } = require("../models/adminModel");
 const { BlogAdmin } = require("../models/blogsAdminModel");
 const { NewsAdmin } = require("../models/newsAdminModel");
 const { YoutubeAdmin } = require("../models/youtubeAdminModel");
+const { UserProfile } = require("../models/userProfile");
 const api = "http://localhost:4000/";
 
 const signupHandler = asyncCatch(async (req, res, next) => {
@@ -18,7 +19,8 @@ const signupHandler = asyncCatch(async (req, res, next) => {
     const user = await User.create(req.body);
     console.log(req.body);
     if (user) {
-      const account = await model.create({});
+      const info = req.body.role === "company" ? {} : { type: req.body.role };
+      const account = await model.create(info, { runValidator: false });
 
       if (req.body.sales) {
         const sale = await Sales.findById(req.body.sales);
@@ -40,7 +42,9 @@ const signupHandler = asyncCatch(async (req, res, next) => {
         );
 
         const token =
-          req.body.type !== "other" ? tokenGenerator(res, data._id) : null;
+          req.body.signupType !== "other"
+            ? tokenGenerator(res, data._id)
+            : null;
 
         return res.status(200).json({
           message: "Account Created Successfully",
@@ -53,26 +57,30 @@ const signupHandler = asyncCatch(async (req, res, next) => {
     }
   };
 
-  switch (req.body.role) {
-    case "visitor":
-      return createAccount(Visitor);
-    case "sales":
-      return createAccount(Sales);
-    case "company":
-      return createAccount(Company);
-    case "admin":
-      return createAccount(Admin);
-    case "news-admin":
-      return createAccount(NewsAdmin);
-    case "blog-admin":
-      return createAccount(BlogAdmin);
-    case "youtube-admin":
-      return createAccount(YoutubeAdmin);
-    default:
-      return next(
-        new AppError("problem with creating your account please try again", 500)
-      );
+  if (req.body.role === "company") {
+    return createAccount(Company);
+  } else {
+    return createAccount(UserProfile);
   }
+
+  // switch (req.body.role) {
+  //   // case "visitor":
+  //   //   return createAccount(Visitor);
+  //   // case "sales":
+  //   //   return createAccount(Sales);
+  //   case "company":
+  //     return createAccount(Company);
+  //   // case "admin":
+  //   //   return createAccount(Admin);
+  //   // case "news-admin":
+  //   //   return createAccount(NewsAdmin);
+  //   // case "blog-admin":
+  //   //   return createAccount(BlogAdmin);
+  //   // case "youtube-admin":
+  //   //   return createAccount(YoutubeAdmin);
+  //   default:
+  //     return createAccount(UserProfile);
+  // }
 });
 
 const loginHandler = asyncCatch(async (req, res, next) => {

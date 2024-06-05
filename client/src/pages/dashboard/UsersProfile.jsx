@@ -269,9 +269,10 @@ import {
 } from "../../features/api/apiSlice";
 import { useLocation } from "react-router-dom";
 
-const UsersProfile = ({ type }) => {
+const UsersProfile = ({ profileType }) => {
   const location = useLocation();
-  const id = location?.search?.split("?id=")[1];
+  const id = location?.search?.split("&id=")[1];
+  const type = location?.search?.split("?user=")[1]?.split("&id=")[0];
   const user = JSON.parse(localStorage.getItem("etblink_user"));
   const [updateData, updateResponse] = useUpdateMutation();
   const [emailData, emailResponse] = useUpdateUsersCredentialsMutation();
@@ -283,6 +284,7 @@ const UsersProfile = ({ type }) => {
   const [middleName, setMiddleName] = useState("");
   const [lastName, setLastName] = useState("");
   const [bio, setBio] = useState("");
+  const [accountType, setAccountType] = useState("");
   const [gender, setGender] = useState("male");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
@@ -302,7 +304,7 @@ const UsersProfile = ({ type }) => {
       tag: ["users"],
     });
   }, []);
-  console.log(users?.data[0], "lllllllll");
+  console.log(id, "ty", type, "lllllllll");
   useEffect(() => {
     if (users) {
       const data = users?.data[0]?.user;
@@ -310,6 +312,7 @@ const UsersProfile = ({ type }) => {
       setMiddleName(data?.middleName ? data.middleName : middleName);
       setLastName(data?.lastName ? data.lastName : lastName);
       setBio(data?.bio ? data.bio : bio);
+      setAccountType(data?.accountType ? data.accountType : accountType);
       setGender(data?.gender ? data.gender : gender);
       setPhone(data?.phone ? data.phone : phone);
       setAddress(data?.address ? data.address : address);
@@ -327,14 +330,15 @@ const UsersProfile = ({ type }) => {
     formData.append("middleName", middleName);
     formData.append("lastName", lastName);
     formData.append("bio", bio);
+    formData.append("type", accountType);
     formData.append("gender", gender);
     formData.append("phone", phone);
     formData.append("address", address);
     formData.append("profilePicture", profilePicture);
     formData.append(
       "url",
-      `/user/${id?.length > 0 ? location?.pathname?.split("/")[3] : type}?id=${
-        users?.data[0]?.user?._id
+      `/user/${profileType ? profileType : type}?id=${
+        profileType ? user?.user?._id : users?.data[0]?.user?._id
       }`
     );
     formData.append("tag", ["users"]);

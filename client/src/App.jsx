@@ -60,6 +60,8 @@ import Bills from "./pages/dashboard/admin/Bills";
 import Notifications from "./pages/dashboard/Notifications";
 import Sponsors from "./pages/dashboard/admin/Sponsors";
 import Banners from "./pages/dashboard/admin/Banners";
+import AddJob from "./pages/dashboard/admin/AddJob";
+import UpdateJob from "./pages/dashboard/admin/UpdateJob";
 
 export const userContext = createContext();
 
@@ -155,7 +157,7 @@ function App() {
               <Route path="/dashboard/sales" element={<Sellers />}></Route>
               <Route
                 path="/dashboard/sales/profile"
-                element={<UsersProfile type="sales" />}
+                element={<UsersProfile profileType="sales" />}
               ></Route>
               <Route
                 path="/dashboard/sales/company"
@@ -183,7 +185,7 @@ function App() {
               ></Route>
               <Route
                 path="/dashboard/admin/profile"
-                element={<UsersProfile type="admins" />}
+                element={<UsersProfile profileType="admins" />}
               ></Route>
               <Route
                 path="/dashboard/admin/youtube"
@@ -222,25 +224,34 @@ function App() {
                 path="/dashboard/admin/blog/detail"
                 element={<UpdateBlog />}
               ></Route>
-              <Route
+              {/* <Route
                 path="/dashboard/admin/sales"
                 element={<Users type="sales" />}
               ></Route>
               <Route
                 path="/dashboard/admin/sales/manage"
                 element={<UsersProfile type="sales" />}
-              ></Route>
+              ></Route> */}
+              <Route path="/dashboard/admin/users" element={<Users />}></Route>
               <Route
+                path="/dashboard/admin/users/manage"
+                element={<UsersProfile />}
+              ></Route>
+              {/* <Route
                 path="/dashboard/admin/visitor"
                 element={<Users type="visitor" />}
               ></Route>
               <Route
                 path="/dashboard/admin/visitors/manage"
                 element={<UsersProfile type="visitor" />}
-              ></Route>
-              <Route
+              ></Route> */}
+              {/* <Route
                 path="/dashboard/admin/companies"
                 element={<Users type="company" />}
+              ></Route> */}
+              <Route
+                path="/dashboard/admin/companies/manage"
+                element={<Profile />}
               ></Route>
               <Route
                 path="/dashboard/admin/sponsors"
@@ -250,11 +261,7 @@ function App() {
                 path="/dashboard/admin/banners"
                 element={<Banners />}
               ></Route>
-              <Route
-                path="/dashboard/admin/companies/manage"
-                element={<Profile />}
-              ></Route>
-              <Route
+              {/* <Route
                 path="/dashboard/admin/news-admins"
                 element={<Users type="news-admin" />}
               ></Route>
@@ -279,6 +286,14 @@ function App() {
                 element={<UsersProfile type="youtube-admin" />}
               ></Route>
               <Route
+                path="/dashboard/admin/job-admins"
+                element={<Users type="job-admin" />}
+              ></Route>
+              <Route
+                path="/dashboard/admin/job-admins/manage"
+                element={<UsersProfile type="job-admin" />}
+              ></Route> */}
+              <Route
                 path="/dashboard/admin/approval"
                 element={<Bills />}
               ></Route>
@@ -291,7 +306,7 @@ function App() {
               <Route path="/dashboard/visitor" element={<Visitors />}></Route>
               <Route
                 path="/dashboard/visitor/profile"
-                element={<UsersProfile type="visitors" />}
+                element={<UsersProfile profileType="visitors" />}
               ></Route>
               {/* ################################################################### */}
               {/* ############################## NEWS-ADMIN ############################## */}
@@ -301,7 +316,7 @@ function App() {
               ></Route>
               <Route
                 path="/dashboard/news-admin/profile"
-                element={<UsersProfile type="news-admins" />}
+                element={<UsersProfile profileType="news-admins" />}
               ></Route>
               <Route
                 path="/dashboard/news-admin/news"
@@ -312,14 +327,14 @@ function App() {
                 element={<NewsDetailAdmin />}
               ></Route>
               {/* ################################################################### */}
-              {/* ############################## NEWS-ADMIN ############################## */}
+              {/* ############################## YOUTUBE-ADMIN ############################## */}
               <Route
                 path="/dashboard/youtube-admin"
                 element={<Visitors />}
               ></Route>
               <Route
                 path="/dashboard/youtube-admin/profile"
-                element={<UsersProfile type="youtube-admins" />}
+                element={<UsersProfile profileType="youtube-admins" />}
               ></Route>
               <Route
                 path="/dashboard/youtube-admin/youtube"
@@ -337,7 +352,7 @@ function App() {
               ></Route>{" "}
               <Route
                 path="/dashboard/blog-admin/profile"
-                element={<UsersProfile type="blog-admins" />}
+                element={<UsersProfile profileType="blog-admins" />}
               ></Route>
               <Route
                 path="/dashboard/blog-admin/blog"
@@ -346,6 +361,21 @@ function App() {
               <Route
                 path="/dashboard/blog-admin/blog/detail"
                 element={<UpdateBlog />}
+              ></Route>
+              {/* ################################################################### */}
+              {/* ############################## JOB-ADMIN ############################## */}
+              <Route path="/dashboard/job-admin" element={<Visitors />}></Route>{" "}
+              <Route
+                path="/dashboard/job-admin/profile"
+                element={<UsersProfile profileType="job-admins" />}
+              ></Route>
+              <Route
+                path="/dashboard/job-admin/job"
+                element={<AddJob />}
+              ></Route>
+              <Route
+                path="/dashboard/job-admin/job/detail"
+                element={<UpdateJob />}
               ></Route>
               {/* ################################################################### */}
               {/* ############################## COMMON ############################## */}
