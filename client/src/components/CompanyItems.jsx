@@ -104,7 +104,7 @@ const CompanyItems = ({ value, phoneNo, type, data, disabled }) => {
   // console.log(onlineUsers, companies?.data[0]?.email, "users");
   // console.log(views, "views");
   // console.log(user?.user?._id, "current user");
-  // console.log(value, "company");
+  console.log(value, "company");
   return (
     <div
       key={value}

@@ -113,7 +113,9 @@ const CompanyDetail = (props) => {
   useEffect(() => {
     var maps = company?.maps;
     var htmlObject = document.getElementById("iframe-div");
-    htmlObject.innerHTML = maps;
+    if (maps) {
+      htmlObject.innerHTML = maps;
+    }
   }, [company]);
 
   const [
@@ -122,10 +124,12 @@ const CompanyDetail = (props) => {
   ] = useLazyReadQuery();
 
   useEffect(() => {
-    saleTrigger({
-      url: `/user/users?_id[eq]=${company?.sales}&populatingValue=user`,
-      tag: ["users"],
-    });
+    if (company.sales) {
+      saleTrigger({
+        url: `/user/users?_id[eq]=${company?.sales}&populatingValue=user`,
+        tag: ["users"],
+      });
+    }
   }, [company]);
 
   const [
@@ -150,7 +154,7 @@ const CompanyDetail = (props) => {
     setTotalPage(Math.ceil(rates?.total / 6));
   }, [rates]);
 
-  console.log(rates?.data, "sales data");
+  console.log(company, "sales data");
   return (
     <div className="relative overflow-hidden z-20">
       <Response response={rateResponse} setPending={setPending} />
@@ -957,43 +961,44 @@ const CompanyDetail = (props) => {
                 />
               </div>
 
-              <div className="w-full text-sm p-5 rounded-md border shadow-lg shadow-gray-300">
-                <p className="flex text-sm gap-2 items-center">
-                  <svg
-                    class="w-5 h-5 text-gray-800 dark:text-white"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      d="M12 2a3 3 0 0 0-2.1.9l-.9.9a1 1 0 0 1-.7.3H7a3 3 0 0 0-3 3v1.2c0 .3 0 .5-.2.7l-1 .9a3 3 0 0 0 0 4.2l1 .9c.2.2.3.4.3.7V17a3 3 0 0 0 3 3h1.2c.3 0 .5 0 .7.2l.9 1a3 3 0 0 0 4.2 0l.9-1c.2-.2.4-.3.7-.3H17a3 3 0 0 0 3-3v-1.2c0-.3 0-.5.2-.7l1-.9a3 3 0 0 0 0-4.2l-1-.9a1 1 0 0 1-.3-.7V7a3 3 0 0 0-3-3h-1.2a1 1 0 0 1-.7-.2l-.9-1A3 3 0 0 0 12 2Zm3.7 7.7a1 1 0 1 0-1.4-1.4L10 12.6l-1.3-1.3a1 1 0 0 0-1.4 1.4l2 2c.4.4 1 .4 1.4 0l5-5Z"
-                      clip-rule="evenodd"
-                    />
-                  </svg>
-                  Sales Agent
-                </p>
+              {sales && sales?.data[0] && (
+                <div className="w-full text-sm p-5 rounded-md border shadow-lg shadow-gray-300">
+                  <p className="flex text-sm gap-2 items-center">
+                    <svg
+                      class="w-5 h-5 text-gray-800 dark:text-white"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M12 2a3 3 0 0 0-2.1.9l-.9.9a1 1 0 0 1-.7.3H7a3 3 0 0 0-3 3v1.2c0 .3 0 .5-.2.7l-1 .9a3 3 0 0 0 0 4.2l1 .9c.2.2.3.4.3.7V17a3 3 0 0 0 3 3h1.2c.3 0 .5 0 .7.2l.9 1a3 3 0 0 0 4.2 0l.9-1c.2-.2.4-.3.7-.3H17a3 3 0 0 0 3-3v-1.2c0-.3 0-.5.2-.7l1-.9a3 3 0 0 0 0-4.2l-1-.9a1 1 0 0 1-.3-.7V7a3 3 0 0 0-3-3h-1.2a1 1 0 0 1-.7-.2l-.9-1A3 3 0 0 0 12 2Zm3.7 7.7a1 1 0 1 0-1.4-1.4L10 12.6l-1.3-1.3a1 1 0 0 0-1.4 1.4l2 2c.4.4 1 .4 1.4 0l5-5Z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
+                    Sales Agent
+                  </p>
 
-                <div className="flex w-full mt-5 flex-col items-center justify-center">
-                  <div class="flex flex-col gap-3 items-center mb-4">
-                    <img
-                      class="w-24 h-24 me-4 rounded-full"
-                      src={sales?.data[0]?.user?.profilePicture}
-                      alt=""
-                    />
-                    <div class="font-medium gap-1 flex flex-col dark:text-white">
-                      <p className="text-xl font-bold">
-                        {sales?.data[0]?.user?.firstName +
-                          " " +
-                          sales?.data[0]?.user?.lastName}
-                      </p>
-                      <p className="">{sales?.data[0]?.email}</p>
-                      <p>{sales?.data[0]?.user?.phone}</p>
+                  <div className="flex w-full mt-5 flex-col items-center justify-center">
+                    <div class="flex flex-col gap-3 items-center mb-4">
+                      <img
+                        class="w-24 h-24 me-4 rounded-full"
+                        src={sales?.data[0]?.user?.profilePicture}
+                        alt=""
+                      />
+                      <div class="font-medium gap-1 flex flex-col dark:text-white">
+                        <p className="text-xl font-bold">
+                          {sales?.data[0]?.user?.firstName}{" "}
+                          {sales?.data[0]?.user?.lastName}
+                        </p>
+                        <p className="">{sales?.data[0]?.email}</p>
+                        <p>{sales?.data[0]?.user?.phone}</p>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
         </div>

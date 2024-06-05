@@ -762,8 +762,8 @@ const Home = () => {
               companies?.map((e, i) => {
                 return (
                   <CompanyItems
-                    value={e._id}
-                    phoneNo="+251 9541**"
+                    value={e?._id}
+                    phoneNo={`${e?.phone?.substring(0, 5)}**`}
                     type="large"
                     data={e}
                   />

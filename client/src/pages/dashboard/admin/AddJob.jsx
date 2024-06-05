@@ -91,13 +91,25 @@ const AddJob = () => {
     {
       name: "TITLE",
       selector: (row) => row.title,
-      cell: (row) => <div className="">{row.title}</div>,
+      cell: (row) => (
+        <div className="">
+          {row?.title?.length > 20
+            ? row?.title?.substring(0, 20) + "..."
+            : row?.title}
+        </div>
+      ),
       sortable: true,
     },
     {
       name: "SUB TITLE",
       selector: (row) => row.subTitle,
-      cell: (row) => <div className="">{row.subTitle}</div>,
+      cell: (row) => (
+        <div className="">
+          {row?.subTitle?.length > 20
+            ? row?.subTitle?.substring(0, 20) + "..."
+            : row?.subTitle}
+        </div>
+      ),
       sortable: true,
     },
     {
@@ -107,22 +119,22 @@ const AddJob = () => {
       sortable: true,
     },
 
-    {
-      name: "DESCRIPTION",
-      selector: (row) => row.description,
-      cell: (row) => (
-        <div
-          className="ql-editors"
-          dangerouslySetInnerHTML={{
-            __html:
-              row?.description?.length > 50
-                ? row?.description?.substring(0, 50) + "..."
-                : row?.description,
-          }}
-        ></div>
-      ),
-      sortable: true,
-    },
+    // {
+    //   name: "DESCRIPTION",
+    //   selector: (row) => row.description,
+    //   cell: (row) => (
+    //     <div
+    //       className="ql-editors"
+    //       dangerouslySetInnerHTML={{
+    //         __html:
+    //           row?.description?.length > 50
+    //             ? row?.description?.substring(0, 50) + "..."
+    //             : row?.description,
+    //       }}
+    //     ></div>
+    //   ),
+    //   sortable: true,
+    // },
     {
       name: "CREATED AT",
       selector: (row) => row.createdAt,

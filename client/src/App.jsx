@@ -62,6 +62,8 @@ import Sponsors from "./pages/dashboard/admin/Sponsors";
 import Banners from "./pages/dashboard/admin/Banners";
 import AddJob from "./pages/dashboard/admin/AddJob";
 import UpdateJob from "./pages/dashboard/admin/UpdateJob";
+import JobCategory from "./pages/jobs/JobCategory";
+import JobDetail from "./pages/jobs/JobDetail";
 
 export const userContext = createContext();
 
@@ -101,6 +103,8 @@ function App() {
               <Route path="/news-detail" element={<NewsDetail />}></Route>
               <Route path="/event" element={<BlogsCategory />}></Route>
               <Route path="/event-detail" element={<BlogsDetail />}></Route>
+              <Route path="/job" element={<JobCategory />}></Route>
+              <Route path="/job-detail" element={<JobDetail />}></Route>
               <Route path="/prices" element={<Prices />}></Route>
               <Route path="/about" element={<About />}></Route>
               <Route path="/ethiopia" element={<Ethiopia />}></Route>
@@ -223,6 +227,11 @@ function App() {
               <Route
                 path="/dashboard/admin/blog/detail"
                 element={<UpdateBlog />}
+              ></Route>
+              <Route path="/dashboard/admin/job" element={<AddJob />}></Route>
+              <Route
+                path="/dashboard/admin/job/detail"
+                element={<UpdateJob />}
               ></Route>
               {/* <Route
                 path="/dashboard/admin/sales"

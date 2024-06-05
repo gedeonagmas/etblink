@@ -400,24 +400,6 @@ const UserSales = ({ type }) => {
     }
   }, [deleteResponse]);
 
-  const typeHandler = (role) => {
-    if (role === "visitor") {
-      return "visitors";
-    } else if (role === "sales") {
-      return "sales";
-    } else if (role === "company") {
-      return "companies";
-    } else if (role === "news-admin") {
-      return "news-admins";
-    } else if (role === "blog-admin") {
-      return "blog-admins";
-    } else if (role === "youtube-admin") {
-      return "youtube-admins";
-    } else if (role === "job-admin") {
-      return "job-admins";
-    }
-  };
-
   const columns = [
     {
       name: "FULL NAME",

@@ -210,7 +210,7 @@ const createView = asyncCatch(async (req, res, next) => {
   const html = `<div>Your company is viewed by a new client. click here <a style={{background:'yellow',padding:'5px', border-radius:'20px',color:white,padding:10px;}} href=${
     "https://etblink.com/dashboard/" + user[0]?.role + "/views"
   }>here</a> for more detail.</div>`;
-  sendEmailHandler({ subject, to: user[0]?.email, from, html });
+  // sendEmailHandler({ subject, to: user[0]?.email, from, html, next });
 
   return res.status(200).json({
     status: "Created",

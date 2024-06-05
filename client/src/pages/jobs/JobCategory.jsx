@@ -1,20 +1,22 @@
 import Banner from "../../components/Banner";
 import CompanyItemsCompany from "../../components/CompanyItemCategory";
 import SmallBanner from "../../components/SmallBanner";
+// import NewsItem from "./NewsItem";
 import ResponsivePagination from "react-responsive-pagination";
 import "./../categories/pagination.css";
 import { useEffect, useState } from "react";
 import { useLazyReadQuery, useReadQuery } from "../../features/api/apiSlice";
-import BlogsItem from "./BlogsItem";
+import { format } from "timeago.js";
 
-const BlogsCategory = () => {
+const JobCategory = () => {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
   const [totalPage, setTotalPage] = useState(1);
+  const [category, setCategory] = useState("");
 
   const [
     trigger,
-    { data: blogs, isFetching: blogsFetching, isError: blogsError },
+    { data: jobs, isFetching: jobsFetching, isError: jobsError },
   ] = useLazyReadQuery();
 
   useEffect(() => {
@@ -22,14 +24,8 @@ const BlogsCategory = () => {
   }, []);
 
   useEffect(() => {
-    setTotalPage(Math.ceil(blogs?.total / 6));
-  }, [blogs]);
-  // useEffect(() => {
-  //   trigger({
-  //     url: `/user/blogs?visible=true&limit=6&page=${page}`,
-  //     tag: ["blogs"],
-  //   });
-  // }, [page]);
+    setTotalPage(Math.ceil(jobs?.total / 6));
+  }, [jobs]);
 
   const {
     data: banners,
@@ -40,14 +36,24 @@ const BlogsCategory = () => {
     tag: ["banners"],
   });
 
-  useEffect(() => {
-    trigger({
-      url: `/user/blogs?visible=true&limit=6&page=${page}&searchField=title&searchValue=${search}`,
-      tag: ["blogs"],
-    });
-  }, [search, page]);
+  //   useEffect(() => {
+  //     trigger({
+  //       url: `/user/jobs?visible=true&limit=6&page=${page}`,
+  //       tag: ["jobs"],
+  //     });
+  //   }, [page]);
 
-  console.log(blogs, "blogs");
+  useEffect(() => {
+    const categoryKeyword = category
+      ? `&category=${category.toString().replaceAll("&", "and")}`
+      : "";
+    trigger({
+      url: `/user/jobs?visible=true&limit=6&page=${page}${categoryKeyword}&searchField=title&searchValue=${search}`,
+      tag: ["jobs"],
+    });
+  }, [search, page, category]);
+
+  console.log(jobs, "jobs");
   return (
     <div className="w-full relative bg-gray-50 bg-dark h-auto">
       <div
@@ -77,46 +83,73 @@ const BlogsCategory = () => {
               placeholder="Search..."
               required
             />
-            {/* <select
+            <select
+              onChange={(e) => setCategory(e.target.value)}
               name=""
               id=""
               className="w-auto px-4 h-12 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             >
-              <option defaultChecked>Filter by country</option>
-              <option value="">Europe</option>
-              <option value="">Europe</option>
-              <option value="">Europe</option>
+              <option selected disabled>
+                Filter by category
+              </option>
+              <option value="">All</option>
+              <option value="software">Software</option>
+              <option value="government">Government</option>
             </select>
-            <p className="flex font-bold">
-              Sort by
-              <span className="text-red-500 flex items-center justify-center ml-2">
-                Name{" "}
-                <svg
-                  class="w-6 h-6 text-gray-800 dark:text-white"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="m8 10 4 4 4-4"
-                  />
-                </svg>
-              </span>
-            </p> */}
           </div>
+          {/* <div className="w-full flex flex-col gap-2">
+            <p className="text-sm">{format(e?.createdAt)}</p>
+            <p className="text-xl font-bold">{e?.title}</p>
+            <p className="text-sm">{e?.subTitle}</p>
+            <div
+              className="ql-editor"
+              dangerouslySetInnerHTML={{ __html: e?.description }}
+            ></div>
+          </div> */}
           <div className="grid mt-5 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full place-items-centers gap-6">
-            {blogs && blogs?.data?.length > 0 ? (
-              blogs?.data?.map((e) => {
-                return <BlogsItem data={e} type="category" />;
+            {jobs && jobs?.data?.length > 0 ? (
+              jobs?.data?.map((e, i) => {
+                return (
+                  <div className="w-full border rounded-lg bg-gray-100 p-5 flex flex-col gap-2">
+                    <p className="text-sm">{format(e?.createdAt)}</p>
+                    <p className="text-xl font-bold">{e?.title}</p>
+                    <p className="text-sm">{e?.subTitle}</p>
+                    <div
+                      className="ql-editor"
+                      dangerouslySetInnerHTML={{
+                        __html:
+                          e?.description?.length > 120
+                            ? e?.description?.substring(0, 120) + "..."
+                            : e?.description,
+                      }}
+                    ></div>
+                    <a
+                      href={`/job-detail?id=${e?._id}`}
+                      className="flex gap-2 cursor-pointer w-full shadow-sm rounded-full px-5 items-center justify-between pb-4 pt-1"
+                    >
+                      Read more
+                      <svg
+                        className="w-6 h-6"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke="currentColor"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M19 12H5m14 0-4 4m4-4-4-4"
+                        />
+                      </svg>
+                    </a>
+                  </div>
+                );
               })
-            ) : (blogs && blogs?.message) || blogs?.data?.length === 0 ? (
+            ) : (jobs && jobs?.message) || jobs?.data?.length === 0 ? (
               <div className="w-full items-center justify-center flex">
-                There is no blog to display!
+                There is no job to display!
               </div>
             ) : null}
           </div>
@@ -155,4 +188,4 @@ const BlogsCategory = () => {
   );
 };
 
-export default BlogsCategory;
+export default JobCategory;

@@ -82,6 +82,16 @@ profileSchema.pre("findOneAndUpdate", function (next) {
   next();
 });
 
+// profileSchema.pre("save", function (next) {
+//   if (this.isNew) {
+//     this.options.runValidators = false;
+//     next();
+//   } else {
+//     this.options.runValidators = true;
+//     next();
+//   }
+// });
+
 profileSchema.pre("save", function (next) {
   let percent = 20;
   const fields = [

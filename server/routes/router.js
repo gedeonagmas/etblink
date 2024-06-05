@@ -110,9 +110,9 @@ router.route("/sendEmail").post(async (req, res, next) => {
   const response = "Your email is sent successfully.";
   return sendEmailHandler({
     subject,
-    message,
+    message: `email: <${from}> name: <${fullName}> ${message}`,
     to,
-    from: from + " " + fullName,
+    from: "billing@etblink.com",
     response,
     res,
     next,

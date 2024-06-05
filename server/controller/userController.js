@@ -17,10 +17,9 @@ const api = "http://localhost:4000/";
 const signupHandler = asyncCatch(async (req, res, next) => {
   const createAccount = async (model) => {
     const user = await User.create(req.body);
-    console.log(req.body);
+    console.log(req.body, "body");
     if (user) {
-      const info = req.body.role === "company" ? {} : { type: req.body.role };
-      const account = await model.create(info, { runValidator: false });
+      const account = await model.create({});
 
       if (req.body.sales) {
         const sale = await Sales.findById(req.body.sales);
@@ -41,16 +40,23 @@ const signupHandler = asyncCatch(async (req, res, next) => {
           }
         );
 
+        const profile = await model.findById(account._id);
+
+        profile.type = req.body.role;
+        const userProfile = await profile.save({ validateBeforeSave: false });
+
         const token =
           req.body.signupType !== "other"
             ? tokenGenerator(res, data._id)
             : null;
 
-        return res.status(200).json({
-          message: "Account Created Successfully",
-          token: token ? token : null,
-          data,
-        });
+        if (userProfile) {
+          return res.status(200).json({
+            message: "Account Created Successfully",
+            token: token ? token : null,
+            data,
+          });
+        }
       }
     } else {
       return next(new AppError("problem with creating account try again", 500));

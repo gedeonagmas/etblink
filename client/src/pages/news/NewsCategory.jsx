@@ -34,19 +34,19 @@ const NewsCategory = () => {
     tag: ["banners"],
   });
 
-  useEffect(() => {
-    trigger({
-      url: `/user/news?visible=true&limit=6&page=${page}`,
-      tag: ["news"],
-    });
-  }, [page]);
+  // useEffect(() => {
+  //   trigger({
+  //     url: `/user/news?visible=true&limit=6&page=${page}`,
+  //     tag: ["news"],
+  //   });
+  // }, [page]);
 
   useEffect(() => {
     trigger({
       url: `/user/news?visible=true&limit=6&page=${page}&searchField=title&searchValue=${search}`,
       tag: ["news"],
     });
-  }, [search]);
+  }, [search, page]);
 
   return (
     <div className="w-full relative bg-gray-50 bg-dark h-auto">
