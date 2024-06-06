@@ -339,7 +339,9 @@
 import React, { useEffect, useState } from "react";
 import LoadingButton from "../../../components/loading/LoadingButton";
 import {
+  useCreateMutation,
   useLazyReadQuery,
+  useReadQuery,
   useUpdateMutation,
   useUserRegisterMutation,
 } from "../../../features/api/apiSlice";
@@ -357,8 +359,24 @@ const UserSales = ({ type }) => {
   const [search, setSearch] = useState("");
   const [totalPage, setTotalPage] = useState(1);
   const [userType, setUserType] = useState("visitor");
+  const [commission, setCommission] = useState(0);
 
   const [trigger, { data: users, isFetching, isError }] = useLazyReadQuery();
+  const {
+    data: commissionData,
+    isFetching: commissionIsFetching,
+    isError: commissionIsErr,
+  } = useReadQuery({ url: "/user/commissions", tag: ["commissions"] });
+
+  useEffect(() => {
+    if (commissionData) {
+      setCommission(
+        commissionData?.data[0]?.value
+          ? commissionData?.data[0]?.value
+          : commission
+      );
+    }
+  }, [commissionData]);
 
   useEffect(() => {
     setPage(1);
@@ -479,6 +497,9 @@ const UserSales = ({ type }) => {
 
   //register new admin
   const [signupData, signupResponse] = useUserRegisterMutation();
+  const [commissionUpdateData, commissionUpdateResponse] = useUpdateMutation();
+  const [commissionCreateData, commissionCreateResponse] = useCreateMutation();
+  const [commissionPending, setCommissionPending] = useState(false);
   const [signupPending, setSignupPending] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -499,10 +520,34 @@ const UserSales = ({ type }) => {
     }
   }, [signupResponse]);
 
+  const commissionHandler = () => {
+    if (commissionData?.data?.length > 0) {
+      commissionUpdateData({
+        value: commission,
+        url: `/user/commissions?id=${commissionData?.data[0]?._id}`,
+        tag: ["commissions"],
+      });
+    } else {
+      commissionCreateData({
+        value: commission,
+        url: `/user/commissions`,
+        tag: ["commissions"],
+      });
+    }
+  };
+
   console.log(user, "users");
   return (
     <div className="flex px-[4%] min-h-[85vh] pb-5 relative bg-dark bg-white flex-col h-auto w-full gap-5">
       <Response response={deleteResponse} setPending={setDeletePending} />
+      <Response
+        response={commissionCreateResponse}
+        setPending={setCommissionPending}
+      />
+      <Response
+        response={commissionUpdateResponse}
+        setPending={setCommissionPending}
+      />
 
       <select
         onChange={(e) => setUserType(e.target.value)}
@@ -520,7 +565,8 @@ const UserSales = ({ type }) => {
         <option value="youtube-admin">Youtube Admin</option>
         <option value="job-admin">Job Admin</option>
       </select>
-      <div className="flex items-center justify-between">
+
+      <div className="flex items-center gap-5 justify-between">
         <input
           onChange={(e) => setSearch(e.target.value)}
           type="search"
@@ -529,6 +575,30 @@ const UserSales = ({ type }) => {
           placeholder="Search..."
           required
         />
+        {userType === "sales" && (
+          <div className="w-full flex items-center gap-3">
+            <div className="flex flex-col gap-2 ">
+              <p>Sales commission</p>{" "}
+              <input
+                onChange={(e) => setCommission(e.target.value)}
+                value={commission}
+                type="number"
+                class="block w-full max-w-md px-2 h-12 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                placeholder="0"
+                min={0}
+                required
+              />
+            </div>
+
+            <LoadingButton
+              pending={commissionPending}
+              onClick={commissionHandler}
+              title="Change"
+              color="bg-main"
+              width="w-36 sm:rounded-lg sm:border sm:py-2 sm:px-5 sm:hover:bg-red-500"
+            />
+          </div>
+        )}
         {userType === "blog-admin" ||
         userType === "news-admin" ||
         userType === "youtube-admin" ||

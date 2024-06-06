@@ -34,13 +34,7 @@ const rateSchema = new mongoose.Schema(
     rater: {
       type: mongoose.Schema.Types.ObjectId,
       ref: function () {
-        return this.role === "visitor"
-          ? "visitor"
-          : this.role === "company"
-          ? "company"
-          : this.role === "sales"
-          ? "sales"
-          : "admin";
+        return this.role === "company" ? "company" : "userProfile";
       },
     },
 

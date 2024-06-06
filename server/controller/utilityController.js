@@ -5,14 +5,13 @@ const { Save } = require("../models/saveModel");
 const { View } = require("../models/viewModel");
 const AppError = require("../utils/AppError");
 const { User } = require("../models/userModel");
-const { Sales } = require("../models/salesModel");
-const { Visitor } = require("../models/visitorModel");
 const { BoostHistory } = require("../models/boostHistoryModel");
 const { SubscriptionHistory } = require("../models/subscriptionHistoryModel");
 const { Payment } = require("../models/paymentModel");
 const { sendEmailHandler } = require("./emailController");
 const { Notification } = require("../models/notificationModel");
 const { Category } = require("../models/categoryModel");
+const { UserProfile } = require("../models/userProfile");
 const from = "billing@etblink.com";
 
 const notificationSender = async (message, role, receiver) => {
@@ -50,7 +49,7 @@ const createRate = asyncCatch(async (req, res, next) => {
     const company =
       req.body.type === "company"
         ? await Company.findById(req.body.accepter)
-        : await Sales.findById(req.body.accepter);
+        : await UserProfile.findById(req.body.accepter);
 
     const result = rate?.filter(
       (e) => e?._id?.accepter?.toString() === req.body.accepter
@@ -219,33 +218,32 @@ const createView = asyncCatch(async (req, res, next) => {
 });
 
 const upgradeHandler = asyncCatch(async (req, res, next) => {
-  const sales =
-    req.body.role === "sales" && (await Visitor.findById(req.body.user));
-
-  console.log(sales);
   const account =
     req.body.role === "company"
       ? await Company.create({})
-      : await Sales.create(
-          {
-            firstName: sales.firstName ? sales.firstName : undefined,
-            middleName: sales.middleName ? sales.middleName : undefined,
-            lastName: sales.lastName ? sales.lastName : undefined,
-            bio: sales.bio ? sales.bio : undefined,
-            gender: sales.gender ? sales.gender : undefined,
-            phone: sales.phone ? sales.phone : undefined,
-            address: sales.address ? sales.address : undefined,
-            profilePicture: sales.profilePicture
-              ? sales.profilePicture
-              : undefined,
-            profileFillStatus: sales.profileFillStatus
-              ? sales.profileFillStatus
-              : undefined,
-          },
-          { validateBeforeSave: false }
-        );
+      : { _id: req.body.user };
 
   if (account._id) {
+    // if (req.body.role === 'sales') {
+    //   const sales = await Visitor.findById(req.body.user);
+    //   const salesData = await Sales.findById(account._id);
+    //   {
+    //     firstName: sales.firstName ? sales.firstName : undefined,
+    //     middleName: sales.middleName ? sales.middleName : undefined,
+    //     lastName: sales.lastName ? sales.lastName : undefined,
+    //     bio: sales.bio ? sales.bio : undefined,
+    //     gender: sales.gender ? sales.gender : undefined,
+    //     phone: sales.phone ? sales.phone : undefined,
+    //     address: sales.address ? sales.address : undefined,
+    //     profilePicture: sales.profilePicture
+    //       ? sales.profilePicture
+    //       : undefined,
+    //     profileFillStatus: sales.profileFillStatus
+    //       ? sales.profileFillStatus
+    //       : undefined,
+    //   },
+    //   { validateBeforeSave: false }
+    // }
     await User.findByIdAndUpdate(
       { _id: req.body._id },
       {

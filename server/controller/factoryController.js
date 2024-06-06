@@ -254,7 +254,7 @@ const _update = asyncCatch(async (req, res, next) => {
       { runValidators: true, new: true }
     );
 
-    console.log(req.query,'data');
+    console.log(data, "data");
     if (!data)
       return next(
         new AppError("something went wrong unable to update the data")

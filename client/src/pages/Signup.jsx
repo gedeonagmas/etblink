@@ -20,7 +20,6 @@ const Signup = () => {
       email,
       registeredBy: location ? "sales" : "Self",
       sales: location ? location : undefined,
-      commission: location ? 100 : undefined,
       password,
       confirmPassword,
     });

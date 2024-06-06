@@ -13,13 +13,7 @@ const notificationSchema = new mongoose.Schema(
     receiver: {
       type: mongoose.Schema.Types.ObjectId,
       ref: function () {
-        return this.role === "visitor"
-          ? "visitor"
-          : this.role === "company"
-          ? "company"
-          : this.role === "sales"
-          ? "sales"
-          : "admin";
+        return this.role === "company" ? "company" : "userProfile";
       },
     },
     isViewed: {
@@ -36,11 +30,11 @@ const notificationSchema = new mongoose.Schema(
       virtuals: true,
     },
   }
-);
+); 
 
 notificationSchema.pre("findOneAndUpdate", function (next) {
   this.options.runValidators = true;
-  next();
+  next(); 
 });
 
 const Notification = mongoose.model("notification", notificationSchema);

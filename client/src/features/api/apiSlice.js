@@ -56,6 +56,7 @@ export const apiSlice = createApi({
     "news-admins",
     "blogs-admins",
     "notifications",
+    'commissions',
   ],
   endpoints: (builder) => ({
     //user signup

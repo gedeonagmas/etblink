@@ -16,7 +16,7 @@ const profileSchema = new mongoose.Schema(
     lastName: {
       type: String,
       validate: valid.name("Last name"),
-    },
+    }, 
 
     bio: {
       type: String,
@@ -44,16 +44,14 @@ const profileSchema = new mongoose.Schema(
     },
 
     earn: {
-      total: { type: Number, default: 0 },
-      withdraw: { type: Number, default: 0 },
-      current: { type: Number, default: 0 },
+      total: { type: Number },
+      withdraw: { type: Number },
+      current: { type: Number },
     },
 
     rating: {
-      type: {
-        total: { type: Number, default: 0 },
-        average: { type: Number, default: 0 },
-      },
+      total: { type: Number },
+      average: { type: Number },
     },
 
     profilePicture: {

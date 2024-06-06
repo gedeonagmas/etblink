@@ -161,7 +161,7 @@ function App() {
               <Route path="/dashboard/sales" element={<Sellers />}></Route>
               <Route
                 path="/dashboard/sales/profile"
-                element={<UsersProfile profileType="sales" />}
+                element={<UsersProfile />}
               ></Route>
               <Route
                 path="/dashboard/sales/company"
@@ -189,7 +189,7 @@ function App() {
               ></Route>
               <Route
                 path="/dashboard/admin/profile"
-                element={<UsersProfile profileType="admins" />}
+                element={<UsersProfile />}
               ></Route>
               <Route
                 path="/dashboard/admin/youtube"
@@ -315,7 +315,7 @@ function App() {
               <Route path="/dashboard/visitor" element={<Visitors />}></Route>
               <Route
                 path="/dashboard/visitor/profile"
-                element={<UsersProfile profileType="visitors" />}
+                element={<UsersProfile />}
               ></Route>
               {/* ################################################################### */}
               {/* ############################## NEWS-ADMIN ############################## */}
@@ -325,7 +325,7 @@ function App() {
               ></Route>
               <Route
                 path="/dashboard/news-admin/profile"
-                element={<UsersProfile profileType="news-admins" />}
+                element={<UsersProfile />}
               ></Route>
               <Route
                 path="/dashboard/news-admin/news"
@@ -343,7 +343,7 @@ function App() {
               ></Route>
               <Route
                 path="/dashboard/youtube-admin/profile"
-                element={<UsersProfile profileType="youtube-admins" />}
+                element={<UsersProfile />}
               ></Route>
               <Route
                 path="/dashboard/youtube-admin/youtube"
@@ -361,7 +361,7 @@ function App() {
               ></Route>{" "}
               <Route
                 path="/dashboard/blog-admin/profile"
-                element={<UsersProfile profileType="blog-admins" />}
+                element={<UsersProfile />}
               ></Route>
               <Route
                 path="/dashboard/blog-admin/blog"
@@ -376,7 +376,7 @@ function App() {
               <Route path="/dashboard/job-admin" element={<Visitors />}></Route>{" "}
               <Route
                 path="/dashboard/job-admin/profile"
-                element={<UsersProfile profileType="job-admins" />}
+                element={<UsersProfile />}
               ></Route>
               <Route
                 path="/dashboard/job-admin/job"

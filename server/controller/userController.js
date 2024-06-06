@@ -5,13 +5,8 @@ const { tokenGenerator } = require("../utils/tokenGenerator");
 const crypto = require("crypto");
 const { Company } = require("../models/companyModel");
 const { sendEmailHandler } = require("./emailController");
-const { Visitor } = require("../models/visitorModel");
-const { Sales } = require("../models/salesModel");
-const { Admin } = require("../models/adminModel");
-const { BlogAdmin } = require("../models/blogsAdminModel");
-const { NewsAdmin } = require("../models/newsAdminModel");
-const { YoutubeAdmin } = require("../models/youtubeAdminModel");
 const { UserProfile } = require("../models/userProfile");
+const { Commission } = require("../models/salesCommission");
 const api = "http://localhost:4000/";
 
 const signupHandler = asyncCatch(async (req, res, next) => {
@@ -21,9 +16,10 @@ const signupHandler = asyncCatch(async (req, res, next) => {
     if (user) {
       const account = await model.create({});
 
-      if (req.body.sales) {
-        const sale = await Sales.findById(req.body.sales);
-        sale.earn.total = sale.earn.total + req.body.commission;
+      if (req.body.sales && req.body.role === "company") {
+        const sale = await UserProfile.findById(req.body.sales);
+        const commission = await Commission.find();
+        sale.earn.total = sale.earn.total + commission[0]?.value;
         sale.earn.current = sale.earn.total - sale.earn.withdraw;
         sale.earn.withdraw = sale.earn.total - sale.earn.current;
         account.registeredBy = req.body.registeredBy;
@@ -41,6 +37,14 @@ const signupHandler = asyncCatch(async (req, res, next) => {
         );
 
         const profile = await model.findById(account._id);
+
+        if (req.body.role === "sales") {
+          profile.earn.total = 0;
+          profile.earn.current = 0;
+          profile.earn.withdraw = 0;
+          profile.rating.total = 0;
+          profile.rating.average = 0;
+        }
 
         profile.type = req.body.role;
         const userProfile = await profile.save({ validateBeforeSave: false });

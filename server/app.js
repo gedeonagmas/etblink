@@ -15,7 +15,7 @@ const { boost } = require("./controller/backgroundJobController.js");
 const app = express();
 // let cache = apicache.middleware;
 // app.use(cache("5 minutes"));
-// const __dirname = path.resolve();
+// const __dirname = path.resolve(); 
 
 // process.on("uncaughtException", (err) => {
 //   console.log("SHUTTING DOWN ");

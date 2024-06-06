@@ -1,6 +1,4 @@
 const mongoose = require("mongoose");
-const valid = require("../utils/validator");
-const { Company } = require("./companyModel");
 
 const viewSchema = new mongoose.Schema(
   {
@@ -16,13 +14,7 @@ const viewSchema = new mongoose.Schema(
     viewer: {
       type: mongoose.Schema.Types.ObjectId,
       ref: function () {
-        return this.role === "visitor"
-          ? "visitor"
-          : this.role === "company"
-          ? "company"
-          : this.role === "sales"
-          ? "sales"
-          : "admin";
+        return this.role === "company" ? "company" : "userProfile";
       },
     },
   },

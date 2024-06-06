@@ -16,13 +16,7 @@ const saveSchema = new mongoose.Schema(
     saver: {
       type: mongoose.Schema.Types.ObjectId,
       ref: function () {
-        return this.role === "visitor"
-          ? "visitor"
-          : this.role === "company"
-          ? "company"
-          : this.role === "sales"
-          ? "sales"
-          : "admin";
+        return this.role === "company" ? "company" : "userProfile";
       },
     },
   },

@@ -337,9 +337,7 @@ const UsersProfile = ({ profileType }) => {
     formData.append("profilePicture", profilePicture);
     formData.append(
       "url",
-      `/user/${profileType ? profileType : type}?id=${
-        profileType ? user?.user?._id : users?.data[0]?.user?._id
-      }`
+      `/user/userProfiles?id=${users?.data[0]?.user?._id}`
     );
     formData.append("tag", ["users"]);
 
