@@ -10,7 +10,8 @@ const sendEmailHandler = ({
   response,
   res,
   next,
-  html,
+  button,
+  link,
   email,
 }) => {
   const transporter = nodemailer.createTransport({
@@ -24,11 +25,12 @@ const sendEmailHandler = ({
   });
 
   const mailOptions = {
-    from: from ? from : "Makuta Law Firm <donotreply@makutalawyers.com>",
+    from: from
+      ? from
+      : "Ethiopian Business Link <donotreply@makutalawyers.com>",
     to: email ? email : to,
-    text: message,
     subject: subject,
-    html: emailTemplate(subject, message),
+    html: emailTemplate({ subject, message, button, link }),
   };
 
   return console.log("email sent");

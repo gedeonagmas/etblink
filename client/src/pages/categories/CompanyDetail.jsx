@@ -108,7 +108,7 @@ const CompanyDetail = (props) => {
   };
 
   useEffect(() => {
-    location && viewHandler();
+    location && currentUser && viewHandler();
   }, []);
 
   useEffect(() => {

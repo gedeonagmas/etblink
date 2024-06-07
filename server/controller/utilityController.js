@@ -12,9 +12,10 @@ const { sendEmailHandler } = require("./emailController");
 const { Notification } = require("../models/notificationModel");
 const { Category } = require("../models/categoryModel");
 const { UserProfile } = require("../models/userProfile");
+const { message } = require("./../utils/messages");
 const from = "billing@etblink.com";
 
-const notificationSender = async (message, role, receiver) => {
+const sendNotificationHandler = async ({ message, role, receiver }) => {
   return await Notification.create({
     message,
     role,
@@ -23,12 +24,12 @@ const notificationSender = async (message, role, receiver) => {
 };
 
 const emailAndNotificationSender = async (subject, message, e, from) => {
-  notificationSender(message, e?.role, e?.user?._id);
+  sendNotificationHandler(message, e?.role, e?.user?._id);
   return sendEmailHandler({ subject, message, to: e?.email, from });
 };
 
 const createRate = asyncCatch(async (req, res, next) => {
-  const rateHandler = async () => {
+  const rateHandler = async (val) => {
     const rate = await Rate.aggregate([
       {
         $group: {
@@ -45,32 +46,41 @@ const createRate = asyncCatch(async (req, res, next) => {
       },
     ]);
 
-    const rateAccepter =
-      req.body.type === "company"
-        ? await Company.findById(req.body.accepter)
-        : await UserProfile.findById(req.body.accepter);
+    // const rateAccepter =
+    //   req.body.type === "company"
+    //     ? await Company.findById(req.body.accepter)
+    //     : await UserProfile.findById(req.body.accepter);
+
+    const user = await User.find({ user: req.body.accepter }).populate("user");
 
     const result = rate?.filter(
       (e) => e?._id?.accepter?.toString() === req.body.accepter
     );
 
     // console.log(result, "result");
-    rateAccepter.rating.total = result[0]?.total;
-    rateAccepter.rating.average = result[0]?.average?.toFixed(1);
+    // rateAccepter.rating.total = result[0]?.total;
+    // rateAccepter.rating.average = result[0]?.average?.toFixed(1);
+    // console.log(user);
+    user[0].user.rating.total = result[0]?.total;
+    user[0].user.rating.average = result[0]?.average?.toFixed(1);
 
-    await rateAccepter.save();
+    const response = await user[0].user.save();
+    if (response) {
+      sendNotificationHandler({
+        message: message.rate.message,
+        role: req.body.role,
+        receiver: req.body.accepter,
+      });
 
-    const user = await User.find({ user: req.body.accepter });
-    if (user) {
-      const subject = "Your rating is updated.";
-      const message = `new service plan is added to your company and your service is released from  thank you for working with us!!!`;
-
-      emailAndNotificationSender(
-        subject,
-        message,
-        user[0],
-        "donotreplay@etblink.com"
-      );
+      sendEmailHandler({
+        subject: message.rate.subject,
+        to: user[0]?.email,
+        from: message.emailOne,
+        message: message.rate.message,
+        button: message.rate.button,
+        link: message.rate.link,
+        next,
+      });
     }
   };
 
@@ -80,7 +90,7 @@ const createRate = asyncCatch(async (req, res, next) => {
   });
 
   if (data.length > 0) {
-    await Rate.findOneAndUpdate({ _id: data[0]._id }, { ...req.body });
+    await Rate.findOneAndUpdate({ _id: data[0]?._id }, { ...req.body });
     rateHandler("update");
     return res
       .status(200)
@@ -192,6 +202,8 @@ const deleteSave = asyncCatch(async (req, res, next) => {
 });
 
 const createView = asyncCatch(async (req, res, next) => {
+  const user = await User.find({ user: req.body.company });
+
   const views = await View.find({
     company: req.body.company,
     viewer: req.body.viewer,
@@ -200,26 +212,35 @@ const createView = asyncCatch(async (req, res, next) => {
     return res
       .status(200)
       .json({ message: "Company is already in your list." });
+  } else {
+    await View.create(req.body);
+
+    const company = await Company.findById(req.body.company);
+    company.views.total = company.views.total + 1;
+    company.views.available = company.views.available + 1;
+    await company.save();
+
+    sendNotificationHandler({
+      message: message.view.message,
+      role: req.body.role,
+      receiver: company?._id,
+    });
+
+    sendEmailHandler({
+      subject: message.view.subject,
+      to: user[0]?.email,
+      from: message.emailOne,
+      message: message.view.message,
+      button: message.view.button,
+      link: message.view.link,
+      next,
+    });
+
+    return res.status(200).json({
+      status: "Created",
+      message: "company added to your list.",
+    });
   }
-  await View.create(req.body);
-
-  const company = await Company.findById(req.body.company);
-  company.views.total = company.views.total + 1;
-  company.views.available = company.views.available + 1;
-  await company.save();
-
-  const user = await User.find({ user: req.body.company });
-  const subject = `Your company is viewed.`;
-  const message = `Your company is viewed by a new client.`;
-  const html = `<div>Your company is viewed by a new client. click here <a style={{background:'yellow',padding:'5px', border-radius:'20px',color:white,padding:10px;}} href=${
-    "https://etblink.com/dashboard/" + user[0]?.role + "/views"
-  }>here</a> for more detail.</div>`;
-  // sendEmailHandler({ subject, to: user[0]?.email, from, html, next });
-
-  return res.status(200).json({
-    status: "Created",
-    message: "company added to your list.",
-  });
 });
 
 const upgradeHandler = asyncCatch(async (req, res, next) => {
@@ -444,7 +465,7 @@ const paymentHandler = asyncCatch(async (req, res, next) => {
     //######### send email and local notifications ###############
     // const subject = "Your Transaction is Successful thank you.";
     // const message = `Your Transaction is Successful thank you.`;
-    // notificationSender(message, "company", company?._id);
+    // sendNotificationHandler(message, "company", company?._id);
     // return sendEmailHandler(subject, message, company?.email, from);
   }
 
@@ -560,7 +581,7 @@ module.exports = {
   upgradeHandler,
   paymentHandler,
   companyAggregation,
-  notificationSender,
+  sendNotificationHandler,
   notificationView,
   recentlyAddedCompany,
 };
