@@ -20,7 +20,7 @@ const schema = new mongoose.Schema(
     },
 
     subCategory: {
-      type: String, 
+      type: String,
     },
 
     categoryImage: {
@@ -70,18 +70,10 @@ const schema = new mongoose.Schema(
       validate: valid.paragraph("description", 100, 10000),
     },
 
-    // latitude: {
-    //   type: String,
-    // },
-
-    // longitude: {
-    //   type: String,
-    // },
-
     maps: {
       type: String,
     },
-    
+
     services: {
       type: [
         {
@@ -102,10 +94,7 @@ const schema = new mongoose.Schema(
 
     logo: {
       type: String,
-      // default: "",
       validate: valid.required("Logo"),
-      // data: Buffer,
-      // contentTYpe:String,
     },
 
     banner: {
@@ -139,14 +128,12 @@ const schema = new mongoose.Schema(
 
     sales: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "sales",
+      ref: "userProfile",
     },
 
     rating: {
-      type: {
-        total: { type: Number, default: 0 },
-        average: { type: Number, default: 0 },
-      },
+      total: { type: Number, default: 0 },
+      average: { type: Number, default: 0 },
     },
 
     currentBalance: { type: Number, default: 0 },
@@ -160,14 +147,10 @@ const schema = new mongoose.Schema(
       total: { type: Number, default: 0 },
     },
 
-    profileFillStatus: {
+    profileFill: {
       type: Number,
+      default: 16,
     },
-
-    // boost: {
-    //   type: mongoose.Schema.Types.ObjectId,
-    //   ref: "boostHistory",
-    // },
 
     boostStartDate: {
       type: Number,
@@ -188,11 +171,6 @@ const schema = new mongoose.Schema(
       type: String,
       default: "",
     },
-
-    // subscription: {
-    //   type: mongoose.Schema.Types.ObjectId,
-    //   ref: "subscriptionHistory",
-    // },
 
     subscriptionStartDate: {
       type: Number,
@@ -227,6 +205,31 @@ const schema = new mongoose.Schema(
 
 schema.pre("findOneAndUpdate", function (next) {
   this.options.runValidators = true;
+  let percent = 16;
+  const fields = [
+    "name",
+    "type",
+    "title",
+    "phone",
+    "video",
+    "website",
+    "description",
+    "services",
+    "features",
+    "logo",
+    "banner",
+    "galleries",
+    "socialMedias",
+    "workingDays",
+  ];
+
+  fields.map((field) => {
+    if (this._update[field]?.length > 0) {
+      percent += 6;
+    }
+  });
+
+  this._update.profileFill = percent;
   next();
 });
 

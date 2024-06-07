@@ -18,7 +18,7 @@ const NewsDetailAdmin = () => {
     isFetching,
     isError,
   } = useReadQuery({
-    url: `/user/news?_id=${location}&populatingType=news&populatingValue=updatedBy,createdBy`,
+    url: `/user/news?_id=${location}&populatingValue=updatedBy,createdBy`,
     tag: ["news"],
   });
 

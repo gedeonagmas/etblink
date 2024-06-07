@@ -4,7 +4,7 @@ import { useUserRegisterMutation } from "../features/api/apiSlice";
 import Response from "../components/Response";
 import LoadingButton from "../components/loading/LoadingButton";
 
-const Signup = () => {
+const Signup = ({ type }) => {
   window.scrollTo({ top: 0 });
   const location = useLocation()?.search?.split("?id=")[1];
   const [signupData, signupResponse] = useUserRegisterMutation();
@@ -16,7 +16,7 @@ const Signup = () => {
 
   const signupHandler = () => {
     signupData({
-      role: location ? "company" : role,
+      role: location ? "company" : type === "admin" ? "admin" : role,
       email,
       registeredBy: location ? "sales" : "Self",
       sales: location ? location : undefined,
@@ -38,9 +38,10 @@ const Signup = () => {
             for="email"
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
           >
-            Register {location ? "as a Company" : "as"}
+            Register{" "}
+            {location ? "as a Company" : type === "admin" ? " as Admin" : "as"}
           </label>
-          {!location && (
+          {!location && type !== "admin" && (
             <select
               name=""
               id=""

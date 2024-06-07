@@ -59,7 +59,7 @@ const fileHandler = (value, req) => {
 //create
 const _create = asyncCatch(async (req, res, next) => {
   const model = selectModel(req.params.table, next);
-  console.log(req.body, "body");
+  // console.log(req.body, "body");
   const value = { ...req.body };
   const files = fileHandler(value, req);
   if (model) {
@@ -231,7 +231,7 @@ const _read = asyncCatch(async (req, res, next) => {
 //update
 const _update = asyncCatch(async (req, res, next) => {
   const model = selectModel(req.params.table, next);
-  console.log(req.body, "body");
+  // console.log(req.body, "body");
   const value = { ...req.body };
   const files = fileHandler(value, req);
   // console.log(files, "files");
@@ -254,7 +254,7 @@ const _update = asyncCatch(async (req, res, next) => {
       { runValidators: true, new: true }
     );
 
-    console.log(data, "data");
+    // console.log(data, "data");
     if (!data)
       return next(
         new AppError("something went wrong unable to update the data")

@@ -16,7 +16,7 @@ const profileSchema = new mongoose.Schema(
     lastName: {
       type: String,
       validate: valid.name("Last name"),
-    }, 
+    },
 
     bio: {
       type: String,
@@ -33,10 +33,9 @@ const profileSchema = new mongoose.Schema(
       validate: valid.phone("Phone"),
     },
 
-    type: {
-      type: String,
-      validate: valid.phone("Type"),
-    },
+    // type: {
+    //   type: String,
+    // },
 
     address: {
       type: String,
@@ -59,7 +58,7 @@ const profileSchema = new mongoose.Schema(
       default: "",
     },
 
-    profileFillStatus: {
+    profileFill: {
       type: Number,
       default: 20,
     },
@@ -77,20 +76,6 @@ const profileSchema = new mongoose.Schema(
 
 profileSchema.pre("findOneAndUpdate", function (next) {
   this.options.runValidators = true;
-  next();
-});
-
-// profileSchema.pre("save", function (next) {
-//   if (this.isNew) {
-//     this.options.runValidators = false;
-//     next();
-//   } else {
-//     this.options.runValidators = true;
-//     next();
-//   }
-// });
-
-profileSchema.pre("save", function (next) {
   let percent = 20;
   const fields = [
     "firstName",
@@ -98,17 +83,18 @@ profileSchema.pre("save", function (next) {
     "lastName",
     "gender",
     "phone",
+    "bio",
     "address",
     "profilePicture",
   ];
+
   fields.map((field) => {
-    if (this[field]?.length > 0) {
+    if (this._update[field]?.length > 0) {
       percent += 10;
     }
   });
 
-  // console.log(this, percent, "percent");
-  this.profileFillStatus = percent;
+  this._update.profileFill = percent;
   next();
 });
 

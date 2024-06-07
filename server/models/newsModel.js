@@ -32,16 +32,12 @@ const newsSchema = new mongoose.Schema(
 
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: function () {
-        return this.role === "admin" ? "admin" : "news-admin";
-      },
+      ref: "userProfile",
     },
 
     updatedBy: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: function () {
-        return this.role === "admin" ? "admin" : "news-admin";
-      },
+      ref: "userProfile",
     },
 
     visible: {

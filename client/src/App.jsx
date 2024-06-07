@@ -73,6 +73,11 @@ function App() {
     tag: ["users"],
   });
 
+  const { data: admin } = useReadQuery({
+    url: "/user/users?role=admin",
+    tag: ["users"],
+  });
+
   useEffect(() => {
     if (user) {
       localStorage.setItem("etblink_user", JSON.stringify(user));
@@ -81,7 +86,7 @@ function App() {
 
   // useEffect(() => {});
   // const user = { data: { email: "gedi@gmail.com" } };
-  // console.log(user?.data, "from app js");
+  console.log(admin, "from app js");
   return (
     <Flowbite>
       <userContext.Provider value={{ user: user?.data }}>
@@ -90,6 +95,12 @@ function App() {
             <Route path="/" element={<HomeTemplate />}>
               <Route path="/" element={<Home />}></Route>
               <Route path="/signup" element={<Signup />}></Route>
+              {admin?.total===0 && (
+                <Route
+                  path="/signup/admin"
+                  element={<Signup type="admin" />}
+                ></Route>
+              )}
               <Route path="/forget" element={<Forget />}></Route>
               <Route path="/reset" element={<Reset />}></Route>
               <Route path="/local" element={<Category type="local" />}></Route>
@@ -233,31 +244,11 @@ function App() {
                 path="/dashboard/admin/job/detail"
                 element={<UpdateJob />}
               ></Route>
-              {/* <Route
-                path="/dashboard/admin/sales"
-                element={<Users type="sales" />}
-              ></Route>
-              <Route
-                path="/dashboard/admin/sales/manage"
-                element={<UsersProfile type="sales" />}
-              ></Route> */}
               <Route path="/dashboard/admin/users" element={<Users />}></Route>
               <Route
                 path="/dashboard/admin/users/manage"
                 element={<UsersProfile />}
               ></Route>
-              {/* <Route
-                path="/dashboard/admin/visitor"
-                element={<Users type="visitor" />}
-              ></Route>
-              <Route
-                path="/dashboard/admin/visitors/manage"
-                element={<UsersProfile type="visitor" />}
-              ></Route> */}
-              {/* <Route
-                path="/dashboard/admin/companies"
-                element={<Users type="company" />}
-              ></Route> */}
               <Route
                 path="/dashboard/admin/companies/manage"
                 element={<Profile />}
@@ -270,38 +261,6 @@ function App() {
                 path="/dashboard/admin/banners"
                 element={<Banners />}
               ></Route>
-              {/* <Route
-                path="/dashboard/admin/news-admins"
-                element={<Users type="news-admin" />}
-              ></Route>
-              <Route
-                path="/dashboard/admin/news-admins/manage"
-                element={<UsersProfile type="news-admin" />}
-              ></Route>
-              <Route
-                path="/dashboard/admin/blog-admins"
-                element={<Users type="blog-admin" />}
-              ></Route>
-              <Route
-                path="/dashboard/admin/blog-admins/manage"
-                element={<UsersProfile type="blog-admin" />}
-              ></Route>
-              <Route
-                path="/dashboard/admin/youtube-admins"
-                element={<Users type="youtube-admin" />}
-              ></Route>
-              <Route
-                path="/dashboard/admin/youtube-admins/manage"
-                element={<UsersProfile type="youtube-admin" />}
-              ></Route>
-              <Route
-                path="/dashboard/admin/job-admins"
-                element={<Users type="job-admin" />}
-              ></Route>
-              <Route
-                path="/dashboard/admin/job-admins/manage"
-                element={<UsersProfile type="job-admin" />}
-              ></Route> */}
               <Route
                 path="/dashboard/admin/approval"
                 element={<Bills />}

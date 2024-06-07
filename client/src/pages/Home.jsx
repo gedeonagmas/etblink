@@ -33,7 +33,7 @@ const Home = () => {
     isFetching: companyFetching,
     isError: companyError,
   } = useReadQuery({
-    url: "/user/companies?isBoosted[eq]=true&limit=6&page=1",
+    url: "/user/companies?profileFill[gte]=90&isBoosted[eq]=true&limit=6&page=1",
     tag: ["companies"],
   });
 

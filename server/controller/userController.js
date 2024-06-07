@@ -10,11 +10,24 @@ const { Commission } = require("../models/salesCommission");
 const api = "http://localhost:4000/";
 
 const signupHandler = asyncCatch(async (req, res, next) => {
-  const createAccount = async (model) => {
-    const user = await User.create(req.body);
-    console.log(req.body, "body");
-    if (user) {
-      const account = await model.create({});
+  const user = await User.create(req.body);
+  console.log(req.body, "body");
+  if (user) {
+    const account =
+      req.body.role === "company"
+        ? await Company.create({})
+        : await UserProfile.create({});
+
+    if (account._id) {
+      const data = await User.findByIdAndUpdate(
+        { _id: user._id },
+        {
+          $set: { user: account._id },
+        }
+      );
+
+
+      const profile = await UserProfile.findById(account._id);
 
       if (req.body.sales && req.body.role === "company") {
         const sale = await UserProfile.findById(req.body.sales);
@@ -28,69 +41,34 @@ const signupHandler = asyncCatch(async (req, res, next) => {
         await sale.save();
       }
 
-      if (account._id) {
-        const data = await User.findByIdAndUpdate(
-          { _id: user._id },
-          {
-            $set: { user: account._id },
-          }
-        );
-
-        const profile = await model.findById(account._id);
-
-        if (req.body.role === "sales") {
-          profile.earn.total = 0;
-          profile.earn.current = 0;
-          profile.earn.withdraw = 0;
-          profile.rating.total = 0;
-          profile.rating.average = 0;
-        }
-
-        profile.type = req.body.role;
-        const userProfile = await profile.save({ validateBeforeSave: false });
-
-        const token =
-          req.body.signupType !== "other"
-            ? tokenGenerator(res, data._id)
-            : null;
-
-        if (userProfile) {
-          return res.status(200).json({
-            message: "Account Created Successfully",
-            token: token ? token : null,
-            data,
-          });
-        }
+      if (req.body.role === "sales") {
+        profile.earn.total = 0;
+        profile.earn.current = 0;
+        profile.earn.withdraw = 0;
+        profile.rating.total = 0;
+        profile.rating.average = 0;
       }
-    } else {
-      return next(new AppError("problem with creating account try again", 500));
+
+      // if (req.body.role !== "company") {
+      //   profile.type = req.body.role;
+      // }
+
+      const userProfile = await profile.save({ validateBeforeSave: false });
+
+      const token =
+        req.body.signupType !== "other" ? tokenGenerator(res, data._id) : null;
+
+      if (userProfile) {
+        return res.status(200).json({
+          message: "Account Created Successfully",
+          token: token ? token : null,
+          data,
+        });
+      }
     }
-  };
-
-  if (req.body.role === "company") {
-    return createAccount(Company);
   } else {
-    return createAccount(UserProfile);
+    return next(new AppError("problem with creating account try again", 500));
   }
-
-  // switch (req.body.role) {
-  //   // case "visitor":
-  //   //   return createAccount(Visitor);
-  //   // case "sales":
-  //   //   return createAccount(Sales);
-  //   case "company":
-  //     return createAccount(Company);
-  //   // case "admin":
-  //   //   return createAccount(Admin);
-  //   // case "news-admin":
-  //   //   return createAccount(NewsAdmin);
-  //   // case "blog-admin":
-  //   //   return createAccount(BlogAdmin);
-  //   // case "youtube-admin":
-  //   //   return createAccount(YoutubeAdmin);
-  //   default:
-  //     return createAccount(UserProfile);
-  // }
 });
 
 const loginHandler = asyncCatch(async (req, res, next) => {

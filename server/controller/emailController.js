@@ -31,25 +31,25 @@ const sendEmailHandler = ({
     html: emailTemplate(subject, message),
   };
 
-  // return console.log("email sent");
-  return transporter.sendMail(mailOptions, function (error, info) {
-    console.log(info, "info");
-    if (error) {
-      console.log("Error in sending email  " + error);
-      return next(
-        new AppError(
-          "Something went wrong unable to send the email, check your connection and email then try again!",
-          500
-        )
-      );
-    } else if (res) {
-      console.log("email sent successfully from response");
-      return res.status(200).json({ message: response });
-    } else {
-      console.log("email sent successfully");
-      return;
-    }
-  });
+  return console.log("email sent");
+  // return transporter.sendMail(mailOptions, function (error, info) {
+  //   console.log(info, "info");
+  //   if (error) {
+  //     console.log("Error in sending email  " + error);
+  //     return next(
+  //       new AppError(
+  //         "Something went wrong unable to send the email, check your connection and email then try again!",
+  //         500
+  //       )
+  //     );
+  //   } else if (res) {
+  //     console.log("email sent successfully from response");
+  //     return res.status(200).json({ message: response });
+  //   } else {
+  //     console.log("email sent successfully");
+  //     return;
+  //   }
+  // });
 };
 
 module.exports = { sendEmailHandler };

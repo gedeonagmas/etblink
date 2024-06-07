@@ -1,19 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import Banner from "../../components/Banner";
-import CompanyItemsCompany from "../../components/CompanyItemCategory";
 import CompanyItems from "../../components/CompanyItems";
-import Map from "../../components/Map";
-import SmallBanner from "../../components/SmallBanner";
 import {
   useCompanyAggregateQuery,
   useLazyReadQuery,
   useReadQuery,
-  useReadRateQuery,
 } from "../../features/api/apiSlice";
 import Loading from "../../components/loading/Loading";
 import ResponsivePagination from "react-responsive-pagination";
 import "./pagination.css";
-import { cityData, countryData } from "../categoryData";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
@@ -21,7 +16,6 @@ import { useLocation } from "react-router-dom";
 
 const Category = ({ type }) => {
   const [page, setPage] = useState(1);
-  console.log(type, "ttttttttttttttttttttt");
   const location = useLocation()?.state;
   const {
     data: categoryData,
@@ -105,7 +99,7 @@ const Category = ({ type }) => {
       : "";
 
     trigger({
-      url: `/user/companies?type=${type}&limit=15&page=${page}${cityKeyword}${countryKeyword}${categoryKeyword}${subCategoryKeyword}${searchKeyword}&populatingValue=sales`,
+      url: `/user/companies?type=${type}&profileFill[gte]=90&limit=15&page=${page}${cityKeyword}${countryKeyword}${categoryKeyword}${subCategoryKeyword}${searchKeyword}&populatingValue=sales`,
       tag: ["companies"],
     });
   }, [city, country, category, subCategory, search, page]);

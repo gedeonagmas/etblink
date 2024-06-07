@@ -369,7 +369,7 @@ const UserSales = ({ type }) => {
   } = useReadQuery({ url: "/user/commissions", tag: ["commissions"] });
 
   useEffect(() => {
-    if (commissionData) {
+    if (commissionData?.data) {
       setCommission(
         commissionData?.data[0]?.value
           ? commissionData?.data[0]?.value

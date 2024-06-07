@@ -7,7 +7,7 @@ const emailTemplate = (subject, message) => {
       <body>
           Hello World!
       </body>
-  </html>`;
+  </html>`; 
 };
 
 module.exports = { emailTemplate };

@@ -29,16 +29,12 @@ const blogModel = new mongoose.Schema(
 
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: function () {
-        return this.role === "admin" ? "admin" : "blog-admin";
-      },
+      ref: "userProfile",
     },
 
     updatedBy: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: function () {
-        return this.role === "admin" ? "admin" : "blog-admin";
-      },
+      ref: "userProfile",
     },
 
     visible: {

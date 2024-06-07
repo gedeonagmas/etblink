@@ -33,6 +33,7 @@ const CompanyDetail = (props) => {
     tag: ["companies", "users"],
   });
 
+  console.log(companyId, "id", location, "location", data, "data");
   // const {
   //   data: rates,
   //   isFetching: rateIsFetching,
@@ -124,7 +125,7 @@ const CompanyDetail = (props) => {
   ] = useLazyReadQuery();
 
   useEffect(() => {
-    if (company.sales) {
+    if (company?.sales) {
       saleTrigger({
         url: `/user/users?_id[eq]=${company?.sales}&populatingValue=user`,
         tag: ["users"],
@@ -154,7 +155,7 @@ const CompanyDetail = (props) => {
     setTotalPage(Math.ceil(rates?.total / 6));
   }, [rates]);
 
-  console.log(company, "sales data");
+  // console.log(data, "sales data");
   return (
     <div className="relative overflow-hidden z-20">
       <Response response={rateResponse} setPending={setPending} />
@@ -311,7 +312,11 @@ const CompanyDetail = (props) => {
                     />
                   </svg>
 
-                  {company?.type === "local" ? company?.city : company?.country}
+                  {company?.type === "local"
+                    ? company?.city
+                    : company?.type === "global"
+                    ? company?.country
+                    : company?.address}
                 </p>
                 {/* <p className="py-2  px-3 rounded-sm flex items-center justify-center  gap-2">
                   <svg

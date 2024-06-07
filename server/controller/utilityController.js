@@ -22,8 +22,7 @@ const notificationSender = async (message, role, receiver) => {
   });
 };
 
-const emailSender = async (subject, message, e) => {
-  const from = "billing@etblink.com";
+const emailAndNotificationSender = async (subject, message, e, from) => {
   notificationSender(message, e?.role, e?.user?._id);
   return sendEmailHandler({ subject, message, to: e?.email, from });
 };
@@ -46,7 +45,7 @@ const createRate = asyncCatch(async (req, res, next) => {
       },
     ]);
 
-    const company =
+    const rateAccepter =
       req.body.type === "company"
         ? await Company.findById(req.body.accepter)
         : await UserProfile.findById(req.body.accepter);
@@ -55,17 +54,23 @@ const createRate = asyncCatch(async (req, res, next) => {
       (e) => e?._id?.accepter?.toString() === req.body.accepter
     );
 
-    company.rating.total = result[0]?.total;
-    company.rating.average = result[0]?.average?.toFixed(1);
+    // console.log(result, "result");
+    rateAccepter.rating.total = result[0]?.total;
+    rateAccepter.rating.average = result[0]?.average?.toFixed(1);
 
-    await company.save();
+    await rateAccepter.save();
 
     const user = await User.find({ user: req.body.accepter });
     if (user) {
       const subject = "Your rating is updated.";
       const message = `new service plan is added to your company and your service is released from  thank you for working with us!!!`;
 
-      emailSender(subject, message, user[0], "donotreplay@etblink.com");
+      emailAndNotificationSender(
+        subject,
+        message,
+        user[0],
+        "donotreplay@etblink.com"
+      );
     }
   };
 
@@ -155,7 +160,7 @@ const createSave = asyncCatch(async (req, res, next) => {
   const user = await User.find({ user: req.body.company });
   const subject = `Your company is added to save list.`;
   const message = `Your company is added to save list.`;
-  sendEmailHandler({ subject, message, to: user[0]?.email, from });
+  sendEmailHandler({ subject, message, to: user[0]?.email, from, next });
 
   return res.status(200).json({
     status: "Created",
@@ -224,26 +229,6 @@ const upgradeHandler = asyncCatch(async (req, res, next) => {
       : { _id: req.body.user };
 
   if (account._id) {
-    // if (req.body.role === 'sales') {
-    //   const sales = await Visitor.findById(req.body.user);
-    //   const salesData = await Sales.findById(account._id);
-    //   {
-    //     firstName: sales.firstName ? sales.firstName : undefined,
-    //     middleName: sales.middleName ? sales.middleName : undefined,
-    //     lastName: sales.lastName ? sales.lastName : undefined,
-    //     bio: sales.bio ? sales.bio : undefined,
-    //     gender: sales.gender ? sales.gender : undefined,
-    //     phone: sales.phone ? sales.phone : undefined,
-    //     address: sales.address ? sales.address : undefined,
-    //     profilePicture: sales.profilePicture
-    //       ? sales.profilePicture
-    //       : undefined,
-    //     profileFillStatus: sales.profileFillStatus
-    //       ? sales.profileFillStatus
-    //       : undefined,
-    //   },
-    //   { validateBeforeSave: false }
-    // }
     await User.findByIdAndUpdate(
       { _id: req.body._id },
       {
@@ -251,20 +236,36 @@ const upgradeHandler = asyncCatch(async (req, res, next) => {
       }
     );
 
-    await Save.updateMany(
-      { saver: req.body.user },
-      { $set: { saver: account._id, role: req.body.role } }
-    );
+    if (req.body.role === "sales") {
+      const profile = await UserProfile.findById(account._id);
 
-    await View.updateMany(
-      { viewer: req.body.user },
-      { $set: { viewer: account._id, role: req.body.role } }
-    );
+      profile.earn.total = 0;
+      profile.earn.current = 0;
+      profile.earn.withdraw = 0;
+      profile.rating.total = 0;
+      profile.rating.average = 0;
 
-    await Rate.updateMany(
-      { rater: req.body.user },
-      { $set: { rater: account._id, role: req.body.role } }
-    );
+      await profile.save();
+    }
+
+    if (req.body.role === "company") {
+      await UserProfile.findByIdAndDelete(req.body.user);
+
+      await Save.updateMany(
+        { saver: req.body.user },
+        { $set: { saver: account._id, role: req.body.role } }
+      );
+
+      await View.updateMany(
+        { viewer: req.body.user },
+        { $set: { viewer: account._id, role: req.body.role } }
+      );
+
+      await Rate.updateMany(
+        { rater: req.body.user },
+        { $set: { rater: account._id, role: req.body.role } }
+      );
+    }
 
     return res.status(200).json({
       status: "Created",
@@ -326,7 +327,7 @@ const paymentHandler = asyncCatch(async (req, res, next) => {
         history.endDate
       ).toDateString()}. thank you for working with us!!!`;
 
-      emailSender(subject, message, e);
+      emailAndNotificationSender(subject, message, e);
     }
   } else if (serviceType === "serviceFee") {
     console.log(req.body.company, "comapny");
@@ -427,7 +428,7 @@ const paymentHandler = asyncCatch(async (req, res, next) => {
             history.endDate
           ).toDateString()}. thank you for working with us!!!`;
 
-          emailSender(subject, message, company[0]);
+          emailAndNotificationSender(subject, message, company[0]);
         }
       }
     };

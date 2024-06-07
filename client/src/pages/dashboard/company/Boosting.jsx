@@ -453,7 +453,7 @@ const Boosting = () => {
           </h2>
           <p class="font-light text-gray-600 sm:text-lg dark:text-gray-400">
             Here at ETBLINK we will put your company in the first place to
-            increase your accessability in all over across the world.
+            increase your accessability across the world.
           </p>
         </div>
 
@@ -478,6 +478,35 @@ const Boosting = () => {
             </div>
           </div>
         )} */}
+
+        {currentCompany?.data[0]?.profileFill < 90 ? (
+          <div
+            class="flex items-center p-4 mb-4 text-sm text-yellow-800 border border-yellow-300 rounded-lg bg-yellow-50 dark:bg-gray-800 dark:text-yellow-300 dark:border-yellow-800"
+            role="alert"
+          >
+            <svg
+              class="flex-shrink-0 inline w-4 h-4 me-3"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+            </svg>
+            <span class="sr-only">Info</span>
+            <div>
+              <span class="font-medium">Warning! </span> Your profile must be
+              greater than 90%
+              <a
+                href="/dashboard/company/profile"
+                className="mx-2 font-bold hover:text-blue-500 underline text-blue-600"
+              >
+                Fill now
+              </a>
+              then come back again to boost.
+            </div>
+          </div>
+        ) : null}
 
         {currentCompany?.data[0]?.subscriptionEndDate < Date.now() ||
         !currentCompany?.data[0]?.isSubscribed ? (
@@ -573,7 +602,8 @@ const Boosting = () => {
                       // setBoostPopup(true);
                     }}
                     className={`text-white w-32 py-2 px-2 ${
-                      !currentCompany?.data[0]?.isSubscribed
+                      !currentCompany?.data[0]?.isSubscribed ||
+                      currentCompany?.data[0]?.profileFill < 90
                         ? "bg-red-400 "
                         : "bg-main hover:bg-red-500"
                     } rounded-lg `}

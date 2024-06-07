@@ -13,26 +13,7 @@ const userSchema = new mongoose.Schema(
       required: [true, "Email is required"],
     },
 
-    role: { type: String, default: "private" },
-
-    // user: {
-    //   type: mongoose.Schema.Types.ObjectId,
-    //   ref: function () {
-    //     return this.role === "visitor"
-    //       ? "visitor"
-    //       : this.role === "company"
-    //       ? "company"
-    //       : this.role === "sales"
-    //       ? "sales"
-    //       : this.role === "news-admin"
-    //       ? "news-admin"
-    //       : this.role === "blog-admin"
-    //       ? "blog-admin"
-    //       : this.role === "youtube-admin"
-    //       ? "youtube-admin"
-    //       : "admin";
-    //   },
-    // },
+    role: { type: String },
 
     user: {
       type: mongoose.Schema.Types.ObjectId,
@@ -46,10 +27,12 @@ const userSchema = new mongoose.Schema(
       select: false,
       validate: valid.password("Password"),
     },
+
     confirmPassword: {
       type: String,
       validate: valid.confirmPassword("Confirm password"),
     },
+
     isActive: { type: Boolean, default: true },
     modifiedDate: Number,
     passwordChangedAt: Number,
