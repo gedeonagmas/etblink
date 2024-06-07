@@ -142,6 +142,7 @@ const readMultipleRate = asyncCatch(async (req, res, next) => {
 
 const deleteRate = asyncCatch(async (req, res, next) => {
   const data = await Rate.findByIdAndDelete(req.query.id);
+
   res.status(200).json({
     status: "Deleted",
     message: "rate deleted successfully",
@@ -162,15 +163,31 @@ const createSave = asyncCatch(async (req, res, next) => {
 
   await Save.create(req.body);
 
-  const company = await Company.findById(req.body.company);
-  company.saves.total = company.saves.total + 1;
-  company.saves.available = company.saves.available + 1;
-  await company.save();
+  const user = await User.find({ user: req.body.company }).populate("user");
+  user[0].user.saves.total = user[0].user.saves.total + 1;
+  user[0].user.saves.available = user[0].user.saves.available + 1;
 
-  const user = await User.find({ user: req.body.company });
-  const subject = `Your company is added to save list.`;
-  const message = `Your company is added to save list.`;
-  sendEmailHandler({ subject, message, to: user[0]?.email, from, next });
+  const response = await user[0].user.save();
+
+  if (response) {
+    sendNotificationHandler({
+      message: message.save.message,
+      role: req.body.role,
+      receiver: req.body.accepter,
+    });
+
+    sendEmailHandler({
+      subject: message.save.subject,
+      to: user[0]?.email,
+      from: message.emailOne,
+      message: message.save.message,
+      button: message.save.button,
+      link: message.save.link,
+      // response: "company added to your list.",
+      // res,
+      next,
+    });
+  }
 
   return res.status(200).json({
     status: "Created",

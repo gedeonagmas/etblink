@@ -38,7 +38,7 @@ const sendEmailHandler = ({
   //   console.log(info, "info");
   //   if (error) {
   //     console.log("Error in sending email  " + error);
-  //     return next(
+  //     return next( 
   //       new AppError(
   //         "Something went wrong unable to send the email, check your connection and email then try again!",
   //         500

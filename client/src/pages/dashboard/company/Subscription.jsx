@@ -587,6 +587,34 @@ const Subscription = ({ type }) => {
       />
 
       <div class="py-2 px-4 mx-auto max-w-screen-xl lg:py-6 lg:px-6">
+        {currentCompany?.data[0]?.profileFill < 90 ? (
+          <div
+            class="flex items-center p-4 mb-4 text-sm text-yellow-800 border border-yellow-300 rounded-lg bg-yellow-50 dark:bg-gray-800 dark:text-yellow-300 dark:border-yellow-800"
+            role="alert"
+          >
+            <svg
+              class="flex-shrink-0 inline w-4 h-4 me-3"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+            </svg>
+            <span class="sr-only">Info</span>
+            <div>
+              <span class="font-medium">Warning! </span> Your profile must be
+              greater than 90%
+              <a
+                href="/dashboard/company/profile"
+                className="mx-2 font-bold hover:text-blue-500 underline text-blue-600"
+              >
+                Fill now
+              </a>
+              then come back again to subscribe.
+            </div>
+          </div>
+        ) : null}{" "}
         {type !== "custom" && (
           <div
             class="flex items-center p-4 mb-4 text-sm text-blue-800 border border-blue-300 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400 dark:border-blue-800"
@@ -626,34 +654,6 @@ const Subscription = ({ type }) => {
             increase your accessability in all over across the world.
           </p>
         </div>
-        {currentCompany?.data[0]?.profileFill < 90 ? (
-          <div
-            class="flex items-center p-4 mb-4 text-sm text-yellow-800 border border-yellow-300 rounded-lg bg-yellow-50 dark:bg-gray-800 dark:text-yellow-300 dark:border-yellow-800"
-            role="alert"
-          >
-            <svg
-              class="flex-shrink-0 inline w-4 h-4 me-3"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-            >
-              <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
-            </svg>
-            <span class="sr-only">Info</span>
-            <div>
-              <span class="font-medium">Warning! </span> Your profile must be
-              greater than 90%
-              <a
-                href="/dashboard/company/profile"
-                className="mx-2 font-bold hover:text-blue-500 underline text-blue-600"
-              >
-                Fill now
-              </a>
-              then come back again to subscribe.
-            </div>
-          </div>
-        ) : null}
         {isFetching && <Loading />}
         {isError && <p>Something went wrong unable to read the data</p>}
         {type === "default" && (
@@ -722,7 +722,6 @@ const Subscription = ({ type }) => {
             ) : null}
           </div>
         )}
-
         <div className="w-full">
           {type === "custom" && (
             <input
@@ -760,7 +759,6 @@ const Subscription = ({ type }) => {
             <div>There is no data to display.</div>
           ) : null}
         </div>
-
         <p className="font-light py-2 mt-10 text-lg">
           Your Previous renewal history.
         </p>

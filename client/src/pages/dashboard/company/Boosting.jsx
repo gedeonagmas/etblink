@@ -587,7 +587,9 @@ const Boosting = () => {
                   <button
                     disabled={
                       currentCompany?.data[0]?.subscriptionEndDate <
-                        Date.now() || !currentCompany?.data[0]?.isSubscribed
+                        Date.now() ||
+                      !currentCompany?.data[0]?.isSubscribed ||
+                      currentCompany?.data[0]?.profileFill < 90
                         ? true
                         : false
                     }

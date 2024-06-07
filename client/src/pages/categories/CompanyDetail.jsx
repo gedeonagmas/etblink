@@ -13,6 +13,7 @@ import {
   useCreateSaveMutation,
   useCreateViewMutation,
   useLazyReadQuery,
+  useDeleteMutation,
 } from "../../features/api/apiSlice";
 import Loading from "../../components/loading/Loading";
 import LoadingButton from "../../components/loading/LoadingButton";
@@ -20,6 +21,7 @@ import Response from "../../components/Response";
 import { format } from "timeago.js";
 import ResponsivePagination from "react-responsive-pagination";
 import "./pagination.css";
+import Pop from "../../components/Pop";
 
 const CompanyDetail = (props) => {
   const location = useLocation();
@@ -43,6 +45,8 @@ const CompanyDetail = (props) => {
   const [rateData, rateResponse] = useCreateRateMutation();
   const [saveData, saveResponse] = useCreateSaveMutation();
   const [viewData, viewResponse] = useCreateViewMutation();
+  const [removeData, removeResponse] = useDeleteMutation();
+
   const [company, setCompany] = useState({});
   const [pending, setPending] = useState(false);
   const [emailPending, setEmailPending] = useState(false);
@@ -54,6 +58,9 @@ const CompanyDetail = (props) => {
   const [fullName, setFullName] = useState("");
   const [message, setMessage] = useState("");
   const [subject, setSubject] = useState("");
+  const [popup, setPopup] = useState(false);
+  const [detail, setDetail] = useState("");
+  const [removePending, setRemovePending] = useState(false);
 
   useEffect(() => {
     if (data?.data) {
@@ -150,6 +157,21 @@ const CompanyDetail = (props) => {
       tag: ["companies", "users"],
     });
   }, [companyId, page]);
+
+  const removeHandler = () => {
+    detail &&
+      removeData({
+        url: `/user/rates?id=${detail?._id}`,
+        tag: ["rates"],
+      });
+  };
+
+  useEffect(() => {
+    if (removeResponse.status === "fulfilled") {
+      setPopup(false);
+      setDetailPopup(false);
+    }
+  }, [removeResponse]);
 
   useEffect(() => {
     setTotalPage(Math.ceil(rates?.total / 6));
@@ -520,12 +542,22 @@ const CompanyDetail = (props) => {
                     rates?.data?.map((e) => {
                       return (
                         <div className="mt-10">
-                          <div class="flex items-center mb-4">
-                            <img
-                              class="w-10 h-10 me-4 rounded-full"
-                              src={e?.rater?.profilePicture}
-                              alt=""
-                            />
+                          <div class="flex items-center gap-2 mb-4">
+                            {e?.rater?.logo ? (
+                              <img
+                                src={e?.rater?.logo}
+                                className="w-10 h-10 rounded-full border"
+                              />
+                            ) : e?.rater?.profilePicture ? (
+                              <img
+                                src={e?.rater?.profilePicture}
+                                className="w-10 h-10 rounded-full border"
+                              />
+                            ) : (
+                              <div className="w-10 h-10 text-center flex items-center justify-center text-xl font-bold rounded-full bg-main text-white">
+                                {e?.fullName?.substring(0, 1)}
+                              </div>
+                            )}
                             <div class="font-medium dark:text-white">
                               <p>
                                 {e?.fullName}
@@ -549,6 +581,19 @@ const CompanyDetail = (props) => {
                             <p>{e?.value}</p>
                           </div>
                           <p className="mt-1 ml-14">{e?.message}</p>
+                          {currentUser?.user?._id === e?.rater?._id && (
+                            <div className="w-full justify-end flex">
+                              <button
+                                onClick={() => {
+                                  setDetail(e);
+                                  setPopup(true);
+                                }}
+                                className="self-end rounded-sm w-20 py-1 mb-2 text-white bg-main mt-2"
+                              >
+                                Delete
+                              </button>
+                            </div>
+                          )}
                         </div>
                       );
                     })}
@@ -567,7 +612,21 @@ const CompanyDetail = (props) => {
                 </div>
               </div>
             </div>
-
+            {popup && (
+              <Pop
+                content="Are you sure you want to remove your rating?"
+                cancel={setPopup}
+                trigger={
+                  <LoadingButton
+                    pending={removePending}
+                    onClick={removeHandler}
+                    title="Yes, I'm Sure"
+                    color="bg-main"
+                    width="w-36 sm:rounded-full sm:border sm:py-2 sm:px-5 sm:hover:bg-red-500"
+                  />
+                }
+              />
+            )}
             <div className="flex relative lg:-mt-52  mt-10 pl-4 py-4 pr-[7%] flex-col gap-10 w-full shadow-lg lg:w-[33%] bg-white bg-dark">
               <div className="w-full p-5 rounded-md border shadow-xl shadow-gray-300">
                 <div className="flex mb-7 items-centere justify-between">
