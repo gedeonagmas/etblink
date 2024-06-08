@@ -9,13 +9,13 @@ const { createServer } = require("http");
 const { Server } = require("socket.io");
 const cookieParser = require("cookie-parser");
 const cron = require("node-cron");
-const { boost } = require("./controller/backgroundJobController.js");
+const { backgroundJob } = require("./controller/backgroundJobController.js");
 // import apicache =require("apicache";
 
 const app = express();
 // let cache = apicache.middleware;
 // app.use(cache("5 minutes"));
-// const __dirname = path.resolve(); 
+// const __dirname = path.resolve();
 
 // process.on("uncaughtException", (err) => {
 //   console.log("SHUTTING DOWN ");
@@ -43,8 +43,8 @@ app.use("/etblink/app/v1/chat", chatRouter);
 app.use("/etblink/app/v1/utility", utilityRouter);
 
 //################################ background job ###########################
-// cron.schedule("1 * * * * *", boost);
-// cron.schedule("0 0 * * *", boost); this is the exact one
+// cron.schedule("1 * * * * *", backgroundJob);
+// cron.schedule("0 0 * * *", backgroundJob); this is the exact one
 //################################ background job ###########################
 
 app.get("/", (req, res) => {

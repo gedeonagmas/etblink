@@ -77,7 +77,7 @@ const Ratings = () => {
           rates?.data?.map((e) => {
             return (
               <div className="h-52 relative border rounded-lg shadow-lg p-3">
-                <div class="flex items-center gap-2 mb-4">
+                <div class="flex items-center gap-3 mb-4">
                   {/* <ProfilePicture user={e?.rater} /> */}
                   {e?.rater?.logo ? (
                     <img
@@ -171,7 +171,7 @@ const Ratings = () => {
 
       {popup && (
         <Pop
-          content="Are you sure you want to remove this notification?"
+          content="Are you sure you want to remove this rate?"
           cancel={setPopup}
           trigger={
             <LoadingButton

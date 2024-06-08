@@ -1,13 +1,12 @@
 const { User } = require("../models/userModel");
-const { Notification } = require("../models/notificationModel");
 const { sendEmailHandler } = require("./emailController");
 const cron = require("node-cron");
 const { BoostHistory } = require("../models/boostHistoryModel");
 const { SubscriptionHistory } = require("../models/subscriptionHistoryModel");
-const { notificationSender } = require("./utilityController");
-// const { message } = require("./../utils/messages");
+const { sendNotificationHandler } = require("./utilityController");
+const { message } = require("./../utils/messages");
 
-const boost = async () => {
+const backgroundJob = async () => {
   const date = new Date().toISOString().split("T")[0];
   let remainingDate = 0;
 
@@ -19,14 +18,83 @@ const boost = async () => {
     );
   };
 
-  const emailSender = async (subject, message, e) => {
-    const from = "billing@etblink.com";
+  const emailSender = async (e, service, startDate, endDate) => {
+    const admin = await User.find({ role: "admin" });
+    if (admin) {
+      [
+        {
+          receiver: admin[0]?.user?.user?._id,
+          type: "admin",
+          role: "admin",
+          email: admin[0]?.email,
+        },
+        {
+          receiver: req?.user?._id,
+          type: "user",
+          role: e?.role,
+          email: e?.email,
+        },
+      ]?.map((e) => {
+        sendNotificationHandler({
+          message:
+            service === "Boost Plan" || service === "Service Plan"
+              ? `Your ${service} has been Expired`
+              : `A new ${service} plan has been added to ${
+                  e?.type === "user" ? "your company" : req.user.email
+                }. The ${service} plan will be available from ${new Date(
+                  startDate
+                ).toDateString()} to ${new Date(endDate).toDateString()}. ${
+                  e?.type === "user"
+                    ? "Thank you for working with us!"
+                    : "Thank you sir!"
+                }`,
+          role: e?.role,
+          receiver: e?.receiver,
+        });
 
-    //send local notification
-    notificationSender(message, e?.role, e?._id);
+        sendEmailHandler({
+          subject:
+            service === "Boost Plan" || service === "Service Plan"
+              ? `Your ${service} has been Expired`
+              : `New ${service} plan added`,
+          to: e?.email,
+          from: message.emailOne,
+          message:
+            service === "Boost Plan" || service === "Service Plan"
+              ? `Your ${service} has been Expired`
+              : `A new ${service} plan has been added to ${
+                  e?.type === "user" ? "your company" : req.user.email
+                }. The ${service} plan will be available from ${new Date(
+                  history.startDate
+                ).toDateString()} to ${new Date(
+                  history.endDate
+                ).toDateString()}. ${
+                  e?.type === "user"
+                    ? "Thank you for working with us!"
+                    : "Thank you sir!"
+                }`,
+          button: message.boost.button,
+          link: message.boost.link,
+        });
+      });
+    }
+  };
 
-    // send email
-    return sendEmailHandler({ subject, message, to: e?.email, from });
+  const emailSenderSingle = async (subject, message, e) => {
+    sendNotificationHandler({
+      message: message,
+      role: e?.role,
+      receiver: e?.receiver,
+    });
+
+    sendEmailHandler({
+      subject: subject,
+      to: e?.email,
+      from: message.emailOne,
+      message: message,
+      button: message.boost.button,
+      link: message.boost.link,
+    });
   };
 
   const boostHistory = await BoostHistory.find({
@@ -47,14 +115,7 @@ const boost = async () => {
       const response = await company[0].user.save();
 
       if (response) {
-        const subject = "New boosted plan is added to your company.";
-        const message = `new boosted plan is added to your company and your boosting service is released from ${new Date(
-          history.startDate
-        ).toDateString()} to ${new Date(
-          history.endDate
-        ).toDateString()}. thank you for working with us!!!`;
-
-        emailSender(subject, message, company[0]);
+        emailSender(company[0], "Boost", history?.startDate, history?.endDate);
       }
     });
   }
@@ -63,6 +124,7 @@ const boost = async () => {
     startDate: Date.now(),
     approved: true,
   });
+
   if (subscriptionHistory?.length > 0) {
     subscriptionHistory?.map(async (history) => {
       const company = await User.find({ user: history?.company }).populate(
@@ -76,14 +138,7 @@ const boost = async () => {
       const response = await company[0].user.save();
 
       if (response) {
-        const subject = "New service plan is added to your company.";
-        const message = `new service plan is added to your company and your service is released from ${new Date(
-          history.startDate
-        ).toDateString()} to ${new Date(
-          history.endDate
-        ).toDateString()}. thank you for working with us!!!`;
-
-        emailSender(subject, message, company[0]);
+        emailSender(company[0], "Boost", history?.startDate, history?.endDate);
       }
     });
   }
@@ -97,7 +152,7 @@ const boost = async () => {
         const message =
           "Boost your company to increase your visibility across the world.";
 
-        emailSender(subject, message, e);
+        emailSenderSingle(subject, message, e);
       }
 
       //for not yet subscribed company
@@ -109,7 +164,7 @@ const boost = async () => {
         const message =
           "Subscribe your company to increase your visibility across the world.";
 
-        emailSender(subject, message, e);
+        emailSenderSingle(subject, message, e);
       }
 
       //boosted expired warning notification
@@ -117,10 +172,10 @@ const boost = async () => {
         parser(7) * 1 === e?.user?.boostEndDate * 1 ||
         parser(14) * 1 === e?.user?.boostEndDate * 1
       ) {
-        const subject = "Boost your company.";
+        const subject = "Extend your boost plan.";
         const message = `Your boost plan remains ${remainingDate} date.`;
 
-        emailSender(subject, message, e);
+        emailSenderSingle(subject, message, e);
       }
 
       //subscription expired warning notification
@@ -128,10 +183,10 @@ const boost = async () => {
         parser(7) * 1 === e?.user?.subscriptionEndDate * 1 ||
         parser(14) * 1 === e?.user?.subscriptionEndDate * 1
       ) {
-        const subject = "Subscription Expired.";
+        const subject = "Extend your subscription plan.";
         const message = `Your Subscription plan remains ${remainingDate} date.`;
 
-        emailSender(subject, message, e);
+        emailSenderSingle(subject, message, e);
       }
 
       //subscription expired notification
@@ -139,11 +194,12 @@ const boost = async () => {
         Date.parse(date) * 1 > e?.user?.subscriptionEndDate * 1 &&
         e?.user?.subscriptionEndDate !== 0
       ) {
-        const subject = "Subscription Expired.";
-        const message = `Your Subscription plan is Expired.`;
+        const message = `Your Service plan has been Expired.`;
         e.user.isSubscribed = false;
-        await e.user.save();
-        emailSender(subject, message, e);
+        const response = await e.user.save();
+        if (response) {
+          emailSender(e, "Service Plan", history?.startDate, history?.endDate);
+        }
       }
 
       //boosting expired notification
@@ -154,11 +210,13 @@ const boost = async () => {
         const subject = "Boost Expired.";
         const message = `Your Boost plan is Expired.`;
         e.user.isBoosted = false;
-        await e.user.save();
-        emailSender(subject, message, e);
+        const response = await e.user.save();
+        if (response) {
+          emailSender(e, "Boost Plan", history?.startDate, history?.endDate);
+        }
       }
     });
   });
 };
 
-module.exports = { boost };
+module.exports = { backgroundJob };

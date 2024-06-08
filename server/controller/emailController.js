@@ -38,13 +38,14 @@ const sendEmailHandler = ({
   //   console.log(info, "info");
   //   if (error) {
   //     console.log("Error in sending email  " + error);
-  //     return next( 
-  //       new AppError(
-  //         "Something went wrong unable to send the email, check your connection and email then try again!",
-  //         500
-  //       )
-  //     );
-  //   } else if (res) {
+  //     if (next)
+  //       return next(
+  //         new AppError(
+  //           "Something went wrong unable to send the email, check your connection and email then try again!",
+  //           500
+  //         )
+  //       );
+  //   } else if (res && response) {
   //     console.log("email sent successfully from response");
   //     return res.status(200).json({ message: response });
   //   } else {

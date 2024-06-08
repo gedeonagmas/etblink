@@ -12,8 +12,7 @@ const { sendEmailHandler } = require("./emailController");
 const { Notification } = require("../models/notificationModel");
 const { Category } = require("../models/categoryModel");
 const { UserProfile } = require("../models/userProfile");
-const { message } = require("./../utils/messages");
-const from = "billing@etblink.com";
+const message = require("./../utils/messages");
 
 const sendNotificationHandler = async ({ message, role, receiver }) => {
   return await Notification.create({
@@ -305,6 +304,28 @@ const upgradeHandler = asyncCatch(async (req, res, next) => {
       );
     }
 
+    const admin = await User.find({ role: "admin" });
+    if (admin) {
+      sendNotificationHandler({
+        message: `The user with the email of ${req?.user?.email} upgrades his account from Visitor to ${req.body.role}. thank you sir.`,
+        role: req.body.role,
+        receiver: admin[0]?.user?.user?._id,
+      });
+
+      sendEmailHandler({
+        subject: message.upgrade.subject,
+        to: admin[0]?.email,
+        from: message.emailOne,
+        message: `The user with the email of ${req.user?.email} upgrades his account from Visitor to ${req.body.role}. thank you sir.`,
+        button: message.upgrade.button,
+        link: message.upgrade.link,
+        response:
+          "Account upgraded successfully Please Login Again to Continue.",
+        res,
+        next,
+      });
+    }
+
     return res.status(200).json({
       status: "Created",
       message: "Account upgraded successfully Please Login Again to Continue.",
@@ -346,7 +367,7 @@ const paymentHandler = asyncCatch(async (req, res, next) => {
 
     await company.save();
 
-    const response = await BoostHistory.create({
+    const history = await BoostHistory.create({
       company: req.body.company,
       boost,
       startDate: Date.parse(new Date(startDate)),
@@ -357,15 +378,56 @@ const paymentHandler = asyncCatch(async (req, res, next) => {
       checkDetail: payFrom === "check" ? req.body.checkDetail : undefined,
     });
 
-    if (response) {
-      const subject = "New boosted plan is added to your company.";
-      const message = `new boosted plan is added to your company and your boosting service is released from ${new Date(
-        history.startDate
-      ).toDateString()} to ${new Date(
-        history.endDate
-      ).toDateString()}. thank you for working with us!!!`;
+    const admin = await User.find({ role: "admin" });
+    if (admin && history) {
+      [
+        {
+          receiver: admin[0]?.user?.user?._id,
+          type: "admin",
+          role: req.body.role,
+          email: admin[0]?.email,
+        },
+        {
+          receiver: req?.user?._id,
+          type: "user",
+          role: req.user.role,
+          email: req.user.email,
+        },
+      ]?.map((e) => {
+        sendNotificationHandler({
+          message: `A new boosted plan has been added to ${
+            e?.type === "user" ? "your company" : req.user.email
+          }. The boosting service will be available from ${new Date(
+            history.startDate
+          ).toDateString()} to ${new Date(history.endDate).toDateString()}. ${
+            e?.type === "user"
+              ? "Thank you for working with us!"
+              : "Thank you sir!"
+          }`,
+          role: e?.role,
+          receiver: e?.receiver,
+        });
 
-      emailAndNotificationSender(subject, message, e);
+        sendEmailHandler({
+          subject: "New boost plan added",
+          to: e?.email,
+          from: message.emailOne,
+          message: `A new boosted plan has been added to ${
+            e?.type === "user" ? "your company" : req.user.email
+          }. The boosting service will be available from ${new Date(
+            history.startDate
+          ).toDateString()} to ${new Date(history.endDate).toDateString()}. ${
+            e?.type === "user"
+              ? "Thank you for working with us!"
+              : "Thank you sir!"
+          }`,
+          button: message.boost.button,
+          link: message.boost.link,
+          response: "Boost plan added successfully.",
+          res,
+          next,
+        });
+      });
     }
   } else if (serviceType === "serviceFee") {
     console.log(req.body.company, "comapny");
@@ -383,7 +445,7 @@ const paymentHandler = asyncCatch(async (req, res, next) => {
 
     await company.save();
 
-    await SubscriptionHistory.create({
+    const history = await SubscriptionHistory.create({
       company: req.body.company,
       subscription,
       startDate: Date.parse(new Date(startDate)),
@@ -394,11 +456,59 @@ const paymentHandler = asyncCatch(async (req, res, next) => {
       checkDetail: payFrom === "check" ? req.body.checkDetail : undefined,
     });
 
-    // const subject = "Your Transaction is Successful thank you.";
-    // const message = `Your Transaction is Successful thank you.`;
-    // return sendEmailHandler(subject, message, company?.email, from);
+    const admin = await User.find({ role: "admin" });
+    if (admin && history) {
+      [
+        {
+          receiver: admin[0]?.user?.user?._id,
+          type: "admin",
+          role: req.body.role,
+          email: admin[0]?.email,
+        },
+        {
+          receiver: req?.user?._id,
+          type: "user",
+          role: req.user.role,
+          email: req.user.email,
+        },
+      ]?.map((e) => {
+        sendNotificationHandler({
+          message: `A new Service plan has been added to ${
+            e?.type === "user" ? "your company" : req.user.email
+          }. The Service plan will be available from ${new Date(
+            history.startDate
+          ).toDateString()} to ${new Date(history.endDate).toDateString()}. ${
+            e?.type === "user"
+              ? "Thank you for working with us!"
+              : "Thank you sir!"
+          }`,
+          role: e?.role,
+          receiver: e?.receiver,
+        });
+
+        sendEmailHandler({
+          subject: "New Service plan added",
+          to: e?.email,
+          from: message.emailOne,
+          message: `A new service plan has been added to ${
+            e?.type === "user" ? "your company" : req.user.email
+          }. The service will be available from ${new Date(
+            history.startDate
+          ).toDateString()} to ${new Date(history.endDate).toDateString()}. ${
+            e?.type === "user"
+              ? "Thank you for working with us!"
+              : "Thank you sir!"
+          }`,
+          button: message.boost.button,
+          link: message.boost.link,
+          response: "Service plan added successfully.",
+          res,
+          next,
+        });
+      });
+    }
   } else if (serviceType === "fund") {
-    await Payment.create({
+    const history = await Payment.create({
       company: req.body.company,
       amount: amount,
       payFrom: payFrom,
@@ -406,9 +516,27 @@ const paymentHandler = asyncCatch(async (req, res, next) => {
       checkDetail: payFrom === "check" ? req.body.checkDetail : undefined,
     });
 
-    // const subject = "Your Transaction is Successful thank you.";
-    // const message = `Your Transaction is Successful thank you.`;
-    // return sendEmailHandler(subject, message, company?.email, from);
+    const admin = await User.find({ role: "admin" });
+    if (admin && history) {
+      sendNotificationHandler({
+        message: `The user with the email of ${req?.user?.email} has deposit ${amount} birr. thank you sir.`,
+        role: "admin",
+        receiver: admin[0]?.user?.user?._id,
+      });
+
+      sendEmailHandler({
+        subject: message.upgrade.subject,
+        to: admin[0]?.email,
+        from: message.emailOne,
+        message: `The user with the email of ${req?.user?.email} has deposit ${amount} birr. thank you sir.`,
+        button: message.fund.button,
+        link: message.fund.link,
+        response:
+          "Account upgraded successfully Please Login Again to Continue.",
+        res,
+        next,
+      });
+    }
   } else if (serviceType === "approve") {
     if (req.user.role !== "admin")
       return next(
@@ -453,21 +581,7 @@ const paymentHandler = asyncCatch(async (req, res, next) => {
             : "Pending";
         }
 
-        const response = await company[0].user.save();
-        if (response) {
-          const subject = `New ${
-            type === "boost" ? "boost" : "service"
-          } plan is added to your company.`;
-          const message = `new ${
-            type === "boost" ? "boost" : "service"
-          } plan is added to your company and your service is released from ${new Date(
-            history.startDate
-          ).toDateString()} to ${new Date(
-            history.endDate
-          ).toDateString()}. thank you for working with us!!!`;
-
-          emailAndNotificationSender(subject, message, company[0]);
-        }
+        await company[0].user.save();
       }
     };
 
@@ -479,11 +593,48 @@ const paymentHandler = asyncCatch(async (req, res, next) => {
     actionType === "subscription" &&
       startHandler(SubscriptionHistory, "subscribe");
 
-    //######### send email and local notifications ###############
-    // const subject = "Your Transaction is Successful thank you.";
-    // const message = `Your Transaction is Successful thank you.`;
-    // sendNotificationHandler(message, "company", company?._id);
-    // return sendEmailHandler(subject, message, company?.email, from);
+    const user = await User.find({ user: req.body.company });
+    if (user) {
+      const approveMsg = `Your ${approvalType} transaction has been ${
+        req.body.value === true
+          ? "Approved"
+          : "Rejected please try again with the correct information"
+      }. Thank you for working with us!`;
+
+      const serviceMsg = `Your ${actionType} transaction has been ${
+        req.body.value === true
+          ? "Started"
+          : "Canceled please contact our customer service"
+      }. Thank you for working with us!`;
+
+      sendNotificationHandler({
+        message:
+          approvalType === "boosting" ||
+          approvalType === "subscription" ||
+          approvalType === "fund"
+            ? approveMsg
+            : serviceMsg,
+        role: user[0]?.role,
+        receiver: user[0]?.user?._id,
+      });
+
+      sendEmailHandler({
+        subject: message.approve.subject,
+        to: user[0]?.email,
+        from: message.emailOne,
+        message:
+          approvalType === "boosting" ||
+          approvalType === "subscription" ||
+          approvalType === "fund"
+            ? approveMsg
+            : serviceMsg,
+        button: message.approve.button,
+        link: message.approve.link,
+        response: "Transaction Successful Thank you!",
+        res,
+        next,
+      });
+    }
   }
 
   return res.status(200).json({
