@@ -4,7 +4,7 @@ import "react-circular-progressbar/dist/styles.css";
 
 const Prices = () => {
   return (
-    <div className="w-full flex flex-col relative bg-gray-50 bg-dark h-auto">
+    <div className="w-full flex flex-col relative bg-gray-200 bg-dark h-auto">
       {/* <div
         style={{
           backgroundImage: "url('./image-4.jpg')",
