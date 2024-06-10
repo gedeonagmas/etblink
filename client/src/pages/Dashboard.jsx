@@ -2101,7 +2101,7 @@ const Dashboard = () => {
 
       <div
         onClick={() => sidebarHandler("off")}
-        class="pl-4 pt-4 mt-20 h-[86.5vh] overflow-y-auto overflow-x-hidden bg-dark bg-whites lg:ml-64"
+        class="pl-4 pt-4 mt-20  bg-dark bg-whites lg:ml-64"
       >
         {/* <Routes>
           <Route path="/company" element={<Company />} />

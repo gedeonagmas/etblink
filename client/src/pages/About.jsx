@@ -21,7 +21,7 @@ const About = () => {
         }}
         className="h-[70vh] bg-cover bg-center relative z-20 w-full"
       ></div>
-      <div className="w-[70%] self-center rounded-md -mt-12 py-4 z-20 relative text-2xl h-auto bg-white bg-dark border shadow-xl">
+      {/* <div className="w-[70%] self-center rounded-md -mt-12 py-4 z-20 relative text-2xl h-auto bg-white bg-dark border shadow-xl">
         <div className="grid px-5 w-full place-items-center gap-y-5 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
           <div className="text-sm">
             <p className="">we provide a flexible</p>
@@ -45,17 +45,14 @@ const About = () => {
             <CircularProgressbar value={70} text={`${70}%`} />
           </div>
         </div>
-      </div>
+      </div> */}
 
       <div class="w-full px-main mt-24 flex items-center gap-10 flex-col md:flex-row">
         <div>
-          <img class="w-[500px] h-[350px]" src="image-1.jpg" alt="" />
+          <img class="w-[500px] h-[280px]" src="image-1.jpg" alt="" />
         </div>
         <div className="flex max-w-[500px] flex-col gap-4">
-          <p className="font-bold text-2xl">
-            Lorem ipsum dolor sit officia <br />
-            amet consectetur.
-          </p>
+          <p className="font-bold text-2xl">Company</p>
           <p className="text-sm">
             Ethiopian Business Link (ETB Link) is an Online Business link
             directory developed by a sister company, skylight Technology PLC.
@@ -100,6 +97,15 @@ const About = () => {
         trends, connect with like-minded professionals, and explore new
         opportunities for success in the dynamic Ethiopian business landscape.
         Let us be your bridge to a thriving business future.
+      </p>
+      <p className="mt-14 px-main">
+        At ETBLink.com, we aim to foster collaboration and growth within the
+        Ethiopian business community by providing a central space for businesses
+        to showcase their products and services, share industry knowledge, and
+        engage with potential partners and customers. Whether you are a start-up
+        entrepreneur or an established corporation, ETBLink.com offers a rang of
+        resources and tools to support your business goals and expansion
+        efforts.
       </p>
       <p className="px-main text-2xl self-center mt-14 font-bold">Our teams</p>
       <div className="grid w-full place-items-center px-main self-center gap-12 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mt-10">

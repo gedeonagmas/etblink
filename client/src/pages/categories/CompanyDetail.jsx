@@ -101,7 +101,7 @@ const CompanyDetail = (props) => {
       company: location?.state?.id,
       saver: currentUser?.user,
       role: currentUser?.role,
-      tag: ["companies,save"],
+      tag: ["companies", "saves"],
     });
   };
 
@@ -110,7 +110,7 @@ const CompanyDetail = (props) => {
       company: companyId,
       viewer: currentUser?.user,
       role: currentUser?.role,
-      tag: ["companies,view"],
+      tag: ["companies","views"],
     });
   };
 
@@ -490,7 +490,7 @@ const CompanyDetail = (props) => {
                         type="text"
                         id="text"
                         class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-0 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white  dark:focus:border-blue-500 dark:shadow-sm-light"
-                        placeholder="name@flowbite.com"
+                        placeholder="company/your name"
                         required
                       />
                     </div>

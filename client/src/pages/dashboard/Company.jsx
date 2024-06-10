@@ -316,7 +316,7 @@ const Company = (props) => {
   };
 
   return (
-    <div className="w-full flex flex-col lg:flex-row gap-5">
+    <div className="w-full pr-10 flex flex-col lg:flex-row gap-5">
       <div className="flex flex-col border-r pr-4 w-full lg:flex-[70%]">
         <Promotion />
         <div className="flex flex-col lg:flex-row gap-2  rounded-sm p-4 mt-5">
@@ -404,7 +404,7 @@ const Company = (props) => {
           </div>
         </div>
 
-        <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+        <div class="relative  shadow-md sm:rounded-lg">
           <div class="flex items-center justify-between flex-column lg:flex-row flex-wrap space-y-4 md:space-y-0 py-4 bg-white dark:bg-gray-900">
             <div>
               <button
@@ -500,7 +500,7 @@ const Company = (props) => {
               <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
                   <th scope="col" class="px-6 py-3">
-                    Name 
+                    Name
                   </th>
                   {/* <th scope="col" class="px-6 py-3">
                     Position

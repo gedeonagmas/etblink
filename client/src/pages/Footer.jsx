@@ -353,19 +353,19 @@ const Footer = () => {
             About Us
           </p>
           <ul className="mt-5 text-sm flex flex-col gap-1">
-            <a href="#" className="hover:underline">
+            <a href="/about" className="hover:underline">
               Company
             </a>
-            <a href="#" className="hover:underline">
+            <a href="/vision-mission" className="hover:underline">
               Vision & Mission
             </a>
-            <a href="#" className="hover:underline">
+            <a href="/social-responsibility" className="hover:underline">
               Social Responsibility
             </a>
-            <a href="#" className="hover:underline">
+            <a href="/prices" className="hover:underline">
               Membership Price/Package
             </a>
-            <a href="#" className="hover:underline">
+            <a href="/our-partners" className="hover:underline">
               Our Partners
             </a>
           </ul>
@@ -375,16 +375,16 @@ const Footer = () => {
             Partners
           </p>
           <ul className="mt-5 text-sm flex flex-col gap-1">
-            <a href="#" className="hover:underline">
+            <a href="/advert-with-us" className="hover:underline">
               Advertise with Us
             </a>
-            <a href="#" className="hover:underline">
+            <a href="/become-representative" className="hover:underline">
               Become Representative
             </a>
-            <a href="#" className="hover:underline">
+            <a href="/become-a-member" className="hover:underline">
               Become a Member
             </a>
-            <a href="#" className="hover:underline">
+            <a href="/work-with-us" className="hover:underline">
               Work with Us
             </a>
           </ul>

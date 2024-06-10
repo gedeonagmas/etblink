@@ -64,6 +64,12 @@ import AddJob from "./pages/dashboard/admin/AddJob";
 import UpdateJob from "./pages/dashboard/admin/UpdateJob";
 import JobCategory from "./pages/jobs/JobCategory";
 import JobDetail from "./pages/jobs/JobDetail";
+import Mission from "./pages/Mission";
+import OurPartners from "./pages/OurPartners";
+import AdvertWithUs from "./pages/AdvertWithUs";
+import BecomeAMember from "./pages/BecomeAMember";
+import BecomeRepresentative from "./pages/BecomeRepresentative";
+import WorkWIthUs from "./pages/WorkWIthUs";
 
 export const userContext = createContext();
 
@@ -94,8 +100,10 @@ function App() {
           <Routes>
             <Route path="/" element={<HomeTemplate />}>
               <Route path="/" element={<Home />}></Route>
-              <Route path="/signup" element={<Signup />}></Route>
-              {admin?.total===0 && (
+              {!user && !admin?.total === 0 && (
+                <Route path="/signup" element={<Signup />}></Route>
+              )}
+              {admin?.total === 0 && (
                 <Route
                   path="/signup/admin"
                   element={<Signup type="admin" />}
@@ -120,6 +128,19 @@ function App() {
               <Route path="/about" element={<About />}></Route>
               <Route path="/ethiopia" element={<Ethiopia />}></Route>
               <Route path="/contact" element={<Contact />}></Route>
+              <Route path="/vision-mission" element={<Mission />}></Route>
+              <Route path="/our-partners" element={<OurPartners />}></Route>
+              <Route path="/advert-with-us" element={<AdvertWithUs />}></Route>
+              <Route
+                path="/become-a-member"
+                element={<BecomeAMember />}
+              ></Route>
+              <Route
+                path="/become-representative"
+                element={<BecomeRepresentative />}
+              ></Route>
+              <Route path="/work-with-us" element={<WorkWIthUs />}></Route>
+
               <Route
                 path="/sales"
                 element={<SalesDetail type="global" />}
@@ -128,238 +149,255 @@ function App() {
             </Route>
 
             {/* ############################## DASHBOARD ################################# */}
-            <Route path="/dashboard" element={<Dashboard />}>
-              {/* ############################## COMPANY ################################# */}
-              <Route path="/dashboard/company" element={<Company />}></Route>
-              <Route
-                path="/dashboard/company/share"
-                element={<Referrals type="company" />}
-              ></Route>
-              <Route
-                path="/dashboard/company/boosting"
-                element={<Boosting />}
-              ></Route>
-              <Route
-                path="/dashboard/company/billing"
-                element={<Billing />}
-              ></Route>
-              <Route
-                path="/dashboard/company/subscription"
-                element={<Subscription type="default" />}
-              ></Route>
-              <Route
-                path="/dashboard/company/saves"
-                element={<Saves type="company" />}
-              ></Route>
-              <Route
-                path="/dashboard/company/sales"
-                element={<SalesDetail type="company" />}
-              ></Route>
-              <Route
-                path="/dashboard/company/views"
-                element={<Views type="company" />}
-              ></Route>
-              <Route
-                path="/dashboard/company/profile"
-                element={<Profile />}
-              ></Route>
-              <Route
-                path="/dashboard/company/change-password"
-                element={<ChangePassword />}
-              ></Route>
-              {/* ################################################################### */}
-              {/* ############################## SALES ############################## */}
-              <Route path="/dashboard/sales" element={<Sellers />}></Route>
-              <Route
-                path="/dashboard/sales/profile"
-                element={<UsersProfile />}
-              ></Route>
-              <Route
-                path="/dashboard/sales/company"
-                element={<SalesCompany />}
-              ></Route>
-              <Route
-                path="/dashboard/sales/profile"
-                element={<Profile />}
-              ></Route>
-              <Route
-                path="/dashboard/sales/referrals"
-                element={<Referrals type="sales" />}
-              ></Route>
-              <Route path="/dashboard/sales/earns" element={<Earns />}></Route>
-              <Route
-                path="/dashboard/sales/ratings"
-                element={<Ratings />}
-              ></Route>
-              {/* ################################################################### */}
-              {/* ############################## ADMIN ############################## */}
-              <Route path="/dashboard/admin/news" element={<AddNews />}></Route>
-              <Route
-                path="/dashboard/admin/news/detail"
-                element={<NewsDetailAdmin />}
-              ></Route>
-              <Route
-                path="/dashboard/admin/profile"
-                element={<UsersProfile />}
-              ></Route>
-              <Route
-                path="/dashboard/admin/youtube"
-                element={<AddYoutube />}
-              ></Route>
-              <Route
-                path="/dashboard/admin/prices"
-                element={<AddPrices />}
-              ></Route>
-              <Route
-                path="/dashboard/admin/prices/detail"
-                element={<UpdatePrices />}
-              ></Route>
-              <Route
-                path="/dashboard/admin/youtube/detail"
-                element={<UpdateYoutube />}
-              ></Route>
-              <Route
-                path="/dashboard/admin/boost"
-                element={<AddBoost />}
-              ></Route>
-              <Route
-                path="/dashboard/admin/boost/detail"
-                element={<UpdateBoost />}
-              ></Route>
-              <Route
-                path="/dashboard/admin/category"
-                element={<AddCategory />}
-              ></Route>{" "}
-              <Route
-                path="/dashboard/admin/category/detail"
-                element={<UpdateCategory />}
-              ></Route>
-              <Route path="/dashboard/admin/blog" element={<AddBlog />}></Route>
-              <Route
-                path="/dashboard/admin/blog/detail"
-                element={<UpdateBlog />}
-              ></Route>
-              <Route path="/dashboard/admin/job" element={<AddJob />}></Route>
-              <Route
-                path="/dashboard/admin/job/detail"
-                element={<UpdateJob />}
-              ></Route>
-              <Route path="/dashboard/admin/users" element={<Users />}></Route>
-              <Route
-                path="/dashboard/admin/users/manage"
-                element={<UsersProfile />}
-              ></Route>
-              <Route
-                path="/dashboard/admin/companies/manage"
-                element={<Profile />}
-              ></Route>
-              <Route
-                path="/dashboard/admin/sponsors"
-                element={<Sponsors />}
-              ></Route>
-              <Route
-                path="/dashboard/admin/banners"
-                element={<Banners />}
-              ></Route>
-              <Route
-                path="/dashboard/admin/approval"
-                element={<Bills />}
-              ></Route>
-              <Route
-                path="/dashboard/admin/subscription/custom"
-                element={<Subscription type="custom" />}
-              ></Route>
-              {/* ################################################################### */}
-              {/* ############################## VISITOR ############################## */}
-              <Route path="/dashboard/visitor" element={<Visitors />}></Route>
-              <Route
-                path="/dashboard/visitor/profile"
-                element={<UsersProfile />}
-              ></Route>
-              {/* ################################################################### */}
-              {/* ############################## NEWS-ADMIN ############################## */}
-              <Route
-                path="/dashboard/news-admin"
-                element={<Visitors />}
-              ></Route>
-              <Route
-                path="/dashboard/news-admin/profile"
-                element={<UsersProfile />}
-              ></Route>
-              <Route
-                path="/dashboard/news-admin/news"
-                element={<AddNews />}
-              ></Route>
-              <Route
-                path="/dashboard/news-admin/news/detail"
-                element={<NewsDetailAdmin />}
-              ></Route>
-              {/* ################################################################### */}
-              {/* ############################## YOUTUBE-ADMIN ############################## */}
-              <Route
-                path="/dashboard/youtube-admin"
-                element={<Visitors />}
-              ></Route>
-              <Route
-                path="/dashboard/youtube-admin/profile"
-                element={<UsersProfile />}
-              ></Route>
-              <Route
-                path="/dashboard/youtube-admin/youtube"
-                element={<AddYouTube />}
-              ></Route>
-              <Route
-                path="/dashboard/youtube-admin/youtube/detail"
-                element={<UpdateYoutube />}
-              ></Route>
-              {/* ################################################################### */}
-              {/* ############################## BLOG-ADMIN ############################## */}
-              <Route
-                path="/dashboard/blog-admin"
-                element={<Visitors />}
-              ></Route>{" "}
-              <Route
-                path="/dashboard/blog-admin/profile"
-                element={<UsersProfile />}
-              ></Route>
-              <Route
-                path="/dashboard/blog-admin/blog"
-                element={<AddBlog />}
-              ></Route>
-              <Route
-                path="/dashboard/blog-admin/blog/detail"
-                element={<UpdateBlog />}
-              ></Route>
-              {/* ################################################################### */}
-              {/* ############################## JOB-ADMIN ############################## */}
-              <Route path="/dashboard/job-admin" element={<Visitors />}></Route>{" "}
-              <Route
-                path="/dashboard/job-admin/profile"
-                element={<UsersProfile />}
-              ></Route>
-              <Route
-                path="/dashboard/job-admin/job"
-                element={<AddJob />}
-              ></Route>
-              <Route
-                path="/dashboard/job-admin/job/detail"
-                element={<UpdateJob />}
-              ></Route>
-              {/* ################################################################### */}
-              {/* ############################## COMMON ############################## */}
-              <Route path="/dashboard/success" element={<Success />}></Route>
-              <Route path="/dashboard/admin" element={<Admin />}></Route>
-              <Route path="/dashboard/saves" element={<Saves />}></Route>
-              <Route
-                path="/dashboard/notifications"
-                element={<Notifications />}
-              ></Route>
-              <Route path="/dashboard/views" element={<Views />}></Route>
-              <Route path="/dashboard/upgrade" element={<Upgrade />}></Route>
-              <Route path="/dashboard/message" element={<Message />}></Route>
-              {/* ################################################################### */}
-              <Route path="*" element={<PageNotFound />}></Route>
-            </Route>
+            {user && (
+              <Route path="/dashboard" element={<Dashboard />}>
+                {/* ############################## COMPANY ################################# */}
+                <Route path="/dashboard/company" element={<Company />}></Route>
+                <Route
+                  path="/dashboard/company/share"
+                  element={<Referrals type="company" />}
+                ></Route>
+                <Route
+                  path="/dashboard/company/boosting"
+                  element={<Boosting />}
+                ></Route>
+                <Route
+                  path="/dashboard/company/billing"
+                  element={<Billing />}
+                ></Route>
+                <Route
+                  path="/dashboard/company/subscription"
+                  element={<Subscription type="default" />}
+                ></Route>
+                <Route
+                  path="/dashboard/company/saves"
+                  element={<Saves type="company" />}
+                ></Route>
+                <Route
+                  path="/dashboard/company/sales"
+                  element={<SalesDetail type="company" />}
+                ></Route>
+                <Route
+                  path="/dashboard/company/views"
+                  element={<Views type="company" />}
+                ></Route>
+                <Route
+                  path="/dashboard/company/profile"
+                  element={<Profile />}
+                ></Route>
+                <Route
+                  path="/dashboard/company/change-password"
+                  element={<ChangePassword />}
+                ></Route>
+                {/* ################################################################### */}
+                {/* ############################## SALES ############################## */}
+                <Route path="/dashboard/sales" element={<Sellers />}></Route>
+                <Route
+                  path="/dashboard/sales/profile"
+                  element={<UsersProfile />}
+                ></Route>
+                <Route
+                  path="/dashboard/sales/company"
+                  element={<SalesCompany />}
+                ></Route>
+                <Route
+                  path="/dashboard/sales/profile"
+                  element={<Profile />}
+                ></Route>
+                <Route
+                  path="/dashboard/sales/referrals"
+                  element={<Referrals type="sales" />}
+                ></Route>
+                <Route
+                  path="/dashboard/sales/earns"
+                  element={<Earns />}
+                ></Route>
+                <Route
+                  path="/dashboard/sales/ratings"
+                  element={<Ratings />}
+                ></Route>
+                {/* ################################################################### */}
+                {/* ############################## ADMIN ############################## */}
+                <Route
+                  path="/dashboard/admin/news"
+                  element={<AddNews />}
+                ></Route>
+                <Route
+                  path="/dashboard/admin/news/detail"
+                  element={<NewsDetailAdmin />}
+                ></Route>
+                <Route
+                  path="/dashboard/admin/profile"
+                  element={<UsersProfile />}
+                ></Route>
+                <Route
+                  path="/dashboard/admin/youtube"
+                  element={<AddYoutube />}
+                ></Route>
+                <Route
+                  path="/dashboard/admin/prices"
+                  element={<AddPrices />}
+                ></Route>
+                <Route
+                  path="/dashboard/admin/prices/detail"
+                  element={<UpdatePrices />}
+                ></Route>
+                <Route
+                  path="/dashboard/admin/youtube/detail"
+                  element={<UpdateYoutube />}
+                ></Route>
+                <Route
+                  path="/dashboard/admin/boost"
+                  element={<AddBoost />}
+                ></Route>
+                <Route
+                  path="/dashboard/admin/boost/detail"
+                  element={<UpdateBoost />}
+                ></Route>
+                <Route
+                  path="/dashboard/admin/category"
+                  element={<AddCategory />}
+                ></Route>{" "}
+                <Route
+                  path="/dashboard/admin/category/detail"
+                  element={<UpdateCategory />}
+                ></Route>
+                <Route
+                  path="/dashboard/admin/blog"
+                  element={<AddBlog />}
+                ></Route>
+                <Route
+                  path="/dashboard/admin/blog/detail"
+                  element={<UpdateBlog />}
+                ></Route>
+                <Route path="/dashboard/admin/job" element={<AddJob />}></Route>
+                <Route
+                  path="/dashboard/admin/job/detail"
+                  element={<UpdateJob />}
+                ></Route>
+                <Route
+                  path="/dashboard/admin/users"
+                  element={<Users />}
+                ></Route>
+                <Route
+                  path="/dashboard/admin/users/manage"
+                  element={<UsersProfile />}
+                ></Route>
+                <Route
+                  path="/dashboard/admin/companies/manage"
+                  element={<Profile />}
+                ></Route>
+                <Route
+                  path="/dashboard/admin/sponsors"
+                  element={<Sponsors />}
+                ></Route>
+                <Route
+                  path="/dashboard/admin/banners"
+                  element={<Banners />}
+                ></Route>
+                <Route
+                  path="/dashboard/admin/approval"
+                  element={<Bills />}
+                ></Route>
+                <Route
+                  path="/dashboard/admin/subscription/custom"
+                  element={<Subscription type="custom" />}
+                ></Route>
+                {/* ################################################################### */}
+                {/* ############################## VISITOR ############################## */}
+                <Route path="/dashboard/visitor" element={<Visitors />}></Route>
+                <Route
+                  path="/dashboard/visitor/profile"
+                  element={<UsersProfile />}
+                ></Route>
+                {/* ################################################################### */}
+                {/* ############################## NEWS-ADMIN ############################## */}
+                <Route
+                  path="/dashboard/news-admin"
+                  element={<Visitors />}
+                ></Route>
+                <Route
+                  path="/dashboard/news-admin/profile"
+                  element={<UsersProfile />}
+                ></Route>
+                <Route
+                  path="/dashboard/news-admin/news"
+                  element={<AddNews />}
+                ></Route>
+                <Route
+                  path="/dashboard/news-admin/news/detail"
+                  element={<NewsDetailAdmin />}
+                ></Route>
+                {/* ################################################################### */}
+                {/* ############################## YOUTUBE-ADMIN ############################## */}
+                <Route
+                  path="/dashboard/youtube-admin"
+                  element={<Visitors />}
+                ></Route>
+                <Route
+                  path="/dashboard/youtube-admin/profile"
+                  element={<UsersProfile />}
+                ></Route>
+                <Route
+                  path="/dashboard/youtube-admin/youtube"
+                  element={<AddYouTube />}
+                ></Route>
+                <Route
+                  path="/dashboard/youtube-admin/youtube/detail"
+                  element={<UpdateYoutube />}
+                ></Route>
+                {/* ################################################################### */}
+                {/* ############################## BLOG-ADMIN ############################## */}
+                <Route
+                  path="/dashboard/blog-admin"
+                  element={<Visitors />}
+                ></Route>{" "}
+                <Route
+                  path="/dashboard/blog-admin/profile"
+                  element={<UsersProfile />}
+                ></Route>
+                <Route
+                  path="/dashboard/blog-admin/blog"
+                  element={<AddBlog />}
+                ></Route>
+                <Route
+                  path="/dashboard/blog-admin/blog/detail"
+                  element={<UpdateBlog />}
+                ></Route>
+                {/* ################################################################### */}
+                {/* ############################## JOB-ADMIN ############################## */}
+                <Route
+                  path="/dashboard/job-admin"
+                  element={<Visitors />}
+                ></Route>{" "}
+                <Route
+                  path="/dashboard/job-admin/profile"
+                  element={<UsersProfile />}
+                ></Route>
+                <Route
+                  path="/dashboard/job-admin/job"
+                  element={<AddJob />}
+                ></Route>
+                <Route
+                  path="/dashboard/job-admin/job/detail"
+                  element={<UpdateJob />}
+                ></Route>
+                {/* ################################################################### */}
+                {/* ############################## COMMON ############################## */}
+                <Route path="/dashboard/success" element={<Success />}></Route>
+                <Route path="/dashboard/admin" element={<Admin />}></Route>
+                <Route path="/dashboard/saves" element={<Saves />}></Route>
+                <Route
+                  path="/dashboard/notifications"
+                  element={<Notifications />}
+                ></Route>
+                <Route path="/dashboard/views" element={<Views />}></Route>
+                <Route path="/dashboard/upgrade" element={<Upgrade />}></Route>
+                <Route path="/dashboard/message" element={<Message />}></Route>
+                {/* ################################################################### */}
+                <Route path="*" element={<PageNotFound />}></Route>
+              </Route>
+            )}
             <Route path="*" element={<PageNotFound />}></Route>
           </Routes>
         </div>
