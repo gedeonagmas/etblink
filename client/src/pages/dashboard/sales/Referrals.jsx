@@ -139,7 +139,7 @@ const Referrals = ({ type }) => {
 
       <p className="font-bold mt-2">Direct share</p>
       <div className="grid w-full mt-2 bg-gray-100 rounded-lg px-5 py-8 grid-cols-3 gap-6 md:grid-cols-5 lg:grid-cols-7 xl:grid-cols-10">
-        {links.map((ref) => {
+        {links?.map((ref) => {
           return (
             <div
               key={ref.button}

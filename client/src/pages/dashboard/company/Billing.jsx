@@ -272,10 +272,10 @@ const Billing = () => {
   console.log(amount, "amount");
 
   return (
-    <div className="w-full  h-auto flex flex-col items-start justify-start">
+    <div className="w-full md:pl-5 h-auto flex flex-col items-start justify-start">
       <Response response={fundResponse} setPending={setFundPending} />
 
-      <div className="flex gap-10 items-center mt-2">
+      {/* <div className="flex gap-10 items-center mt-2">
         <div className="px-5 py-2 gap-y-3 flex flex-col rounded-lg border">
           <p className="text-lg">Current Balance</p>
           <p className="text-xl font-bold">
@@ -294,27 +294,81 @@ const Billing = () => {
             Add Fund
           </button>
         </div>
-      </div>
-      <p className="font-light py-2 mt-10 text-lg">
-        Your previous fund history.
+      </div> */}
+      <p className="text-lg pt-2">Your Fund Transactions.</p>
+      <p className="font-light mt-1">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui laborum
+        perspiciatis molestias, ex, unde numquam accusantium laudantium,
+        repudiandae itaque delectus quia iusto dolor quasi exercitationem nam
+        soluta quod sed distinctio.
       </p>
-      <div class="relative w-full overflow-x-auto mt-2 overflow-y-auto h-[300px]">
-        <table class="w-full   text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-          <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+      <div className="relative mt-8">
+        <p className="text-lg font-light py-2">Information.</p>
+        <div className="flex border border-gray-300 gap-2">
+          <p className="py-2 px-4 w-44">Name</p>
+          <p className="font-light w-52 lg:w-80 py-2 px-4 border-l border-gray-300">
+            {user?.user?.name}
+          </p>
+        </div>
+        <div className="flex border border-t-0 gap-2 border-gray-300">
+          <p className="py-2 px-4 w-44">Email</p>
+          <p className="font-light w-52 lg:w-80 py-2 px-4 border-l border-gray-300">
+            {user?.email?.split("@")?.join(" @")}
+          </p>
+        </div>
+        <div className="flex border border-t-0 gap-2 border-gray-300">
+          <p className="py-2 px-4 w-44">Phone</p>
+          <p className="font-light w-52 lg:w-80 py-2 px-4 border-l border-gray-300">
+            {user?.user?.phone}
+          </p>
+        </div>
+        <div className="flex border border-t-0 gap-2 border-gray-300">
+          <p className="py-2 px-4 w-44">Current Balance</p>
+          <p className="font-light w-52 lg:w-80 py-2 px-4 border-l border-gray-300">
+            {new Intl.NumberFormat().format(
+              currentCompany?.data[0]?.currentBalance
+            )}{" "}
+            birr
+          </p>
+        </div>
+        <div className="flex border border-t-0 gap-2 border-gray-300">
+          <p className="py-2 px-4 w-44">New Fund</p>
+          <div className="font-light w-52 lg:w-80 py-2 px-4 border-l border-gray-300">
+            <button
+              onClick={() => {
+                setPaymentTypePopup(true);
+              }}
+              className="px-5 py-1 w-40 rounded-sm bg-main hover:bg-red-500 text-white"
+            >
+              Add Fund
+            </button>
+          </div>
+        </div>
+      </div>
+      <p className="py-2 mt-10 text-lg">Your previous fund history.</p>
+      <div class="relative w-full pr-10 overflow-x-auto mt-2 overflow-y-auto pb-10 h-[300px]s">
+        <table class="w-full border relative border-gray-300  text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+          <thead class="text-xs text-gray-700 border-b uppercase bg-red-100 dark:bg-gray-700 dark:text-gray-400">
             <tr>
-              <th scope="col" class="px-3 py-3">
+              <th scope="col" class="px-3 border-l py-3">
                 No
               </th>
-              <th scope="col" class="px-3 py-3">
-                Amount
+              <th scope="col" class="px-3 border-l py-3">
+                Name
               </th>
-              <th scope="col" class="px-3 py-3">
-                Date
+              <th scope="col" class="px-3 border-l py-3">
+                Email
               </th>
-              <th scope="col" class="px-3 py-3">
+              <th scope="col" class="px-3 border-l py-3">
                 Payment Method
               </th>
-              <th scope="col" class="px-3 py-3">
+              <th scope="col" class="px-3 border-l py-3">
+                Amount
+              </th>
+              <th scope="col" class="px-3 border-l py-3">
+                Date
+              </th>
+              <th scope="col" class="px-3 border-l py-3">
                 Status
               </th>
             </tr>
@@ -326,14 +380,20 @@ const Billing = () => {
                   <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                     <td
                       scope="row"
-                      class="px-3 py-4 w-3  font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                      class="px-3 py-4 w-3 border-l  font-medium text-gray-900 whitespace-nowrap dark:text-white"
                     >
                       {i + 1}
                     </td>
-                    <td class="px-3 w-52  py-4">{e?.amount}</td>
-                    <td class="px-3 w-52  py-4">{format(e?.createdAt)}</td>
-                    <td class="px-3 w-28 py-4">{e?.paymentMethod}</td>
-                    <td class="px-3 py-4">{e.status}</td>
+                    <td class="px-3 w-72 border-l  py-4">{e?.company?.name}</td>
+                    <td class="px-3 w-72 border-l  py-4">{user?.email}</td>
+                    <td class="px-3 w-24 border-l  py-4">{e?.payFrom}</td>
+                    <td class="px-3 w-24 border-l  py-4">{e?.amount}</td>
+                    <td class="px-3 w-52 border-l  py-4">
+                      {format(e?.createdAt)}
+                    </td>
+                    <td class="px-3 w-28 border-l py-4">
+                      {e?.approved ? "Approved" : "Pending..."}
+                    </td>
                   </tr>
                 );
               })

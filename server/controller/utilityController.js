@@ -89,7 +89,7 @@ const createRate = asyncCatch(async (req, res, next) => {
         button: message.rateButton(),
         link: message.rateLink(req.body.for),
         next,
-      });
+      });  
     }
   };
 
