@@ -3,6 +3,7 @@ import Banner from "../../components/Banner";
 import CompanyItems from "../../components/CompanyItems";
 import {
   useCompanyAggregateQuery,
+  useCreateSaveMutation,
   useLazyReadQuery,
   useReadQuery,
 } from "../../features/api/apiSlice";
@@ -13,6 +14,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 import { useLocation } from "react-router-dom";
+import Response from "../../components/Response";
 
 const Category = ({ type }) => {
   const [page, setPage] = useState(1);
@@ -49,6 +51,17 @@ const Category = ({ type }) => {
   const [subCategoryData, setSubCategoryData] = useState([]);
   const [city, setCity] = useState("");
   const [country, setCountry] = useState("");
+  const [savePending, setSavePending] = useState(false);
+
+  const [saveData, saveResponse] = useCreateSaveMutation();
+  // const saveHandler = () => {
+  //   saveData({
+  //     company: value,
+  //     saver: user?.user?._id,
+  //     role: user?.role,
+  //     tag: ["save", "company"],
+  //   });
+  // };
 
   const {
     data: aggregateData,
@@ -182,6 +195,8 @@ const Category = ({ type }) => {
   return (
     <div className="w-full relative pb-6 pt-24 bg-gray-50 bg-dark h-auto">
       {/* {companyFetching && <Loading />} */}
+      <Response response={saveResponse} setPending={setSavePending} />
+
       {companyError && <p>Something went wrong unable to fetch the data!</p>}
       {/* <div className="absolute text-lg font-bold  z-30 top-[500px] left-[2%]">
         We provide more than <br /> 245 total companies <br /> for your business
@@ -465,8 +480,6 @@ const Category = ({ type }) => {
             <div className="grid mt-5 grid-cols-1  md:grid-cols-2 lg:grid-cols-3 w-full place-items-center gap-6">
               {companyFetching ? (
                 <Loading />
-              ) : lastPage?.length > 0 ? (
-                <p>{lastPage}</p>
               ) : companyError ? (
                 <p>Something went error unable to read the data.</p>
               ) : company?.data?.length > 0 ? (

@@ -123,6 +123,7 @@ const Profile = () => {
   const [maps, setMaps] = useState("");
   const [latitude, setLatitude] = useState("");
   const [longitude, setLongitude] = useState("");
+  const [directions, setDirections] = useState("");
   const [service, setService] = useState("");
   const [services, setServices] = useState([]);
   const [feature, setFeature] = useState("");
@@ -141,6 +142,7 @@ const Profile = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [procedure, setProcedure] = useState(false);
 
   const [socialMedias, setSocialMedias] = useState({
     facebook: "",
@@ -173,21 +175,34 @@ const Profile = () => {
     }
   };
 
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(function (position) {
+  console.log(directions, "directions...");
+
+  useEffect(() => {
+    if (directions?.length > 0) {
+      console.log("running... from directions");
+
       setMaps(`<iframe
       width="100%"
       id="iframe"
       height="300"
-      src="https://maps.google.com/maps?q=${position?.coords?.latitude},${position?.coords?.longitude}&hl=es;&z=9&amp;output=embed"
+      src="https://maps.google.com/maps?q=${directions}&hl=es;&z=9&amp;output=embed"
     ></iframe>`);
-      // setLatitude(position.coords.latitude);
-      // setLongitude(position.coords.longitude);
-      // console.log(`Latitude: ${latitude}, Longitude: ${longitude}`, position);
-    });
-  } else {
-    console.log("Geolocation is not supported by this browser.");
-  }
+    } else {
+      if (navigator.geolocation) {
+        console.log("running... from navigator");
+        navigator.geolocation.getCurrentPosition(function (position) {
+          setMaps(`<iframe
+        width="100%"
+        id="iframe"
+        height="300"
+        src="https://maps.google.com/maps?q=${position?.coords?.latitude},${position?.coords?.longitude}&hl=es;&z=9&amp;output=embed"
+      ></iframe>`);
+        });
+      } else {
+        console.log("Geolocation is not supported by this browser.");
+      }
+    }
+  }, [directions]);
 
   // useEffect(() => {
   //   setUser(JSON.parse(localStorage.getItem("etblink_user")));
@@ -215,6 +230,11 @@ const Profile = () => {
       setSubCategory(data?.subCategory ? data.subCategory : subCategory);
       setCity(data?.city ? data.city : city);
       setMaps(data?.maps ? data.maps : maps);
+      setDirections(
+        data?.maps
+          ? data?.maps?.split("/maps?q=")[1]?.split("&")[0]
+          : directions
+      );
       setCountry(data?.country ? data.country : country);
       setName(data?.name ? data.name : name);
       setPhone(data?.phone ? data.phone : phone);
@@ -325,7 +345,7 @@ const Profile = () => {
         corrupti repudiandae.
       </p>
       <p className="text-lg font-semibold mt-6">Information's</p>
-      <div className="grid w-full mt-2 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-2">
+      <div className="grid w-full relative mt-2 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-2">
         <div className="mb-5">
           <label
             for="name"
@@ -575,6 +595,93 @@ const Profile = () => {
             placeholder="skylighttechnologies.com"
             required
           />
+        </div>
+        <div className="mb-5 relative">
+          <label
+            for="name"
+            class=" mb-2 text-sm flex items-center font-medium text-gray-900 dark:text-white"
+          >
+            Locations{" "}
+            <span
+              onClick={() => setProcedure(true)}
+              className="text-blue-600 cursor-pointer text-sm flex items-center hover:underline ml-1 "
+            >
+              (Procedures here
+              <svg
+                class="w-5 h-5 underline"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 12H5m14 0-4 4m4-4-4-4"
+                />
+              </svg>
+            </span>
+            )
+          </label>
+          <input
+            onChange={(e) => setDirections(e.target.value)}
+            value={directions}
+            type="text"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder="9.007707209572045, 38.78704169152206"
+            required
+          />
+          {procedure && (
+            <div className="absolute z-20 flex flex-col gap-1 text-sm top-0 right-0 shadow-lg bg-gray-200 rounded-lg border h-auto w-full px-3 pt-6 pb-2">
+              <svg
+                class="w-6 absolute top-1 right-1 cursor-pointer hover:text-gray-700 h-6 text-gray-800 dark:text-white"
+                onClick={() => setProcedure(false)}
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="m15 9-6 6m0-6 6 6m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                />
+              </svg>
+
+              <p className="border p-1 mt-2 rounded-lg border-yellow-500">
+                if your company location is similar to where you are right now.
+                just leave it as it is. otherwise follow the following steps.
+              </p>
+              <a target="_blank" href="https://maps.google.com" className="">
+                1. Go to Google Map by clicking{" "}
+                <span className="text-blue-600 font-bold">here</span>
+              </a>
+              <p>2. Select your location then right click on it.</p>
+              <img
+                src="https://etblink.com/etbmapprocedure.PNG"
+                alt=""
+                className="w-full border border-red-400 mt-1 object-cover object-center h-44"
+              />
+              <p className="mt-1">
+                3. Click on the first row(9.00391,38.75927) to copy, then paste
+                it here on location field.
+              </p>
+              <button
+                onClick={() => setProcedure(false)}
+                className="px-4 py-2 mt-1 hover:bg-red-500 rounded-sm bg-main text-white"
+              >
+                Hooray, Got it.
+              </button>
+            </div>
+          )}
         </div>
       </div>
       <div className="mb-5 w-full">

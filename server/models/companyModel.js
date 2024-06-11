@@ -211,10 +211,12 @@ schema.pre("findOneAndUpdate", function (next) {
     "type",
     "title",
     "phone",
+    "address",
     "video",
     "website",
     "description",
     "services",
+    "maps",
     "features",
     "logo",
     "banner",
@@ -225,7 +227,13 @@ schema.pre("findOneAndUpdate", function (next) {
 
   fields.map((field) => {
     if (this._update[field]?.length > 0) {
-      percent += 6;
+      percent =
+        this._update[field] === "website" ||
+        this._update[field] === "video" ||
+        this._update[field] === "maps" ||
+        this._update[field] === "title"
+          ? percent + 3
+          : percent + 6;
     }
   });
 
@@ -233,37 +241,37 @@ schema.pre("findOneAndUpdate", function (next) {
   next();
 });
 
-schema.pre("save", function (next) {
-  let percent = 20;
-  const fields = [
-    "name",
-    "type",
-    "title",
-    "phone",
-    "video",
-    "website",
-    "description",
-    "latitude",
-    "longitude",
-    "services",
-    "features",
-    "logo",
-    "banner",
-    "galleries",
-    "socialMedias",
-    "workingDays",
-  ];
-  fields.map((field) => {
-    if (this[field]?.length > 0) {
-      percent += 5;
-    }
-    return percent;
-  });
+// schema.pre("save", function (next) {
+//   let percent = 20;
+//   const fields = [
+//     "name",
+//     "type",
+//     "title",
+//     "phone",
+//     "video",
+//     "website",
+//     "description",
+//     "latitude",
+//     "longitude",
+//     "services",
+//     "features",
+//     "logo",
+//     "banner",
+//     "galleries",
+//     "socialMedias",
+//     "workingDays",
+//   ];
+//   fields.map((field) => {
+//     if (this[field]?.length > 0) {
+//       percent += 5;
+//     }
+//     return percent;
+//   });
 
-  // console.log(percent, "percent");
-  this.profileFillStatus = percent;
-  next();
-});
+//   // console.log(percent, "percent");
+//   this.profileFillStatus = percent;
+//   next();
+// });
 
 // uniqueValidator.defaults.message = "{PATH} '{VALUE}' is taken";
 // schema.plugin(uniqueValidator);

@@ -35,7 +35,6 @@ const CompanyDetail = (props) => {
     tag: ["companies", "users"],
   });
 
-  console.log(companyId, "id", location, "location", data, "data");
   // const {
   //   data: rates,
   //   isFetching: rateIsFetching,
@@ -110,7 +109,7 @@ const CompanyDetail = (props) => {
       company: companyId,
       viewer: currentUser?.user,
       role: currentUser?.role,
-      tag: ["companies","views"],
+      tag: ["companies", "views"],
     });
   };
 
@@ -159,6 +158,12 @@ const CompanyDetail = (props) => {
   }, [companyId, page]);
 
   const removeHandler = () => {
+    console.log(
+      currentUser?.user?._id === detail,
+      currentUser?.user?._id,
+      detail,
+      "company detail"
+    );
     detail &&
       removeData({
         url: `/user/rates?id=${detail?._id}`,
@@ -430,12 +435,12 @@ const CompanyDetail = (props) => {
               <div className="w-full">
                 <p className="text-xl mt-10 font-bold">Videos</p>
                 {/* <div className="grid grid-cols-1 gap-7 w-full mt-5 sm:grid-cols-2 md:grid-cols-3"> */}
-                <div className="flex w-full mt-5 rounded-lg border relative justify-start py-4 gap-1 flex-col items-enter">
+                <div className="flex w-full rounded-lg mt-5 border relative justify-start  gap-1 flex-col items-enter">
                   {company?.video && (
                     <video
                       src={company?.video}
                       alt=""
-                      className="w-full rounded-lg"
+                      className="w-full border h-[350px] rounded-lg"
                       controls
                     />
                   )}
@@ -581,19 +586,20 @@ const CompanyDetail = (props) => {
                             <p>{e?.value}</p>
                           </div>
                           <p className="mt-1 ml-14">{e?.message}</p>
-                          {currentUser?.user?._id === e?.rater?._id && (
-                            <div className="w-full justify-end flex">
-                              <button
-                                onClick={() => {
-                                  setDetail(e);
-                                  setPopup(true);
-                                }}
-                                className="self-end rounded-sm w-20 py-1 mb-2 text-white bg-main mt-2"
-                              >
-                                Delete
-                              </button>
-                            </div>
-                          )}
+                          {currentUser &&
+                            currentUser?.user?._id === e?.rater?._id && (
+                              <div className="w-full justify-end flex">
+                                <button
+                                  onClick={() => {
+                                    setDetail(e);
+                                    setPopup(true);
+                                  }}
+                                  className="self-end rounded-sm w-20 py-1 mb-2 text-white bg-main mt-2"
+                                >
+                                  Delete
+                                </button>
+                              </div>
+                            )}
                         </div>
                       );
                     })}
@@ -1046,11 +1052,17 @@ const CompanyDetail = (props) => {
 
                   <div className="flex w-full mt-5 flex-col items-center justify-center">
                     <div class="flex flex-col gap-3 items-center mb-4">
-                      <img
-                        class="w-24 h-24 me-4 rounded-full"
-                        src={sales?.data[0]?.user?.profilePicture}
-                        alt=""
-                      />
+                      {sales?.data[0]?.user?.profilePicture ? (
+                        <img
+                          class="w-24 h-24 me-4 rounded-full"
+                          src={sales?.data[0]?.user?.profilePicture}
+                          alt=""
+                        />
+                      ) : (
+                        <div className="w-24 h-24 rounded-full text-4xl flex items-center justify-center border bg-main text-white">
+                          {sales?.data[0]?.email?.substring(0, 1)}
+                        </div>
+                      )}
                       <div class="font-medium gap-1 flex flex-col dark:text-white">
                         <p className="text-xl font-bold">
                           {sales?.data[0]?.user?.firstName}{" "}

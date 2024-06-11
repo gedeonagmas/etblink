@@ -70,29 +70,36 @@ import AdvertWithUs from "./pages/AdvertWithUs";
 import BecomeAMember from "./pages/BecomeAMember";
 import BecomeRepresentative from "./pages/BecomeRepresentative";
 import WorkWIthUs from "./pages/WorkWIthUs";
+import Loading from "./components/loading/Loading";
 
 export const userContext = createContext();
 
 function App() {
-  const { data: user } = useReadQuery({
-    url: "/user/readProfileInfo",
-    tag: ["users"],
-  });
+  // const {
+  //   data: user,
+  //   isFetching,
+  //   isError,
+  // } = useReadQuery({
+  //   url: "/user/readProfileInfo",
+  //   tag: ["users"],
+  // });
+
+  const user = JSON.parse(localStorage.getItem("etblink_user"));
 
   const { data: admin } = useReadQuery({
     url: "/user/users?role=admin",
     tag: ["users"],
   });
 
-  useEffect(() => {
-    if (user) {
-      localStorage.setItem("etblink_user", JSON.stringify(user));
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (user) {
+  //     localStorage.setItem("etblink_user", JSON.stringify(user));
+  //   }
+  // }, []);
 
   // useEffect(() => {});
   // const user = { data: { email: "gedi@gmail.com" } };
-  console.log(user, "from app js");
+  // console.log(user, "from app js");
   return (
     <Flowbite>
       <userContext.Provider value={{ user: user?.data }}>
@@ -149,10 +156,24 @@ function App() {
             </Route>
 
             {/* ############################## DASHBOARD ################################# */}
-            {user && (
+            {/* {isFetching && (
+              <Route
+                path="*"
+                element={
+                  <div className="w-full h-screen fixed top-0 gap-2 left-0 bg-white bg-dark text-black flex items-center justify-center">
+                    <div className="loader !bg-red-500"></div>
+                    <p className="font-semibold">Loading...</p>
+                  </div>
+                }
+              ></Route>
+            )} */}
+            <Route path="*" element={<PageNotFound />}></Route>
+
+            {user ? (
               <Route path="/dashboard" element={<Dashboard />}>
+                <Route path="/dashboard" element={<PageNotFound />}></Route>
                 {/* ############################## COMPANY ################################# */}
-                {user?.data?.role === "company" ? (
+                {user?.role === "company" ? (
                   <>
                     <Route
                       path="/dashboard/company"
@@ -200,7 +221,7 @@ function App() {
                 )}
                 {/* ################################################################### */}
                 {/* ############################## SALES ############################## */}
-                {user?.data?.role === "sales" ? (
+                {user?.role === "sales" ? (
                   <>
                     <Route
                       path="/dashboard/sales"
@@ -236,7 +257,7 @@ function App() {
                 )}
                 {/* ################################################################### */}
                 {/* ############################## ADMIN ############################## */}
-                {user?.data?.role === "admin" ? (
+                {user?.role === "admin" ? (
                   <>
                     <Route
                       path="/dashboard/admin/news"
@@ -332,7 +353,7 @@ function App() {
                 )}
                 {/* ################################################################### */}
                 {/* ############################## VISITOR ############################## */}
-                {user?.data?.role === "visitor" ? (
+                {user?.role === "visitor" ? (
                   <>
                     {" "}
                     <Route
@@ -353,7 +374,7 @@ function App() {
                 )}
                 {/* ################################################################### */}
                 {/* ############################## NEWS-ADMIN ############################## */}
-                {user?.data?.role === "news-admin" ? (
+                {user?.role === "news-admin" ? (
                   <>
                     {" "}
                     <Route
@@ -378,7 +399,7 @@ function App() {
                 )}
                 {/* ################################################################### */}
                 {/* ############################## YOUTUBE-ADMIN ############################## */}
-                {user?.data?.role === "youtube-admin" ? (
+                {user?.role === "youtube-admin" ? (
                   <>
                     <Route
                       path="/dashboard/youtube-admin"
@@ -402,7 +423,7 @@ function App() {
                 )}
                 {/* ################################################################### */}
                 {/* ############################## BLOG-ADMIN ############################## */}
-                {user?.data?.role === "blog-admin" ? (
+                {user?.role === "blog-admin" ? (
                   <>
                     {" "}
                     <Route
@@ -427,7 +448,7 @@ function App() {
                 )}
                 {/* ################################################################### */}
                 {/* ############################## JOB-ADMIN ############################## */}
-                {user?.data?.role === "job-admin" ? (
+                {user?.role === "job-admin" ? (
                   <>
                     {" "}
                     <Route
@@ -464,6 +485,8 @@ function App() {
                 {/* ################################################################### */}
                 {/* <Route path="*" element={<PageNotFound />}></Route> */}
               </Route>
+            ) : (
+              <Route path="*" element={<PageNotFound />}></Route>
             )}
             {/* <Route path="*" element={<PageNotFound />}></Route> */}
           </Routes>

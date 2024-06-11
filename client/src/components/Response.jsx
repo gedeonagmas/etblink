@@ -54,12 +54,21 @@ const Response = ({ response, setPending, redirectTo, type }) => {
         type === "forget" ? 20000 : 6000
       );
 
-      if (type === "login" || type === "signUp") {
+      if (type === "login") {
         localStorage.setItem(
           "etblink_user",
           JSON.stringify(response?.data?.data)
         );
         navigate(dashboard);
+        window.location.reload();
+      }
+      if (type === "signUp") {
+        localStorage.setItem(
+          "etblink_user",
+          JSON.stringify(response?.data?.data)
+        );
+        navigate(`/dashboard/${response?.data?.data?.role}/profile`);
+        window.location.reload();
       }
       if (type === "update") {
         const data = JSON.parse(localStorage.getItem("etblink_user"));

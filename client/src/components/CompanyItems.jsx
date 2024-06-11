@@ -10,6 +10,7 @@ import {
 } from "../features/api/apiSlice";
 import { SavedSearch } from "@mui/icons-material";
 import { io } from "socket.io-client";
+import Response from "./Response";
 
 const CompanyItems = ({ value, phoneNo, type, data, disabled }) => {
   const [phone, setPhone] = useState(phoneNo);
@@ -56,6 +57,7 @@ const CompanyItems = ({ value, phoneNo, type, data, disabled }) => {
   };
 
   const saveHandler = () => {
+    // user?.user &&
     saveData({
       company: value,
       saver: user?.user?._id,
@@ -66,6 +68,7 @@ const CompanyItems = ({ value, phoneNo, type, data, disabled }) => {
 
   const [socket, setSocket] = useState(null);
   const [onlineUsers, setOnlineUsers] = useState();
+  const [savePending, setSavePending] = useState(false);
 
   useEffect(() => {
     setSocket(io("http://localhost:3001"));
@@ -110,6 +113,8 @@ const CompanyItems = ({ value, phoneNo, type, data, disabled }) => {
       key={value}
       className="w-full relative h-auto bg-white dark:bg-gray-700 rounded-md shadow-xl shadow-gray-200 flex flex-col items-start text-sm justify-start"
     >
+      <Response response={saveResponse} setPending={setSavePending} />
+
       <div className="w-full relative rounded-xl   flex items-center justify-center gap-4">
         <div className="relative w-full">
           <img
@@ -123,8 +128,12 @@ const CompanyItems = ({ value, phoneNo, type, data, disabled }) => {
             {openClosedHandler(data?.workingDays)}
           </div>
           <Link
-            to="/dashboard/views"
-            className="absolute px-1 py-1 hover:bg-red-500 cursor-pointer rounded-md bg-main ml-1 gap-1 shadow-lg bottom-1 text-white flex items-center justify-center left-2"
+            to={user?.user?._id === value ? "/dashboard/views" : ""}
+            className={`absolute px-1 py-1  ${
+              user?.role === "company"
+                ? "cursor-pointer hover:bg-red-500"
+                : "cursor-default"
+            } rounded-md bg-main ml-1 gap-1 shadow-lg bottom-1 text-white flex items-center justify-center left-2`}
           >
             {views?.message ? (
               <svg
@@ -164,7 +173,7 @@ const CompanyItems = ({ value, phoneNo, type, data, disabled }) => {
             )}
             {data?.views?.total}
           </Link>
-          <p
+          <div
             onClick={() => {
               if (!disabled) {
                 saves?.data?.length > 0 ? removeHandler() : saveHandler();
@@ -204,7 +213,7 @@ const CompanyItems = ({ value, phoneNo, type, data, disabled }) => {
               </svg>
             )}
             {data?.saves?.total}
-          </p>
+          </div>
         </div>
         <div
           className={`absolute bg-white bg-dark ${
@@ -391,7 +400,7 @@ const CompanyItems = ({ value, phoneNo, type, data, disabled }) => {
           <p className="mr-3">chat</p>
         </a>
 
-        <Link
+        <a
           to="/company"
           state={{ id: value }}
           className={` ${
@@ -402,10 +411,10 @@ const CompanyItems = ({ value, phoneNo, type, data, disabled }) => {
               : value === 2
               ? "bg-emerald-500"
               : "bg-orange-500"
-          }  text-white rounded-sm`}
+          }  text-white rounded-s cursor-pointer`}
         >
-          Detail{" "}
-        </Link>
+          Detail
+        </a>
       </div>
     </div>
   );

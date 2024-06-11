@@ -93,13 +93,13 @@ utilityRouter.route("/rate").post(authentication, createRate);
 utilityRouter.route("/rate").get(readRate);
 utilityRouter.route("/rateMultiple").get(authentication, readMultipleRate);
 utilityRouter.route("/rate").delete(authentication, deleteRate);
-utilityRouter.route("/save").post(createSave);
+utilityRouter.route("/save").post(authentication, createSave);
 utilityRouter.route("/save").delete(authentication, deleteSave);
 utilityRouter.route("/view").post(authentication, createView);
 utilityRouter.route("/upgrade").post(authentication, upgradeHandler);
 utilityRouter.route("/boost").post(authentication, paymentHandler);
 utilityRouter.route("/companyAggregate").get(companyAggregation);
-utilityRouter.route("/notificationView").put(notificationView);
+utilityRouter.route("/notificationView").put(authentication, notificationView);
 utilityRouter.route("/recentlyAddedCompany").get(recentlyAddedCompany);
 
 //factory route
@@ -138,13 +138,13 @@ router
   .patch(authentication, aggregate);
 
 //chat route
-chatRouter.route("/:id").get(chatRead);
+chatRouter.route("/:id").get(authentication, chatRead);
 chatRouter
   .route("/")
-  .post(files, chatCreate)
-  .get(chatRead)
-  .put(files, chatUpdate)
-  .delete(chatDelete);
+  .post(authentication, files, chatCreate)
+  .get(authentication, chatRead)
+  .put(authentication, files, chatUpdate)
+  .delete(authentication, chatDelete);
 
 //aggregation
 // router.route("/stats/:table").patch(authentication, authorization, firstPhase);
