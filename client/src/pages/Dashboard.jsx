@@ -380,7 +380,7 @@ const Dashboard = () => {
       : id?.classList?.add("hidden");
   };
 
-  // console.log(user, "context from dashboard");
+  // console.log(saves, "context from dashboard");
   return (
     <div>
       <nav class="fixed top-0 z-50 w-full bg-white bg-dark border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
@@ -489,7 +489,7 @@ const Dashboard = () => {
                     className="items-center cursor-pointer flex flex-col justify-center "
                   >
                     <svg
-                      class="w-6 h-6 text-gray-800 dark:text-white"
+                      class="w-6 h-6"
                       aria-hidden="true"
                       xmlns="http://www.w3.org/2000/svg"
                       width="24"
@@ -524,9 +524,11 @@ const Dashboard = () => {
                           <path d="m12.75 20.66 6.184-7.098c2.677-2.884 2.559-6.506.754-8.705-.898-1.095-2.206-1.816-3.72-1.855-1.293-.034-2.652.43-3.963 1.442-1.315-1.012-2.678-1.476-3.973-1.442-1.515.04-2.825.76-3.724 1.855-1.806 2.201-1.915 5.823.772 8.706l6.183 7.097c.19.216.46.34.743.34a.985.985 0 0 0 .743-.34Z" />
                         </svg>
 
-                        <div class="absolute inline-flex items-center justify-center w-6 h-6 text-xs p-1 font-bold text-white bg-main border-2 border-white rounded-full -top-2 -end-2 dark:border-gray-900">
-                          {saves?.data ? saves?.data?.length : 0}
-                        </div>
+                        {saves?.data?.length > 0 && (
+                          <div class="absolute inline-flex items-center justify-center w-6 h-6 text-xs p-1 font-bold text-white bg-main border-2 border-white rounded-full -top-2 -end-2 dark:border-gray-900">
+                            {saves?.data?.length}
+                          </div>
+                        )}
                         <p className="text-xs font-semibold">saves</p>
                       </button>
                     </div>
@@ -555,9 +557,11 @@ const Dashboard = () => {
                             />
                           </svg>
 
-                          <div class="absolute inline-flex items-center justify-center w-6 h-6 font-bold text-white bg-main border-2 border-white rounded-full -top-2 -end-3 dark:border-gray-900">
-                            {views?.data ? views?.data?.length : 0}
-                          </div>
+                          {views?.data?.length > 0 && (
+                            <div class="absolute inline-flex items-center justify-center w-6 h-6 font-bold text-white bg-main border-2 border-white rounded-full -top-2 -end-3 dark:border-gray-900">
+                              {views?.data?.length}
+                            </div>
+                          )}
                         </button>
                         <p className="text-xs font-semibold">views</p>
                       </div>
@@ -575,7 +579,7 @@ const Dashboard = () => {
                         class="relative flex flex-col items-center text-sm font-medium text-center"
                       >
                         <svg
-                          class="w-6 h-6 text-gray-800 dark:text-white"
+                          class="w-6 h-6"
                           aria-hidden="true"
                           xmlns="http://www.w3.org/2000/svg"
                           width="24"
@@ -586,11 +590,11 @@ const Dashboard = () => {
                           <path d="M17.133 12.632v-1.8a5.407 5.407 0 0 0-4.154-5.262.955.955 0 0 0 .021-.106V3.1a1 1 0 0 0-2 0v2.364a.933.933 0 0 0 .021.106 5.406 5.406 0 0 0-4.154 5.262v1.8C6.867 15.018 5 15.614 5 16.807 5 17.4 5 18 5.538 18h12.924C19 18 19 17.4 19 16.807c0-1.193-1.867-1.789-1.867-4.175Zm-13.267-.8a1 1 0 0 1-1-1 9.424 9.424 0 0 1 2.517-6.391A1.001 1.001 0 1 1 6.854 5.8a7.43 7.43 0 0 0-1.988 5.037 1 1 0 0 1-1 .995Zm16.268 0a1 1 0 0 1-1-1A7.431 7.431 0 0 0 17.146 5.8a1 1 0 0 1 1.471-1.354 9.424 9.424 0 0 1 2.517 6.391 1 1 0 0 1-1 .995ZM8.823 19a3.453 3.453 0 0 0 6.354 0H8.823Z" />
                         </svg>
 
-                        <div class="absolute inline-flex items-center justify-center w-6 h-6 text-xs p-1 font-bold text-white bg-main border-2 border-white rounded-full -top-2 end-3 dark:border-gray-900">
-                          {notifications?.data
-                            ? notifications?.data?.length
-                            : 0}
-                        </div>
+                        {notifications?.data?.length > 0 && (
+                          <div class="absolute inline-flex items-center justify-center w-6 h-6 text-xs p-1 font-bold text-white bg-main border-2 border-white rounded-full -top-2 end-3 dark:border-gray-900">
+                            {notifications?.data?.length}
+                          </div>
+                        )}
                         <p className="text-xs font-semibold">notifications</p>
                       </button>
                     </div>

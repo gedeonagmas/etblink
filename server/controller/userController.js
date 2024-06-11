@@ -11,7 +11,7 @@ const api = "http://localhost:4000/";
 
 const signupHandler = asyncCatch(async (req, res, next) => {
   const user = await User.create(req.body);
-  console.log(req.body, "body");
+  console.log(req.body, "body"); 
   if (user) {
     const account =
       req.body.role === "company"

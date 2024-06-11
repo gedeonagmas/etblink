@@ -9,6 +9,9 @@ import Response from "../../../components/Response";
 import LoadingButton from "../../../components/loading/LoadingButton";
 import Pay from "../../Pay";
 
+import ResponsivePagination from "react-responsive-pagination";
+import "./../../categories/pagination.css";
+
 const Boosting = () => {
   const user = JSON.parse(localStorage.getItem("etblink_user"));
   const [boostingData, boostingResponse] = useCreateBoostMutation();
@@ -79,14 +82,24 @@ const Boosting = () => {
     });
   }, []);
 
-  const {
-    data: boostHistory,
-    isFetching: historyFetching,
-    isError: historyError,
-  } = useReadQuery({
-    url: `/user/boosthistories?populatingType=boosthistories&populatingValue=company,boost`,
-    tag: ["boosthistories"],
-  });
+  const [
+    triggerHistory,
+    { data: boostHistory, isFetching: historyFetching, isError: historyError },
+  ] = useLazyReadQuery();
+
+  const [page, setPage] = useState(1);
+  const [totalPage, setTotalPage] = useState(1);
+
+  useEffect(() => {
+    setTotalPage(Math.ceil(boostHistory?.total / 10));
+  }, [boostHistory]);
+
+  useEffect(() => {
+    triggerHistory({
+      url: `/user/boosthistories?approved=true&limit=10&page=${page}&populatingValue=company,boost`,
+      tag: ["boosthistories"],
+    });
+  }, [page]);
 
   const formatDate = (e, type) => {
     if (type === "history") {
@@ -443,7 +456,7 @@ const Boosting = () => {
   console.log(startDate.length > 0, "boosted");
 
   return (
-    <section class="bg-white dark:bg-gray-900 relative">
+    <section class="bg-white md:pl-5 md:pr-5 dark:bg-gray-900 relative">
       <Response response={boostingResponse} setPending={setBoostPending} />
 
       <div class="py-2 px-4 mx-auto max-w-screen-xl lg:py-6 lg:px-6">
@@ -625,26 +638,34 @@ const Boosting = () => {
         <p className="font-light py-2 mt-10 text-lg">
           Companies in our boosted list.
         </p>
-        <div class="relative overflow-x-auto mt-2 overflow-y-auto h-[300px]">
-          <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-              <tr>
-                <th scope="col" class="px-3 py-3">
+        {historyFetching && <Loading />}
+
+        <div class="relative overflow-x-auto mt-2 overflow-y-auto">
+        <table class="w-full border relative border-gray-300  text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+          <thead class="text-xs text-gray-700 border-b uppercase bg-red-300 dark:bg-gray-700 dark:text-gray-400">
+             <tr>
+                <th scope="col" class=" px-3 border-l border-gray-300 py-4">
                   No
                 </th>
-                <th scope="col" class="px-3 py-3">
+                <th scope="col" class=" px-3 border-l border-gray-300 py-4">
                   Logo
                 </th>
-                <th scope="col" class="px-3 py-3">
-                  Company
+                <th scope="col" class=" px-3 border-l border-gray-300 py-4">
+                  Name
                 </th>
-                <th scope="col" class="px-3 py-3">
-                  Boost type
+                <th scope="col" class=" px-3 border-l border-gray-300 py-4">
+                  Phone
                 </th>
-                <th scope="col" class="px-3 py-3">
+                <th scope="col" class=" px-3 border-l border-gray-300 py-4">
+                  Type
+                </th>{" "}
+                <th scope="col" class=" px-3 border-l border-gray-300 py-4">
+                  Method
+                </th>
+                <th scope="col" class=" px-3 border-l border-gray-300 py-4">
                   Started Date
                 </th>
-                <th scope="col" class="px-3 py-3">
+                <th scope="col" class=" px-3 border-l border-gray-300 py-4">
                   End Date
                 </th>
               </tr>
@@ -653,16 +674,26 @@ const Boosting = () => {
               {boostHistory && boostHistory?.data?.length > 0 ? (
                 boostHistory?.data?.map((e, i) => {
                   return (
-                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                    <tr
+                      class={`${
+                        i % 2 === 1
+                          ? "bg-gray-100 dark:bg-gray-700 dark:border-gray-700"
+                          : "bg-gray-200 dark:bg-gray-600 dark:border-gray-700"
+                      } ${
+                        i === boostHistory?.data?.length - 1
+                          ? "border-b-0"
+                          : "border-b"
+                      } `}
+                    >
                       <td
                         scope="row"
-                        class="px-3 py-4 w-3  font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                        class=" px-3 border-l border-gray-300 py-1 w-3  font-medium text-gray-900 whitespace-nowrap dark:text-white"
                       >
                         {i + 1}
                       </td>
                       <td
                         scope="row"
-                        class="px-2 py-4 w-14  font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                        class="px-2 py-1 w-14 border-l border-gray-300  font-medium text-gray-900 whitespace-nowrap dark:text-white"
                       >
                         <img
                           src={e?.company?.logo}
@@ -670,12 +701,14 @@ const Boosting = () => {
                           className="w-11 h-11 rounded-full border object-fill object-center"
                         />
                       </td>
-                      <td class="px-3 w-52  py-4">{e?.company?.name}</td>
-                      <td class="px-3 w-28 py-4">{e?.boost?.name}</td>
-                      <td class="px-3 py-4">
+                      <td class=" px-3 border-l border-gray-300 w-52  py-1">{e?.company?.name}</td>
+                      <td class=" px-3 border-l border-gray-300 w-32  py-1">{e?.company?.phone}</td>
+                      <td class=" px-3 border-l border-gray-300 w-28 py-1">{e?.boost?.name}</td>
+                      <td class=" px-3 border-l border-gray-300 w-28 py-1">{e?.payFrom}</td>
+                      <td class=" px-3 border-l border-gray-300 py-1">
                         {formatDate(e?.startDate, "history")}
                       </td>
-                      <td class="px-3 py-4">
+                      <td class=" px-3 border-l border-gray-300 py-1">
                         {formatDate(e?.endDate, "history")}
                       </td>
                     </tr>
@@ -683,10 +716,23 @@ const Boosting = () => {
                 })
               ) : (boostHistory && boostHistory?.message) ||
                 boostHistory?.data?.length === 0 ? (
-                <div>Be the first one to boost your Company.</div>
+                <div className="py-2">
+                  Be the first one to boost your Company.
+                </div>
               ) : null}
             </tbody>
           </table>
+          <div className="py-3">
+            <ResponsivePagination
+              total={totalPage}
+              current={page}
+              onPageChange={(currentPage) => setPage(currentPage)}
+              previousLabel="Previous"
+              previousClassName="w-24"
+              nextClassName="w-24"
+              nextLabel="Next"
+            />
+          </div>
         </div>
       </div>
 

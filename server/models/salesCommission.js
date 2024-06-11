@@ -10,7 +10,7 @@ const commissionSchema = new mongoose.Schema(
     },
   },
   {
-    timestamps: true,
+    timestamps: true, 
     toJSON: {
       virtuals: true,
     },

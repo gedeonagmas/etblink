@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {
   useCreateBoostMutation,
+  useLazyReadQuery,
   useReadQuery,
 } from "../../../features/api/apiSlice";
 import Loading from "../../../components/loading/Loading";
@@ -8,6 +9,8 @@ import Pay from "../../Pay";
 import { format } from "timeago.js";
 import Response from "../../../components/Response";
 import LoadingButton from "../../../components/loading/LoadingButton";
+import ResponsivePagination from "react-responsive-pagination";
+import "./../../categories/pagination.css";
 
 const Billing = () => {
   const user = JSON.parse(localStorage.getItem("etblink_user"));
@@ -53,14 +56,27 @@ const Billing = () => {
     tag: ["companies"],
   });
 
-  const {
-    data: paymentHistory,
-    isFetching: historyFetching,
-    isError: historyError,
-  } = useReadQuery({
-    url: `/user/payments?company=${user?.user?._id}&populatingType=payments&populatingValue=company`,
-    tag: ["payments"],
-  });
+  const [
+    triggerHistory,
+    {
+      data: paymentHistory,
+      isFetching: historyFetching,
+      isError: historyError,
+    },
+  ] = useLazyReadQuery();
+
+  const [page, setPage] = useState(1);
+  const [totalPage, setTotalPage] = useState(1);
+  useEffect(() => {
+    setTotalPage(Math.ceil(paymentHistory?.total / 10));
+  }, [paymentHistory]);
+
+  useEffect(() => {
+    triggerHistory({
+      url: `/user/payments?company=${user?.user?._id}&page=${page}&limit=10&populatingType=payments&populatingValue=company`,
+      tag: ["payments"],
+    });
+  }, [page]);
 
   useEffect(() => {
     if (amount?.toString()[0] === "0") {
@@ -304,36 +320,36 @@ const Billing = () => {
       </p>
       <div className="relative mt-8">
         <p className="text-lg font-light py-2">Information.</p>
-        <div className="flex border border-gray-300 gap-2">
-          <p className="py-2 px-4 w-44">Name</p>
-          <p className="font-light w-52 lg:w-80 py-2 px-4 border-l border-gray-300">
+        <div className="flex border border-gray-300  text-sm gap-2">
+          <p className="py-1 px-4 w-44">Name</p>
+          <p className="font-light w-52 lg:w-80 py-1 px-4 border-l border-gray-300">
             {user?.user?.name}
           </p>
         </div>
-        <div className="flex border border-t-0 gap-2 border-gray-300">
-          <p className="py-2 px-4 w-44">Email</p>
-          <p className="font-light w-52 lg:w-80 py-2 px-4 border-l border-gray-300">
+        <div className="flex border border-t-0 gap-2 text-sm border-gray-300">
+          <p className="py-1 px-4 w-44">Email</p>
+          <p className="font-light w-52 lg:w-80 py-1 px-4 border-l border-gray-300">
             {user?.email?.split("@")?.join(" @")}
           </p>
         </div>
-        <div className="flex border border-t-0 gap-2 border-gray-300">
-          <p className="py-2 px-4 w-44">Phone</p>
-          <p className="font-light w-52 lg:w-80 py-2 px-4 border-l border-gray-300">
+        <div className="flex border border-t-0 gap-2 text-sm border-gray-300">
+          <p className="py-1 px-4 w-44">Phone</p>
+          <p className="font-light w-52 lg:w-80 py-1 px-4 border-l border-gray-300">
             {user?.user?.phone}
           </p>
         </div>
-        <div className="flex border border-t-0 gap-2 border-gray-300">
-          <p className="py-2 px-4 w-44">Current Balance</p>
-          <p className="font-light w-52 lg:w-80 py-2 px-4 border-l border-gray-300">
+        <div className="flex border border-t-0 gap-2 text-sm border-gray-300">
+          <p className="py-1 px-4 w-44">Current Balance</p>
+          <p className="font-light w-52 lg:w-80 py-1 px-4 border-l border-gray-300">
             {new Intl.NumberFormat().format(
               currentCompany?.data[0]?.currentBalance
             )}{" "}
             birr
           </p>
         </div>
-        <div className="flex border border-t-0 gap-2 border-gray-300">
-          <p className="py-2 px-4 w-44">New Fund</p>
-          <div className="font-light w-52 lg:w-80 py-2 px-4 border-l border-gray-300">
+        <div className="flex border border-t-0 gap-2 text-sm border-gray-300">
+          <p className="py-1 px-4 w-44">New Fund</p>
+          <div className="font-light w-52 py-1 lg:w-80 p1-2 px-4 border-l border-gray-300">
             <button
               onClick={() => {
                 setPaymentTypePopup(true);
@@ -345,31 +361,33 @@ const Billing = () => {
           </div>
         </div>
       </div>
-      <p className="py-2 mt-10 text-lg">Your previous fund history.</p>
-      <div class="relative w-full pr-10 overflow-x-auto mt-2 overflow-y-auto pb-10 h-[300px]s">
+      <p className="py-2 mt-10 text-lg">Previous Transactions.</p>
+      {historyFetching && <Loading />}
+
+      <div class="relative w-full pr-10 overflow-x-auto mt-2 overflow-y-auto pb-10">
         <table class="w-full border relative border-gray-300  text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-          <thead class="text-xs text-gray-700 border-b uppercase bg-red-100 dark:bg-gray-700 dark:text-gray-400">
+          <thead class="text-xs text-gray-700 border-b uppercase bg-red-300 dark:bg-gray-700 dark:text-gray-400">
             <tr>
-              <th scope="col" class="px-3 border-l py-3">
+              <th scope="col" class="px-3 border-l py-3 border-gray-300">
                 No
               </th>
-              <th scope="col" class="px-3 border-l py-3">
+              <th scope="col" class="px-3 border-l py-3 border-gray-300">
                 Name
               </th>
-              <th scope="col" class="px-3 border-l py-3">
+              <th scope="col" class="px-3 border-l py-3 border-gray-300">
                 Email
               </th>
-              <th scope="col" class="px-3 border-l py-3">
-                Payment Method
+              <th scope="col" class="px-3 border-l py-3 border-gray-300">
+                Method
               </th>
-              <th scope="col" class="px-3 border-l py-3">
+              <th scope="col" class="px-3 border-l py-3 border-gray-300">
                 Amount
               </th>
-              <th scope="col" class="px-3 border-l py-3">
+              <th scope="col" class="px-3 border-l py-3 border-gray-300">
                 Date
               </th>
-              <th scope="col" class="px-3 border-l py-3">
-                Status
+              <th scope="col" class="px-3 border-l py-3 border-gray-300">
+                Approved
               </th>
             </tr>
           </thead>
@@ -377,22 +395,32 @@ const Billing = () => {
             {paymentHistory && paymentHistory?.data?.length > 0 ? (
               paymentHistory?.data?.map((e, i) => {
                 return (
-                  <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                  <tr
+                    class={`${
+                      i % 2 === 1
+                        ? "bg-gray-100 dark:bg-gray-700 dark:border-gray-700"
+                        : "bg-gray-200 dark:bg-gray-600 dark:border-gray-700"
+                    } ${
+                      i === paymentHistory?.data?.length - 1
+                        ? "border-b-0"
+                        : "border-b"
+                    } `}
+                  >
                     <td
                       scope="row"
-                      class="px-3 py-4 w-3 border-l  font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                      class="px-3 py-3 border-gray-300 w-3 border-l  font-medium text-gray-900 whitespace-nowrap dark:text-white"
                     >
                       {i + 1}
                     </td>
-                    <td class="px-3 w-72 border-l  py-4">{e?.company?.name}</td>
-                    <td class="px-3 w-72 border-l  py-4">{user?.email}</td>
-                    <td class="px-3 w-24 border-l  py-4">{e?.payFrom}</td>
-                    <td class="px-3 w-24 border-l  py-4">{e?.amount}</td>
-                    <td class="px-3 w-52 border-l  py-4">
+                    <td class="px-3 w-72 border-l py-3 border-gray-300">{e?.company?.name}</td>
+                    <td class="px-3 w-72 border-l py-3 border-gray-300">{user?.email}</td>
+                    <td class="px-3 w-24 border-l py-3 border-gray-300">{e?.payFrom}</td>
+                    <td class="px-3 w-24 border-l py-3 border-gray-300">{e?.amount}</td>
+                    <td class="px-3 w-52 border-l py-3 border-gray-300">
                       {format(e?.createdAt)}
                     </td>
-                    <td class="px-3 w-28 border-l py-4">
-                      {e?.approved ? "Approved" : "Pending..."}
+                    <td class="px-3 w-28 border-l py-3 border-gray-300">
+                      {e?.approved ? "Yes" : "No"}
                     </td>
                   </tr>
                 );
@@ -403,6 +431,17 @@ const Billing = () => {
             ) : null}
           </tbody>
         </table>
+        <div className="py-3">
+          <ResponsivePagination
+            total={totalPage}
+            current={page}
+            onPageChange={(currentPage) => setPage(currentPage)}
+            previousLabel="Previous"
+            previousClassName="w-24"
+            nextClassName="w-24"
+            nextLabel="Next"
+          />
+        </div>
       </div>
 
       {paymentTypePopup && (

@@ -84,16 +84,41 @@ const Subscription = ({ type }) => {
     tag: ["companies"],
   });
 
-  const {
-    data: subscriptionHistory,
-    isFetching: historyFetching,
-    isError: historyError,
-  } = useReadQuery({
-    url: `/user/subscriptionhistories?company=${
-      type === "default" ? user?.user?._id : company
-    }&populatingType=subscriptionhistories&populatingValue=company,subscription`,
-    tag: ["subscriptionhistories"],
-  });
+  // const {
+  //   data: subscriptionHistory,
+  //   isFetching: historyFetching,
+  //   isError: historyError,
+  // } = useReadQuery({
+  //   url: `/user/subscriptionhistories?company=${
+  //     type === "default" ? user?.user?._id : company
+  //   }&populatingType=subscriptionhistories&populatingValue=company,subscription`,
+  //   tag: ["subscriptionhistories"],
+  // });
+
+  const [
+    triggerHistory,
+    {
+      data: subscriptionHistory,
+      isFetching: historyFetching,
+      isError: historyError,
+    },
+  ] = useLazyReadQuery();
+
+  const [pageTwo, setPageTwo] = useState(1);
+  const [totalPageTwo, setTotalPageTwo] = useState(1);
+
+  useEffect(() => {
+    setTotalPageTwo(Math.ceil(subscriptionHistory?.total / 10));
+  }, [subscriptionHistory]);
+
+  useEffect(() => {
+    triggerHistory({
+      url: `/user/subscriptionhistories?company=${
+        type === "default" ? user?.user?._id : company
+      }&page=${pageTwo}&populatingValue=company,subscription`,
+      tag: ["subscriptionhistories"],
+    });
+  }, [pageTwo]);
 
   const formatDate = (e, type) => {
     if (type === "history") {
@@ -762,30 +787,37 @@ const Subscription = ({ type }) => {
         <p className="font-light py-2 mt-10 text-lg">
           Your Previous renewal history.
         </p>
-        <div class="relative overflow-x-auto mt-2 overflow-y-auto h-[300px]">
-          <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-              <tr>
-                <th scope="col" class="px-3 py-3">
+        {historyFetching && <Loading />}
+        <div class="relative overflow-x-auto mt-2 overflow-y-auto">
+        <table class="w-full border relative border-gray-300  text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+          <thead class="text-xs text-gray-700 border-b uppercase bg-red-300 dark:bg-gray-700 dark:text-gray-400">
+             <tr>
+                <th scope="col" class="px-3 border-l border-gray-300 py-4">
                   No
                 </th>
-                <th scope="col" class="px-3 py-3">
-                  Subscription type
+                <th scope="col" class="px-3 border-l border-gray-300 py-4">
+                  Logo
                 </th>
-                <th scope="col" class="px-3 py-3">
-                  Amount
+                <th scope="col" class="px-3 border-l border-gray-300 py-4">
+                  Name
                 </th>
-                <th scope="col" class="px-3 py-3">
-                  Duration
+                <th scope="col" class="px-3 border-l border-gray-300 py-4">
+                  Phone
                 </th>
-                <th scope="col" class="px-3 py-3">
+                <th scope="col" class="px-3 border-l border-gray-300 py-4">
+                  Type
+                </th>{" "}
+                <th scope="col" class="px-3 border-l border-gray-300 py-4">
+                  Method
+                </th>
+                <th scope="col" class="px-3 border-l border-gray-300 py-4">
                   Started Date
                 </th>
-                <th scope="col" class="px-3 py-3">
+                <th scope="col" class="px-3 border-l border-gray-300 py-4">
                   End Date
                 </th>
-                <th scope="col" class="px-3 py-3">
-                  Status
+                <th scope="col" class="px-3 border-l border-gray-300 py-4">
+                  Approved
                 </th>
               </tr>
             </thead>
@@ -793,36 +825,68 @@ const Subscription = ({ type }) => {
               {subscriptionHistory && subscriptionHistory?.data?.length > 0 ? (
                 subscriptionHistory?.data?.map((e, i) => {
                   return (
-                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                    <tr
+                      class={`${
+                        i % 2 === 1
+                          ? "bg-gray-100 dark:bg-gray-700 dark:border-gray-700"
+                          : "bg-gray-200 dark:bg-gray-600 dark:border-gray-700"
+                      } ${
+                        i === subscriptionHistory?.data?.length - 1
+                          ? "border-b-0"
+                          : "border-b"
+                      } `}
+                    >
                       <td
                         scope="row"
-                        class="px-3 py-4 w-3  font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                        class="px-3 border-l border-gray-300 py-1 w-3  font-medium text-gray-900 whitespace-nowrap dark:text-white"
                       >
                         {i + 1}
                       </td>
-                      <td class="px-3 w-52  py-4">{e?.subscription?.type}</td>
-                      <td class="px-3 w-52  py-4">{e?.subscription?.amount}</td>
-                      <td class="px-3 w-28 py-4">
-                        {e?.subscription?.For + " " + e?.subscription?.duration}
+                      <td
+                        scope="row"
+                        class="px-2 py-1 w-14 border-l border-gray-300  font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                      >
+                        <img
+                          src={e?.company?.logo}
+                          alt=""
+                          className="w-11 h-11 rounded-full border object-fill object-center"
+                        />
                       </td>
-                      <td class="px-3 py-4">
+                      <td class="px-3 border-l border-gray-300 w-52  py-1">{e?.company?.name}</td>
+                      <td class="px-3 border-l border-gray-300 w-32  py-1">{e?.company?.phone}</td>
+                      <td class="px-3 border-l border-gray-300 w-28 py-1">{e?.subscription?.name}</td>
+                      <td class="px-3 border-l border-gray-300 w-28 py-1">{e?.payFrom}</td>
+                      <td class="px-3 border-l border-gray-300 py-1">
                         {formatDate(e?.startDate, "history")}
                       </td>
-                      <td class="px-3 py-4">
+                      <td class="px-3 border-l border-gray-300 py-1">
                         {formatDate(e?.endDate, "history")}
                       </td>
-                      <td class="px-3 w-52  py-4">
-                        {e?.company?.subscriptionStatus}
+                      <td class="px-3 border-l border-gray-300 w-28 py-1">
+                        {e?.approved ? "Yes" : "No"}
                       </td>
                     </tr>
                   );
                 })
               ) : (subscriptionHistory && subscriptionHistory?.message) ||
                 subscriptionHistory?.data?.length === 0 ? (
-                <div>There is no renewal history.</div>
+                <div className="py-2">
+                  Be the first one to boost your Company.
+                </div>
               ) : null}
             </tbody>
           </table>
+          <div className="py-3">
+            <ResponsivePagination
+              total={totalPageTwo}
+              current={pageTwo}
+              onPageChange={(currentPage) => setPageTwo(currentPage)}
+              previousLabel="Previous"
+              previousClassName="w-24"
+              nextClassName="w-24"
+              nextLabel="Next"
+            />
+          </div>
         </div>
       </div>
 

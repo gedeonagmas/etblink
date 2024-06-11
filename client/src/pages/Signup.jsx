@@ -51,7 +51,6 @@ const Signup = ({ type }) => {
               <option value="visitor">Visitor</option>
               <option value="company">Company</option>
               <option value="sales">Sales</option>
-              <option value="admin">Admin</option>
             </select>
           )}
         </div>
