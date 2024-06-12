@@ -406,21 +406,29 @@ const Company = (props) => {
   };
   console.log(data, "data");
   return (
-    <div className="w-full pb-10 pr-10 pl-3 flex flex-col lg:flex-row gap-5">
-      <div className="flex flex-col border-r pr-4 w-full lg:flex-[68%]">
+    <div className="w-full pb-10 pr-3 lg:pr-10 pl-3 flex flex-col lg:flex-row gap-5">
+      <div className="flex flex-col lg:border-r pr-4 w-full lg:flex-[68%]">
         <Promotion />
-        {/* <div className="flex flex-col lg:flex-row gap-2  rounded-sm p-4 mt-5">
+        <div className="flex flex-col lg:flex-rows gap-2  rounded-sm p-4s mt-5">
           <div className="flex flex-col gap-3">
-            <div className="w-full flex gap-2">
-              <div className="flex border-r rounded-sm flex-col p-3 w-auto h-[90px] justify-between items-start">
-                <p className="">Total</p>
-                <p className="text-xl font-bold">298.401</p>
+            <div className="w-full flex items-start justify-between gap-2">
+              <div className="flex border-r rounded-sm flex-col p-3 w-full h-[90px] justify-between items-start">
+                <p className="">Your Saves</p>
+                <p className="text-xl text-[#00aeff] font-bold">12k+</p>
               </div>
-              <div className="flex border-r rounded-sm flex-col p-3 w-auto h-[90px] justify-between items-start">
-                <p className="">Net</p>
-                <p className="text-xl font-bold">298.401</p>
+              <div className="flex border-r rounded-sm flex-col p-3 w-full h-[90px] justify-between items-start">
+                <p className="">Your Views</p>
+                <p className="text-xl text-main font-bold">22k+</p>
               </div>
-              <div className="flex relative rounded-sm flex-col p-3 h-auto w-24 justify-between items-start">
+              <div className="flex border-r rounded-sm flex-col p-3 w-full h-[90px] justify-between items-start">
+                <p className="">Other Saves</p>
+                <p className="text-xl text-yellow-400 font-bold">37+</p>
+              </div>
+              <div className="flex rounded-sm flex-col p-3 w-full h-[90px] justify-between items-start">
+                <p className="">Other Views</p>
+                <p className="text-xl text-emerald-500 font-bold">27+</p>
+              </div>
+              {/* <div className="flex relative rounded-sm flex-col p-3 h-auto w-24 justify-between items-start">
                 <CircularProgressbar
                   value={70}
                   text={`${70}%`}
@@ -430,10 +438,10 @@ const Company = (props) => {
                     trailColor: "gold",
                   })}
                 />
-              </div>
+              </div> */}
             </div>
 
-            <div id="chart-line" className="p-2 bg-gray-100 dark:bg-gray-700">
+            {/* <div id="chart-line" className="p-2 bg-gray-100 dark:bg-gray-700">
               <div className="bg-white bg-dark">
                 <SmallChart
                   type="line"
@@ -468,11 +476,10 @@ const Company = (props) => {
                   ]}
                 />
               </div>
-            </div>
+            </div> */}
           </div>
 
           <div className="flex bg-gray-100 dark:bg-gray-700 rounded-sm flex-col relative -mt-20s p-3 h-auto  justify-between items-start">
-           
             <div id="chart" className="bg-white bg-dark w-full ">
               <ReactApexChart
                 options={state.options}
@@ -482,7 +489,7 @@ const Company = (props) => {
               />
             </div>
           </div>
-        </div> */}
+        </div>
         {isFetching && <Loading />}
         {isError && <p>Something went wrong unable to read boost data</p>}
         <div class="relative sm:rounded-lg">
@@ -944,7 +951,7 @@ const Company = (props) => {
           <p className="text-xl text-gray-400 font-bold">
             Your Current Balance
           </p>
-          <div className="flex w-full items-center gap-2 mt-4">
+          <div className="flex w-full lg:flex-col xl:flex-row items-center gap-2 mt-4">
             <p className="text-xl font-bold">
               {new Intl.NumberFormat().format(data?.company?.currentBalance)}
             </p>
@@ -957,7 +964,7 @@ const Company = (props) => {
           </div>
         </div>
 
-        <div className="w-full flex items-center justify-between mt-4 py-2">
+        <div className="w-full flex lg:flex-col xl:flex-row gap-10 lg:gap-2 mt-4 py-2">
           <div className="">
             <p className="text-gray-400 mb-1 text-lg">Subscription</p>
             {data?.company?.subscriptionEndDate !== 0 ? (
@@ -984,7 +991,7 @@ const Company = (props) => {
           </div>
         </div>
 
-        <div className="mt-5">
+        <div className="mt-5 border shadow-lg rounded-lg p-3">
           <p className="text-xl font-semibold text-gray-400">Your sales</p>
           {/* <div className="flex mt-5 w-full flex-col items-start  hover:bg-red-100 bg-white bg-dark border-dark border p-4 justify-start">
             <div className="flex w-full items-center justify-between">
@@ -1164,14 +1171,16 @@ const Company = (props) => {
               return (
                 <a
                   href="/dashboard/message"
-                  className="flex relative cursor-pointer hover:bg-gray-200 justify-center w-full bg-gray-100 dark:bg-gray-700 p-2 items-center rounded-xl gap-3 mt-3"
+                  className="flex relative md:flex-col xl:flex-row cursor-pointer hover:bg-gray-200 justify-center w-full bg-gray-100 dark:bg-gray-700 p-2 items-center rounded-xl gap-3 mt-3"
                 >
-                  <p className="text-xl self-start h-10 w-10 rounded-full text-center bg-main text-white relative">
+                  <p className="text-xl self-start h-10 w-10 xl:w-12 rounded-full text-center bg-main text-white relative">
                     {e?.sender?.email?.substring(0, 1)}
                   </p>
 
-                  <div className="flex w-[86%] flex-col">
-                    <p className="font-bold">{e?.sender?.email}</p>
+                  <div className="flex w-full flex-col">
+                    <p className="block lg:hidden xl:block">
+                      {e?.sender?.email}
+                    </p>
                     <p className="text-xs">{e?.message?.content}</p>
                     <p className="text-xs self-end">{format(e?.createdAt)}</p>
                   </div>
