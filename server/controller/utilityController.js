@@ -13,6 +13,7 @@ const { Notification } = require("../models/notificationModel");
 const { Category } = require("../models/categoryModel");
 const { UserProfile } = require("../models/userProfile");
 const message = require("./../utils/messages");
+const { Chat } = require("../models/chatModel");
 
 const sendNotificationHandler = async ({ message, role, receiver }) => {
   return await Notification.create({
@@ -714,6 +715,14 @@ const companyDashboardAggregation = asyncCatch(async (req, res, next) => {
     .populate("viewer")
     .sort("-createdAt");
 
+  const messages = await Chat.find({
+    receiver: req.query.id,
+    messageType: "text",
+  })
+    .limit(10)
+    .populate("sender")
+    .sort("-createdAt");
+
   const view = await View.aggregate([
     {
       $group: {
@@ -742,18 +751,36 @@ const companyDashboardAggregation = asyncCatch(async (req, res, next) => {
     },
   ]);
 
+  const company = await Company.findById(req.query.id).populate("sales");
+
+  const boost = await BoostHistory.find({
+    company: req.query.id,
+  }).countDocuments();
+
+  const subscription = await SubscriptionHistory.find({
+    company: req.query.id,
+  }).countDocuments();
+
+  const fund = await Payment.find({
+    company: req.query.id,
+  }).countDocuments();
+
   // console.log(
   //   view.filter((e) => e._id.company.toString() === req.query.id),
   //   "final"
   // );
 
-  // console.log(finalData, "final");
+  console.log(boost, "final");
   return res.status(200).json({
-    status: "Read",
-    view: view.filter((e) => e._id.company.toString() === req.query.id),
-    save: save.filter((e) => e._id.company.toString() === req.query.id),
+    view: view?.filter((e) => e?._id?.company?.toString() === req?.query?.id),
+    save: save?.filter((e) => e?._id?.company?.toString() === req?.query?.id),
     views,
-    saves
+    saves,
+    boost,
+    subscription,
+    fund,
+    company,
+    messages,
   });
 });
 
