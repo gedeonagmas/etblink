@@ -17,6 +17,11 @@ const viewSchema = new mongoose.Schema(
         return this.role === "company" ? "company" : "userProfile";
       },
     },
+ 
+    date: {
+      type: Number,
+      default: Date.parse(new Date().toISOString().split("T")[0]),
+    },
   },
   {
     timestamps: true,

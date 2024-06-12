@@ -113,6 +113,7 @@ const CompanyDetail = (props) => {
     });
   };
 
+  console.log(companyId, location, "company id");
   useEffect(() => {
     location && currentUser && viewHandler();
   }, []);

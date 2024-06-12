@@ -56,7 +56,7 @@ export const apiSlice = createApi({
     "news-admins",
     "blogs-admins",
     "notifications",
-    'commissions',
+    "commissions",
   ],
   endpoints: (builder) => ({
     //user signup
@@ -281,6 +281,7 @@ export const apiSlice = createApi({
           url: data.url,
           method: "GET",
           // headers: authorization,
+          credentials: "include",
         };
       },
       providesTags: () => {
@@ -399,6 +400,16 @@ export const apiSlice = createApi({
       }),
       providesTags: ["companies", "aggregate"],
     }),
+
+    //company dashboard aggregation
+    companyDashboardAggregation: builder.query({
+      query: (arg) => ({
+        url: `/utility/companyDashboardAggregation?id=${arg.id}`,
+        method: "GET",
+        credentials: "include",
+      }),
+      providesTags: ["saves", "views"],
+    }),
   }),
 });
 
@@ -434,4 +445,5 @@ export const {
   useCompanyAggregateQuery,
   useNotificationViewMutation,
   useRecentlyAddedCompanyQuery,
+  useCompanyDashboardAggregationQuery,
 } = apiSlice;

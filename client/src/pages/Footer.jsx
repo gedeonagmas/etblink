@@ -88,54 +88,53 @@ const Footer = () => {
   return (
     <div className="">
       {/* sellers */}
-      <div
-        style={{}}
-        className="w-full px-main flex flex-col items-center justify-between h-auto mt-10"
-      >
-        <div className="w-full flex items-center justify-between h-auto">
-          <div className="w-full items-center justify-center flex flex-col">
-            <p className="text-4xl text-center font-semibold text-gray-700">
-              Our <span className="text-main">Representatives</span>
-            </p>
-            <p className="text-[17px] mt-3 py-1 font-light text-gray-500">
-              our top Representatives
-            </p>
+      {sales && sales?.data?.length > 0 && (
+        <div
+          style={{}}
+          className="w-full px-main flex flex-col items-center justify-between h-auto mt-10"
+        >
+          <div className="w-full flex items-center justify-between h-auto">
+            <div className="w-full items-center justify-center flex flex-col">
+              <p className="text-4xl text-center font-semibold text-gray-700">
+                Our <span className="text-main">Representatives</span>
+              </p>
+              <p className="text-[17px] mt-3 py-1 font-light text-gray-500">
+                our top Representatives
+              </p>
+            </div>
           </div>
-        </div>
 
-        <div className="relative my-5 w-full flex items-center">
-          <button
-            onClick={previous}
-            className="absolute button shadow-2xl rounded-full  z-20 top-[90px] -left-6"
-          >
-            <svg
-              class="w-14 text-gray-400 cursor-pointer hover:bg-gray-300 hover:text-red-500 border border-gray-300 rounded-full h-14 bg-gray-300/50"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              fill="none"
-              viewBox="0 0 24 24"
+          <div className="relative my-5 w-full flex items-center">
+            <button
+              onClick={previous}
+              className="absolute button shadow-2xl rounded-full  z-20 top-[90px] -left-6"
             >
-              <path
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="m15 19-7-7 7-7"
-              />
-            </svg>
-          </button>
-          <div className="w-full slider-container relative">
-            <Slider
-              ref={(slider) => {
-                sliderRefFooter = slider;
-              }}
-              {...settings}
-            >
-              {sales &&
-                sales?.data?.length > 0 &&
-                sales?.data?.map((user, i) => (
+              <svg
+                class="w-14 text-gray-400 cursor-pointer hover:bg-gray-300 hover:text-red-500 border border-gray-300 rounded-full h-14 bg-gray-300/50"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="m15 19-7-7 7-7"
+                />
+              </svg>
+            </button>
+            <div className="w-full slider-container relative">
+              <Slider
+                ref={(slider) => {
+                  sliderRefFooter = slider;
+                }}
+                {...settings}
+              >
+                {sales?.data?.map((user, i) => (
                   <div
                     key={user?._id}
                     className="flex w-[200px] relative flex-col items-start rounded-lg hover:bg-red-100 dark:hover:bg-gray-600  bg-dark border-dark border shadow-xl justify-start"
@@ -279,8 +278,8 @@ const Footer = () => {
                     </div>
                   </div>
                 ))}
-            </Slider>
-            {/* <div className="absolute -top-8 right-2 flex gap-2 items-center justify-center">
+              </Slider>
+              {/* <div className="absolute -top-8 right-2 flex gap-2 items-center justify-center">
               <button className="button" onClick={previous}>
                 <svg
                   class="w-4 h-4 text-gray-800 dark:text-white"
@@ -320,32 +319,33 @@ const Footer = () => {
                 </svg>
               </button>
             </div> */}
-          </div>
+            </div>
 
-          <button
-            onClick={next}
-            className="absolute button shadow-2xl rounded-full  z-20 top-[90px] -right-6"
-          >
-            <svg
-              class="w-14 text-gray-400 cursor-pointer hover:bg-gray-300 hover:text-red-500 border border-gray-300 rounded-full h-14 bg-gray-300/50"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              fill="none"
-              viewBox="0 0 24 24"
+            <button
+              onClick={next}
+              className="absolute button shadow-2xl rounded-full  z-20 top-[90px] -right-6"
             >
-              <path
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="m9 5 7 7-7 7"
-              />
-            </svg>
-          </button>
+              <svg
+                class="w-14 text-gray-400 cursor-pointer hover:bg-gray-300 hover:text-red-500 border border-gray-300 rounded-full h-14 bg-gray-300/50"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="m9 5 7 7-7 7"
+                />
+              </svg>
+            </button>
+          </div>
         </div>
-      </div>
+      )}
 
       <div className="w-full h-auto bg-black text-white px-main grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 flex-col py-10 items-start justify-between">
         <div className="w-auto">

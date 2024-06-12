@@ -5,7 +5,7 @@ const AppError = require("../utils/AppError");
 
 const authentication = async (req, res, next) => {
   // console.log(req.cookies, "cookies");
-  // console.log(req.headers,'headers');
+  // console.log(req.headers,'headers'); 
   let token, user;
   const header = req.cookies._e_l_s;
   if (header && header !== "null" && header !== "") {

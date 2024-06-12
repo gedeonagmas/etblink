@@ -401,7 +401,7 @@ const CompanyItems = ({ value, phoneNo, type, data, disabled }) => {
         </a>
 
         <a
-          to="/company"
+          href={`/company?id=${value}`}
           state={{ id: value }}
           className={` ${
             type === "large" ? "py-[8px] px-10" : "px-4"

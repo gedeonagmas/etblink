@@ -89,7 +89,7 @@ const createRate = asyncCatch(async (req, res, next) => {
         button: message.rateButton(),
         link: message.rateLink(req.body.for),
         next,
-      });  
+      });
     }
   };
 
@@ -701,6 +701,62 @@ const companyAggregation = asyncCatch(async (req, res, next) => {
   });
 });
 
+const companyDashboardAggregation = asyncCatch(async (req, res, next) => {
+  const saves = await Save.find({ company: req.query.id })
+    .limit(10)
+    .select("createdAt saver")
+    .populate("saver")
+    .sort("-createdAt");
+
+  const views = await View.find({ company: req.query.id })
+    .limit(10)
+    .select("createdAt viewer")
+    .populate("viewer")
+    .sort("-createdAt");
+
+  const view = await View.aggregate([
+    {
+      $group: {
+        _id: {
+          createdAt: "$date",
+          company: "$company",
+        },
+        total: {
+          $sum: 1,
+        },
+      },
+    },
+  ]);
+
+  const save = await Save.aggregate([
+    {
+      $group: {
+        _id: {
+          createdAt: "$date",
+          company: "$company",
+        },
+        total: {
+          $sum: 1,
+        },
+      },
+    },
+  ]);
+
+  // console.log(
+  //   view.filter((e) => e._id.company.toString() === req.query.id),
+  //   "final"
+  // );
+
+  // console.log(finalData, "final");
+  return res.status(200).json({
+    status: "Read",
+    view: view.filter((e) => e._id.company.toString() === req.query.id),
+    save: save.filter((e) => e._id.company.toString() === req.query.id),
+    views,
+    saves
+  });
+});
+
 const recentlyAddedCompany = asyncCatch(async (req, res, next) => {
   const importer = await Company.find(
     { category: "Advertisement" },
@@ -745,6 +801,7 @@ module.exports = {
   sendNotificationHandler,
   notificationView,
   recentlyAddedCompany,
+  companyDashboardAggregation,
 };
 
 //   // console.log(Date.parse(new Date(req.body.endDate)));
