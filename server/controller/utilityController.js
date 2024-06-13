@@ -723,7 +723,17 @@ const companyDashboardAggregation = asyncCatch(async (req, res, next) => {
     .populate("sender")
     .sort("-createdAt");
 
+  const today = new Date();
+  const priorDate = new Date(new Date().setDate(today.getDate() - 30));
   const view = await View.aggregate([
+    {
+      $match: {
+        date: {
+          $gt: Date.parse(priorDate?.toISOString().split("T")[0]),
+          $lt: Date.parse(today?.toISOString().split("T")[0]),
+        },
+      },
+    },
     {
       $group: {
         _id: {
@@ -738,6 +748,14 @@ const companyDashboardAggregation = asyncCatch(async (req, res, next) => {
   ]);
 
   const save = await Save.aggregate([
+    {
+      $match: {
+        date: {
+          $gt: Date.parse(priorDate?.toISOString().split("T")[0]),
+          $lt: Date.parse(today?.toISOString().split("T")[0]),
+        },
+      },
+    },
     {
       $group: {
         _id: {
@@ -770,7 +788,8 @@ const companyDashboardAggregation = asyncCatch(async (req, res, next) => {
   //   "final"
   // );
 
-  console.log(boost, "final");
+  console.log(saves?.length, "final");
+
   return res.status(200).json({
     view: view?.filter((e) => e?._id?.company?.toString() === req?.query?.id),
     save: save?.filter((e) => e?._id?.company?.toString() === req?.query?.id),

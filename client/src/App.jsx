@@ -215,6 +215,10 @@ function App() {
                       path="/dashboard/company/change-password"
                       element={<ChangePassword />}
                     ></Route>
+                    <Route
+                      path="/dashboard/company/ratings"
+                      element={<Ratings />}
+                    ></Route>
                   </>
                 ) : (
                   <Route path="*" element={<PageNotFound />}></Route>

@@ -789,9 +789,9 @@ const Subscription = ({ type }) => {
         </p>
         {historyFetching && <Loading />}
         <div class="relative overflow-x-auto mt-2 overflow-y-auto">
-        <table class="w-full border relative border-gray-300  text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-          <thead class="text-xs text-gray-700 border-b uppercase bg-red-300 dark:bg-gray-700 dark:text-gray-400">
-             <tr>
+          <table class="w-full border relative border-gray-300  text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+            <thead class="text-xs text-gray-700 border-b uppercase bg-red-300 dark:bg-gray-700 dark:text-gray-400">
+              <tr>
                 <th scope="col" class="px-3 border-l border-gray-300 py-4">
                   No
                 </th>
@@ -852,10 +852,18 @@ const Subscription = ({ type }) => {
                           className="w-11 h-11 rounded-full border object-fill object-center"
                         />
                       </td>
-                      <td class="px-3 border-l border-gray-300 w-52  py-1">{e?.company?.name}</td>
-                      <td class="px-3 border-l border-gray-300 w-32  py-1">{e?.company?.phone}</td>
-                      <td class="px-3 border-l border-gray-300 w-28 py-1">{e?.subscription?.name}</td>
-                      <td class="px-3 border-l border-gray-300 w-28 py-1">{e?.payFrom}</td>
+                      <td class="px-3 border-l border-gray-300 w-52  py-1">
+                        {e?.company?.name}
+                      </td>
+                      <td class="px-3 border-l border-gray-300 w-32  py-1">
+                        {e?.company?.phone}
+                      </td>
+                      <td class="px-3 border-l border-gray-300 w-28 py-1">
+                        {e?.subscription?.name}
+                      </td>
+                      <td class="px-3 border-l border-gray-300 w-28 py-1">
+                        {e?.payFrom}
+                      </td>
                       <td class="px-3 border-l border-gray-300 py-1">
                         {formatDate(e?.startDate, "history")}
                       </td>
@@ -892,7 +900,7 @@ const Subscription = ({ type }) => {
 
       {paymentTypePopup && subscriptionInfo && (
         <div className="fixed z-20 top-0 left-0 items-center justify-center flex flex-col w-full h-[100vh] bg-black/50">
-          <div className="relative rounded-lg p-5 z-40 items-center lg:ml-56 mt-20 justify-center w-[350px] md:w-[600px] h-[450px] overflow-y-scroll bg-white bg-dark">
+          <div className="relative rounded-lg p-5 z-40 items-center lg:ml-56 mt-20 justify-center w-[350px] md:w-[600px] h-[450px] overflow-auto xl:overflow-hidden bg-white bg-dark">
             <svg
               class="w-6 h-6 cursor-pointer absolute top-2 right-2 text-gray-800 hover:text-gray-600 dark:text-white"
               aria-hidden="true"
@@ -1015,8 +1023,23 @@ const Subscription = ({ type }) => {
                 <p className="text-lg mt-4 font-bold">
                   Select your payment type.
                 </p>
+                <p className="my-3">
+                  Select your payment method. You can deposit into your ETBLINK
+                  account online, via bank transfer, or by check. Choose the
+                  option that is most convenient for you.
+                </p>
+                <p className="my-3">
+                  የመክፈያ ዘዴዎን ይምረጡ። በኦለይን፣ በባንክ ማስተላለፍ ወይም በቼክ ወደ ኢቲቢ ሊነክ ማስገባት
+                  ይችላሉ። ለእርስዎ በጣም ምቹ የሆነውን አማራጭ ይምረጡ.
+                </p>
+
+                <p className="my-3">
+                  If you pay online or directly from your deposit, your boost
+                  service will start automatically. Otherwise, your service will
+                  start within 24 hours.
+                </p>
                 <div className="w-full py-7 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 items-center justify-between">
-                  <div className="rounded-lg hover:bg-gray-200 p-4 flex items-center gap-4 border">
+                  <div className="rounded-lg hover:bg-blue-600 bg-[#00aeff] text-white cursor-default p-2 flex items-center gap-4 border">
                     <input
                       onChange={(e) =>
                         e.target.checked ? setPayFrom("online") : ""
@@ -1025,10 +1048,10 @@ const Subscription = ({ type }) => {
                       name="paymentType"
                       id=""
                     />
-                    <p className="text-xl font-bold">Online</p>
+                    <p className="">Online</p>
                   </div>
                   <div
-                    className={`rounded-lg hover:bg-gray-200 p-4 flex items-center gap-4 border ${
+                    className={`rounded-lg hover:bg-yellow-500 relative cursor-default bg-yellow-400 text-white p-2 flex items-center gap-4 border ${
                       currentCompany?.data[0]?.currentBalance <
                         subscriptionInfo?.amount && "bg-red-100"
                     }`}
@@ -1050,9 +1073,29 @@ const Subscription = ({ type }) => {
                       name="paymentType"
                       id=""
                     />
-                    <p className="text-xl font-bold">Deposit</p>
+                    <p className="">Deposit</p>
+                    {currentCompany?.data[0]?.currentBalance <
+                      subscriptionInfo?.amount && (
+                      <svg
+                        class="w-6 h-6 absolute top-2 left-1 text-main"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="m15 9-6 6m0-6 6 6m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                        />
+                      </svg>
+                    )}
                   </div>
-                  <div className="rounded-lg hover:bg-gray-200 p-4 flex items-center gap-4 border">
+                  <div className="rounded-lg hover:bg-emerald-600 bg-emerald-500 text-white cursor-default p-2 flex items-center gap-4 border">
                     <input
                       onChange={(e) =>
                         e.target.checked ? setPayFrom("bank") : ""
@@ -1061,9 +1104,9 @@ const Subscription = ({ type }) => {
                       name="paymentType"
                       id=""
                     />
-                    <p className="text-xl font-bold">Bank</p>
+                    <p className="">Bank</p>
                   </div>
-                  <div className="rounded-lg hover:bg-gray-200 p-4 flex items-center gap-4 border">
+                  <div className="rounded-lg hover:bg-red-500 bg-main text-white cursor-default p-2 flex items-center gap-4 border">
                     <input
                       onChange={(e) =>
                         e.target.checked ? setPayFrom("check") : ""
@@ -1072,7 +1115,7 @@ const Subscription = ({ type }) => {
                       name="paymentType"
                       id=""
                     />
-                    <p className="text-xl font-bold">Check</p>
+                    <p className="">Check</p>
                   </div>
                 </div>
               </div>

@@ -11,6 +11,7 @@ import Pay from "../../Pay";
 
 import ResponsivePagination from "react-responsive-pagination";
 import "./../../categories/pagination.css";
+import boostimg from "./../../../assets/etbboostimg1.png";
 
 const Boosting = () => {
   const user = JSON.parse(localStorage.getItem("etblink_user"));
@@ -585,17 +586,14 @@ const Boosting = () => {
           {boosts && boosts?.data?.length > 0 ? (
             boosts?.data?.map((e) => {
               return (
-                <div class="flex mt-5 flex-col p-4 w-full items-center justify-center gap-2 hover:bg-gray-200 text-gray-900 bg-white rounded-lg border border-gray-100 shadow dark:border-gray-600 xl:p-8 dark:bg-gray-800 dark:text-white">
-                  <h3 class="text-xl font-semibold">{e?.name}</h3>
+                <div class="flex mt-5 flex-col p-3 w-full items-center justify-center gap-1 hover:bg-gray-200 text-gray-900 bg-white rounded-lg border border-gray-100 shadow dark:border-gray-600 xl:p-8 dark:bg-gray-800 dark:text-white">
+                  <img src={boostimg} alt="" className="w-14 h-12" />
+                  <h3 class="text-xl uppercase mt-1 font-bold">{e?.name}</h3>
                   <div class="flex justify-center items-baseline">
-                    <span class="mr-2 text-2xl font-extrabold">
-                      {e?.amount} birr
-                    </span>
+                    <span class="mr-2">{e?.amount} birr</span>
                   </div>
                   <div class="flex justify-center items-baseline">
-                    <span class="mr-2 text-xl font-extrabold">
-                      {e?.duration}
-                    </span>
+                    <span class="mr-2 text-xls font-light">{e?.duration}</span>
                   </div>
                   <button
                     disabled={
@@ -616,7 +614,7 @@ const Boosting = () => {
                       // });
                       // setBoostPopup(true);
                     }}
-                    className={`text-white w-32 py-2 px-2 ${
+                    className={`text-white w-32 py-1 px-2 ${
                       !currentCompany?.data[0]?.isSubscribed ||
                       currentCompany?.data[0]?.profileFill < 90
                         ? "bg-red-400 "
@@ -641,31 +639,31 @@ const Boosting = () => {
         {historyFetching && <Loading />}
 
         <div class="relative overflow-x-auto mt-2 overflow-y-auto">
-        <table class="w-full border relative border-gray-300  text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-          <thead class="text-xs text-gray-700 border-b uppercase bg-red-300 dark:bg-gray-700 dark:text-gray-400">
-             <tr>
-                <th scope="col" class=" px-3 border-l border-gray-300 py-4">
+          <table class="w-full border relative border-gray-300  text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+            <thead class="text-xs text-gray-700 border-b uppercase bg-red-100 dark:bg-gray-700 dark:text-gray-400">
+              <tr>
+                <th scope="col" class=" px-3 border-l border-gray-300 py-1">
                   No
                 </th>
-                <th scope="col" class=" px-3 border-l border-gray-300 py-4">
+                <th scope="col" class=" px-3 border-l border-gray-300 py-1">
                   Logo
                 </th>
-                <th scope="col" class=" px-3 border-l border-gray-300 py-4">
+                <th scope="col" class=" px-3 border-l border-gray-300 py-1">
                   Name
                 </th>
-                <th scope="col" class=" px-3 border-l border-gray-300 py-4">
+                <th scope="col" class=" px-3 border-l border-gray-300 py-1">
                   Phone
                 </th>
-                <th scope="col" class=" px-3 border-l border-gray-300 py-4">
+                <th scope="col" class=" px-3 border-l border-gray-300 py-1">
                   Type
                 </th>{" "}
-                <th scope="col" class=" px-3 border-l border-gray-300 py-4">
+                <th scope="col" class=" px-3 border-l border-gray-300 py-1">
                   Method
                 </th>
-                <th scope="col" class=" px-3 border-l border-gray-300 py-4">
+                <th scope="col" class=" px-3 border-l border-gray-300 py-1">
                   Started Date
                 </th>
-                <th scope="col" class=" px-3 border-l border-gray-300 py-4">
+                <th scope="col" class=" px-3 border-l border-gray-300 py-1">
                   End Date
                 </th>
               </tr>
@@ -683,7 +681,7 @@ const Boosting = () => {
                         i === boostHistory?.data?.length - 1
                           ? "border-b-0"
                           : "border-b"
-                      } `}
+                      } text-sm `}
                     >
                       <td
                         scope="row"
@@ -698,13 +696,21 @@ const Boosting = () => {
                         <img
                           src={e?.company?.logo}
                           alt=""
-                          className="w-11 h-11 rounded-full border object-fill object-center"
+                          className="w-9 h-9 rounded-full border object-fill object-center"
                         />
                       </td>
-                      <td class=" px-3 border-l border-gray-300 w-52  py-1">{e?.company?.name}</td>
-                      <td class=" px-3 border-l border-gray-300 w-32  py-1">{e?.company?.phone}</td>
-                      <td class=" px-3 border-l border-gray-300 w-28 py-1">{e?.boost?.name}</td>
-                      <td class=" px-3 border-l border-gray-300 w-28 py-1">{e?.payFrom}</td>
+                      <td class=" px-3 border-l border-gray-300 w-52  py-1">
+                        {e?.company?.name}
+                      </td>
+                      <td class=" px-3 border-l border-gray-300 w-32  py-1">
+                        {e?.company?.phone}
+                      </td>
+                      <td class=" px-3 border-l border-gray-300 w-28 py-1">
+                        {e?.boost?.name}
+                      </td>
+                      <td class=" px-3 border-l border-gray-300 w-28 py-1">
+                        {e?.payFrom}
+                      </td>
                       <td class=" px-3 border-l border-gray-300 py-1">
                         {formatDate(e?.startDate, "history")}
                       </td>
@@ -738,13 +744,14 @@ const Boosting = () => {
 
       {paymentTypePopup && (
         <div className="fixed top-0 left-0 items-center justify-center flex flex-col w-full h-[100vh] bg-black/50">
-          <div className="relative rounded-lg p-5 z-30 items-center lg:ml-56 mt-20 justify-center w-[350px] md:w-[600px] h-[450px] bg-white bg-dark">
+          <div className="relative rounded-lg px-5 py-6 z-30 items-center lg:ml-56 mt-20 justify-center w-[350px] md:w-[600px] overflow-auto xl:overflow-hidden h-[450px] bg-white bg-dark">
             <svg
               class="w-6 h-6 cursor-pointer absolute top-2 right-2 text-gray-800 hover:text-gray-600 dark:text-white"
               aria-hidden="true"
               onClick={() => {
                 setPayFrom("");
-                setPaymentTypePopup(false);
+                //www.youtube.com/
+                https: setPaymentTypePopup(false);
               }}
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -760,9 +767,24 @@ const Boosting = () => {
                 d="M6 18 17.94 6M18 18 6.06 6"
               />
             </svg>
-            <p className="text-lg mt-4 font-bold">Select your payment type.</p>
+            <p className="text-lg mt-2 font-bold">Select your payment type.</p>
+            <p className="my-3">
+              Select your payment method. You can deposit into your ETBLINK
+              account online, via bank transfer, or by check. Choose the option
+              that is most convenient for you.
+            </p>
+            <p className="my-3">
+              የመክፈያ ዘዴዎን ይምረጡ። በኦለይን፣ በባንክ ማስተላለፍ ወይም በቼክ ወደ ኢቲቢ ሊነክ ማስገባት ይችላሉ።
+              ለእርስዎ በጣም ምቹ የሆነውን አማራጭ ይምረጡ.
+            </p>
+
+            <p className="my-3">
+              If you pay online or directly from your deposit,
+              your boost service will start automatically. Otherwise, your
+              service will start within 24 hours.
+            </p>
             <div className="w-full py-7 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 items-center justify-between">
-              <div className="rounded-lg hover:bg-gray-200 p-4 flex items-center gap-4 border">
+              <div className="rounded-lg text-white cursor-default bg-[#00aeff] hover:bg-blue-500 p-2 flex items-center gap-4 border">
                 <input
                   onChange={(e) =>
                     e.target.checked ? setPayFrom("online") : ""
@@ -771,14 +793,35 @@ const Boosting = () => {
                   name="paymentType"
                   id=""
                 />
-                <p className="text-xl font-bold">Online</p>
+                <p className="">Online</p>
               </div>
               <div
-                className={`rounded-lg hover:bg-gray-200 p-4 flex items-center gap-4 border ${
+                className={`rounded-lg relative cursor-default hover:bg-yellow-500 bg-yellow-400 text-white p-2 flex items-center gap-4 border ${
                   currentCompany?.data[0]?.currentBalance < boostInfo?.amount &&
                   "bg-red-100"
                 }`}
               >
+                {currentCompany?.data[0]?.currentBalance <
+                  boostInfo?.amount && (
+                  <svg
+                    class="w-6 h-6 absolute top-2 left-1 text-main"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="m15 9-6 6m0-6 6 6m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                    />
+                  </svg>
+                )}
+
                 <input
                   disabled={
                     currentCompany?.data[0]?.currentBalance < boostInfo?.amount
@@ -795,18 +838,18 @@ const Boosting = () => {
                   name="paymentType"
                   id=""
                 />
-                <p className="text-xl font-bold">Deposit</p>
+                <p className="">Deposit</p>
               </div>
-              <div className="rounded-lg hover:bg-gray-200 p-4 flex items-center gap-4 border">
+              <div className="rounded-lg hover:bg-emerald-600 cursor-default text-white bg-emerald-500 p-2 flex items-center gap-4 border">
                 <input
                   onChange={(e) => (e.target.checked ? setPayFrom("bank") : "")}
                   type="radio"
                   name="paymentType"
                   id=""
                 />
-                <p className="text-xl font-bold">Bank</p>
+                <p className="">Bank</p>
               </div>
-              <div className="rounded-lg hover:bg-gray-200 p-4 flex items-center gap-4 border">
+              <div className="rounded-lg hover:bg-red-500 cursor-default text-white bg-main  p-2 flex items-center gap-4 border">
                 <input
                   onChange={(e) =>
                     e.target.checked ? setPayFrom("check") : ""
@@ -815,7 +858,7 @@ const Boosting = () => {
                   name="paymentType"
                   id=""
                 />
-                <p className="text-xl font-bold">Check</p>
+                <p className="">Check</p>
               </div>
             </div>
 
