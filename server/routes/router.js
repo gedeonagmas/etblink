@@ -100,7 +100,9 @@ utilityRouter.route("/view").post(authentication, createView);
 utilityRouter.route("/upgrade").post(authentication, upgradeHandler);
 utilityRouter.route("/boost").post(authentication, paymentHandler);
 utilityRouter.route("/companyAggregate").get(companyAggregation);
-utilityRouter.route("/companyDashboardAggregation").get(companyDashboardAggregation);
+utilityRouter
+  .route("/companyDashboardAggregation")
+  .get(authentication, companyDashboardAggregation);
 utilityRouter.route("/notificationView").put(authentication, notificationView);
 utilityRouter.route("/recentlyAddedCompany").get(recentlyAddedCompany);
 

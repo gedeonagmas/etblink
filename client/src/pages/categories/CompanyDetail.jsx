@@ -97,7 +97,7 @@ const CompanyDetail = (props) => {
 
   const saveHandler = () => {
     saveData({
-      company: location?.state?.id,
+      company: location?.search?.split("?id=")[1],
       saver: currentUser?.user,
       role: currentUser?.role,
       tag: ["companies", "saves"],

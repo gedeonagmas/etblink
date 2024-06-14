@@ -99,7 +99,7 @@ function App() {
 
   // useEffect(() => {});
   // const user = { data: { email: "gedi@gmail.com" } };
-  // console.log(user, "from app js");
+  console.log(!user, admin?.total !== 0, "from app js");
   return (
     <Flowbite>
       <userContext.Provider value={{ user: user?.data }}>
@@ -107,7 +107,7 @@ function App() {
           <Routes>
             <Route path="/" element={<HomeTemplate />}>
               <Route path="/" element={<Home />}></Route>
-              {!user && !admin?.total === 0 && (
+              {!user && admin?.total !== 0 && (
                 <Route path="/signup" element={<Signup />}></Route>
               )}
               {admin?.total === 0 && (
@@ -263,6 +263,7 @@ function App() {
                 {/* ############################## ADMIN ############################## */}
                 {user?.role === "admin" ? (
                   <>
+                    <Route path="/dashboard/admin" element={<Admin />}></Route>
                     <Route
                       path="/dashboard/admin/news"
                       element={<AddNews />}

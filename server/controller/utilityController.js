@@ -14,6 +14,10 @@ const { Category } = require("../models/categoryModel");
 const { UserProfile } = require("../models/userProfile");
 const message = require("./../utils/messages");
 const { Chat } = require("../models/chatModel");
+const { Job } = require("../models/jobModel");
+const { News } = require("../models/newsModel");
+const { Blog } = require("../models/blogModel");
+const { Youtube } = require("../models/youtubeModel");
 
 const sendNotificationHandler = async ({ message, role, receiver }) => {
   return await Notification.create({
@@ -173,6 +177,7 @@ const createSave = asyncCatch(async (req, res, next) => {
     await Save.create(req.body);
 
     const user = await User.find({ user: req.body.company }).populate("user");
+    console.log(user, req.body, "user");
     user[0].user.saves.total = user[0].user.saves.total + 1;
     user[0].user.saves.available = user[0].user.saves.available + 1;
 
@@ -703,16 +708,26 @@ const companyAggregation = asyncCatch(async (req, res, next) => {
 });
 
 const companyDashboardAggregation = asyncCatch(async (req, res, next) => {
-  const saves = await Save.find({ company: req.query.id })
+  const saveParameter =
+    req.query.type === "company"
+      ? { company: req.query.id }
+      : { saver: req.query.id };
+
+  const viewParameter =
+    req.query.type === "company"
+      ? { company: req.query.id }
+      : { viewer: req.query.id };
+
+  const saves = await Save.find(saveParameter)
     .limit(10)
     .select("createdAt saver")
-    .populate("saver")
+    .populate(req.query.type === "company" ? "saver" : "company")
     .sort("-createdAt");
 
-  const views = await View.find({ company: req.query.id })
+  const views = await View.find(viewParameter)
     .limit(10)
     .select("createdAt viewer")
-    .populate("viewer")
+    .populate(req.query.type === "company" ? "viewer" : "company")
     .sort("-createdAt");
 
   const messages = await Chat.find({
@@ -730,7 +745,7 @@ const companyDashboardAggregation = asyncCatch(async (req, res, next) => {
       $match: {
         date: {
           $gt: Date.parse(priorDate?.toISOString().split("T")[0]),
-          $lt: Date.parse(today?.toISOString().split("T")[0]),
+          $lte: Date.parse(today?.toISOString().split("T")[0]),
         },
       },
     },
@@ -738,7 +753,7 @@ const companyDashboardAggregation = asyncCatch(async (req, res, next) => {
       $group: {
         _id: {
           createdAt: "$date",
-          company: "$company",
+          company: req.query.type === "company" ? "$company" : "$viewer",
         },
         total: {
           $sum: 1,
@@ -752,7 +767,7 @@ const companyDashboardAggregation = asyncCatch(async (req, res, next) => {
       $match: {
         date: {
           $gt: Date.parse(priorDate?.toISOString().split("T")[0]),
-          $lt: Date.parse(today?.toISOString().split("T")[0]),
+          $lte: Date.parse(today?.toISOString().split("T")[0]),
         },
       },
     },
@@ -760,7 +775,7 @@ const companyDashboardAggregation = asyncCatch(async (req, res, next) => {
       $group: {
         _id: {
           createdAt: "$date",
-          company: "$company",
+          company: req.query.type === "company" ? "$company" : "$saver",
         },
         total: {
           $sum: 1,
@@ -769,7 +784,43 @@ const companyDashboardAggregation = asyncCatch(async (req, res, next) => {
     },
   ]);
 
-  const company = await Company.findById(req.query.id).populate("sales");
+  const user =
+    req.query.type === "company"
+      ? await Company.findById(req.query.id).populate("sales")
+      : await UserProfile.findById(req.query.id);
+
+  const company =
+    req.query.type === "sales"
+      ? await Company.find({ sales: req.query.id }).limit(5)
+      : "";
+
+  const job =
+    req.user.role === "job-admin"
+      ? await Job.find({ createdBy: req.user.id }).countDocuments()
+      : req.user.role === "admin"
+      ? await Job.find().countDocuments()
+      : "";
+
+  const news =
+    req.user.role === "news-admin"
+      ? await News.find({ createdBy: req.user.id }).countDocuments()
+      : req.user.role === "admin"
+      ? await News.find().countDocuments()
+      : "";
+
+  const blog =
+    req.user.role === "blog-admin"
+      ? await Blog.find({ createdBy: req.user.id }).countDocuments()
+      : req.user.role === "admin"
+      ? await Blog.find().countDocuments()
+      : "";
+
+  const youtube =
+    req.user.role === "youtube-admin"
+      ? await Youtube.find({ createdBy: req.user.id }).countDocuments()
+      : req.user.role === "admin"
+      ? await Youtube.find().countDocuments()
+      : "";
 
   const boost = await BoostHistory.find({
     company: req.query.id,
@@ -788,18 +839,23 @@ const companyDashboardAggregation = asyncCatch(async (req, res, next) => {
   //   "final"
   // );
 
-  console.log(saves?.length, "final");
+  console.log(job, "final");
 
   return res.status(200).json({
     view: view?.filter((e) => e?._id?.company?.toString() === req?.query?.id),
     save: save?.filter((e) => e?._id?.company?.toString() === req?.query?.id),
     views,
     saves,
-    boost,
-    subscription,
-    fund,
-    company,
+    boost: req.query.type === "company" ? boost : "",
+    subscription: req.query.type === "company" ? subscription : "",
+    fund: req.query.type === "company" ? fund : "",
+    user,
+    company: req.query.type === "sales" ? company : "",
     messages,
+    job,
+    news,
+    youtube,
+    blog,
   });
 });
 

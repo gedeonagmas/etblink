@@ -57,7 +57,6 @@ const CompanyItems = ({ value, phoneNo, type, data, disabled }) => {
   };
 
   const saveHandler = () => {
-    // user?.user &&
     saveData({
       company: value,
       saver: user?.user?._id,

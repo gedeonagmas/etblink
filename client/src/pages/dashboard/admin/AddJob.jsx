@@ -252,7 +252,7 @@ const AddJob = () => {
         />
       )}
       {add && (
-        <div className="absolute shadow-xl z-30 top-2 bg-white bg-dark right-0 w-full rounded-lg p-4 border border-gray-300">
+        <div className="absolute shadow-xl  z-30 top-2 bg-white bg-dark overflow-auto h-[80vh] bg-dark right-0 w-full rounded-lg p-4 border border-gray-300">
           <div className="relative cursor-pointer">
             <svg
               class="w-6 absolute top-1 right-1 hover:text-gray-600 h-6 text-gray-800 dark:text-white"

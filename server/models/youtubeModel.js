@@ -19,6 +19,14 @@ const youtubeSchema = new mongoose.Schema(
       type: String,
       validate: valid.required("Category"),
     },
+    createdBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "userProfile",
+    },
+    updatedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "userProfile",
+    },
   },
   {
     timestamps: true,

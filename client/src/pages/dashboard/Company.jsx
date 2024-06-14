@@ -1,18 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
-import Charts from "../../components/Charts";
 import ReactApexChart from "react-apexcharts";
-import SmallChart from "../../components/SmallChart";
-import { Diversity2, Message, More, MoreVert } from "@mui/icons-material";
-import gedi from "../../assets/gedi.jpg";
-import flag from "../../assets/etbetio.png";
+import { MoreVert } from "@mui/icons-material";
 import Promotion from "../../components/Promotion";
-import Tables from "../../components/Tables";
 import { useCompanyDashboardAggregationQuery } from "../../features/api/apiSlice";
 import Loading from "../../components/loading/Loading";
-import ProfilePicture from "../../components/ProfilePicture";
 import { format } from "timeago.js";
+import { CircularProgressbar } from "react-circular-progressbar";
 
 const Company = (props) => {
   const user = JSON.parse(localStorage.getItem("etblink_user"));
@@ -21,6 +15,7 @@ const Company = (props) => {
 
   const { data, isFetching, isError } = useCompanyDashboardAggregationQuery({
     id: user?.user?._id,
+    type: "company",
   });
 
   const formatDate = (date) => {
@@ -67,7 +62,7 @@ const Company = (props) => {
         },
         colors: val === "save" ? ["#00aeff"] : ["red"],
         dataLabels: {
-          enabled: false,
+          enabled: true,
         },
         markers: {
           size: 0,
@@ -124,13 +119,13 @@ const Company = (props) => {
   };
   console.log(saveData, viewData, data, "data");
   return (
-    <div className="w-full pb-10 pr-3 lg:pr-10 pl-3 flex flex-col lg:flex-row gap-5">
+    <div className="w-full pb-10 md:pr-3 lg:pr-10 md:pl-3 flex flex-col lg:flex-row gap-5">
       {isFetching && (
         <div className="w-full flex items-center justify-center py-5">
           <Loading />
         </div>
       )}
-      {isError && <p>Something went wrong unable to read boost data</p>}
+      {isError && <p>Something went wrong unable to read the data</p>}
       {data && (
         <>
           <div className="flex flex-col lg:border-r pr-4 w-full lg:flex-[68%]">
@@ -162,7 +157,7 @@ const Company = (props) => {
                         />
                       </svg>
 
-                      <p> {formatNumber(data?.company?.saves?.total)}+</p>
+                      <p> {formatNumber(data?.user?.saves?.total)}+</p>
                     </div>
                   </a>
                   <a
@@ -183,7 +178,7 @@ const Company = (props) => {
                         <path d="m12.75 20.66 6.184-7.098c2.677-2.884 2.559-6.506.754-8.705-.898-1.095-2.206-1.816-3.72-1.855-1.293-.034-2.652.43-3.963 1.442-1.315-1.012-2.678-1.476-3.973-1.442-1.515.04-2.825.76-3.724 1.855-1.806 2.201-1.915 5.823.772 8.706l6.183 7.097c.19.216.46.34.743.34a.985.985 0 0 0 .743-.34Z" />
                       </svg>
 
-                      <p>{formatNumber(data?.company?.saves?.available)}+</p>
+                      <p>{formatNumber(data?.user?.saves?.available)}+</p>
                     </div>
                   </a>
                   <a
@@ -208,7 +203,7 @@ const Company = (props) => {
                         />
                       </svg>
 
-                      <p> {formatNumber(data?.company?.views?.total)}+</p>
+                      <p> {formatNumber(data?.user?.views?.total)}+</p>
                     </div>
                   </a>
                   <a
@@ -229,7 +224,8 @@ const Company = (props) => {
                         <path d="m13.001 19.927 2.896 1.773c1.52.93 3.405-.442 2.992-2.179l-1.06-4.452 3.468-2.978c1.353-1.162.633-3.382-1.142-3.525L15.603 8.2l-1.754-4.226A1.973 1.973 0 0 0 13 3v16.927ZM10.999 3c-.36.205-.663.53-.848.974L8.397 8.2l-4.552.366c-1.775.143-2.495 2.363-1.142 3.525l3.468 2.978-1.06 4.452c-.413 1.737 1.472 3.11 2.992 2.178l2.896-1.773V3Z" />
                       </svg>
                       <p className="mt-[2px]">
-                        {data?.company?.rating?.average}
+                        {data?.user?.rating?.average}{" "}
+                        <span className="text-gray-400">/</span>5
                       </p>
                     </div>
                   </a>
@@ -298,97 +294,6 @@ const Company = (props) => {
             </div>
 
             <div class="relative sm:rounded-lg">
-              <div class="flex items-center justify-between flex-column lg:flex-row flex-wrap space-y-4 md:space-y-0 py-4 bg-white dark:bg-gray-900">
-                {/*  <div>
-              <button
-                id="dropdownActionButton"
-                data-dropdown-toggle="dropdownAction"
-                class="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
-                type="button"
-              >
-                <span class="sr-only">Action button</span>
-                Sort by
-                <svg
-                  class="w-2.5 h-2.5 ms-2.5"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 10 6"
-                >
-                  <path
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="m1 1 4 4 4-4"
-                  />
-                </svg>
-              </button>
-              <div
-                id="dropdownAction"
-                class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600"
-              >
-                <ul
-                  class="py-1 text-sm text-gray-700 dark:text-gray-200"
-                  aria-labelledby="dropdownActionButton"
-                >
-                  <li>
-                    <a
-                      href="#"
-                      class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                    >
-                      Name
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                    >
-                      Age
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                    >
-                      Email
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <label for="table-search" class="sr-only">
-              Search
-            </label>
-            <div class="relative">
-              <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
-                <svg
-                  class="w-4 h-4 text-gray-500 dark:text-gray-400"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-                  />
-                </svg>
-              </div>
-              <input
-                type="text"
-                id="table-search-users"
-                class="block pt-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Search for users"
-              />
-            </div>*/}
-              </div>
-
               <div className="flex flex-col w-full gap-4 lg:flex-row mt-2">
                 <div className="w-full">
                   <div className="pb-2">Your Latest Saves</div>
@@ -399,7 +304,7 @@ const Company = (props) => {
                           Profile
                         </th>
                         <th scope="col" class="px-2 text-start py-3">
-                          Message
+                          Action
                         </th>
                       </tr>
                     </thead>
@@ -536,7 +441,7 @@ const Company = (props) => {
                           Profile
                         </th>
                         <th scope="col" class="px-2 text-start py-3">
-                          Message
+                          Action
                         </th>
                       </tr>
                     </thead>
@@ -670,7 +575,7 @@ const Company = (props) => {
             </div>
           </div>
 
-          <div className="flex flex-col w-full lg:flex-[32%]">
+          <div className="flex flex-col w-full pr-4 lg:flex-[32%]">
             <div className="flex gap-1 lg:flex-col xl:flex-row items-center justify-between p-2 bg-gray-100 dark:bg-gray-600 rounded-sm">
               <div className="flex relative w-full xl:w-[90px] p-2 h-full bg-white bg-dark">
                 <div className=" rounded-lg gap-1 flex flex-col items-start justify-start">
@@ -768,14 +673,49 @@ const Company = (props) => {
             </div>
 
             <div className="bg-white bg-dark py-4 mt-3 border-b-2 border-gray-100">
+              <p className="text-lg text-gray-400 font-bold">
+                Profile Fill Status
+              </p>
+              <div className="flex relative w-full flex-col items-center justify-center gap-2 mt-4">
+                <CircularProgressbar
+                  value={data?.user?.profileFill}
+                  className="h-16 w-16"
+                />
+                <div className="absolute top-[18%] text-lg font-bold text-red">
+                  {data?.user?.profileFill}%
+                </div>
+                <a
+                  href="/dashboard/company/profile"
+                  className="flex py-1 text-sm px-3 w-full text-center items-center justify-center hover:text-white hover:bg-emerald-500 rounded-sm mt-2 text-emerald-500 border gap-1 border-emerald-500 font-semibold"
+                >
+                  Edit your profile
+                  <svg
+                    class="w-6 h-6"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M19 12H5m14 0-4 4m4-4-4-4"
+                    />
+                  </svg>
+                </a>
+              </div>
+            </div>
+            <div className="bg-white bg-dark py-4 mt-3 border-b-2 border-gray-100">
               <p className="text-xl text-gray-400 font-bold">
                 Your Current Balance
               </p>
               <div className="flex w-full lg:flex-col xl:flex-row items-center gap-2 mt-4">
                 <p className="text-xl font-bold">
-                  {new Intl.NumberFormat().format(
-                    data?.company?.currentBalance
-                  )}
+                  {new Intl.NumberFormat().format(data?.user?.currentBalance)}
                 </p>
                 <a
                   href="/dashboard/company/billing"
@@ -789,9 +729,9 @@ const Company = (props) => {
             <div className="w-full flex lg:flex-col xl:flex-row gap-10 lg:gap-2 mt-4 py-2">
               <div className="">
                 <p className="text-gray-400 mb-1 text-lg">Subscription</p>
-                {data?.company?.subscriptionEndDate !== 0 ? (
+                {data?.user?.subscriptionEndDate !== 0 ? (
                   <p className="mb-1 text-emerald-500 font-bold text-sm">
-                    Expired {format(data?.company?.subscriptionEndDate)}
+                    Expired {format(data?.user?.subscriptionEndDate)}
                   </p>
                 ) : (
                   <p className="mb-1 text-emerald-500 font-bold text-sm">
@@ -801,13 +741,13 @@ const Company = (props) => {
               </div>
               <div className="">
                 <p className="text-gray-400 mb-1 text-lg">Boost</p>
-                {data?.company?.subscriptionEndDate !== 0 ? (
+                {data?.user?.boostEndDate !== 0 ? (
                   <p className="mb-1 text-main font-bold text-sm">
-                    Expired {format(data?.company?.boostEndDate)}
+                    Expired {format(data?.user?.boostEndDate)}
                   </p>
                 ) : (
                   <p className="mb-1 text-main font-bold text-sm">
-                    Not Subscribed Yet
+                    Not Boosted Yet
                   </p>
                 )}
               </div>
@@ -960,24 +900,24 @@ const Company = (props) => {
           </div> */}
               <div className="flex w-full mt-5 flex-col items-center justify-center">
                 <div class="flex flex-col gap-3 items-center mb-4">
-                  {data?.company?.sales?.profilePicture ? (
+                  {data?.user?.sales?.profilePicture ? (
                     <img
                       class="w-24 h-24 me-4 rounded-full"
-                      src={data?.company?.sales?.profilePicture}
+                      src={data?.user?.sales?.profilePicture}
                       alt=""
                     />
                   ) : (
                     <div className="w-24 h-24 rounded-full text-4xl flex items-center justify-center border bg-main text-white">
-                      {data?.company?.sales?.firstName?.substring(0, 1)}
+                      {data?.user?.sales?.firstName?.substring(0, 1)}
                     </div>
                   )}
                   <div class="font-medium gap-1 flex flex-col dark:text-white">
                     <p className="text-xl font-bold">
-                      {data?.company?.sales?.firstName}{" "}
-                      {data?.company?.sales?.lastName}
+                      {data?.user?.sales?.firstName}{" "}
+                      {data?.user?.sales?.lastName}
                     </p>
                     {/* <p className="">{sales?.data[0]?.email}</p> */}
-                    <p>{data?.company?.sales?.phone}</p>
+                    <p>{data?.user?.sales?.phone}</p>
                   </div>
                 </div>
               </div>

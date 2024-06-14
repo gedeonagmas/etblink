@@ -404,7 +404,7 @@ export const apiSlice = createApi({
     //company dashboard aggregation
     companyDashboardAggregation: builder.query({
       query: (arg) => ({
-        url: `/utility/companyDashboardAggregation?id=${arg.id}`,
+        url: `/utility/companyDashboardAggregation?id=${arg.id}&type=${arg.type}`,
         method: "GET",
         credentials: "include",
       }),
