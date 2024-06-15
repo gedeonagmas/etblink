@@ -204,7 +204,7 @@ const Earns = () => {
                   {(
                     (user?.data[0]?.user?.earn?.total * 100) /
                     user?.data[0]?.user?.earn?.total
-                  ).toFixed(1)}
+                  ).toFixed(0)}
                   %
                 </p>
               </div>
@@ -235,7 +235,7 @@ const Earns = () => {
                   {(
                     (user?.data[0]?.user?.earn?.withdraw * 100) /
                     user?.data[0]?.user?.earn?.total
-                  ).toFixed(1)}
+                  ).toFixed(0)}
                   %
                 </p>
               </div>
@@ -269,7 +269,7 @@ const Earns = () => {
                   {(
                     (user?.data[0]?.user?.earn?.current * 100) /
                     user?.data[0]?.user?.earn?.total
-                  ).toFixed(1)}
+                  ).toFixed(0)}
                   %
                 </p>
               </div>
