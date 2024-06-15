@@ -46,6 +46,7 @@ const {
   notificationView,
   recentlyAddedCompany,
   companyDashboardAggregation,
+  adminDashboardAggregation,
 } = require("../controller/utilityController.js");
 const { sendEmailHandler } = require("../controller/emailController.js");
 
@@ -103,6 +104,9 @@ utilityRouter.route("/companyAggregate").get(companyAggregation);
 utilityRouter
   .route("/companyDashboardAggregation")
   .get(authentication, companyDashboardAggregation);
+utilityRouter
+  .route("/adminDashboardAggregation")
+  .get(authentication, adminDashboardAggregation);
 utilityRouter.route("/notificationView").put(authentication, notificationView);
 utilityRouter.route("/recentlyAddedCompany").get(recentlyAddedCompany);
 

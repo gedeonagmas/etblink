@@ -23,8 +23,13 @@ const subscriptionHistorySchema = new mongoose.Schema(
       default: 0,
     },
 
+    amount: {
+      type: Number,
+      default: 0,
+    },
+
     payFrom: {
-      type: String,
+      type: String, 
     },
 
     bankDetail: {

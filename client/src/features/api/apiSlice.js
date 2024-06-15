@@ -410,6 +410,16 @@ export const apiSlice = createApi({
       }),
       providesTags: ["saves", "views"],
     }),
+
+    //admin dashboard aggregation
+    adminDashboardAggregation: builder.query({
+      query: (arg) => ({
+        url: `/utility/adminDashboardAggregation?id=${arg.id}`,
+        method: "GET",
+        credentials: "include",
+      }),
+      providesTags: ["users"],
+    }),
   }),
 });
 
@@ -446,4 +456,5 @@ export const {
   useNotificationViewMutation,
   useRecentlyAddedCompanyQuery,
   useCompanyDashboardAggregationQuery,
+  useAdminDashboardAggregationQuery,
 } = apiSlice;

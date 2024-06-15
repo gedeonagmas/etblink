@@ -3,19 +3,18 @@ import "react-circular-progressbar/dist/styles.css";
 import ReactApexChart from "react-apexcharts";
 import { MoreVert } from "@mui/icons-material";
 import Promotion from "../../components/Promotion";
-import { useCompanyDashboardAggregationQuery } from "../../features/api/apiSlice";
+import { useAdminDashboardAggregationQuery } from "../../features/api/apiSlice";
 import Loading from "../../components/loading/Loading";
 import { format } from "timeago.js";
 import { CircularProgressbar } from "react-circular-progressbar";
 
 const Admin = (props) => {
   const user = JSON.parse(localStorage.getItem("etblink_user"));
-  const [saveData, setSaveData] = useState([]);
-  const [viewData, setViewData] = useState([]);
+  const [boostData, setBoostData] = useState([]);
+  const [subscriptionData, setSubscriptionData] = useState([]);
 
-  const { data, isFetching, isError } = useCompanyDashboardAggregationQuery({
+  const { data, isFetching, isError } = useAdminDashboardAggregationQuery({
     id: user?.user?._id,
-    type: "admin",
   });
 
   const formatDate = (date) => {
@@ -23,18 +22,18 @@ const Admin = (props) => {
   };
 
   useEffect(() => {
-    const view = [];
-    const save = [];
-    data?.save?.map((e) => {
-      save.push([e?._id?.createdAt, e?.total]);
+    const boost = [];
+    const subscription = [];
+    data?.boost?.map((e) => {
+      boost.push([e?._id?.createdAt, e?.total]);
     });
 
-    data?.view?.map((e) => {
-      view.push([e?._id?.createdAt, e?.total]);
+    data?.subscription?.map((e) => {
+      subscription.push([e?._id?.createdAt, e?.total]);
     });
 
-    setViewData(view);
-    setSaveData(save);
+    setBoostData(boost);
+    setSubscriptionData(subscription);
   }, [data]);
 
   const formatNumber = (number) => {
@@ -49,8 +48,8 @@ const Admin = (props) => {
     return {
       series: [
         {
-          name: `${val === "save" ? "Saves" : "Views"}`,
-          data: val === "save" ? saveData : viewData,
+          name: `${val === "boost" ? "Boosts" : "Subscriptions"}`,
+          data: val === "boost" ? boostData : subscriptionData,
         },
       ],
 
@@ -60,7 +59,7 @@ const Admin = (props) => {
           toolbar: { show: false },
           parentHeightOffset: 0,
         },
-        colors: val === "save" ? ["#00aeff"] : ["red"],
+        colors: val === "boost" ? ["#00aeff"] : ["red"],
         dataLabels: {
           enabled: true,
         },
@@ -68,7 +67,7 @@ const Admin = (props) => {
           size: 0,
         },
         title: {
-          text: `Last 30 day ${val === "save" ? "Saves" : "Views"}`,
+          text: `Last 30 day ${val === "boost" ? "Boosts" : "Subscriptions"}`,
           align: "left",
         },
         fill: {
@@ -117,7 +116,7 @@ const Admin = (props) => {
       },
     };
   };
-  console.log(saveData, viewData, data, "data");
+  console.log(data, "data");
   return (
     <div className="w-full pb-10 md:pr-3 lg:pr-10 md:pl-3 flex flex-col lg:flex-row gap-5">
       {isFetching && (
@@ -153,9 +152,7 @@ const Admin = (props) => {
                     </svg>
                   </div>
                   <p className="text-sm">All Users</p>
-                  <p className="text-xs ">
-                    Total {formatNumber(data?.admin?.users)}
-                  </p>
+                  <p className="text-xs ">Total {formatNumber(data?.users)}</p>
                 </div>
                 <a
                   href="/dashboard/admin/users"
@@ -187,9 +184,7 @@ const Admin = (props) => {
                     </svg>
                   </div>
                   <p className="text-sm">News</p>
-                  <p className="text-xs">
-                    Total {formatNumber(data?.admin?.news)}
-                  </p>
+                  <p className="text-xs">Total {formatNumber(data?.news)}</p>
                 </div>
                 <a
                   href="/dashboard/admin/news"
@@ -221,9 +216,7 @@ const Admin = (props) => {
                     </svg>
                   </div>
                   <p className="text-sm">Youtube</p>
-                  <p className="text-xs">
-                    Total {formatNumber(data?.admin?.youtube)}
-                  </p>
+                  <p className="text-xs">Total {formatNumber(data?.youtube)}</p>
                 </div>
                 <a
                   href="/dashboard/admin/youtube"
@@ -255,9 +248,7 @@ const Admin = (props) => {
                     </svg>
                   </div>
                   <p className="text-sm">Jobs</p>
-                  <p className="text-xs">
-                    Total {formatNumber(data?.admin?.job)}
-                  </p>
+                  <p className="text-xs">Total {formatNumber(data?.job)}</p>
                 </div>
                 <a
                   href="/dashboard/admin/job"
@@ -288,9 +279,7 @@ const Admin = (props) => {
                     </svg>
                   </div>
                   <p className="text-sm">Sponsor</p>
-                  <p className="text-xs">
-                    Total {formatNumber(data?.admin?.sponsor)}
-                  </p>
+                  <p className="text-xs">Total {formatNumber(data?.sponsor)}</p>
                 </div>
                 <a
                   href="/dashboard/admin/sponsors"
@@ -322,9 +311,7 @@ const Admin = (props) => {
                     </svg>
                   </div>
                   <p className="text-sm">Blog</p>
-                  <p className="text-xs">
-                    Total {formatNumber(data?.admin?.blog)}
-                  </p>
+                  <p className="text-xs">Total {formatNumber(data?.blog)}</p>
                 </div>
                 <a
                   href="/dashboard/admin/blog"
@@ -339,13 +326,13 @@ const Admin = (props) => {
               <div className="flex flex-col gap-3">
                 <div className="w-full grid grid-cols-2 lg:grid-cols-4 items-start justify-between gap-2">
                   <a
-                    href="/dashboard/saves"
+                    href="/dashboard/admin/users"
                     className="flex cursor-pointer hover:bg-gray-100 border-r rounded-sm flex-col p-3 w-full h-[90px] justify-between items-start"
                   >
-                    <p className="">Total Saves</p>
+                    <p className="">Boosted Company</p>
                     <div className="text-xl flex items-center gap-4 text-[#00aeff] font-bold">
                       <svg
-                        class="w-6 h-6 text-blue-600"
+                        class="w-6 h-6"
                         aria-hidden="true"
                         xmlns="http://www.w3.org/2000/svg"
                         width="24"
@@ -358,42 +345,48 @@ const Admin = (props) => {
                           stroke-linecap="round"
                           stroke-linejoin="round"
                           stroke-width="2"
-                          d="M12.01 6.001C6.5 1 1 8 5.782 13.001L12.011 20l6.23-7C23 8 17.5 1 12.01 6.002Z"
+                          d="M4 4.5V19a1 1 0 0 0 1 1h15M7 14l4-4 4 4 5-5m0 0h-3.207M20 9v3.207"
                         />
                       </svg>
 
-                      <p> {formatNumber(data?.user?.saves?.total)}+</p>
+                      <p> {formatNumber(data?.boosted)}+</p>
                     </div>
                   </a>
                   <a
-                    href="/dashboard/saves"
+                    href="/dashboard/admin/users"
                     className="flex cursor-pointer hover:bg-gray-100 border-r rounded-sm flex-col p-3 w-full h-[90px] justify-between items-start"
                   >
-                    <p className="">Available Saves</p>
+                    <p className="">Not Boosted Company</p>
                     <div className="text-xl flex items-center gap-4 text-main font-bold">
                       <svg
-                        class="w-6 h-6 text-red-500"
+                        class="w-6 h-6"
                         aria-hidden="true"
                         xmlns="http://www.w3.org/2000/svg"
                         width="24"
                         height="24"
-                        fill="currentColor"
+                        fill="none"
                         viewBox="0 0 24 24"
                       >
-                        <path d="m12.75 20.66 6.184-7.098c2.677-2.884 2.559-6.506.754-8.705-.898-1.095-2.206-1.816-3.72-1.855-1.293-.034-2.652.43-3.963 1.442-1.315-1.012-2.678-1.476-3.973-1.442-1.515.04-2.825.76-3.724 1.855-1.806 2.201-1.915 5.823.772 8.706l6.183 7.097c.19.216.46.34.743.34a.985.985 0 0 0 .743-.34Z" />
+                        <path
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M4 4.5V19a1 1 0 0 0 1 1h15M7 10l4 4 4-4 5 5m0 0h-3.207M20 15v-3.207"
+                        />
                       </svg>
 
-                      <p>{formatNumber(data?.user?.saves?.available)}+</p>
+                      <p>{formatNumber(data?.notBoosted)}+</p>
                     </div>
                   </a>
                   <a
-                    href="/dashboard/views"
+                    href="/dashboard/admin/users"
                     className="flex cursor-pointer hover:bg-gray-100 border-r rounded-sm flex-col p-3 w-full h-[90px] justify-between items-start"
                   >
-                    <p className="">Views</p>
+                    <p className="">Subscribed Company</p>
                     <div className="text-xl flex items-center gap-4 text-emerald-400 font-bold">
                       <svg
-                        class="w-6 h-6 text-emerald-600"
+                        class="w-6 h-6"
                         aria-hidden="true"
                         xmlns="http://www.w3.org/2000/svg"
                         width="24"
@@ -403,56 +396,62 @@ const Admin = (props) => {
                       >
                         <path
                           fill-rule="evenodd"
-                          d="M4.998 7.78C6.729 6.345 9.198 5 12 5c2.802 0 5.27 1.345 7.002 2.78a12.713 12.713 0 0 1 2.096 2.183c.253.344.465.682.618.997.14.286.284.658.284 1.04s-.145.754-.284 1.04a6.6 6.6 0 0 1-.618.997 12.712 12.712 0 0 1-2.096 2.183C17.271 17.655 14.802 19 12 19c-2.802 0-5.27-1.345-7.002-2.78a12.712 12.712 0 0 1-2.096-2.183 6.6 6.6 0 0 1-.618-.997C2.144 12.754 2 12.382 2 12s.145-.754.284-1.04c.153-.315.365-.653.618-.997A12.714 12.714 0 0 1 4.998 7.78ZM12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"
+                          d="M9 15a6 6 0 1 1 12 0 6 6 0 0 1-12 0Zm3.845-1.855a2.4 2.4 0 0 1 1.2-1.226 1 1 0 0 1 1.992-.026c.426.15.809.408 1.111.749a1 1 0 1 1-1.496 1.327.682.682 0 0 0-.36-.213.997.997 0 0 1-.113-.032.4.4 0 0 0-.394.074.93.93 0 0 0 .455.254 2.914 2.914 0 0 1 1.504.9c.373.433.669 1.092.464 1.823a.996.996 0 0 1-.046.129c-.226.519-.627.94-1.132 1.192a1 1 0 0 1-1.956.093 2.68 2.68 0 0 1-1.227-.798 1 1 0 1 1 1.506-1.315.682.682 0 0 0 .363.216c.038.009.075.02.111.032a.4.4 0 0 0 .395-.074.93.93 0 0 0-.455-.254 2.91 2.91 0 0 1-1.503-.9c-.375-.433-.666-1.089-.466-1.817a.994.994 0 0 1 .047-.134Zm1.884.573.003.008c-.003-.005-.003-.008-.003-.008Zm.55 2.613s-.002-.002-.003-.007a.032.032 0 0 1 .003.007ZM4 14a1 1 0 0 1 1 1v4a1 1 0 1 1-2 0v-4a1 1 0 0 1 1-1Zm3-2a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1Zm6.5-8a1 1 0 0 1 1-1H18a1 1 0 0 1 1 1v3a1 1 0 1 1-2 0v-.796l-2.341 2.049a1 1 0 0 1-1.24.06l-2.894-2.066L6.614 9.29a1 1 0 1 1-1.228-1.578l4.5-3.5a1 1 0 0 1 1.195-.025l2.856 2.04L15.34 5h-.84a1 1 0 0 1-1-1Z"
                           clip-rule="evenodd"
                         />
                       </svg>
 
-                      <p> {formatNumber(data?.user?.views?.total)}+</p>
+                      <p> {formatNumber(data?.subscribed)}+</p>
                     </div>
                   </a>
                   <a
-                    href="/dashboard/company/ratings"
+                    href="/dashboard/admin/users"
                     className="flex cursor-pointer hover:bg-gray-100 rounded-sm flex-col p-3 w-full h-[90px] justify-between items-start"
                   >
-                    <p className="">Ratings</p>
+                    <p className="">Not Subscribed Company</p>
                     <div className="text-xl flex items-center gap-4 text-yellow-500 font-bold">
                       <svg
-                        class="w-6 text-yellow-400 h-6"
+                        class="w-6 h-6"
                         aria-hidden="true"
                         xmlns="http://www.w3.org/2000/svg"
                         width="24"
                         height="24"
-                        fill="currentColor"
+                        fill="none"
                         viewBox="0 0 24 24"
                       >
-                        <path d="m13.001 19.927 2.896 1.773c1.52.93 3.405-.442 2.992-2.179l-1.06-4.452 3.468-2.978c1.353-1.162.633-3.382-1.142-3.525L15.603 8.2l-1.754-4.226A1.973 1.973 0 0 0 13 3v16.927ZM10.999 3c-.36.205-.663.53-.848.974L8.397 8.2l-4.552.366c-1.775.143-2.495 2.363-1.142 3.525l3.468 2.978-1.06 4.452c-.413 1.737 1.472 3.11 2.992 2.178l2.896-1.773V3Z" />
+                        <path
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M4 4.5V19a1 1 0 0 0 1 1h15M7 10l4 4 4-4 5 5m0 0h-3.207M20 15v-3.207"
+                        />
                       </svg>
+
                       <p className="mt-[2px]">
-                        {data?.user?.rating?.average}{" "}
-                        <span className="text-gray-400">/</span>5
+                        {formatNumber(data?.notSubscribed)}+
                       </p>
                     </div>
                   </a>
                 </div>
               </div>
 
-              <div className="flex bg-gray-100 dark:bg-gray-700 rounded-sm flex-col lg:flex-row relative -mt-20s p-3 h-auto  justify-between items-start">
-                {saveData && (
+              <div className="flex my-4 bg-gray-100 dark:bg-gray-700 rounded-sm flex-col lg:flex-row relative -mt-20s p-3 h-auto  justify-between items-start">
+                {boostData && (
                   <div id="chart" className="bg-white bg-dark w-full ">
                     <ReactApexChart
-                      options={tableData("save").options}
-                      series={tableData("save").series}
+                      options={tableData("boost").options}
+                      series={tableData("boost").series}
                       type="area"
                       height={200}
                     />
                   </div>
                 )}
-                {viewData && (
+                {subscriptionData && (
                   <div id="chart" className="bg-white bg-dark w-full ">
                     <ReactApexChart
-                      options={tableData("view").options}
-                      series={tableData("view").series}
+                      options={tableData("subscription").options}
+                      series={tableData("subscription").series}
                       type="area"
                       height={200}
                     />
@@ -464,12 +463,12 @@ const Admin = (props) => {
             <div class="relative sm:rounded-lg">
               <div className="flex flex-col w-full gap-4 lg:flex-row mt-2">
                 <div className="w-full">
-                  <div className="pb-2">Your Latest Saves</div>
+                  <div className="pb-2">Latest Boosts</div>
                   <table class="text-sm w-full text-left border shadow-lg border-gray-200 rtl:text-right text-gray-500 dark:text-gray-400">
                     <thead class="text-xs text-gray-700 uppercase bg-emerald-100 dark:bg-gray-700 dark:text-gray-400">
                       <tr>
                         <th scope="col" class="px-2 text-start py-3">
-                          Profile
+                          Company
                         </th>
                         <th scope="col" class="px-2 text-start py-3">
                           Action
@@ -478,8 +477,8 @@ const Admin = (props) => {
                     </thead>
                     <tbody>
                       {data &&
-                        data?.saves &&
-                        data?.saves?.map((e, i) => {
+                        data?.boosts &&
+                        data?.boosts?.map((e, i) => {
                           return (
                             <tr
                               key={e?._id}
@@ -489,33 +488,26 @@ const Admin = (props) => {
                                 scope="row"
                                 class="flex items-center px-2 text-start py-4 text-gray-900 whitespace-nowrap dark:text-white"
                               >
-                                {e?.saver?.profilePicture?.length > 1 ? (
+                                {e?.company?.profilePicture?.length > 1 ? (
                                   <img
                                     class="w-12 h-12 me-4 rounded-full"
-                                    src={e?.saver?.profilePicture}
+                                    src={e?.company?.profilePicture}
                                     alt=""
                                   />
                                 ) : (
                                   <div className="w-12 h-12 rounded-full font-bold text-4xl flex items-center justify-center border bg-main text-white">
-                                    {e?.saver?.firstName
-                                      ? e?.saver?.firstName?.substring(0, 1)
-                                      : e?.saver?.name?.substring(0, 1)}
+                                    {e?.company?.name &&
+                                      e?.company?.name?.substring(0, 1)}
                                   </div>
                                 )}
 
                                 <div class="ps-3">
-                                  {e?.saver?.firstName ? (
-                                    <div class="text-base font-semibold">
-                                      {e?.saver?.firstName} {e?.saver?.lastName}
-                                    </div>
-                                  ) : (
-                                    <div class="text-base font-semibold">
-                                      {e?.saver?.name?.length > 21
-                                        ? e?.saver?.name?.substring(0, 20) +
-                                          "..."
-                                        : e?.saver?.name}
-                                    </div>
-                                  )}
+                                  <div class="text-base font-semibold">
+                                    {e?.company?.name?.length > 21
+                                      ? e?.company?.name?.substring(0, 20) +
+                                        "..."
+                                      : e?.company?.name}
+                                  </div>
 
                                   <div class="flex gap-1 justify-start items-center">
                                     <svg
@@ -543,7 +535,7 @@ const Admin = (props) => {
 
                               <td class="px-1 w-20 text-center py-4">
                                 <a
-                                  href="/dashboard/saves"
+                                  href={`/company?id=${e?.company?._id}`}
                                   type="button"
                                   data-modal-target="editUserModal"
                                   data-modal-show="editUserModal"
@@ -600,13 +592,13 @@ const Admin = (props) => {
                   </table>
                 </div>
                 <div className="w-full">
-                  <div className="pb-2">Your Latest Views</div>
+                  <div className="pb-2">Latest Subscriptions</div>
 
                   <table class="text-sm w-full text-left border shadow-lg border-gray-200 rtl:text-right text-gray-500 dark:text-gray-400">
                     <thead class="text-xs text-gray-700 uppercase bg-red-100 dark:bg-gray-700 dark:text-gray-400">
                       <tr>
                         <th scope="col" class="px-2 text-start py-3">
-                          Profile
+                          Company
                         </th>
                         <th scope="col" class="px-2 text-start py-3">
                           Action
@@ -615,8 +607,8 @@ const Admin = (props) => {
                     </thead>
                     <tbody>
                       {data &&
-                        data?.views &&
-                        data?.views?.map((e, i) => {
+                        data?.subscribes &&
+                        data?.subscribes?.map((e, i) => {
                           return (
                             <tr
                               key={e?._id}
@@ -626,34 +618,26 @@ const Admin = (props) => {
                                 scope="row"
                                 class="flex items-center px-2 text-start py-4 text-gray-900 whitespace-nowrap dark:text-white"
                               >
-                                {e?.viewer?.profilePicture?.length > 1 ? (
+                                {e?.company?.profilePicture?.length > 1 ? (
                                   <img
                                     class="w-12 h-12 me-4 rounded-full"
-                                    src={e?.viewer?.profilePicture}
+                                    src={e?.company?.profilePicture}
                                     alt=""
                                   />
                                 ) : (
                                   <div className="w-12 h-12 rounded-full font-bold text-4xl flex items-start justify-start border bg-main text-white">
-                                    {e?.viewer?.firstName
-                                      ? e?.viewer?.firstName?.substring(0, 1)
-                                      : e?.viewer?.name?.substring(0, 1)}
+                                    {e?.company?.name &&
+                                      e?.company?.name?.substring(0, 1)}
                                   </div>
                                 )}
 
                                 <div class="ps-3">
-                                  {e?.viewer?.firstName ? (
-                                    <div class="text-base font-semibold">
-                                      {e?.viewer?.firstName}{" "}
-                                      {e?.viewer?.lastName}
-                                    </div>
-                                  ) : (
-                                    <div class="text-base font-semibold">
-                                      {e?.viewer?.name?.length > 21
-                                        ? e?.viewer?.name?.substring(0, 20) +
-                                          "..."
-                                        : e?.viewer?.name}
-                                    </div>
-                                  )}
+                                  <div class="text-base font-semibold">
+                                    {e?.company?.name?.length > 21
+                                      ? e?.company?.name?.substring(0, 20) +
+                                        "..."
+                                      : e?.company?.name}
+                                  </div>
 
                                   <div class="flex gap-1 justify-start items-center">
                                     <svg
@@ -681,7 +665,7 @@ const Admin = (props) => {
 
                               <td class="px-1 w-20 text-center py-4">
                                 <a
-                                  href="/dashboard/views"
+                                  href={`/company?id=${e?.company?._id}`}
                                   type="button"
                                   data-modal-target="editUserModal"
                                   data-modal-show="editUserModal"
@@ -765,9 +749,7 @@ const Admin = (props) => {
                     </svg>
                   </div>
                   <p className="text-sm">Company</p>
-                  <p className="text-xs">
-                    Total {formatNumber(data?.admin?.company)}
-                  </p>
+                  <p className="text-xs">Total {formatNumber(data?.company)}</p>
                 </div>
                 <a
                   href="/dashboard/admin/users"
@@ -798,9 +780,7 @@ const Admin = (props) => {
                     </svg>
                   </div>
                   <p className="text-sm">Sales</p>
-                  <p className="text-xs">
-                    Total {formatNumber(data?.admin?.sales)}
-                  </p>
+                  <p className="text-xs">Total {formatNumber(data?.sales)}</p>
                 </div>
                 <a
                   href="/dashboard/admin/users"
@@ -832,7 +812,7 @@ const Admin = (props) => {
                   </div>
                   <p className="text-sm">Visitor</p>
                   <p className="text-xs">
-                    Total {formatNumber(data?.admin?.visitor)}{" "}
+                    Total {formatNumber(data?.visitor)}{" "}
                   </p>
                 </div>
                 <a

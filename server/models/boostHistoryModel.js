@@ -27,6 +27,11 @@ const boostHistorySchema = new mongoose.Schema(
       type: String,
     },
 
+    amount: {
+      type: Number,
+      default: 0,
+    },
+
     bankDetail: {
       type: Object,
     },

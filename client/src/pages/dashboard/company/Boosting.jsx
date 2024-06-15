@@ -779,9 +779,9 @@ const Boosting = () => {
             </p>
 
             <p className="my-3">
-              If you pay online or directly from your deposit,
-              your boost service will start automatically. Otherwise, your
-              service will start within 24 hours.
+              If you pay online or directly from your deposit, your boost
+              service will start automatically. Otherwise, your service will
+              start within 24 hours.
             </p>
             <div className="w-full py-7 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 items-center justify-between">
               <div className="rounded-lg text-white cursor-default bg-[#00aeff] hover:bg-blue-500 p-2 flex items-center gap-4 border">

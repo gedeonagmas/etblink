@@ -18,6 +18,7 @@ const { Job } = require("../models/jobModel");
 const { News } = require("../models/newsModel");
 const { Blog } = require("../models/blogModel");
 const { Youtube } = require("../models/youtubeModel");
+const { Sponsor } = require("../models/sponsorsModel");
 
 const sendNotificationHandler = async ({ message, role, receiver }) => {
   return await Notification.create({
@@ -402,9 +403,19 @@ const paymentHandler = asyncCatch(async (req, res, next) => {
 
     await company.save();
 
+    const amount =
+      payFrom === "online" || "deposit"
+        ? req.body.amount
+        : payFrom === "check"
+        ? req.body.checkDetail.checkAmount
+        : payFrom === "bank"
+        ? req.body.bankDetail.bankAmount
+        : req.body.amount;
+
     const history = await BoostHistory.create({
       company: req.body.company,
       boost,
+      amount,
       startDate: Date.parse(new Date(startDate)),
       endDate: Date.parse(new Date(endDate)),
       payFrom,
@@ -473,11 +484,22 @@ const paymentHandler = asyncCatch(async (req, res, next) => {
 
     await company.save();
 
+    const amount =
+      payFrom === "online" || "deposit"
+        ? req.body.amount
+        : payFrom === "check"
+        ? req.body.checkDetail.checkAmount
+        : payFrom === "bank"
+        ? req.body.bankDetail.bankAmount
+        : req.body.amount;
+
     const history = await SubscriptionHistory.create({
       company: req.body.company,
       subscription,
+      amount,
       startDate: Date.parse(new Date(startDate)),
       endDate: Date.parse(new Date(endDate)),
+      amount: req.body.amount,
       payFrom,
       approved: payFrom === "online" || payFrom === "deposit" ? true : false,
       bankDetail: payFrom === "bank" ? req.body.bankDetail : undefined,
@@ -797,29 +819,21 @@ const companyDashboardAggregation = asyncCatch(async (req, res, next) => {
   const job =
     req.user.role === "job-admin"
       ? await Job.find({ createdBy: req.user.id }).countDocuments()
-      : req.user.role === "admin"
-      ? await Job.find().countDocuments()
       : "";
 
   const news =
     req.user.role === "news-admin"
       ? await News.find({ createdBy: req.user.id }).countDocuments()
-      : req.user.role === "admin"
-      ? await News.find().countDocuments()
       : "";
 
   const blog =
     req.user.role === "blog-admin"
       ? await Blog.find({ createdBy: req.user.id }).countDocuments()
-      : req.user.role === "admin"
-      ? await Blog.find().countDocuments()
       : "";
 
   const youtube =
     req.user.role === "youtube-admin"
       ? await Youtube.find({ createdBy: req.user.id }).countDocuments()
-      : req.user.role === "admin"
-      ? await Youtube.find().countDocuments()
       : "";
 
   const boost = await BoostHistory.find({
@@ -833,11 +847,6 @@ const companyDashboardAggregation = asyncCatch(async (req, res, next) => {
   const fund = await Payment.find({
     company: req.query.id,
   }).countDocuments();
-
-  // console.log(
-  //   view.filter((e) => e._id.company.toString() === req.query.id),
-  //   "final"
-  // );
 
   console.log(job, "final");
 
@@ -856,6 +865,151 @@ const companyDashboardAggregation = asyncCatch(async (req, res, next) => {
     news,
     youtube,
     blog,
+  });
+});
+
+const adminDashboardAggregation = asyncCatch(async (req, res, next) => {
+  const user = await UserProfile.findById(req.query.id);
+  const company = await User.find({ role: "company" }).countDocuments();
+  const sales = await User.find({ role: "sales" }).countDocuments();
+  const visitor = await User.find({ role: "visitor" }).countDocuments();
+  const users = await User.find().countDocuments();
+  const news = await News.find().countDocuments();
+  const youtube = await Youtube.find().countDocuments();
+  const job = await Job.find().countDocuments();
+  const sponsor = await Sponsor.find().countDocuments();
+  const blog = await Blog.find().countDocuments();
+  const subscribed = await Company.find({
+    isSubscribed: true,
+  }).countDocuments();
+  const notSubscribed = await Company.find({
+    isSubscribed: false,
+  }).countDocuments();
+  const boosted = await Company.find({ isBoosted: true }).countDocuments();
+  const notBoosted = await Company.find({ isBoosted: false }).countDocuments();
+  const boostHistoryApproved = await BoostHistory.find({
+    approved: true,
+  }).countDocuments();
+  const boostHistoryNotApproved = await BoostHistory.find({
+    approved: false,
+  }).countDocuments();
+  const subscriptionHistoryApproved = await SubscriptionHistory.find({
+    approved: true,
+  }).countDocuments();
+  const subscriptionHistoryNotApproved = await SubscriptionHistory.find({
+    approved: false,
+  }).countDocuments();
+  const fundApproved = await Payment.find({ approved: true }).countDocuments();
+  const fundNotApproved = await Payment.find({
+    approved: false,
+  }).countDocuments();
+
+  const fundAmountData = await Payment.find({ approved: true });
+  const boostAmountData = await BoostHistory.find({ approved: true });
+  const subscriptionAmountData = await SubscriptionHistory.find({
+    approved: true,
+  });
+
+  let fundAmount = 0;
+  let boostAmount = 0;
+  let subscriptionAmount = 0;
+
+  fundAmountData?.map((e) => {
+    fundAmount += e?.amount * 1;
+  });
+
+  boostAmountData?.map((e) => {
+    boostAmount += e?.amount * 1;
+  });
+
+  subscriptionAmountData?.map((e) => {
+    subscriptionAmount += e?.amount * 1;
+  });
+
+  const today = new Date();
+  const priorDate = new Date(new Date().setDate(today.getDate() - 30));
+  const boost = await BoostHistory.aggregate([
+    {
+      $match: {
+        startDate: {
+          $gt: Date.parse(priorDate?.toISOString().split("T")[0]),
+          $lte: Date.parse(today?.toISOString().split("T")[0]),
+        },
+      },
+    },
+    {
+      $group: {
+        _id: {
+          createdAt: "$createdAt",
+          // company: "$company",
+        },
+        total: {
+          $sum: 1,
+        },
+      },
+    },
+  ]);
+  const subscription = await SubscriptionHistory.aggregate([
+    {
+      $match: {
+        startDate: {
+          $gt: Date.parse(priorDate?.toISOString().split("T")[0]),
+          $lte: Date.parse(today?.toISOString().split("T")[0]),
+        },
+      },
+    },
+    {
+      $group: {
+        _id: {
+          createdAt: "$createdAt",
+          // company: "$company",
+        },
+        total: {
+          $sum: 1,
+        },
+      },
+    },
+  ]);
+ 
+  const boosts = await BoostHistory.find({ approved: true })
+    .limit(10)
+    .populate("company")
+    .sort("-createdAt");
+
+  const subscribes = await SubscriptionHistory.find({ approved: true })
+    .limit(10)
+    .populate("company")
+    .sort("-createdAt");
+
+  console.log(boostAmount, "boost");
+  return res.status(200).json({
+    company,
+    sales,
+    visitor,
+    users,
+    user,
+    news,
+    youtube,
+    job,
+    sponsor,
+    blog,
+    subscribed,
+    notSubscribed,
+    boosted,
+    notBoosted,
+    boostHistoryApproved,
+    boostHistoryNotApproved,
+    subscriptionHistoryApproved,
+    subscriptionHistoryNotApproved,
+    fundApproved,
+    fundNotApproved,
+    fundAmount,
+    boostAmount,
+    subscriptionAmount,
+    boost,
+    subscription,
+    boosts,
+    subscribes,
   });
 });
 
@@ -904,6 +1058,7 @@ module.exports = {
   notificationView,
   recentlyAddedCompany,
   companyDashboardAggregation,
+  adminDashboardAggregation,
 };
 
 //   // console.log(Date.parse(new Date(req.body.endDate)));
