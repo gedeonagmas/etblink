@@ -609,6 +609,7 @@ const paymentHandler = asyncCatch(async (req, res, next) => {
         );
 
         if (type === "boost") {
+          console.log(user);
           company[0].user.boostStartDate = history.startDate;
           company[0].user.boostEndDate = history.endDate;
           company[0].user.isBoosted = req.body.value;
@@ -949,6 +950,7 @@ const adminDashboardAggregation = asyncCatch(async (req, res, next) => {
       },
     },
   ]);
+
   const subscription = await SubscriptionHistory.aggregate([
     {
       $match: {
@@ -970,7 +972,7 @@ const adminDashboardAggregation = asyncCatch(async (req, res, next) => {
       },
     },
   ]);
- 
+
   const boosts = await BoostHistory.find({ approved: true })
     .limit(10)
     .populate("company")
