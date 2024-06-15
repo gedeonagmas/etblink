@@ -669,7 +669,7 @@ const Sellers = (props) => {
                   {data?.user?.profileFill}%
                 </div>
                 <a
-                  href="/dashboard/visitor/profile"
+                  href="/dashboard/sales/profile"
                   className="flex py-1 text-sm px-3 w-full text-center items-center justify-center hover:text-white hover:bg-emerald-500 rounded-sm mt-2 text-emerald-500 border gap-1 border-emerald-500 font-semibold"
                 >
                   Edit your profile
