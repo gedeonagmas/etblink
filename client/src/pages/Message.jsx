@@ -4,6 +4,7 @@ import { io } from "socket.io-client";
 import {
   useCreateMutation,
   useLazyReadChatQuery,
+  useLazyReadQuery,
   useReadQuery,
 } from "../features/api/apiSlice";
 import Response from "../components/Response";
@@ -92,15 +93,41 @@ const Message = () => {
     }
   }, [receiver, sender]);
 
-  const {
-    data: userData,
-    isLoading: userIsFetching,
-    isError: userIsError,
-  } = useReadQuery({
-    url: `/user/users`,
-    tag: ["users"],
-  });
+  // const {
+  //   data: userData,
+  //   isLoading: userIsFetching,
+  //   isError: userIsError,
+  // } = useReadQuery({
+  //   url: `/user/users`,
+  //   tag: ["users"],
+  // });
 
+  // const [page, setPage] = useState(1);
+  const [search, setSearch] = useState("");
+  // const [totalPage, setTotalPage] = useState(1);
+  const [role, setRole] = useState("");
+  const [limit, setLimit] = useState(30);
+
+  const [
+    userDataTrigger,
+    { data: userData, isFetching: userIsFetching, isError: userIsError },
+  ] = useLazyReadQuery();
+
+  // useEffect(() => {
+  //   setPage(1);
+  // }, []);
+
+  // useEffect(() => {
+  //   setTotalPage(Math.ceil(userData?.total / 30));
+  // }, [userData]);
+
+  useEffect(() => {
+    const roles = role?.length > 0 ? `&role=${role}` : null;
+    userDataTrigger({
+      url: `/user/users?limit=${limit}${roles}&searchField=email&searchValue=${search}&populatingValue=user`,
+      tag: ["users"],
+    });
+  }, [limit, search, role]);
   // useEffect(() => {
   //   const hash = location.hash.split("#").splice(1, 2);
   //   // console.log(hash, "locations now");
@@ -109,25 +136,25 @@ const Message = () => {
   //   }
   // }, []);
   const focusHandler = (id) => {
-    ["group", "private", "manager", "lawyer", "all"].map((e) => {
-      const ids = document.getElementById(e);
-      ids?.classList?.remove(
-        // "border-b",
-        // "bg-gray-200",
-        // "border-blue-600",
-        "font-extrabold",
-        "text-blue-600"
-      );
-      if (id === e) {
-        ids?.classList?.add(
-          // "border-b",
-          // "bg-gray-200",
-          // "border-blue-600",
-          "font-extrabold",
-          "text-blue-600"
+    ["all-sidebar", "company-sidebar", "sales-sidebar", "visitor-sidebar"].map(
+      (e) => {
+        const ids = document.getElementById(e);
+        ids?.classList?.remove(
+          "border-b-red-500",
+          // "border",
+          "text-main"
+          // "font-bold"
         );
+        if (id === e) {
+          ids?.classList?.add(
+            "border-b-red-500",
+            // "border",
+            "text-main"
+            // "font-bold"
+          );
+        }
       }
-    });
+    );
   };
 
   useEffect(() => {
@@ -163,7 +190,7 @@ const Message = () => {
             formData.append("chatFile", file);
           })
         : formData.append("chatFile", files);
-      sendMessageData(formData);
+      message?.length > 0 && sendMessageData(formData);
     }
 
     // sender &&
@@ -200,16 +227,6 @@ const Message = () => {
   useEffect(() => {
     refer.current?.scrollIntoView();
   }, [typing]);
-
-  const createRoomHandler = (id) => {
-    [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14].map((e) => {
-      const ids = document.getElementById(e);
-      ids?.classList?.remove("bg-gray-200");
-      if (id === e) {
-        ids?.classList?.add("bg-gray-200");
-      }
-    });
-  };
 
   const closeLists = () => {
     const i = document.getElementById("user_lists");
@@ -275,6 +292,7 @@ const Message = () => {
   const [callFlag, setCallFlag] = useState(false);
   const [callRejected, setCallRejected] = useState(false);
   const [rejectedMessage, setRejectedMessage] = useState("");
+  const [receiverUser, setReceiverUser] = useState("");
 
   useEffect(() => {
     const peer = new Peer();
@@ -363,9 +381,15 @@ const Message = () => {
     }, 4000);
   });
 
-  // console.log(peerId, "peer id");
+  useEffect(() => {
+    if (sendMessageResponse?.status === "fulfilled") {
+      setMessage("");
+    }
+  }, [sendMessageResponse]);
+
+  // console.log(sender, "peer id");
   return (
-    <div className="flex text-xs  -ml-3 -mt-2">
+    <div className="flex text-xs overflow-hidden -ml-3 -mt-[16px]">
       <Response response={sendMessageResponse} setPending={setPending} />
 
       {/* video */}
@@ -399,6 +423,7 @@ const Message = () => {
               popup={popup}
               typingHandler={typingHandler}
               setMessage={setMessage}
+              sendMessageResponse={sendMessageResponse}
               pending={pending}
               sendHandler={sendHandler}
               setFiles={setFiles}
@@ -408,21 +433,28 @@ const Message = () => {
           </div>
         </div>
       ) : (
-        <div className="w-full flex h-[82.3vh]">
+        <div className="w-full overflow-hidden flex h-[87.2vh]">
           <div id="user_list_container" className="w-[25%]">
             <UserList
               userIsFetching={userIsFetching}
               userIsError={userIsError}
               userData={userData}
               currentUser={currentUser}
-              createRoomHandler={createRoomHandler}
               setReceiverId={setReceiverId}
               setSenderId={setSenderId}
               onlineUsers={onlineUsers}
+              focusHandler={focusHandler}
+              setRole={setRole}
+              setSearch={setSearch}
+              // setPage={setPage}
+              receiver={receiver}
+              setReceiverUser={setReceiverUser}
+              limit={limit}
+              setLimit={setLimit}
             />
           </div>
 
-          <div className="flex w-[76%] bg-yellow-500 h-[85vh] flex-col border-r">
+          <div className="flex w-[76%] overflow-hidden h-[86.3vh] flex-col border-r">
             <ChatHeader
               sender={sender}
               receiver={receiver}
@@ -439,6 +471,7 @@ const Message = () => {
               rejectedMessage={rejectedMessage}
               setRejectedMessage={setRejectedMessage}
               callAcceptHandler={callAcceptHandler}
+              user={receiverUser}
             />
             <Messages
               isLoading={isLoading}

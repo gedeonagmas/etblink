@@ -1,8 +1,32 @@
 import { Done, DoneOutline, DoneRounded } from "@mui/icons-material";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
+import { useReadQuery } from "../features/api/apiSlice";
+import Loading from "../components/loading/Loading";
 
 const Prices = () => {
+  const user = JSON.parse(localStorage.getItem("etblink_user"));
+
+  const {
+    data: subscriptions,
+    isFetching,
+    isError,
+  } = useReadQuery({ url: "/user/subscriptions", tag: ["subscriptions"] });
+
+  // <button
+  //   disabled={currentCompany?.data[0]?.profileFill < 90 ? true : false}
+  //   onClick={() => {
+  //     setSubscriptionInfo(e);
+  //     setPaymentTypePopup(true);
+  //   }}
+  //   className={`text-white w-32 py-2 px-2 ${
+  //     currentCompany?.data[0]?.profileFill < 90
+  //       ? "bg-red-400 "
+  //       : "bg-main hover:bg-red-500"
+  //   } rounded-lg `}
+  // >
+  //   Get Started
+  // </button>;
   return (
     <div className="w-full flex flex-col relative bg-gray-200 bg-dark h-auto">
       {/* <div
@@ -40,159 +64,126 @@ const Prices = () => {
       <p className="text-2xl px-main self-center mt-32 font-bold">
         Select from our price list
       </p>
+      {isFetching && <Loading text="text-gray-500" />}
+      {isError && <p>something went wrong unable to read the prices</p>}
+
       <div className="grid w-full place-items-center py-5 px-main self-center gap-x-10 gap-y-10 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mt-10">
-        <div className="relative flex flex-col items-center justify-center w-[370px]">
-          <div className="h-6 rounded-lg rounded-b-none z-10 w-[260px] from-pink-600 to-blue-600 bg-gradient-to-tr"></div>
-          <div className="flex flex-col z-20 rounded-b-none bg-white relative mt-0 w-[300px] items-start justify-start gap-2 rounded-xl shadow-xl">
-            <div className="flex h-[92px] w-full flex-col items-center justify-center">
-              <p className="text-4xl text-black font-extrabold uppercase">
-                SILVER
-              </p>
-              <p className="text-xs text-gray-400 uppercase">
-                price is only for 1 year
-              </p>
-            </div>
-          </div>{" "}
-          <div className="h-[72px] shadow-2xl flex flex-col items-center justify-center text-white font-extrabold text-xl rounded-lg absolute z-20 top-[116px] w-[320px] from-blue-600 to-red-600 bg-gradient-to-tr">
-            <p>
-              3000 birr
-              <span className="ml-2 text-center align-middle text-sm">
-                for Local companies
-              </span>
-            </p>
-            <p>
-              $ 100
-              <span className="ml-2 text-center align-middle text-sm">
-                for Global companies
-              </span>
-            </p>
-          </div>
-          <div className=" rounded-xl mt-12 flex flex-col items-center justify-center px-4 bg-blue pb-4 pt-8 w-[300px] bg-white">
-            {[0, 2, 3, 4, 5].map((e) => {
-              return (
-                <div className="flex w-full mt-3 items-center justify-between">
-                  <div className="flex items-center justify-start gap-3">
-                    <div className="w-3 h-3 from-[rgb(252,45,45)] to-[hsl(241,99%,48%)] bg-gradient-to-tr rounded-full"></div>
-                    <p className="text-gray-600">Full page description</p>
+        {subscriptions && subscriptions?.data?.length > 0 ? (
+          subscriptions?.data?.map((e, i) => {
+            return (
+              <div className="relative flex flex-col items-center justify-center w-[370px]">
+                <div
+                  className={`h-6 rounded-lg rounded-b-none z-10 w-[260px] ${
+                    i === 0
+                      ? "from-[rgb(252,45,45)] to-[hsl(241,99%,48%)]"
+                      : i === 1
+                      ? "to-orange-500 from-yellow-400"
+                      : i === 2
+                      ? "from-pink-600 to-red-600"
+                      : "from-emerald-600 to-pink-600"
+                  } bg-gradient-to-tr`}
+                ></div>
+                <div className="flex flex-col z-20 rounded-b-none bg-white relative mt-0 w-[300px] items-start justify-start gap-2 rounded-xl shadow-xl">
+                  <div className="flex h-[92px] w-full flex-col items-center justify-center">
+                    <p className="text-4xl text-black font-extrabold uppercase">
+                      {e?.name}
+                    </p>
+                    <p className="text-xs text-gray-400 uppercase">
+                      price is only for {e?.duration}
+                    </p>
                   </div>
-                  <div>
-                    <DoneRounded
-                      fontSize="small"
-                      className="text-emerald-500"
-                    />
-                  </div>
+                </div>{" "}
+                <div
+                  className={`h-[72px] shadow-2xl flex flex-col items-center justify-center text-white font-extrabold text-xl rounded-lg absolute z-20 top-[116px] w-[320px] ${
+                    i === 0
+                      ? "from-[rgb(252,45,45)] to-[hsl(241,99%,48%)]"
+                      : i === 1
+                      ? "to-orange-500 from-yellow-400"
+                      : i === 2
+                      ? "from-pink-600 to-red-600"
+                      : "from-emerald-600 to-pink-600"
+                  } bg-gradient-to-tr`}
+                >
+                  <p>
+                    {e?.amount} birr
+                    <span className="ml-2 text-center align-middle text-sm">
+                      for Local companies
+                    </span>
+                  </p>
+                  <p>
+                    $ {e?.amount}
+                    <span className="ml-2 text-center align-middle text-sm">
+                      for Global companies
+                    </span>
+                  </p>
                 </div>
-              );
-            })}
+                <div className=" rounded-xl mt-12 flex flex-col items-center justify-center px-4 bg-blue pb-4 pt-8 w-[300px] bg-white">
+                  {e?.features?.map((f) => {
+                    return (
+                      <div className="flex w-full mt-3 items-center justify-between">
+                        <div className="flex items-center justify-start gap-3">
+                          <div
+                            className={`w-3 h-3 ${
+                              i === 0
+                                ? "from-[rgb(252,45,45)] to-[hsl(241,99%,48%)]"
+                                : i === 1
+                                ? "to-orange-500 from-yellow-400"
+                                : i === 2
+                                ? "from-pink-600 to-red-600"
+                                : "from-emerald-600 to-pink-600"
+                            }  bg-gradient-to-tr rounded-full`}
+                          ></div>
+                          <p className="text-gray-600">{f}</p>
+                        </div>
+                        <div>
+                          <DoneRounded
+                            fontSize="small"
+                            className="text-emerald-500"
+                          />
+                        </div>
+                      </div>
+                    );
+                  })}
 
-            <div className="rounded-full mt-5 cursor-pointer hover:text-gray-300 absolutes bottom-3 left-16 w-36 from-pink-600 to-blue-600 bg-gradient-to-tr text-white text-lg font-bold flex items-center justify-center uppercase py-2">
-              SUBSCRIBE
-            </div>
-          </div>
-          <div className="h-6 rounded-lg rounded-t-none z-10 w-[260px] from-pink-600 to-blue-600 bg-gradient-to-tr"></div>
-        </div>
-
-        <div className="relative flex flex-col items-center justify-center w-[370px]">
-          <div className="h-6 rounded-lg rounded-b-none z-10 w-[260px] to-orange-500 from-yellow-400 bg-gradient-to-tr"></div>
-          <div className="flex flex-col z-20 rounded-b-none bg-white relative mt-0 w-[300px] items-start justify-start gap-2 rounded-xl shadow-xl">
-            <div className="flex h-[92px] w-full flex-col items-center justify-center">
-              <p className="text-4xl text-black font-extrabold uppercase">
-                GOLD
-              </p>
-              <p className="text-xs text-gray-400 uppercase">
-                price is only for 1 year
-              </p>
-            </div>
-          </div>{" "}
-          <div className="h-[72px] shadow-2xl flex flex-col items-center justify-center text-white font-extrabold text-xl rounded-lg absolute z-20 top-[116px] w-[320px] to-orange-500 from-yellow-400 bg-gradient-to-tr">
-            <p>
-              3000 birr
-              <span className="ml-2 text-center align-middle text-sm">
-                for Local companies
-              </span>
-            </p>
-            <p>
-              $ 100
-              <span className="ml-2 text-center align-middle text-sm">
-                for Global companies
-              </span>
-            </p>
-          </div>
-          <div className=" rounded-xl mt-12 flex flex-col items-center justify-center px-4 bg-blue pb-4 pt-8 w-[300px] bg-white">
-            {[0, 2, 3, 4, 5].map((e) => {
-              return (
-                <div className="flex w-full mt-3 items-center justify-between">
-                  <div className="flex items-center justify-start gap-3">
-                    <div className="w-3 h-3 to-orange-500 from-yellow-400 bg-gradient-to-tr rounded-full"></div>
-                    <p className="text-gray-600">Full page description</p>
-                  </div>
-                  <div>
-                    <DoneRounded
-                      fontSize="small"
-                      className="text-emerald-500"
-                    />
-                  </div>
+                  <a
+                    href={
+                      user?.role === "company"
+                        ? "/dashboard/company/subscription"
+                        : "#"
+                    }
+                    className={`rounded-full mt-5 cursor-pointer ${
+                      i === 0
+                        ? "from-[rgb(252,45,45)] to-[hsl(241,99%,48%)]"
+                        : i === 1
+                        ? "to-orange-500 from-yellow-400"
+                        : i === 2
+                        ? "from-pink-600 to-red-600"
+                        : "from-emerald-600 to-pink-600"
+                    } hover:text-gray-300 absolutes bottom-3 left-16 w-36 bg-gradient-to-tr text-white text-lg font-bold flex items-center justify-center uppercase py-2`}
+                  >
+                    SUBSCRIBE
+                  </a>
                 </div>
-              );
-            })}
-
-            <div className="rounded-full mt-5 cursor-pointer hover:text-gray-300 absolutes bottom-3 left-16 w-36 to-orange-500 from-yellow-400 bg-gradient-to-tr text-white text-lg font-bold flex items-center justify-center uppercase py-2">
-              SUBSCRIBE
-            </div>
+                <div
+                  className={`h-6 rounded-lg rounded-t-none z-10 w-[260px] ${
+                    i === 0
+                      ? "from-[rgb(252,45,45)] to-[hsl(241,99%,48%)]"
+                      : i === 1
+                      ? "to-orange-500 from-yellow-400"
+                      : i === 2
+                      ? "from-pink-600 to-red-600"
+                      : "from-emerald-600 to-pink-600"
+                  } bg-gradient-to-tr`}
+                ></div>
+              </div>
+            );
+          })
+        ) : (subscriptions && subscriptions?.message) ||
+          subscriptions?.data?.length === 0 ? (
+          <div className="w-full items-center justify-center flex">
+            There is no subscription history!
           </div>
-          <div className="h-6 rounded-lg rounded-t-none z-10 w-[260px] to-orange-500 from-yellow-400 bg-gradient-to-tr"></div>
-        </div>
-
-        <div className="relative flex flex-col items-center justify-center w-[370px]">
-          <div className="h-6 rounded-lg rounded-b-none z-10 w-[260px] from-pink-600 to-red-600 bg-gradient-to-tr"></div>
-          <div className="flex flex-col z-20 rounded-b-none bg-white relative mt-0 w-[300px] items-start justify-start gap-2 rounded-xl shadow-xl">
-            <div className="flex h-[92px] w-full flex-col items-center justify-center">
-              <p className="text-4xl text-black font-extrabold uppercase">
-                SILVER
-              </p>
-              <p className="text-xs text-gray-400 uppercase">
-                price is only for 1 year
-              </p>
-            </div>
-          </div>{" "}
-          <div className="h-[72px] shadow-2xl flex flex-col items-center justify-center text-white font-extrabold text-xl rounded-lg absolute z-20 top-[116px] w-[320px] from-pink-600 to-red-600 bg-gradient-to-tr">
-            <p>
-              3000 birr
-              <span className="ml-2 text-center align-middle text-sm">
-                for Local companies
-              </span>
-            </p>
-            <p>
-              $ 100
-              <span className="ml-2 text-center align-middle text-sm">
-                for Global companies
-              </span>
-            </p>
-          </div>
-          <div className=" rounded-xl mt-12 flex flex-col items-center justify-center px-4 bg-blue pb-4 pt-8 w-[300px] bg-white">
-            {[0, 2, 3, 4, 5].map((e) => {
-              return (
-                <div className="flex w-full mt-3 items-center justify-between">
-                  <div className="flex items-center justify-start gap-3">
-                    <div className="w-3 h-3 from-red-600 to-pink-600 bg-gradient-to-tr rounded-full"></div>
-                    <p className="text-gray-600">Full page description</p>
-                  </div>
-                  <div>
-                    <DoneRounded
-                      fontSize="small"
-                      className="text-emerald-500"
-                    />
-                  </div>
-                </div>
-              );
-            })}
-
-            <div className="rounded-full mt-5 cursor-pointer hover:text-gray-300 absolutes bottom-3 left-16 w-36 from-pink-600 to-red-600 bg-gradient-to-tr text-white text-lg font-bold flex items-center justify-center uppercase py-2">
-              SUBSCRIBE
-            </div>
-          </div>
-          <div className="h-6 rounded-lg rounded-t-none z-10 w-[260px] from-pink-600 to-red-600 bg-gradient-to-tr"></div>
-        </div>
+        ) : null}
       </div>
 
       {/* <p className="px-main text-2xl self-center mt-24 font-bold">

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import LoadingButton from "../loading/LoadingButton";
 
 const MessageInput = ({
@@ -10,14 +10,20 @@ const MessageInput = ({
   setFiles,
   setDescription,
   setMessageType,
+  sendMessageResponse,
 }) => {
+  useEffect(() => {
+    if (sendMessageResponse?.status === "fulfilled") {
+      setMessage("");
+    }
+  }, [sendMessageResponse]);
   return (
-    <div className="border-t bg-white relative border-gray-200 shadow-sm py-1 px-1">
+    <div className="border-t bg-white  border-b border-dark bg-dark relative border-gray-200 shadow-sm py-1 px-1">
       <div
         id="file-send"
         className="hidden absolute bg-white z-20 flex-col items-start justify-start gap-3 bottom-0 left-0 rounded-sm w-full h-auto p-2 border shadow-xl"
       >
-        <div className="flex w-full items-center justify-between p-3 md:p-5 border-b rounded-t dark:border-gray-600">
+        <div className="flex w-full items-center justify-between p-3 md:p-5 border-b border-dark rounded-t dark:border-gray-600">
           <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
             Send file
           </h3>
@@ -56,7 +62,7 @@ const MessageInput = ({
         <input
           onChange={(e) => setFiles(e.target.files)}
           multiple
-          className="block w-full mb-5 text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+          className="block w-full mb-5 text-gray-900 border border-dark border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
           id="small_size"
           type="file"
         />
@@ -71,7 +77,7 @@ const MessageInput = ({
           onChange={(e) => setDescription(e.target.value)}
           id="message"
           rows="4"
-          className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-dark border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           placeholder="Write your description here..."
         ></textarea>
 
@@ -94,14 +100,14 @@ const MessageInput = ({
               setFiles("");
             }}
             type="button"
-            className="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+            className="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none border-dark bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
           >
             Cancel
           </button>
         </div>
       </div>
 
-      <div className="relative items-center justify-center flex gap-2 borders border-gray-300 rounded-sm">
+      <div className="relative items-center justify-center flex gap-2  rounded-sm">
         <button
           onClick={() => {
             setMessageType("file");
@@ -133,7 +139,7 @@ const MessageInput = ({
           }}
           type="text"
           placeholder="Write your message!"
-          className="w-full text-gray-600 focus:ring-0 text-sm focus:border-none p-[2px] border-none focus:outline-none focus:rounded-sm"
+          className="w-full text-gray-600 bg-dark focus:ring-0 text-sm focus:border-none p-[2px] border-none focus:outline-none focus:rounded-sm"
         />
 
         <button

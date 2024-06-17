@@ -1,31 +1,34 @@
 import React from "react";
 import Loading from "../loading/Loading";
+import { Diversity3, Hail, HolidayVillage, People } from "@mui/icons-material";
 
 const UserList = ({
   userIsFetching,
   userIsError,
   userData,
   currentUser,
-  createRoomHandler,
   setReceiverId,
   setSenderId,
   onlineUsers,
+  focusHandler,
+  setRole,
+  setSearch,
+  receiver,
+  // setPage,
+  setReceiverUser,
+  limit,
+  setLimit,
 }) => {
   console.log(onlineUsers);
+
   return (
     <div
       id="user_lists"
-      className="flex border-r  overflow-y-hidden flex-col flex-[20%] h-[85vh]"
+      className="flex border border-t-0 border-dark overflow-hidden flex-col flex-[20%] h-[86.3vh]"
     >
       {/* search */}
-      <div className="w-full flex flex-col py-[4px] bg-gray-100 items-center justify-start shadow-sm h-[72px] border-b">
+      <div className="w-full flex flex-col bg-green-500 border-dark items-center justify-start shadow-sm h-[41px] border-b">
         <div class="w-full">
-          <label
-            for="default-search"
-            class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
-          >
-            Search
-          </label>
           <div class="relative">
             <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
               <svg
@@ -45,9 +48,10 @@ const UserList = ({
               </svg>
             </div>
             <input
+              onChange={(e) => setSearch(e.target.value)}
               type="search"
               id="default-search"
-              class="block w-full p-[6px] ps-10 text-sm text-gray-900 border border-gray-300 rounded-md bg-white focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              class="block w-full p-[8px] h-[44px] focus:ring-0 text-dark ps-10 text-sm text-gray-900 border-none bg-dark focus:outline-none"
               placeholder="Search users"
               required
             />
@@ -60,67 +64,52 @@ const UserList = ({
           </div>
         </div>
 
-        <div className="flex w-full mt-[6px] bg-gray-300 border-b-2 items-center justify-start">
-          <div className="flex w-full p-[2px] gap-1 bg-gray-200 border-b-[1.5px] border-b-red-500 text-whiteg font-semibold cursor-pointer border-r justify-center flex-cols items-center">
-            <svg
-              class="w-6 h-6 "
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M15 9h3m-3 3h3m-3 3h3m-6 1c-.306-.613-.933-1-1.618-1H7.618c-.685 0-1.312.387-1.618 1M4 5h16a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Zm7 5a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z"
-              />
-            </svg>
+        <div className="flex w-full mt-[6px]s border-b border-t border-dark items-center justify-start">
+          <div
+            onClick={() => {
+              setRole("");
+              focusHandler("all-sidebar");
+            }}
+            id="all-sidebar"
+            className="flex border-b-red-500 border border-t-0 border-l-0 border-b-0 text-main flex-col w-full p-[2px] gap-[2px] border-dark cursor-pointer border-r justify-center items-center"
+          >
+            <Diversity3 fontSize="small" />
+            <p className="">All</p>
+          </div>
+
+          <div
+            onClick={() => {
+              setRole("company");
+              focusHandler("company-sidebar");
+            }}
+            id="company-sidebar"
+            className="flex flex-col w-full p-[2px] gap-[2px] cursor-pointer border-dark border-r justify-center items-center"
+          >
+            <HolidayVillage fontSize="small" />
             <p className="  ">Company</p>
           </div>
 
-          <div className="flex w-full hover:bg-red-500 hover:text-white p-[2px] gap-1  cursor-pointer justify-center flex-cols border-r items-center">
-            <svg
-              class="w-6 h-6 "
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M15 9h3m-3 3h3m-3 3h3m-6 1c-.306-.613-.933-1-1.618-1H7.618c-.685 0-1.312.387-1.618 1M4 5h16a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Zm7 5a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z"
-              />
-            </svg>
+          <div
+            onClick={() => {
+              setRole("sales");
+              focusHandler("sales-sidebar");
+            }}
+            id="sales-sidebar"
+            className="flex flex-col w-full p-[2px] gap-[2px] border-dark  cursor-pointer justify-center border-r items-center"
+          >
+            <People fontSize="small" />
             <p className="  ">Sales</p>
           </div>
 
-          <div className="flex w-full hover:bg-red-500 hover:text-white p-[2px] gap-1 cursor-pointer justify-center flex-cols border-r items-center">
-            <svg
-              class="w-6 h-6 "
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M15 9h3m-3 3h3m-3 3h3m-6 1c-.306-.613-.933-1-1.618-1H7.618c-.685 0-1.312.387-1.618 1M4 5h16a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Zm7 5a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z"
-              />
-            </svg>
+          <div
+            onClick={() => {
+              setRole("visitor");
+              focusHandler("visitor-sidebar");
+            }}
+            id="visitor-sidebar"
+            className="flex flex-col w-full p-[2px] gap-[2px] cursor-pointer border-dark justify-center items-center"
+          >
+            <Hail fontSize="small" />
             <p className="  ">Visitor</p>
           </div>
         </div>
@@ -129,8 +118,8 @@ const UserList = ({
       {userIsFetching && <Loading text="text-gray-500" />}
       {userIsError && <p>something went wrong unable to read the users</p>}
       {/* user list */}
-      <div className="flex flex-col  mt-2 h-full overflow-y-auto">
-        <ul className="max-w-sm divide-y divide-gray-200 dark:divide-gray-700">
+      <div className="flex relative flex-col  mt-[46px] h-full overflow-y-auto">
+        <ul className="max-w-sm  divide-y divide-gray-200 dark:divide-gray-700">
           {userData && userData?.data?.length > 0 ? (
             userData?.data?.map((user, i) => {
               if (user?._id !== currentUser?._id) {
@@ -139,19 +128,23 @@ const UserList = ({
                     key={i}
                     id={i.toString()}
                     onClick={() => {
-                      createRoomHandler(i);
                       setReceiverId(user?._id);
                       setSenderId(currentUser?._id);
+                      setReceiverUser(user);
                       // setChatId(`${sender}.${receiver}`);
                       // fetchUsersMessage();
                     }}
-                    className="p-[6px] hover:bg-gray-200"
+                    className={`p-[6px] hover:bg-gray-200 dark:hover:bg-gray-700 ${
+                      user?._id === receiver
+                        ? "bg-gray-200 dark:bg-gray-700"
+                        : ""
+                    }`}
                   >
                     <div className="flex cursor-pointer items-center space-x-4 rtl:space-x-reverse">
                       <div className="relative">
                         {user?.role !== "company" &&
                         user?.user?.profilePicture?.length < 1 ? (
-                          <div className="w-9 h-9 p-1  font-bold rounded-full flex items-center justify-center bg-main text-white text-center">
+                          <div className="w-9 h-9 p-1 text-xl font-bold rounded-full flex items-center justify-center bg-main text-white text-center">
                             {user?.email?.substring(0, 1)}
                           </div>
                         ) : user?.role !== "company" &&
@@ -171,7 +164,7 @@ const UserList = ({
                             alt="user"
                           />
                         ) : (
-                          <div className="w-9 h-9 p-1  font-bold rounded-full flex items-center justify-center bg-main text-white text-center">
+                          <div className="w-9 h-9 p-1 text-xl font-bold rounded-full flex items-center justify-center bg-main text-white text-center">
                             {user?.email?.substring(0, 1)}
                           </div>
                         )}
@@ -199,7 +192,15 @@ const UserList = ({
               }
             })
           ) : (
-            <div className="w-full text-center">No user found</div>
+            <div className="w-full mt-5 text-center">Users Not Found</div>
+          )}
+          {userData?.data?.length >= 30 && (
+            <p
+              onClick={() => setLimit(limit + 30)}
+              className="absolute bottom-0 left-20 bg-white bg-dark cursor-pointer p-1 text-sm"
+            >
+              See more
+            </p>
           )}
         </ul>
       </div>

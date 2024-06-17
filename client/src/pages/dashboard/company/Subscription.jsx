@@ -15,6 +15,7 @@ import Tables from "../../../components/Tables";
 import ResponsivePagination from "react-responsive-pagination";
 import "./../../categories/pagination.css";
 import ProfilePicture from "../../../components/ProfilePicture";
+import { DoneRounded } from "@mui/icons-material";
 
 const Subscription = ({ type }) => {
   const user = JSON.parse(localStorage.getItem("etblink_user"));
@@ -605,7 +606,7 @@ const Subscription = ({ type }) => {
   console.log(startDate, endDate, subscriptionInfo, "boosted");
 
   return (
-    <section class="bg-white dark:bg-gray-900 relative">
+    <section class="bg-white pr-3 lg:pr-10 dark:bg-gray-900 relative">
       <Response
         response={subscriptionResponse}
         setPending={setSubscriptionPending}
@@ -682,60 +683,120 @@ const Subscription = ({ type }) => {
         {isFetching && <Loading />}
         {isError && <p>Something went wrong unable to read the data</p>}
         {type === "default" && (
-          <div class="space-y-8 lg:grid lg:grid-cols-3 sm:gap-6 xl:gap-10 lg:space-y-0">
+          <div class="grid grid-cols-1 md:grid-cols-2 pr-3 lg:grid-cols-3 py-4 bg-gray-200">
             {subscriptions && subscriptions?.data?.length > 0 ? (
-              subscriptions?.data?.map((e) => {
+              subscriptions?.data?.map((e, i) => {
                 return (
-                  <div class="flex flex-col p-6 mx-auto max-w-lg text-center text-gray-900 bg-white rounded-lg border border-gray-100 shadow dark:border-gray-600 xl:p-8 dark:bg-gray-800 dark:text-white">
-                    <h3 class="mb-4 text-2xl font-semibold">{e?.name}</h3>
-                    <p class="font-light text-gray-500 sm:text-lg dark:text-gray-400">
-                      {e?.description}
-                    </p>
-                    <div class="flex justify-center items-baseline my-8">
-                      <span class="mr-2 text-5xl font-extrabold">
-                        {e?.amount}
-                      </span>
-                      <span class="text-gray-500 dark:text-gray-400">
-                        / for {e?.For} {e?.duration}
-                      </span>
+                  <div className="relative flex flex-col items-center justify-center w-[350px]">
+                    <div
+                      className={`h-6 rounded-lg rounded-b-none z-10 w-[240px] ${
+                        i === 0
+                          ? "from-[rgb(252,45,45)] to-[hsl(241,99%,48%)]"
+                          : i === 1
+                          ? "to-orange-500 from-yellow-400"
+                          : i === 2
+                          ? "from-pink-600 to-red-600"
+                          : "from-emerald-600 to-pink-600"
+                      } bg-gradient-to-tr`}
+                    ></div>
+                    <div className="flex flex-col z-20 rounded-b-none bg-white relative mt-0 w-[280px] items-start justify-start gap-2 rounded-xl shadow-xl">
+                      <div className="flex h-[92px] w-full flex-col items-center justify-center">
+                        <p className="text-4xl text-black font-extrabold uppercase">
+                          {e?.name}
+                        </p>
+                        <p className="text-xs text-gray-400 uppercase">
+                          price is only for {e?.duration}
+                        </p>
+                      </div>
+                    </div>{" "}
+                    <div
+                      className={`h-[72px] shadow-2xl flex flex-col items-center justify-center text-white font-extrabold text-xl rounded-lg absolute z-20 top-[116px] w-[300px] ${
+                        i === 0
+                          ? "from-[rgb(252,45,45)] to-[hsl(241,99%,48%)]"
+                          : i === 1
+                          ? "to-orange-500 from-yellow-400"
+                          : i === 2
+                          ? "from-pink-600 to-red-600"
+                          : "from-emerald-600 to-pink-600"
+                      } bg-gradient-to-tr`}
+                    >
+                      <p>
+                        {e?.amount} birr
+                        <span className="ml-2 text-center align-middle text-sm">
+                          for Local companies
+                        </span>
+                      </p>
+                      <p>
+                        $ {e?.amount}
+                        <span className="ml-2 text-center align-middle text-sm">
+                          for Global companies
+                        </span>
+                      </p>
                     </div>
-                    <ul role="list" class="mb-8 space-y-4 text-left">
+                    <div className=" rounded-xl mt-12 flex flex-col items-center justify-center px-4 bg-blue pb-4 pt-8 w-[280px] bg-white">
                       {e?.features?.map((f) => {
                         return (
-                          <li class="flex items-center space-x-3">
-                            <svg
-                              class="flex-shrink-0 w-5 h-5 text-green-500 dark:text-green-400"
-                              fill="currentColor"
-                              viewBox="0 0 20 20"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                fill-rule="evenodd"
-                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                clip-rule="evenodd"
-                              ></path>
-                            </svg>
-                            <span>{f}</span>
-                          </li>
+                          <div className="flex w-full mt-3 items-center justify-between">
+                            <div className="flex items-center justify-start gap-3">
+                              <div
+                                className={`w-3 h-3 ${
+                                  i === 0
+                                    ? "from-[rgb(252,45,45)] to-[hsl(241,99%,48%)]"
+                                    : i === 1
+                                    ? "to-orange-500 from-yellow-400"
+                                    : i === 2
+                                    ? "from-pink-600 to-red-600"
+                                    : "from-emerald-600 to-pink-600"
+                                }  bg-gradient-to-tr rounded-full`}
+                              ></div>
+                              <p className="text-gray-600">{f}</p>
+                            </div>
+                            <div>
+                              <DoneRounded
+                                fontSize="small"
+                                className="text-emerald-500"
+                              />
+                            </div>
+                          </div>
                         );
                       })}
-                    </ul>
-                    <button
-                      disabled={
-                        currentCompany?.data[0]?.profileFill < 90 ? true : false
-                      }
-                      onClick={() => {
-                        setSubscriptionInfo(e);
-                        setPaymentTypePopup(true);
-                      }}
-                      className={`text-white w-32 py-2 px-2 ${
-                        currentCompany?.data[0]?.profileFill < 90
-                          ? "bg-red-400 "
-                          : "bg-main hover:bg-red-500"
-                      } rounded-lg `}
-                    >
-                      Get Started
-                    </button>
+
+                      <button
+                        disabled={
+                          currentCompany?.data[0]?.profileFill < 90
+                            ? true
+                            : false
+                        }
+                        onClick={() => {
+                          setSubscriptionInfo(e);
+                          setPaymentTypePopup(true);
+                        }}
+                        className={`rounded-full mt-5 cursor-pointer ${
+                          i === 0 && currentCompany?.data[0]?.profileFill >= 90
+                            ? "from-[rgb(252,45,45)] to-[hsl(241,99%,48%)]"
+                            : i === 1 &&
+                              currentCompany?.data[0]?.profileFill >= 90
+                            ? "to-orange-500 from-yellow-400"
+                            : i === 2 &&
+                              currentCompany?.data[0]?.profileFill >= 90
+                            ? "from-pink-400 to-red-600"
+                            : "from-red-400 to-pink-600"
+                        } hover:text-gray-300 absolutes bottom-3 left-16 w-36 bg-gradient-to-tr text-white text-lg font-bold flex items-center justify-center uppercase py-2`}
+                      >
+                        SUBSCRIBE
+                      </button>
+                    </div>
+                    <div
+                      className={`h-6 rounded-lg rounded-t-none z-10 w-[240px] ${
+                        i === 0
+                          ? "from-[rgb(252,45,45)] to-[hsl(241,99%,48%)]"
+                          : i === 1
+                          ? "to-orange-500 from-yellow-400"
+                          : i === 2
+                          ? "from-pink-600 to-red-600"
+                          : "from-emerald-600 to-pink-600"
+                      } bg-gradient-to-tr`}
+                    ></div>
                   </div>
                 );
               })

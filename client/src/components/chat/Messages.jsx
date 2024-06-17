@@ -26,7 +26,7 @@ const Messages = ({
   return (
     <div
       id="messages"
-      className="flex w-full flex-col h-[70vh] bg-white bg-dark space-y-4d p-3 overflow-y-auto scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch"
+      className="flex w-full flex-col h-[72vh] space-y-4d p-3 overflow-y-auto scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch"
     >
       {isLoading && <Loading text="text-gray-500" />}
       {isError && <p>something went wrong unable to read the messages</p>}
@@ -49,16 +49,16 @@ const Messages = ({
                         : "items-end"
                     }`}
                   >
-                    <div>
+                    <div className="">
                       <div
-                        className={`px-4 py-2 rounded-lg inline-block rounded-bl-none bg-dark  ${
+                        className={`px-4 py-2 rounded-lg inline-block rounded-bl-none  ${
                           message?.sender?._id !== currentUser?._id
                             ? "bg-gray-300 text-gray-700"
                             : "bg-main text-white"
                         } `}
                       >
                         {message?.messageType === "text" && (
-                          <p>{message?.message?.content}</p>
+                          <p className="">{message?.message?.content}</p>
                         )}
                         {message?.messageType === "file" &&
                         message?.message?.content?.length > 0

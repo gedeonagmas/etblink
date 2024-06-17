@@ -20,16 +20,18 @@ const ChatHeader = ({
   callRejectedHandler,
   rejectedMessage,
   setRejectedMessage,
+  user,
   callAcceptHandler,
 }) => {
-  const user = JSON.parse(localStorage.getItem("etblink_user"));
+  // const user = JSON.parse(localStorage.getItem("etblink_user"));
+  console.log(user, "user list from header");
   return (
-    <div className="w-full relative bg-gray-100 flex border-b justify-between items-center">
+    <div className="w-full relative py-[2px] bg-gray-100 bg-dark flex border-b border-dark justify-between items-center">
       <div className="flex items-center space-x-4 rtl:space-x-reverse">
         <a
           href="#"
           id="menu"
-          className="flex flex-col md:hidden ml-2 items-center p-2 border-gray-400 text-gray-900 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700 group"
+          className="flex flex-col md:hidden ml-2 items-center p-2 border-gray-400 border-dark text-gray-900 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700 group"
         >
           <svg
             className="w-6 h-6 text-gray-800 dark:text-white"
@@ -51,7 +53,7 @@ const ChatHeader = ({
           <p className=" font-medium text-gray-900 truncate dark:text-white">
             {user?.role === "company"
               ? user?.user?.name
-              : ` ${user?.user?.firstName} ${user?.user?.middleName} `}
+              : ` ${user?.user?.firstName} ${user?.user?.lastName} `}
           </p>
 
           <p className=" mt-[2px] text-gray-500 truncate dark:text-gray-400">
