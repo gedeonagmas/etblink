@@ -24,10 +24,18 @@ const ChatHeader = ({
   callAcceptHandler,
 }) => {
   // const user = JSON.parse(localStorage.getItem("etblink_user"));
-  console.log(user, "user list from header");
+  // console.log(user, "user list from header");
   return (
-    <div className="w-full relative py-[2px] bg-gray-100 bg-dark flex border-b border-dark justify-between items-center">
-      <div className="flex items-center space-x-4 rtl:space-x-reverse">
+    <div className="w-full relative py-[2px] bg-gray-200 bg-dark flex border-b border-dark justify-between items-center">
+      <div
+        onClick={() => {
+          const id = document.getElementById("user_list_container");
+          id?.classList?.value?.includes("hidden")
+            ? id?.classList?.remove("hidden")
+            : id?.classList?.add("hidden");
+        }}
+        className="flex items-center space-x-4 rtl:space-x-reverse"
+      >
         <a
           href="#"
           id="menu"

@@ -11,6 +11,8 @@ const MessageInput = ({
   setDescription,
   setMessageType,
   sendMessageResponse,
+  message,
+  files,
 }) => {
   useEffect(() => {
     if (sendMessageResponse?.status === "fulfilled") {
@@ -18,7 +20,7 @@ const MessageInput = ({
     }
   }, [sendMessageResponse]);
   return (
-    <div className="border-t bg-white  border-b border-dark bg-dark relative border-gray-200 shadow-sm py-1 px-1">
+    <div className="border-t w-full bg-white z-10 absolute bottom-0 border-b border-dark bg-dark border-gray-200 shadow-sm py-1 px-1">
       <div
         id="file-send"
         className="hidden absolute bg-white z-20 flex-col items-start justify-start gap-3 bottom-0 left-0 rounded-sm w-full h-auto p-2 border shadow-xl"
@@ -82,17 +84,23 @@ const MessageInput = ({
         ></textarea>
 
         <div className="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
-          <LoadingButton
-            pending={pending}
-            onClick={() => {
-              sendHandler();
-              setMessageType("text");
-              setFiles("");
-            }}
-            title="Send"
-            color="bg-main"
-            width="w-full rounded-l-none rounded-r-sm"
-          />
+          {files?.length > 0 ? (
+            <LoadingButton
+              pending={pending}
+              onClick={() => {
+                sendHandler();
+                setMessageType("file");
+                // setFiles("");
+              }}
+              title="Send"
+              color="bg-main"
+              width="w-full rounded-l-none rounded-r-sm"
+            />
+          ) : (
+            <div className="w-28 text-center py-3 px-2 text-[14px] bg-red-500 text-white rounded-l-none rounded-r-sm">
+              Send
+            </div>
+          )}
           <button
             onClick={() => {
               popup("file-send");
@@ -162,16 +170,22 @@ const MessageInput = ({
           </svg>
         </button>
 
-        <LoadingButton
-          pending={pending}
-          onClick={() => {
-            sendHandler();
-            setMessageType("text");
-          }}
-          title="Send"
-          color="bg-main"
-          width="w-full rounded-l-none rounded-r-sm"
-        />
+        {message?.length > 0 ? (
+          <LoadingButton
+            pending={pending}
+            onClick={() => {
+              sendHandler();
+              setMessageType("text");
+            }}
+            title="Send"
+            color="bg-main"
+            width="w-full rounded-l-none rounded-r-sm"
+          />
+        ) : (
+          <div className="w-28 text-center py-3 px-2 text-[14px] bg-red-500 text-white rounded-l-none rounded-r-sm">
+            Send
+          </div>
+        )}
         {/* <button
         onClick={sendHandler}
         type="button"

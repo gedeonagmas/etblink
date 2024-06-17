@@ -99,7 +99,7 @@ function App() {
 
   // useEffect(() => {});
   // const user = { data: { email: "gedi@gmail.com" } };
-  console.log(!user, admin?.total !== 0, "from app js");
+  // console.log(!user, admin?.total !== 0, "from app js");
   return (
     <Flowbite>
       <userContext.Provider value={{ user: user?.data }}>

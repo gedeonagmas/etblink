@@ -2,6 +2,7 @@ import React from "react";
 import Loading from "../loading/Loading";
 import { format } from "timeago.js";
 import ProfilePicture from "../ProfilePicture";
+import "./typing.css";
 
 const Messages = ({
   isLoading,
@@ -26,7 +27,7 @@ const Messages = ({
   return (
     <div
       id="messages"
-      className="flex w-full flex-col h-[72vh] space-y-4d p-3 overflow-y-auto scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch"
+      className="flex w-full flex-col h-[72vh] p-3 overflow-y-auto scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch"
     >
       {isLoading && <Loading text="text-gray-500" />}
       {isError && <p>something went wrong unable to read the messages</p>}
@@ -377,9 +378,15 @@ const Messages = ({
       )}
 
       {typing && (
-        <p className=" text-main flex gap-2 items-center justify-center ml-2 mt-1">
-          typing...
-        </p>
+        <div className=" text-main absolute bottom-14 flex gap-2 items-center justify-center ml-2 mt-1">
+          <div class="chat-bubble">
+            <div class="typing">
+              <div class="dot"></div>
+              <div class="dot"></div>
+              <div class="dot"></div>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

@@ -110,16 +110,12 @@ const Message = () => {
 
   const [
     userDataTrigger,
-    { data: userData, isFetching: userIsFetching, isError: userIsError },
+    { data: userDatas, isFetching: userIsFetching, isError: userIsError },
   ] = useLazyReadQuery();
 
   // useEffect(() => {
   //   setPage(1);
   // }, []);
-
-  // useEffect(() => {
-  //   setTotalPage(Math.ceil(userData?.total / 30));
-  // }, [userData]);
 
   useEffect(() => {
     const roles = role?.length > 0 ? `&role=${role}` : null;
@@ -128,6 +124,19 @@ const Message = () => {
       tag: ["users"],
     });
   }, [limit, search, role]);
+
+  const [userData, setUserData] = useState([]);
+  useEffect(() => {
+    const aa = [];
+    userDatas?.data?.map((e) => {
+      onlineUsers?.includes(e?.email) ? aa.unshift(e) : aa.push(e);
+    });
+    setUserData(aa);
+  }, [userDatas]);
+
+  // console.log(userData, "user data value");
+  // const compare=()
+
   // useEffect(() => {
   //   const hash = location.hash.split("#").splice(1, 2);
   //   // console.log(hash, "locations now");
@@ -174,8 +183,9 @@ const Message = () => {
     });
   }, [socket]);
 
+  console.log(files.length, "only files");
   const sendHandler = () => {
-    files && console.log(files, "files");
+    console.log(message, "message", messageType, files, "files");
     if (sender && receiver) {
       const formData = new FormData();
       formData.append("sender", sender);
@@ -190,7 +200,7 @@ const Message = () => {
             formData.append("chatFile", file);
           })
         : formData.append("chatFile", files);
-      message?.length > 0 && sendMessageData(formData);
+      sendMessageData(formData);
     }
 
     // sender &&
@@ -293,6 +303,7 @@ const Message = () => {
   const [callRejected, setCallRejected] = useState(false);
   const [rejectedMessage, setRejectedMessage] = useState("");
   const [receiverUser, setReceiverUser] = useState("");
+  // const [showUserList, setShowUserList] = useState(false);
 
   useEffect(() => {
     const peer = new Peer();
@@ -389,12 +400,12 @@ const Message = () => {
 
   // console.log(sender, "peer id");
   return (
-    <div className="flex text-xs overflow-hidden -ml-3 -mt-[16px]">
+    <div className="flex text-xs overflow-hidden relative -ml-3 -mt-[16px]">
       <Response response={sendMessageResponse} setPending={setPending} />
 
       {/* video */}
       {displayVideo ? (
-        <div className="absolute z-20 pl-[220px] top-0 left-0 bg-white flex gap-5 items-center p-5 w-full h-[100vh]">
+        <div className="absolute z-20 pl-[220px] top-0 left-0 bg-white bg-dark flex gap-5 items-center p-5 w-full h-[100vh]">
           <Video
             setRemotePeerIdValue={setRemotePeerIdValue}
             remotePeerIdValue={remotePeerIdValue}
@@ -407,7 +418,7 @@ const Message = () => {
             chatId={chatId}
           />
 
-          <div className="flex flex-col items-start justify-start h-[63vh] w-[25%] bg-blue-500 border shadow-2xl rounded-sm">
+          <div className="flex flex-col items-start justify-start h-[63vh] w-[25%] border shadow-2xl rounded-sm">
             <ChatHeader sender={sender} receiver={receiver} type="small" />
             <Messages
               isLoading={isLoading}
@@ -429,12 +440,17 @@ const Message = () => {
               setFiles={setFiles}
               setDescription={setDescription}
               setMessageType={setMessageType}
+              message={message}
+              files={files}
             />
           </div>
         </div>
       ) : (
-        <div className="w-full overflow-hidden flex h-[87.2vh]">
-          <div id="user_list_container" className="w-[25%]">
+        <div className="w-full overflow-hidden flex h-[86.7vh]">
+          <div
+            id="user_list_container"
+            className="absolute hidden md:block bg-white bg-dark z-20 left-0 top-11 md:top-0  md:relative w-[80%] md:w-[25%]"
+          >
             <UserList
               userIsFetching={userIsFetching}
               userIsError={userIsError}
@@ -454,7 +470,7 @@ const Message = () => {
             />
           </div>
 
-          <div className="flex w-[76%] overflow-hidden h-[86.3vh] flex-col border-r">
+          <div className="flex relative w-full md:w-[76%] overflow-hidden h-[86.7vh] flex-col border-r">
             <ChatHeader
               sender={sender}
               receiver={receiver}
@@ -491,8 +507,10 @@ const Message = () => {
               pending={pending}
               sendHandler={sendHandler}
               setFiles={setFiles}
+              files={files}
               setDescription={setDescription}
               setMessageType={setMessageType}
+              message={message}
             />
             {/* </div> */}
           </div>

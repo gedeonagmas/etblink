@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Loading from "../loading/Loading";
 import { Diversity3, Hail, HolidayVillage, People } from "@mui/icons-material";
 
@@ -19,17 +19,21 @@ const UserList = ({
   limit,
   setLimit,
 }) => {
-  console.log(onlineUsers);
+  // console.log(onlineUsers);
+  // console.log(userData, "user data user list");
 
+  // useEffect(() => {
+
+  // }, [userData]);
   return (
     <div
       id="user_lists"
-      className="flex border border-t-0 border-dark overflow-hidden flex-col flex-[20%] h-[86.3vh]"
+      className="flex w-full relative border border-t-0 border-dark overflow-hidden flex-col md:flex-[20%] h-[79.3vh] md:h-[86.7vh]"
     >
       {/* search */}
-      <div className="w-full flex flex-col bg-green-500 border-dark items-center justify-start shadow-sm h-[41px] border-b">
-        <div class="w-full">
-          <div class="relative">
+      <div className="w-full flex flex-col  border-dark items-center justify-start shadow-sm h-[41px] border-b">
+        <div class="w-full border-t  bg-gray-200">
+          <div class="relative ">
             <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
               <svg
                 class="w-4 h-4 text-gray-500 dark:text-gray-400"
@@ -51,7 +55,7 @@ const UserList = ({
               onChange={(e) => setSearch(e.target.value)}
               type="search"
               id="default-search"
-              class="block w-full p-[8px] h-[44px] focus:ring-0 text-dark ps-10 text-sm text-gray-900 border-none bg-dark focus:outline-none"
+              class="block w-full p-[8px] h-[44px] bg-gray-50 md:bg-gray-200 focus:ring-0 text-dark ps-10 text-sm text-gray-900 border-none bg-dark focus:outline-none"
               placeholder="Search users"
               required
             />
@@ -114,14 +118,13 @@ const UserList = ({
           </div>
         </div>
       </div>
-
-      {userIsFetching && <Loading text="text-gray-500" />}
-      {userIsError && <p>something went wrong unable to read the users</p>}
       {/* user list */}
-      <div className="flex relative flex-col  mt-[46px] h-full overflow-y-auto">
-        <ul className="max-w-sm  divide-y divide-gray-200 dark:divide-gray-700">
-          {userData && userData?.data?.length > 0 ? (
-            userData?.data?.map((user, i) => {
+      <div className="flex w-full scrollbar-w-[4px] relative flex-col  mt-[46px] h-full  scrollbar scrollbar-thumb-slate-300 overflow-y-auto">
+        {userIsFetching && <Loading text="text-gray-500" />}
+        {userIsError && <p>something went wrong unable to read the users</p>}
+        <ul className="w-full md:max-w-sm  divide-y divide-gray-200 dark:divide-gray-700">
+          {userData && userData?.length > 0 ? (
+            userData?.map((user, i) => {
               if (user?._id !== currentUser?._id) {
                 return (
                   <li
@@ -131,6 +134,10 @@ const UserList = ({
                       setReceiverId(user?._id);
                       setSenderId(currentUser?._id);
                       setReceiverUser(user);
+                      const id = document.getElementById("user_list_container");
+                      id?.classList?.value?.includes("hidden")
+                        ? id?.classList?.remove("hidden")
+                        : id?.classList?.add("hidden");
                       // setChatId(`${sender}.${receiver}`);
                       // fetchUsersMessage();
                     }}
@@ -194,10 +201,10 @@ const UserList = ({
           ) : (
             <div className="w-full mt-5 text-center">Users Not Found</div>
           )}
-          {userData?.data?.length >= 30 && (
+          {userData?.length >= 30 && (
             <p
               onClick={() => setLimit(limit + 30)}
-              className="absolute bottom-0 left-20 bg-white bg-dark cursor-pointer p-1 text-sm"
+              className=" bg-red-400s hover:bg-gray-200 text-center bg-dark cursor-pointer p-1 text-xs"
             >
               See more
             </p>
