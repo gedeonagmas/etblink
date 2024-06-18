@@ -80,7 +80,7 @@ const Messages = ({
                                         className="rounded-lg py-1 cursor-pointer hover:bg-gray-300 px-2 bg-gray-100 text-main"
                                       >
                                         <svg
-                                          class="w-6 h-6 text-gray-800 dark:text-white"
+                                          class="w-6 h-6"
                                           aria-hidden="true"
                                           xmlns="http://www.w3.org/2000/svg"
                                           width="24"
@@ -143,7 +143,7 @@ const Messages = ({
                                         className="rounded-lg py-1 cursor-pointer hover:bg-gray-300 px-2 bg-gray-100 text-main"
                                       >
                                         <svg
-                                          class="w-6 h-6 text-gray-800 dark:text-white"
+                                          class="w-6 h-6"
                                           aria-hidden="true"
                                           xmlns="http://www.w3.org/2000/svg"
                                           width="24"
@@ -206,7 +206,7 @@ const Messages = ({
                                         className="rounded-lg py-1 cursor-pointer hover:bg-gray-300 px-2 bg-gray-100 text-main"
                                       >
                                         <svg
-                                          class="w-6 h-6 text-gray-800 dark:text-white"
+                                          class="w-6 h-6"
                                           aria-hidden="true"
                                           xmlns="http://www.w3.org/2000/svg"
                                           width="24"
@@ -271,7 +271,7 @@ const Messages = ({
                                         className="rounded-lg py-1 cursor-pointer hover:bg-gray-300 px-2 bg-gray-100 text-main"
                                       >
                                         <svg
-                                          class="w-6 h-6 text-gray-800 dark:text-white"
+                                          class="w-6 h-6"
                                           aria-hidden="true"
                                           xmlns="http://www.w3.org/2000/svg"
                                           width="24"
@@ -322,9 +322,18 @@ const Messages = ({
                                       <p className=" font-bold w-auto">
                                         Size:{" "}
                                         <span className="font-normal">
-                                          {el.size} MB
+                                          {el.size}
                                         </span>
                                       </p>
+
+                                      {/* {message?.message?.description && (
+                                        <p className=" w-auto mt-2 mb-5">
+                                          description:{" "}
+                                          <span className="">
+                                            {message?.message?.description}
+                                          </span>
+                                        </p>
+                                      )} */}
                                     </div>
                                   </div>
                                 );
@@ -334,6 +343,7 @@ const Messages = ({
                       </div>
                       {message?.message?.description && (
                         <p className=" w-auto mt-2 mb-5">
+                          description:{" "}
                           <span className="">
                             {message?.message?.description}
                           </span>

@@ -125,6 +125,7 @@ const Message = () => {
     });
   }, [limit, search, role]);
 
+  console.log(limit, search, role, "user list fetching");
   const [userData, setUserData] = useState([]);
   useEffect(() => {
     const aa = [];
@@ -183,9 +184,9 @@ const Message = () => {
     });
   }, [socket]);
 
-  console.log(files.length, "only files");
+  // console.log(files, "only files");
   const sendHandler = () => {
-    console.log(message, "message", messageType, files, "files");
+    // console.log(message, "message", messageType, files, "files");
     if (sender && receiver) {
       const formData = new FormData();
       formData.append("sender", sender);
@@ -357,6 +358,15 @@ const Message = () => {
     // socket?.emit("call-accepted-peerIdSend", chatId, peerId);
   };
 
+  useEffect(() => {
+    if (sendMessageResponse?.status === "fulfilled" && messageType === "file") {
+      setMessageType("file");
+      setFiles("");
+      popup("file-send");
+      setDescription("");
+    }
+  }, [sendMessageResponse]);
+
   socket?.on("call-accepted-response", (bool, peerId) => {
     setDisplayVideo(bool);
     // call(peerId);
@@ -441,6 +451,8 @@ const Message = () => {
               setDescription={setDescription}
               setMessageType={setMessageType}
               message={message}
+              receiver={receiver}
+              sender={sender}
               files={files}
             />
           </div>
@@ -511,6 +523,8 @@ const Message = () => {
               setDescription={setDescription}
               setMessageType={setMessageType}
               message={message}
+              receiver={receiver}
+              sender={sender}
             />
             {/* </div> */}
           </div>

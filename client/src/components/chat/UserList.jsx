@@ -32,7 +32,7 @@ const UserList = ({
     >
       {/* search */}
       <div className="w-full flex flex-col  border-dark items-center justify-start shadow-sm h-[41px] border-b">
-        <div class="w-full border-t  bg-gray-200">
+        <div class="w-full border-t md:border-t-0 border-dark bg-gray-200">
           <div class="relative ">
             <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
               <svg
